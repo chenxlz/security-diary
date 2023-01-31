@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 date: 2022-07-24T09:46:57Z
-lastmod: 2023-01-30T22:02:08Z
+lastmod: 2023-01-31T22:30:31Z
 ---
 
 ![image](assets/30-20230130221844-hxib8nk.jpg)
@@ -9,6 +9,14 @@ lastmod: 2023-01-30T22:02:08Z
 # JavaScript
 
 # JS基础
+
+### 基本概念
+
+* ECMAScript：JavaScript的核心，描述了语言的基本语法和数据类型，ECMAScript是一套标准，定义了js语言的标准
+* DOM：文档对象模型，有一套操作页面元素的API，DOM可以把HTML看做是文档树，通过DOM提供的API可以对树上的节点进行操作
+* BOM：浏览器对象模型，一套操作浏览器功能的API，通过BOM可以操作浏览器窗口，比如：弹出框、控制浏览器跳转、获取分辨率等
+
+　　​![image](assets/image-20230131211847-faii45s.png)​
 
 ### 自执行函数
 
@@ -106,7 +114,7 @@ fn();
   ```
 * 修改this指向：通过修改this的指向，达到方法的**借用**
 
-  * call：将方法里的this修改为 obj 对象（this指向obj），并立即调用前面的函数。需要**独立传递参数**
+  * fn.call：将方法里的this修改为 obj 对象（this指向obj），并立即调用前面的函数。需要**独立传递参数**
 
     ```js
     方法.call(obj,参数1,参数2...)
@@ -1083,6 +1091,219 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
     const res2 = await request().then(res=>{},err=>{return err})
     ... 
   }
+  ```
+
+## 正则
+
+### 正则表达式
+
+```js
+//正则的作用是对字符串进行匹配操作，在代码上的体现是一个正则对象
+//正则表达式表示的是一种规则，不具体的一种规则
+// 语法1：通过new
+//  new RegExp(正则表达式)
+let reg1 = new RegExp(/ /)
+
+// 语法2：字面量 //
+let reg2 = /\d/;        // 此正则表示的规则1个数字
+console.log(reg2);
+```
+
+### 正则方法
+
+* 正则校验：检验字符串是否匹配正则
+
+  ```js
+  正则对象.test(字符串)//返回值是boolean
+  let reg = /123/
+  console.log(reg.test('123'))
+  ```
+* 正则替换：字符串替换
+
+  ```js
+  // 字符串.replace(正则,替换内容)
+  // 在字符串中，将正则匹配到的部分使用 替换内容 进行替换
+        
+  // 默认仅替换匹配到的第1个
+  console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
+  console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
+  ```
+* 正则查找：查找字符串中符合正则规则的字符，并返回数组
+
+  ```js
+  正则.exec(str)
+  作用：查看正则表达式匹配str的结果（是第几个字符满足匹配规则的，是哪个字符满足匹配规则等）
+  特点：默认情况下，每一次调用exec只会返回第一个匹配的字符串信息，如果想要返回所有匹配信息
+  a.需要设置正则表达式为全局匹配
+  b.需要执行多次exec方法
+  属性介绍
+  index:匹配字符的下标
+  下标：0：匹配字符
+  1-n：后面的下标只对()分组有效，没有分组则数组只有一个元素
+
+  //示例1：找出第一个匹配字符中包含  数字+单词+单词 字符的内容
+  //默认：只能找到第一个匹配的字符
+  var str = "1aasjdg2bbjahsgd3cc";
+  var reg = /\d\w\w/;
+  var resArr = reg.exec ( str );
+  console.log ( resArr );//["1aa", index: 0, input: "1aasjdg2bbjahsgd3cc", groups: undefined]
+
+  //示例2：找出所有匹配字符中包含   数字+单词+单词 字符的内容
+  var str = "1absjdg2cdjahsgd3ef";
+  var reg = /\d\w\w/g;//需要设置全局匹配
+  var resArr = reg.exec ( str );
+  console.log ( resArr );//["1ab", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+
+  //每一次匹配之后，reg会记录当前已经匹配的字符，下一次再执行exec的时候就会往后面匹配
+  resArr = reg.exec(str);
+  console.log ( resArr );//["2cd", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+  resArr = reg.exec(str);
+  console.log ( resArr );//["3ef", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+
+  //以上代码可以简写成
+  while(resArr){//只要resArr存在，就继续执行exec
+    console.log ( resArr );
+    resArr = reg.exec(str);
+  };
+
+  //示例3：如果正则有分组，则数组从1下标开始获取分组对应的字符
+  var reg1 = /\d(\w)(\w)/;
+  console.log ( reg1.exec ( str ) );
+  //["1ab", "a", "b", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+  ```
+
+### 元字符
+
+* 概念
+
+  ```js
+  元字符:  与字面意思并不同，是被正则赋予了特殊功能的字符
+  原义文本字符:  含义与字面意思相同的字符
+  ```
+* 预定义类
+
+  ```js
+  被正则赋予了特殊含义的单个字符 或 字符组合
+  \d  :表示数字
+  \D  :表示非数字
+  \w  :表示单词字符，大小写字母、数字、下划线
+  \W  :非单词字符
+  \s  :空白字符，空格、制表符、换行、回车
+  \S  :非空白字符
+  .  :匹配除 \n \r 之外的字符
+  ```
+* 字符范围类：表示一个范围中的任何一个字符
+
+  ```js
+  []
+  [abcXYZ678]  //字符 abcXYZ678 中的任何一个
+  [a-z]  //匹配任何一个小写字符
+  [a-zA-Z0-9]  //大小写字符以及数字
+  ```
+* 汉字类：需要通过编码进行匹配`[\u4e00-\u9fa5]`​
+
+  ```js
+  每个汉字在计算中都有一个编码，汉字编码的范围在 \u4e00-\u9fa5 之间。
+  \u表示的是16进制
+  ```
+* 反向范围匹配：`^`​符号必须在 `[ ]`​ 内(`[^]`​)，而且是第1位才是反向范围匹配
+
+  ```js
+  [ ]  :表示一个字符范围
+  [^]  :反向匹配一个范围之外的字符
+  [^a-h]//不包含a-h的任何一个字符
+  ```
+* 边界：元字符 `^`​ 与`$`​
+
+  ```js
+  默认的正则在进行匹配时，只要是字符串中的部分与正则规则匹配就表示成功。
+  严格匹配就是要对字符串整体进行匹配，即是整体就要能匹配开头与结尾。
+  ^  :表示字符开头
+  $  :表示字符结尾
+  ```
+* 量词：用于表示正则的数量
+
+  ```js
+  ?  :出现0次或1次（最多1次）
+  +  :出现1次或多次（至少1次）
+  *   :不限制
+  {3}  :3次
+  {3,}  :至少3次
+  {3,5}  :3次到5次之间
+  ```
+* 分组：`()`​：用于表示所操作的范围
+
+  ```js
+  // 需求：需要得到 'okokok' 字符串
+  console.log(/ok{3}/.test('okokok'));      // false
+  // ok{3}  {3}是修饰前面的k出现3次
+  console.log(/ok{3}/.test('okkk'));        // true
+
+  // 使用()表示 {3}所修饰的范围
+  console.log(/(ok){3}/.test('okokok'));    // true
+  console.log(/(ok){3}/.test('okkk'));      // false
+
+  ```
+* 或运算与分组：用于完成或运算，经常需要借助`()`​对或的内容进行分组
+
+  ```js
+  // | 用于进行或运算
+  console.log(/b|look/.test('book'));   // true
+  console.log(/b|look/.test('look'));   // true
+
+  // 或运算与分组
+  // 不使用分组   默认是 n 与 l进行或运算
+  console.log(/^zhangsan|lisi$/.test('zhangsanisi'));   // true
+  console.log(/^zhangsan|lisi$/.test('zhangsalisi'));   // true
+
+  // 使用分组     括号内的 zhangsan 与 lisi 进行或
+  console.log(/^(zhangsan|lisi)$/.test('zhangsanisi'));    // false
+  console.log(/^(zhangsan|lisi)$/.test('zhangsalisi'));    // false
+  console.log(/^(zhangsan|lisi)$/.test('zhangsan'));        // true
+  console.log(/^(zhangsan|lisi)$/.test('lisi'));            // true
+  ```
+* 修饰符
+
+  ```js
+  i:正则默认是区分大小写的，使用 i 修改符可以不区分大小写
+  console.log(/abc/.test('abc'));   // true
+  console.log(/abc/.test('Abc'));   // false
+  console.log(/abc/.test('aBC'));   // false
+  console.log(/abc/i.test('aBC'));   // true
+
+  g:全局操作：主要用于替换操作，替换字符串里全部匹配到的部分,默认仅替换匹配到的第1个
+  console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
+  console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
+
+  /正则表达式/i
+  /正则表达式/g
+  new RegExp(正则表达式,修饰符)
+  ```
+* 转义符：`\`​：去除某些字符被正则赋予的特殊的功能
+
+  ```js
+  //去除某些字符被正则赋予的特殊的功能
+  //  . 被正则赋予获取除 \r \n外所有的字符。
+  console.log(/./.test('.'));     //true
+  console.log(/./.test('a'));     //true
+  //  \. 是将  . 的功能转义掉，去匹配最原始的 .
+  console.log(/\./.test('.'));     //true
+  console.log(/\./.test('a'));     //false
+  ```
+* 贪婪模式
+
+  ```js
+  贪婪模式与非贪婪模式一般用于量词
+  贪婪模式：正则表达式在匹配成功的前提下，尽可能多的匹配（默认模式）
+  非贪婪模式:正则表达式匹配成功的前提下，尽可能少的匹配（在量词后面加上 ?）
+  //1.贪婪模式：正则表达式在匹配成功的前提下，尽可能多的匹配
+  var reg = /\d{3,6}/;//匹配3-6位数字
+  console.log ( "1234567890".replace ( reg, "X" ) );//X7890   (正则表达式会匹配6位数字)
+
+  //2.非贪婪模式:正则表达式匹配成功的前提下，尽可能少的匹配
+  //语法：在量词后面加上 ?
+  var reg1 = /\d{3,6}?/;//匹配3-6位数字
+  console.log ( "1234567890".replace ( reg1, "X" ) );//X4567890   (正则表达式会匹配3位数字)
   ```
 
 ## 原型对象
@@ -2078,8 +2299,8 @@ console.log(n.toString());//'10'
 ### 获取页面元素
 
 ```js
-let xx = document.querySelector('选择器')              //根据选择器获取满足条件第一个元素,返回值是dom对象或null
-let xxList = document.querySelectorAll('选择器')       //根据选择器获取满足条件所有元素，返回值是伪数组
+let dom = document.querySelector('选择器')              //根据选择器获取满足条件第一个元素,返回值是dom对象或null
+let domList = document.querySelectorAll('选择器')       //根据选择器获取满足条件所有元素，返回值是伪数组
 let btn = document.getElementById('btn')              //根据id名获取dom对象
 let liList = document.getElementsByTagName('li')      //根据标签名获取，返回值是伪数组
 let boxList = document.getElementsByClassName('box')  //根据类名获取，返回值是伪数组
@@ -2113,6 +2334,8 @@ dom.src  //获取路径(常用于img标签)
 * 获取非标属性：**`dom.data.xx`**​
 
   ```js
+  获取非标属性：dom.data.xx
+  设置非标属性：dom.dataset.xxx = "xxx"
   document.querySelector('img').data.sex//获取dom的sex属性（标签内为data-sex="boy"）
   document.querySelector('img').dataset.sex = '新属性'
   ```
@@ -2149,14 +2372,6 @@ form.checked  = false  //设置选中状态，用于radio，chenkbox
 form.selected = false  //设置选中状态，用于option
 ```
 
-### 焦点事件
-
-```js
-let oInput = document.querySelector('input')
-oInput.onfocus = ()=>{}//获得焦点
-oInput.onblur = ()=>{}//失去焦点
-```
-
 ## Node节点
 
 ### 节点概念
@@ -2168,7 +2383,7 @@ oInput.onblur = ()=>{}//失去焦点
   * 节点名称：dom.nodeName
   * 节点的值：dom.nodeValue
 
-### 获取节点
+### 节点获取
 
 * 获取兄弟节点
 
@@ -2195,7 +2410,7 @@ oInput.onblur = ()=>{}//失去焦点
   oDiv.parentNode  //用于获取父元素节点
   ```
 
-### 元素节点的操作
+### 节点操作
 
 * 创建节点：**新创建的节点仅位于内存中，必须添加到DOM树上才会有页面效果**
 
@@ -2327,6 +2542,40 @@ dom.onClick = function(){}
   ```js
   对象.removeEventListener(事件名,事件处理函数名)
   ```
+
+### 常用事件
+
+```js
+鼠标事件
+onclick：当用户点击某个对象时调用的事件句柄
+oncontextmenu：在用户点击鼠标右键打开上下文菜单时触发
+ondblclick：当用户双击某个对象时调用的事件句柄
+onmousedown：鼠标按钮被按下
+onmouseenter：当鼠标指针移动到元素上时触发（内部已经阻止事件冒泡，不会触发父元素事件）
+onmouseleave：当鼠标指针移出元素时触发（内部已经阻止事件冒泡，不会触发父元素事件）
+onmousemove：鼠标被移动
+onmouseover：鼠标移到某元素之上（会通过事件冒泡触发父元素事件）
+onmouseout：鼠标从某元素移开（会通过事件冒泡触发父元素事件）
+onmouseup：鼠标按键被松开
+
+
+键盘事件
+onkeydown：某个键盘按键被按下
+onkeypress：某个键盘按键被按下并松开
+onkeyup：某个键盘按键被松开
+
+表单事件
+onblur：元素失去焦点时触发
+onchange：该事件在表单元素的内容改变时触发
+onfocus：元素获取焦点时触发
+onfocusin：元素即将获取焦点时触发
+onfocusout：元素即将失去焦点时触发
+oninput：元素获取用户输入时触发
+onreset：表单重置时触发
+onsearch：用户向搜索域输入文本时触发 ( <input="search">)
+onselect：用户选取文本时触发)
+onsubmit：表单提交时触发
+```
 
 ### 事件对象
 
@@ -2539,219 +2788,6 @@ dom.onClick = function(){}
   </html>
   ```
 
-## 正则
-
-### 正则表达式
-
-```js
-//正则的作用是对字符串进行匹配操作，在代码上的体现是一个正则对象
-//正则表达式表示的是一种规则，不具体的一种规则
-// 语法1：通过new
-//  new RegExp(正则表达式)
-let reg1 = new RegExp(/ /)
-
-// 语法2：字面量 //
-let reg2 = /\d/;        // 此正则表示的规则1个数字
-console.log(reg2);
-```
-
-### 正则方法
-
-* 正则校验：检验字符串是否匹配正则
-
-  ```js
-  正则对象.test(字符串)//返回值是boolean
-  let reg = /123/
-  console.log(reg.test('123'))
-  ```
-* 正则替换：字符串替换
-
-  ```js
-  // 字符串.replace(正则,替换内容)
-  // 在字符串中，将正则匹配到的部分使用 替换内容 进行替换
-        
-  // 默认仅替换匹配到的第1个
-  console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
-  console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
-  ```
-* 正则查找：查找字符串中符合正则规则的字符，并返回数组
-
-  ```js
-  正则.exec(str)
-  作用：查看正则表达式匹配str的结果（是第几个字符满足匹配规则的，是哪个字符满足匹配规则等）
-  特点：默认情况下，每一次调用exec只会返回第一个匹配的字符串信息，如果想要返回所有匹配信息
-  a.需要设置正则表达式为全局匹配
-  b.需要执行多次exec方法
-  属性介绍
-  index:匹配字符的下标
-  下标：0：匹配字符
-  1-n：后面的下标只对()分组有效，没有分组则数组只有一个元素
-
-  //示例1：找出第一个匹配字符中包含  数字+单词+单词 字符的内容
-  //默认：只能找到第一个匹配的字符
-  var str = "1aasjdg2bbjahsgd3cc";
-  var reg = /\d\w\w/;
-  var resArr = reg.exec ( str );
-  console.log ( resArr );//["1aa", index: 0, input: "1aasjdg2bbjahsgd3cc", groups: undefined]
-
-  //示例2：找出所有匹配字符中包含   数字+单词+单词 字符的内容
-  var str = "1absjdg2cdjahsgd3ef";
-  var reg = /\d\w\w/g;//需要设置全局匹配
-  var resArr = reg.exec ( str );
-  console.log ( resArr );//["1ab", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-
-  //每一次匹配之后，reg会记录当前已经匹配的字符，下一次再执行exec的时候就会往后面匹配
-  resArr = reg.exec(str);
-  console.log ( resArr );//["2cd", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-  resArr = reg.exec(str);
-  console.log ( resArr );//["3ef", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-
-  //以上代码可以简写成
-  while(resArr){//只要resArr存在，就继续执行exec
-    console.log ( resArr );
-    resArr = reg.exec(str);
-  };
-
-  //示例3：如果正则有分组，则数组从1下标开始获取分组对应的字符
-  var reg1 = /\d(\w)(\w)/;
-  console.log ( reg1.exec ( str ) );
-  //["1ab", "a", "b", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-  ```
-
-### 元字符
-
-* 概念
-
-  ```js
-  元字符:  与字面意思并不同，是被正则赋予了特殊功能的字符
-  原义文本字符:  含义与字面意思相同的字符
-  ```
-* 预定义类
-
-  ```js
-  被正则赋予了特殊含义的单个字符 或 字符组合
-  \d  :表示数字
-  \D  :表示非数字
-  \w  :表示单词字符，大小写字母、数字、下划线
-  \W  :非单词字符
-  \s  :空白字符，空格、制表符、换行、回车
-  \S  :非空白字符
-  .  :匹配除 \n \r 之外的字符
-  ```
-* 字符范围类：表示一个范围中的任何一个字符
-
-  ```js
-  []
-  [abcXYZ678]  //字符 abcXYZ678 中的任何一个
-  [a-z]  //匹配任何一个小写字符
-  [a-zA-Z0-9]  //大小写字符以及数字
-  ```
-* 汉字类：需要通过编码进行匹配`[\u4e00-\u9fa5]`​
-
-  ```js
-  每个汉字在计算中都有一个编码，汉字编码的范围在 \u4e00-\u9fa5 之间。
-  \u表示的是16进制
-  ```
-* 反向范围匹配：`^`​符号必须在 `[ ]`​ 内(`[^]`​)，而且是第1位才是反向范围匹配
-
-  ```js
-  [ ]  :表示一个字符范围
-  [^]  :反向匹配一个范围之外的字符
-  [^a-h]//不包含a-h的任何一个字符
-  ```
-* 边界：元字符 `^`​ 与`$`​
-
-  ```js
-  默认的正则在进行匹配时，只要是字符串中的部分与正则规则匹配就表示成功。
-  严格匹配就是要对字符串整体进行匹配，即是整体就要能匹配开头与结尾。
-  ^  :表示字符开头
-  $  :表示字符结尾
-  ```
-* 量词：用于表示正则的数量
-
-  ```js
-  ?  :出现0次或1次（最多1次）
-  +  :出现1次或多次（至少1次）
-  *   :不限制
-  {3}  :3次
-  {3,}  :至少3次
-  {3,5}  :3次到5次之间
-  ```
-* 分组：`()`​：用于表示所操作的范围
-
-  ```js
-  // 需求：需要得到 'okokok' 字符串
-  console.log(/ok{3}/.test('okokok'));      // false
-  // ok{3}  {3}是修饰前面的k出现3次
-  console.log(/ok{3}/.test('okkk'));        // true
-
-  // 使用()表示 {3}所修饰的范围
-  console.log(/(ok){3}/.test('okokok'));    // true
-  console.log(/(ok){3}/.test('okkk'));      // false
-
-  ```
-* 或运算与分组：用于完成或运算，经常需要借助`()`​对或的内容进行分组
-
-  ```js
-  // | 用于进行或运算
-  console.log(/b|look/.test('book'));   // true
-  console.log(/b|look/.test('look'));   // true
-
-  // 或运算与分组
-  // 不使用分组   默认是 n 与 l进行或运算
-  console.log(/^zhangsan|lisi$/.test('zhangsanisi'));   // true
-  console.log(/^zhangsan|lisi$/.test('zhangsalisi'));   // true
-
-  // 使用分组     括号内的 zhangsan 与 lisi 进行或
-  console.log(/^(zhangsan|lisi)$/.test('zhangsanisi'));    // false
-  console.log(/^(zhangsan|lisi)$/.test('zhangsalisi'));    // false
-  console.log(/^(zhangsan|lisi)$/.test('zhangsan'));        // true
-  console.log(/^(zhangsan|lisi)$/.test('lisi'));            // true
-  ```
-* 修饰符
-
-  ```js
-  i:正则默认是区分大小写的，使用 i 修改符可以不区分大小写
-  console.log(/abc/.test('abc'));   // true
-  console.log(/abc/.test('Abc'));   // false
-  console.log(/abc/.test('aBC'));   // false
-  console.log(/abc/i.test('aBC'));   // true
-
-  g:全局操作：主要用于替换操作，替换字符串里全部匹配到的部分,默认仅替换匹配到的第1个
-  console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
-  console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
-
-  /正则表达式/i
-  /正则表达式/g
-  new RegExp(正则表达式,修饰符)
-  ```
-* 转义符：`\`​：去除某些字符被正则赋予的特殊的功能
-
-  ```js
-  //去除某些字符被正则赋予的特殊的功能
-  //  . 被正则赋予获取除 \r \n外所有的字符。
-  console.log(/./.test('.'));     //true
-  console.log(/./.test('a'));     //true
-  //  \. 是将  . 的功能转义掉，去匹配最原始的 .
-  console.log(/\./.test('.'));     //true
-  console.log(/\./.test('a'));     //false
-  ```
-* 贪婪模式
-
-  ```js
-  贪婪模式与非贪婪模式一般用于量词
-  贪婪模式：正则表达式在匹配成功的前提下，尽可能多的匹配（默认模式）
-  非贪婪模式:正则表达式匹配成功的前提下，尽可能少的匹配（在量词后面加上 ?）
-  //1.贪婪模式：正则表达式在匹配成功的前提下，尽可能多的匹配
-  var reg = /\d{3,6}/;//匹配3-6位数字
-  console.log ( "1234567890".replace ( reg, "X" ) );//X7890   (正则表达式会匹配6位数字)
-
-  //2.非贪婪模式:正则表达式匹配成功的前提下，尽可能少的匹配
-  //语法：在量词后面加上 ?
-  var reg1 = /\d{3,6}?/;//匹配3-6位数字
-  console.log ( "1234567890".replace ( reg1, "X" ) );//X4567890   (正则表达式会匹配3位数字)
-  ```
-
 ## BOM
 
 ### BOM概念
@@ -2962,8 +2998,6 @@ console.log(reg2);
   sessionStorage.clear()//清空数据
   ```
 
-　　‍
-
 ## 重绘（重排）与回流
 
 　　​![image](assets/image-20220804232217-69eb40a.png)​
@@ -2995,10 +3029,6 @@ console.log(reg2);
     * 如：修改颜色，修改透明度等，对布局没有任何影响的
 
 　　​![image](assets/image-20220804232257-30sii1t.png)​
-
-　　‍
-
-　　‍
 
 # 网络请求
 
@@ -3115,6 +3145,76 @@ console.log(reg2);
   })
   ```
 
+## WebSocket
+
+### 基本概念
+
+　　​`WebSocket`​是一套通讯协议，是属于`WebAPI`​的内容，是H5新增的。`WebSocket`​通讯协议的特点：1.长连接；2.服务端可以主动给客户端发消息
+
+　　它基于`http：超文本传输协议`​，因为先用http请求建立连接，后面就是`websocke`​t的**长链接技术**进行交互
+
+　　协议头：`ws://`​ 、`wss://`​
+
+### 原生代码
+
+```js
+//创建WebSocket对象
+let ws = new WebSocket('连接地址')
+
+//监听服务器发的消息 
+ws.onmessage = function (e) {
+  // 当服务器有消息，就会自动调用这个函数
+  // e.data有服务器返回的数据
+}
+
+//先服务器发送消息
+ws.send('发送的内容')
+
+//关闭连接
+ws.close()
+
+//连接成功时的调用方法
+ws.onopen = function () {
+  // 连接成功时调用
+}
+
+//连接关闭时的调用方法
+ws.onclose = function () {
+  // 连接关闭时调用
+}
+```
+
+### socket.io插件
+
+* ​`socket.io`​是一套基于`websocket协议`​的框架。有客户端和服务器端版本。一般使用`socket.io`​快速搭建`WebSocket`​的接口，也可以在浏览器中快速调用接口
+* 下载socket.io
+
+  ```js
+  //使用npm给项目安装socket.io框架
+  npm i socket.io-client
+  ```
+* 基本使用
+
+  ```js
+  导包
+  import io from "socket.io-client";
+  如多个地方需要使用到socket实例，可以把socket定义在data中
+  data () {
+    return {
+      socket:null
+    }
+  }
+
+  创建socket.io对象，并建立链接
+  const socket = io('连接的服务器')//看后台文档，查看创建链接是否需要携带数据
+  向服务器端发送信息
+  socket.emit('消息类型', 消息内容)
+  监听服务器信息
+  socket.on('消息类型', msg => {
+    // msg就是服务器返回的消息
+  })
+  ```
+
 ## AJAX
 
 * 概念：不刷新页面的情况和服务器通信
@@ -3154,7 +3254,6 @@ console.log(reg2);
   // 4.发送请求
   xhr.send()
   //xhr.send(data) 向服务器提交的数据，如图片等放里面
-
   ```
 
 ## Content-Type
@@ -3162,9 +3261,9 @@ console.log(reg2);
 * 概念：**使用axios提交数据时，axios会根据我们提交的数据类型，自动改变content-type**
 
   ```js
-  1.在响应中 Content-Type 告诉客户端实际返回的内容的内容类型(浏览器根据这个判断如何解析)
-  2.在请求中 Content-type 客户端告诉服务器实际发送的数据类型
-  3.使用axios提交不同格式的数据时，content-type是axios帮咱们设置的
+  1.在响应中 Content-Type 告诉客户端实际返回的内容的内容类型(浏览器根据这个判断如何解析);
+  2.在请求中 Content-Type 客户端告诉服务器实际发送的数据类型;
+  3.使用 axios 提交不同格式的数据时，content-type是axios帮咱们设置的
   ```
 * Content-Type类型
 
@@ -3182,7 +3281,7 @@ console.log(reg2);
   1. 请求行（request line）：有请求的**方法**和**地址**
   2. 请求头部（ header ）
   3. 空行
-  4. 请求体 4 个部分组成。
+  4. 请求体
   ```
 
   ​![image-20220613110032277](assets/image-20220613110032277-20220801165426-zp21wvr.png)​
@@ -3192,7 +3291,7 @@ console.log(reg2);
   1. 状态行：有响应状态码
   2. 响应头部
   3. 空行
-  4. 响应体 4 个部分组成。
+  4. 响应体 
   ```
 
   ​![image-20220613110755239](assets/image-20220613110755239-20220801165426-0n0w3jf.png)​
@@ -3225,9 +3324,9 @@ console.log(reg2);
   业务状态码是**后端程序员**自定义的，不具有通用性。
   ```
 
-## 表单提交
+　　‍
 
-### 原生表单数据提交
+## 原生表单数据提交
 
 * 概念：直接用`form`​​表单标签提交数据，和用`ajax`​​最大的区别是`form`​​会导致页面重新加载
 * 基本表单元素
@@ -3296,7 +3395,7 @@ console.log(reg2);
   console.log('res2:', res2) // {username: 'jack', password: '23456'}
   ```
 
-### FormData数据提交
+## FormData数据提交
 
 * 概念：一个内置对象`FormData`​​，可以用来获取表单数据甚至上传文件
 * 基本使用：获取表单标签的值
@@ -3338,81 +3437,4 @@ console.log(reg2);
     // 3. get 查看
     console.log("icon:", data.get('icon'))
   }
-  ```
-
-# WebSocket
-
-### WebSocket简介
-
-　　​`WebSocket`​是一套通讯协议，是属于WebAPI的内容，是H5新增的。
-
-　　​`WebSocket`​通讯协议的特点：1.长连接；2.服务端可以主动给客户端发消息
-
-* 它基于`http：超文本传输协议`​，因为先用http请求建立连接，后面就是`websocke`​t的**长链接技术**进行交互
-
-* 协议头：`ws://`​ 、`wss://`​
-
-### WebSocket基本使用
-
-```js
-//创建WebSocket对象
-let ws = new WebSocket('连接地址')
-
-//监听服务器发的消息 
-ws.onmessage = function (e) {
-    // 当服务器有消息，就会自动调用这个函数
-    // e.data有服务器返回的数据
-}
-
-//先服务器发送消息
-ws.send('发送的内容')
-
-//关闭连接
-ws.close()
-
-//连接成功时的调用方法
-ws.onopen = function () {
-    // 连接成功时调用
-}
-
-//连接关闭时的调用方法
-ws.onclose = function () {
-    // 连接关闭时调用
-}
-```
-
-### socket.io插件
-
-* ​`socket.io`​是一套基于`websocket协议`​的框架。有客户端和服务器端版本。一般使用`socket.io`​快速搭建`WebSocket`​的接口，也可以在浏览器中快速调用接口
-* 下载socket.io
-
-  ```js
-  //使用npm给项目安装socket.io框架
-  npm i socket.io-client
-  ```
-* 基本使用
-
-  ```js
-  导包
-  import io from "socket.io-client";
-
-  如多个地方需要使用到socket实例，可以把socket定义在data中
-  data () {
-      return {
-          socket:null
-      }
-  }
-
-  创建socket.io对象，并建立链接
-  const socket = io('连接的服务器')//看后台文档，查看创建链接是否需要携带数据
-
-  向服务器端发送信息
-  socket.emit('消息类型', 消息内容)
-
-  监听服务器信息
-  socket.on('消息类型', msg => {
-
-      // msg就是服务器返回的消息
-  })
-
   ```
