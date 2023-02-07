@@ -1,22 +1,22 @@
 ---
 title: Node
 date: 2022-07-27T20:15:24Z
-lastmod: 2022-11-12T16:59:10Z
+lastmod: 2023-02-04T15:37:28Z
 ---
 
 ![image](assets/v2-d5a78cd0626ff0acfe3f0d3a65828108_r-20220727205227-2gkknpd.jpg)
 
 # Node
 
-　　[Node.js](https://nodejs.dev/en/) 是一个基于 `Chrome V8引擎` 的 `JavaScript` 运行时环境，`Node.js` 可以运行 `JS`文件
+[Node.js](https://nodejs.dev/en/) 是一个基于 `Chrome V8引擎` 的 `JavaScript` 运行时环境，`Node.js` 可以运行 `JS`文件
 
 # Git
 
-## Git基本概念
+### Git基本概念
 
-　　[Git](https://git-scm.com/)是一款免费、开源的**分布式**版本控制系统 ，用于敏捷高效地处理任何或小或大的项目。传送门：[参考资料](https://juejin.cn/post/6844904191203213326#heading-29)
+[Git](https://git-scm.com/)是一款免费、开源的**分布式**版本控制系统 ，用于敏捷高效地处理任何或小或大的项目。传送门：[参考资料](https://juejin.cn/post/6844904191203213326#heading-0)
 
-## Git基本操作
+### Git基本操作
 
 * 设置用户名：安装好后第一步
 
@@ -99,7 +99,7 @@ lastmod: 2022-11-12T16:59:10Z
   node_modules/
   ```
 
-## Git分支操作
+### Git分支操作
 
 * 查看分支：在`git`​中，有一个特殊指针`HEAD`​,永远会指向当前分支
 
@@ -119,13 +119,14 @@ lastmod: 2022-11-12T16:59:10Z
   工作区、暂存区对所有分支而言，都是公共的，在切换分支时，工作区、暂存区的内容都会被带过去，所有要先保存
   git checkout 分支名称  //切换到目标分支
   git checkout -b 分支名  //创建并切换分支
+  git checkout -b dev  //创建并切换分支
   ```
 * 删除分支：不能在当前分支删除当前分支，需要切换到其他分支才能删除
 
   ```js
   git branch -d 分支名  //删除分支,如果该分支有提交未进行合并，则会删除失败
   git branch -D 分支名  //强制删除，就算没有进行合并操作也可以删除
-  git branch -d dev
+  git branch -d dev  //创建并切换到dev分支
   ```
 * 合并分支：要先切换到要合并得分支
 
@@ -139,7 +140,7 @@ lastmod: 2022-11-12T16:59:10Z
   git merge --abort  //取消合并
   ```
 
-## Git远程操作
+### Git远程操作
 
 * 远程关联：注意：关联之后，如果本身有东西，是无法直接push的，要先pull然后合并冲突，再add、commit再push
 
@@ -163,7 +164,6 @@ lastmod: 2022-11-12T16:59:10Z
   //事例
   git clone git@gitee.com:jepsonpp/test.git
   git clone -b dev git@gitee.com:jepsonpp/test.git
-
   ```
 * 远程推送：把本地得推送到远程仓库
 
@@ -199,7 +199,7 @@ lastmod: 2022-11-12T16:59:10Z
 
 ### global模块
 
-　　类似于 `window` 对象，`global模块`是`node` 中的全局模块，除了`global模块`（全局模块）中的内容可以直接使用，其他模块都是需要加载
+类似于 `window` 对象，`global模块`是`node` 中的全局模块，除了`global模块`（全局模块）中的内容可以直接使用，其他模块都是需要加载
 
 ```js
 //window 浏览器中的全局对象
@@ -261,7 +261,7 @@ console.log(__filename)// C:\Users\hulinghao\Desktop\xxx\Node.js - day01\04-源�
 
 ### path模块
 
-　　Node.js 提供的处理路径的模块 `path`，提供了很多处理路径的方法和属性，也是一个内置模块
+Node.js 提供的处理路径的模块 `path`，提供了很多处理路径的方法和属性，也是一个内置模块
 
 ```js
 // 1. 导入path
@@ -274,9 +274,9 @@ console.log('res3:', res3)
 
 ### http模块
 
-　　`http`也是内置模块, `Node.js` 官方提供的、用来创建web 服务器的模块。它提供了一系列的方法和属性,让开发者(咱们)可以用代码来创建服务器,接收**请求**及响应**内容**
+`http`也是内置模块, `Node.js` 官方提供的、用来创建web 服务器的模块。它提供了一系列的方法和属性,让开发者(咱们)可以用代码来创建服务器,接收**请求**及响应**内容**
 
-* [创建最基本web服务器](http://nodejs.cn/learn#nodejs-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A4%BA%E4%BE%8B)
+* 创建最基本web服务器
 
   ```js
   // 1. 导入 http 模块
@@ -292,7 +292,6 @@ console.log('res3:', res3)
   })
 
   // 4. 为服务器实例绑定 request 事件，监听客户端的请求,当客户端发送请求到服务器的时候，会触发这个事件
-
   server.on('request', (request, response) => {  // request ,response 形参。名字可以改,如非必要不建议改
     // console.log('request:', request)
     console.log('request.method:', request.method)
@@ -312,14 +311,14 @@ console.log('res3:', res3)
 * `request(请求)对象`常见属性
 
   ```js
-  headers: 所有的请求头信息
+  headers:所有的请求头信息
   method:请求的方式
   url:请求的地址
   ```
 * `response(响应)对象`常见属性和方法
 
   ```js
-  res.write(data): 给浏览器发送响应体，可以调用多次，从而提供连续的请求体
+  res.write(data);  给浏览器发送响应体，可以调用多次，从而提供连续的请求体
   res.end();   通知浏览器，所有响应头和响应主体都已被发送，即服务器将其视为已完成。
   res.end(data); 结束请求，并且响应一段内容，相当于res.write(data) + res.end()
   res.statusCode: 响应的的状态码 200 404 500
@@ -392,9 +391,57 @@ console.log('res3:', res3)
   nrm use taobao  # 切换到淘宝镜像
   nrm use npm  # 切换到npm主站
   ```
-* `serve`：功能和自己编写的 web 服务器类似，通过 `serve` 托管并测试访问
+* ​`serve`​：功能和自己编写的 web 服务器类似，通过 `serve`​ 托管并测试访问
+
+## 模块化规范
+
+### AMD
+
+```js
+- AMD规范采用异步方式加载模块，模块的加载不影响它后面语句的运行。
+- 聊到AMD主要指的是通过require.js实现的模块化
+- 项目中看到类似代码说明用的是AMD规范
+
+// 执行基本操作
+require(["jquery","underscore"],function($,_){
+  // some code here
+});
+```
+
+### CMD
+
+```js
+- CMD是另一种js模块化方案，它与AMD很类似。
+- 不同点在于：AMD 推崇依赖前置、提前执行，CMD推崇依赖就近、延迟执行。
+- 项目中看到类似代码说明用的是CMD规范
+
+// 执行基本操作
+define(function(require, exports, module) {
+    var a = require('./a'); //在需要时申明
+    a.doSomething();
+    if (false) {
+        var b = require('./b');
+        b.doSomething();
+    }
+});
+```
+
+### CommonJS
+
+```js
+Node.js是CommonJS规范的主要实践
+```
+
+### EMS
+
+```js
+- 也叫做ES6 Module
+- ES6 在语言标准的层面上，实现了模块功能，逐步会成为浏览器和服务器通用的模块解决方案
+```
 
 ## 第三方包管理
+
+node.js安装完成之后，自带有npm了，可以使用npm下载使用依赖包。
 
 ### npm
 
@@ -436,7 +483,7 @@ console.log('res3:', res3)
 
 ### yarn
 
-　　`npm`是官方的管理工具，yarn是第三方的包管理工具和, , 和`npm`相比有**缓存机制**，可以直接取缓存没必要重新下载，速度比npm快一些。
+​`npm`​是官方的管理工具，`yarn`​是第三方的包管理工具 , 和`npm`​相比有**缓存机制**，可以直接取缓存没必要重新下载，速度比`npm`​快一些。
 
 * 基本命令
 
@@ -445,7 +492,7 @@ console.log('res3:', res3)
   npm i yarn -g    // 全局安装使用yarn
 
   2.初始化
-  yarn init  /  yarn init -y
+  yarn init  //  yarn init -y
 
   3.安装插件
   npm:   npm i 插件名
@@ -472,374 +519,9 @@ console.log('res3:', res3)
   8.npm换成yarn：删掉node_module,package-lock.json然后安装使用yarn
   ```
 
-## 同源跨域
-
-### 概念
-
-　　同源指的是两个 URL 地址具有相同的**协议地址、主机名、端口号，其中有一个不一样就是跨域**
-
-　　**跨域请求产生时，请求是发出去了，也是有响应的，仅仅是浏览器同源策略，认为不安全，拦截了结果，不将数据传递我们使用罢了**
-
-### JSONP
-
-* 原理
-
-  ```js
-  利用 <script>标签没有跨域限制的漏洞，网页可以得到从其他来源动态产生的JSON数据。
-  JSONP请求一定需要对方的服务器做支持才可以
-  JSONP优点是简单兼容性好，可用于解决主流浏览器的跨域数据访问的问题。
-  缺点是仅支持get方法具有局限性,不安全可能会遭受XSS攻击。
-  ```
-* JSONP和AJAX
-
-  ```js
-  JSONP和AJAX相同，都是客户端向服务器端发送请求，从服务器端获取数据的方式
-  但AJAX属于同源策略，JSONP属于非同源策略(跨域请求)
-  //同源策略会收到同源跨域的影响
-  //非同源策略不受到跨域的影响
-  ```
-* 步骤
-
-  ```js
-  1.声明一个回调函数，其函数名(如show)当做参数值，要传递给跨域请求数据的服务器，函数形参为要获取目标数据(服务器返回的data)。
-  2.创建一个<script>标签，把那个跨域的API数据接口地址，赋值给script的src,还要在这个地址中向服务器传递该函数名(可以通过问号传参:?callback=show)
-  3.服务器接收到请求后，需要进行特殊的处理：把传递进来的函数名和它需要给你的数据拼接成一个字符串,例如:传递进去的函数名是show，它准备好的数据是show('xxx')
-  4.最后服务器把准备的数据通过HTTP协议返回给客户端，客户端再调用执行之前声明的回调函数（show），对返回的数据进行操作。
-
-  // index.html
-  //封装方法
-  function jsonp({ url, params, callback }) {
-    return new Promise((resolve, reject) => {
-      let script = document.createElement('script')
-      window[callback] = function(data) {
-        resolve(data)
-        document.body.removeChild(script)
-      }
-      params = { ...params, callback } // wd=b&callback=show
-      let arrs = []
-      for (let key in params) {
-        arrs.push(`${key}=${params[key]}`)
-      }
-      script.src = `${url}?${arrs.join('&')}`
-      document.body.appendChild(script)
-    })
-  }
-
-  //这段代码相当于向http://localhost:3000/say?wd=Iloveyou&callback=show这个地址请求数据
-  //然后后台返回show('我不爱你')，最后会运行show()这个函数，打印出'我不爱你'
-  jsonp({
-    url: 'http://localhost:3000/say',
-    params: { wd: 'Iloveyou' },
-    callback: 'show'
-  }).then(data => {
-    console.log(data)//主要看后端返回了什么数据
-  })
-  ```
-
-### CORS
-
-* 概念
-
-  ```js
-  CORS是解决跨域数据请求的终极解决方案，全称是 Cross-origin resource sharing。
-  CORS技术需要浏览器和服务器同时支持，二者缺一不可：
-  浏览器要支持 CORS 功能（主流的浏览器全部支持，IE 不能低于 IE10）
-  服务器要开启 CORS 功能（需要后端开发者为接口开启 CORS 功能）
-  ```
-* 原理：服务器端通过 Access-Control-Allow-Origin 响应头，来告诉浏览器当前的 API 接口是否允许跨域请求。
-
-  ```js
-   Access-Control-Allow-Origin:*
-  ```
-* 优势
-
-  ```js
-  CORS 是真正的 Ajax 请求，支持 GET、POST、DELETE、PUT、PATCH 等这些常见的 Ajax 请求方式
-  只需要后端开启 CORS 功能即可，前端的代码无须做任何改动
-
-  Node.js中可以通过设置如下的请求头 允许跨域
-  response.setHeader('Access-Control-Allow-Origin', '*')
-  ```
-
-### postMessage
-
-```js
-postMessage是HTML5 XMLHttpRequest Level 2中的API，且是为数不多可以跨域操作的window属性之一，它可用于解决以下方面的问题：
-1.页面和其打开的新窗口的数据传递
-2.多窗口之间消息传递
-3.页面与嵌套的iframe消息传递
-4.上面三个场景的跨域数据传递
-postMessage()方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递 。
-```
-
-### websocket
-
-```js
-Websocket是HTML5的一个持久化的协议，它实现了浏览器与服务器的全双工通信，同时也是跨域的一种解决方案。
-WebSocket和HTTP都是应用层协议，都基于 TCP 协议。
-但是WebSocket 是一种双向通信协议，在建立连接之后，WebSocket 的 server 与 client 都能主动向对方发送或接收数据。
-同时，WebSocket 在建立连接时需要借助 HTTP 协议，连接建立好了之后 client 与 server 之间的双向通信就与 HTTP 无关了。
-原生WebSocket API使用起来不太方便，我们使用Socket.io，它很好地封装了webSocket接口，提供了更简单、灵活的接口，也对不支持webSocket的浏览器提供了向下兼容。
-```
-
-### Node中间件代理(两次跨域)
-
-　　同源策略是浏览器需要遵循的标准，而如果是服务器向服务器请求就无需遵循同源策略。   
-代理服务器，需要做以下几个步骤：
-
-* 接受客户端请求 。
-* 将请求转发给服务器。
-* 拿到服务器响应数据。
-* 将响应转发给客户端。
-
-　　我们先来看个例子：本地文件index.html文件，通过代理服务器`http://localhost:3000`向目标服务器`http://localhost:4000`请求数据。
-
-```xml
-// index.html(http://127.0.0.1:5500)
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script>
-   $.ajax({
-     url: 'http://localhost:3000',
-     type: 'post',
-     data: { name: 'xiamen', password: '123456' },
-     contentType: 'application/json;charset=utf-8',
-     success: function(result) {
-       console.log(result) // {"title":"fontend","password":"123456"}
-     },
-     error: function(msg) {
-       console.log(msg)
-     }
-   })
-</script>
-```
-
-```javascript
-// server1.js 代理服务器(http://localhost:3000)
-const http = require('http')
-// 第一步：接受客户端请求
-const server = http.createServer((request, response) => {
-  // 代理服务器，直接和浏览器直接交互，需要设置CORS 的首部字段
-  response.writeHead(200, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': '*',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  })
-  // 第二步：将请求转发给服务器
-  const proxyRequest = http
-    .request(
-      {
-        host: '127.0.0.1',
-        port: 4000,
-        url: '/',
-        method: request.method,
-        headers: request.headers
-      },
-      serverResponse => {
-        // 第三步：收到服务器的响应
-        var body = ''
-        serverResponse.on('data', chunk => {
-          body += chunk
-        })
-        serverResponse.on('end', () => {
-          console.log('The data is ' + body)
-          // 第四步：将响应结果转发给浏览器
-          response.end(body)
-        })
-      }
-    )
-    .end()
-})
-server.listen(3000, () => {
-  console.log('The proxyServer is running at http://localhost:3000')
-})
-复制代码
-```
-
-```javascript
-// server2.js(http://localhost:4000)
-const http = require('http')
-const data = { title: 'fontend', password: '123456' }
-const server = http.createServer((request, response) => {
-  if (request.url === '/') {
-    response.end(JSON.stringify(data))
-  }
-})
-server.listen(4000, () => {
-  console.log('The server is running at http://localhost:4000')
-})
-```
-
-　　上述代码经过两次跨域，值得注意的是浏览器向代理服务器发送请求，也遵循同源策略，最后在index.html文件打印出`{"title":"fontend","password":"123456"}`
-
-### nginx反向代理
-
-　　实现原理类似于Node中间件代理，需要你搭建一个中转nginx服务器，用于转发请求。
-
-　　使用nginx反向代理实现跨域，是最简单的跨域方式。只需要修改nginx的配置即可解决跨域问题，支持所有浏览器，支持session，不需要修改任何代码，并且不会影响服务器性能。
-
-　　实现思路：通过nginx配置一个代理服务器（域名与domain1相同，端口不同）做跳板机，反向代理访问domain2接口，并且可以顺便修改cookie中domain信息，方便当前域cookie写入，实现跨域登录。
-
-　　先下载[nginx](http://nginx.org/en/download.html)，然后将nginx目录下的nginx.conf修改如下:
-
-```ini
-// proxy服务器
-server {
-  listen       81;
-  server_name  www.domain1.com;
-  location / {
-    proxy_pass   http://www.domain2.com:8080;  #反向代理
-    proxy_cookie_domain www.domain2.com www.domain1.com; #修改cookie里域名
-    index  index.html index.htm;
-
-    # 当用webpack-dev-server等中间件代理接口访问nignx时，此时无浏览器参与，故没有同源限制，下面的跨域配置可不启用
-    add_header Access-Control-Allow-Origin http://www.domain1.com;  #当前端只跨域不带cookie时，可为*
-    add_header Access-Control-Allow-Credentials true;
-  }
-}
-```
-
-　　最后通过命令行`nginx -s reload`启动nginx
-
-```csharp
-// index.html
-var xhr = new XMLHttpRequest();
-// 前端开关：浏览器是否读写cookie
-xhr.withCredentials = true;
-// 访问nginx中的代理服务器
-xhr.open('get', 'http://www.domain1.com:81/?user=admin', true);
-xhr.send();
-```
-
-```ini
-// server.js
-var http = require('http');
-var server = http.createServer();
-var qs = require('querystring');
-server.on('request', function(req, res) {
-    var params = qs.parse(req.url.substring(2));
-    // 向前台写cookie
-    res.writeHead(200, {
-        'Set-Cookie': 'l=a123456;Path=/;Domain=www.domain2.com;HttpOnly'   // HttpOnly:脚本无法读取
-    });
-    res.write(JSON.stringify(params));
-    res.end();
-});
-server.listen('8080');
-console.log('Server is running at port 8080...');
-```
-
-### window.name + iframe
-
-　　window.name属性的独特之处：name值在不同的页面（甚至不同域名）加载后依旧存在，并且可以支持非常长的 name 值（2MB）。
-
-　　其中a.html和b.html是同域的，都是`http://localhost:3000`;而c.html是`http://localhost:4000`
-
-```ini
- // a.html(http://localhost:3000/b.html)
-  <iframe src="http://localhost:4000/c.html" frameborder="0" onload="load()" id="iframe"></iframe>
-  <script>
-    let first = true
-    // onload事件会触发2次，第1次加载跨域页，并留存数据于window.name
-    function load() {
-      if(first){
-      // 第1次onload(跨域页)成功后，切换到同域代理页面
-        let iframe = document.getElementById('iframe');
-        iframe.src = 'http://localhost:3000/b.html';
-        first = false;
-      }else{
-      // 第2次onload(同域b.html页)成功后，读取同域window.name中数据
-        console.log(iframe.contentWindow.name);
-      }
-    }
-  </script>
-复制代码
-```
-
-　　b.html为中间代理页，与a.html同域，内容为空。
-
-```xml
- // c.html(http://localhost:4000/c.html)
-  <script>
-    window.name = '我不爱你'  
-  </script>
-复制代码
-```
-
-　　总结：通过iframe的src属性由外域转向本地域，跨域数据即由iframe的window.name从外域传递到本地域。这个就巧妙地绕过了浏览器的跨域访问限制，但同时它又是安全操作。
-
-### location.hash + iframe
-
-　　实现原理： a.html欲与c.html跨域相互通信，通过中间页b.html来实现。 三个页面，不同域之间利用iframe的location.hash传值，相同域之间直接js访问来通信。
-
-　　具体实现步骤：一开始a.html给c.html传一个hash值，然后c.html收到hash值后，再把hash值传递给b.html，最后b.html将结果放到a.html的hash值中。  
-同样的，a.html和b.html是同域的，都是`http://localhost:3000`;而c.html是`http://localhost:4000`
-
-```xml
- // a.html
-  <iframe src="http://localhost:4000/c.html#iloveyou"></iframe>
-  <script>
-    window.onhashchange = function () { //检测hash的变化
-      console.log(location.hash);
-    }
-  </script>
-复制代码
-```
-
-```css
- // b.html
-  <script>
-    window.parent.parent.location.hash = location.hash 
-    //b.html将结果放到a.html的hash值中，b.html可通过parent.parent访问a.html页面
-  </script>
-复制代码
-```
-
-```ini
- // c.html
- console.log(location.hash);
-  let iframe = document.createElement('iframe');
-  iframe.src = 'http://localhost:3000/b.html#idontloveyou';
-  document.body.appendChild(iframe);
-```
-
-### document.domain + iframe
-
-　　 **该方式只能用于二级域名相同的情况下，比如 ​**​**​ 和 ​**​**​ 适用于该方式**​**`a.test.com`**​**`b.test.com`** 。  
-只需要给页面添加 `document.domain ='test.com'` 表示二级域名都相同就可以实现跨域。
-
-　　实现原理：两个页面都通过js强制设置document.domain为基础主域，就实现了同域。
-
-　　我们看个例子：页面`a.zf1.cn:3000/a.html`获取页面`b.zf1.cn:3000/b.html`中a的值
-
-```xml
-// a.html
-<body>
- helloa
-  <iframe src="http://b.zf1.cn:3000/b.html" frameborder="0" onload="load()" id="frame"></iframe>
-  <script>
-    document.domain = 'zf1.cn'
-    function load() {
-      console.log(frame.contentWindow.a);
-    }
-  </script>
-</body>
-复制代码
-```
-
-```xml
-// b.html
-<body>
-   hellob
-   <script>
-     document.domain = 'zf1.cn'
-     var a = 100;
-   </script>
-</body>
-```
-
 # [Webpack](https://www.webpackjs.com/)
 
-## Webpack基本设置
+## 基本设置
 
 * 测试打包模板
 
@@ -962,7 +644,7 @@ console.log('Server is running at port 8080...');
   npm run build//生产环境打包
   ```
 
-## Webpack设置说明
+## 设置说明
 
 ### 模式设置
 
@@ -1012,9 +694,9 @@ console.log('Server is running at port 8080...');
 
 ### 清理设置
 
-　　清理dist目录：`output.clean`默认不开启，那么上一次打包生成的dist文件不会删除，这次打包的文件还是在上一次的dist中，导致可能原先的文件存在导致后面看代码文件造成混乱。
+清理dist目录：`output.clean`默认不开启，那么上一次打包生成的dist文件不会删除，这次打包的文件还是在上一次的dist中，导致可能原先的文件存在导致后面看代码文件造成混乱。
 
-　　开启后会把文件出口文件删除后在继续打包，重新改出口名，原文件不在新出口，是不会删除的。
+开启后会把文件出口文件删除后在继续打包，重新改出口名，原文件不在新出口，是不会删除的。
 
 * `/webpack.config.js`中设置**增加清理** `dist` 目录的配置
 
@@ -1035,9 +717,9 @@ console.log('Server is running at port 8080...');
 
 ### 热替换设置
 
-　　`HMR`：修改了代码并保存时，`HMR` 会在应用程序运行过程中替换、添加或删除模块，而**无需重新加载整个页面（入口代码修改还是会刷新）**。
+`HMR`：修改了代码并保存时，`HMR` 会在应用程序运行过程中替换、添加或删除模块，而**无需重新加载整个页面（入口代码修改还是会刷新）**。
 
-　　开启了 `dev-server` 之后，会**默认开启**​`HMR(hot module replacement)`。
+开启了 `dev-server` 之后，会**默认开启**​`HMR(hot module replacement)`。
 
 * `HMR` 主要通过以下几种方式，来显著加快开发速度：
 
@@ -1045,7 +727,7 @@ console.log('Server is running at port 8080...');
   * **只更新变更内容，以节省宝贵的开发时间；**
   * **调整样式更加快速 - 几乎相当于在浏览器调试器中更改样式。**
 
-　　在`webpack.config.js`中进行设置
+在`webpack.config.js`中进行设置
 
 ```js
 module.exports = {
@@ -1062,13 +744,13 @@ module.exports = {
 
 ### 映射设置
 
-　　就是一个信息文件，里面储存着位置信息。存储着压缩混淆后的代码，所对应的**转换前**的位置。
+就是一个信息文件，里面储存着位置信息。存储着压缩混淆后的代码，所对应的**转换前**的位置。
 
-　　设置开启，会在项目打包后会生成`.map`文件，出错的时候，除错工具将直接显示原始代码，而不是转换后的代码，能够极大的方便后期的调试。
+设置开启，会在项目打包后会生成`.map`文件，出错的时候，除错工具将直接显示原始代码，而不是转换后的代码，能够极大的方便后期的调试。
 
-　　注意:开发阶段辅助调错，**上线一定要移除，避免源码泄露**。
+注意:开发阶段辅助调错，**上线一定要移除，避免源码泄露**。
 
-　　在`webpack.config.js`中进行设置
+在`webpack.config.js`中进行设置
 
 ```js
 //开发中需要排错，需要准确的定位错误行号
@@ -1080,11 +762,11 @@ module.exports = {
 
 ### watch设置
 
-　　开启 `watch` 模式启动自动化打包：检测打包入口，以及打包入口引用的文件是否发生变动，如果发生变动，就重新打包。
+开启 `watch` 模式启动自动化打包：检测打包入口，以及打包入口引用的文件是否发生变动，如果发生变动，就重新打包。
 
-　　`watch` 是内置的，不需要下载，文件发生变动后，文件自动打包，但是网页需要自己刷新。
+`watch` 是内置的，不需要下载，文件发生变动后，文件自动打包，但是网页需要自己刷新。
 
-　　调整 `package.json` 中的 `scripts` 开启`watch` 模式，然后启动命令：`npm run watch`
+调整 `package.json` 中的 `scripts` 开启`watch` 模式，然后启动命令：`npm run watch`
 
 ```js
 "scripts": {
@@ -1093,11 +775,11 @@ module.exports = {
 }
 ```
 
-## Webpack相关插件
+## 相关插件
 
 ### html-webpack-plugin
 
-　　`Webpack`默认只打包`js`，这个插件可以打包时会自动生成`index.html`页面到`dist`文件夹中，自动把打包生成的`js`文件插入到页面中。
+`Webpack`默认只打包`js`，这个插件可以打包时会自动生成`index.html`页面到`dist`文件夹中，自动把打包生成的`js`文件插入到页面中。
 
 * 下载插件
 
@@ -1138,11 +820,11 @@ module.exports = {
 
 ### loader
 
-　　`loader` 是文件加载器，能够加载资源文件，并对这些文件进行特定的处理，然后打包在指定文件中，**简单来说就是将** `webpack` 传入的字符串做出特定的处理修改。
+`loader` 是文件加载器，能够加载资源文件，并对这些文件进行特定的处理，然后打包在指定文件中，**简单来说就是将** `webpack` 传入的字符串做出特定的处理修改。
 
-　　`webpack` 默认只能解析 `js` 模块，如果是其他的文件需要安装对应的 `loader`。
+`webpack` 默认只能解析 `js` 模块，如果是其他的文件需要安装对应的 `loader`。
 
-　　![image](assets/image-20220731205739-uc0rxf9.png)​
+![image](assets/image-20220731205739-uc0rxf9.png)​
 
 1. 下载所需的loader,第三方模块
 
@@ -1192,9 +874,9 @@ module.exports = {
 
 ### webpack-dev-server
 
-　　`webpack-dev-server` 的本质是开启了一个测试用服务器，`dev-server`，开启一个服务器，并自动监测文件变更，刷新页面。
+`webpack-dev-server` 的本质是开启了一个测试用服务器，`dev-server`，开启一个服务器，并自动监测文件变更，刷新页面。
 
-　　凡是修改了`webpack.config.js ​`配置文件，或修改了`​ package.json ​`配置文件，必须重启实时打包的服务器，否则最新的配置文件无法生效。
+凡是修改了`webpack.config.js ​`配置文件，或修改了`​ package.json ​`配置文件，必须重启实时打包的服务器，否则最新的配置文件无法生效。
 
 1. 下载`webpack-dev-server`：
 
@@ -1242,4 +924,4 @@ module.exports = {
         1. 访问的是 `devServer` 配置中 `static` 的根目录
         2. `/index.html` 可以省略不写
 
-　　‍
+‍

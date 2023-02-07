@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 date: 2022-07-24T09:46:57Z
-lastmod: 2023-02-02T22:16:37Z
+lastmod: 2023-02-05T16:58:04Z
 ---
 
 ![image](assets/30-20230130221844-hxib8nk.jpg)
@@ -30,7 +30,7 @@ lastmod: 2023-02-02T22:16:37Z
 2. 局部作用域(局部变量): **函数内部**声明的变量
 3. 块级作用域(块级变量): 分支或循环大括号里声明的变量
 
-　　注意：如果一个变量在声明的时候没有使用关键字。 例如： `num = 10`​,此时这个变量**无论写在哪里都是全局变量**。
+注意：如果一个变量在声明的时候没有使用关键字。 例如： `num = 10`​,此时这个变量**无论写在哪里都是全局变量**。
 
 ```js
 // 全局作用域
@@ -59,11 +59,11 @@ console.log(num); //0
 
 ### 作用域链
 
-　　作用域链：由全局作用域与局部作用域形成的 "链条"
+作用域链：由全局作用域与局部作用域形成的 "链条"
 
-　　全局作用域：script标签、外部js文件
+全局作用域：script标签、外部js文件
 
-　　局部作用域：函数
+局部作用域：函数
 
 ```js
 function fn(){
@@ -76,7 +76,7 @@ function fn(){
 
 ​![image](assets/image-20220808213020-25o2lhv.png)​
 
-　　链式查找规则：当一个作用域内使用一个变量时，如果当前作用域没有，则会向上一级作用域找。
+链式查找规则：当一个作用域内使用一个变量时，如果当前作用域没有，则会向上一级作用域找。
 
 ```js
 let a = 10
@@ -408,9 +408,9 @@ fn();
 
 ### 构造函数
 
-　　构造函数就是函数，使用`new`​关键字调用，来创建对象的函数。如果一个函数使用 `new`​ 关键字调用，那么这个函数就是构造函数。
+构造函数就是函数，使用`new`​关键字调用，来创建对象的函数。如果一个函数使用 `new`​ 关键字调用，那么这个函数就是构造函数。
 
-　　构造函数，是面向对象三大特性的`封装性`​的体现。可以将数据与操作数据的方法定义到一个主体上，方法内通过this来访问数据，实例化出来的每个对象上各自保留有自己的数据与操作数据的方法。
+构造函数，是面向对象三大特性的`封装性`​的体现。可以将数据与操作数据的方法定义到一个主体上，方法内通过this来访问数据，实例化出来的每个对象上各自保留有自己的数据与操作数据的方法。
 
 * 实例化
 
@@ -432,15 +432,15 @@ fn();
 
 ### 变量提升
 
-　　预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
+预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
 
-　　函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
+函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
 
-　　变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
+变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
 
-　　块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
+块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
 
-　　函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
+函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
 
 ```js
 var的函数作用域，会提升到当前作用域的最顶部
@@ -516,9 +516,9 @@ person(false)
 
 ### 展开运算符
 
-　　展开运算符符号：`...`​，可以用于将数组展开，展开成由逗号分隔的多个值。
+展开运算符符号：`...`​，可以用于将数组展开，展开成由逗号分隔的多个值。
 
-　　也可以获取函数剩余的所有实参，一般情况下,可以替代动态参数`argument`​。
+也可以获取函数剩余的所有实参，一般情况下,可以替代动态参数`argument`​。
 
 ```js
 1.获取函数参数
@@ -1084,9 +1084,9 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## 原型对象
 
-　　在`JS`​中只要有一个函数存在，JS就会创建一个与之对应的对象。这个对象就是原型对象。默认只有一个`constructor`​属性
+在`JS`​中只要有一个函数存在，JS就会创建一个与之对应的对象。这个对象就是原型对象。默认只有一个`constructor`​属性
 
-　　原型对象可以说是解决了内存浪费的问题，构造函数所创建的对象的共享方法放在原型对象里面，这样可以节约内存空间
+原型对象可以说是解决了内存浪费的问题，构造函数所创建的对象的共享方法放在原型对象里面，这样可以节约内存空间
 
 ### 构造函数、原型对象、实例对象
 
@@ -1100,9 +1100,9 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ### 原型对象作用
 
-　　原型对象上的成员会被所有的实例对象所共享。就是当一个**实例对象访问某个成员时，如果不存在会自动到原型对象上找**。
+原型对象上的成员会被所有的实例对象所共享。就是当一个**实例对象访问某个成员时，如果不存在会自动到原型对象上找**。
 
-　　使用原则：所有实例共享(一份)保存到原型对象上，如果每个实例都要独有的(多份)定义在构造函数内
+使用原则：所有实例共享(一份)保存到原型对象上，如果每个实例都要独有的(多份)定义在构造函数内
 
 ```js
 function Person(){}
@@ -1129,7 +1129,7 @@ console.log(obj.say === obj2.say)
 
 ### 原型对象的this
 
-　　原型对象方法里的`this`​，哪个实例对象调用这个方法，this就代表谁。
+原型对象方法里的`this`​，哪个实例对象调用这个方法，this就代表谁。
 
 ```js
 function Person(){
@@ -1242,7 +1242,7 @@ Person.prototype.fn = function(){
 
 ### 函数概念
 
-　　函数是一个数据类型，可以理解为存储代码的容器。 把这些代码给存到变量中，要使用的时候取出来执行即可。函数是解决重复功能的`代码复用问题`​
+函数是一个数据类型，可以理解为存储代码的容器。 把这些代码给存到变量中，要使用的时候取出来执行即可。函数是解决重复功能的`代码复用问题`​
 
 ```js
 //函数声明：
@@ -1255,11 +1255,11 @@ fn()
 
 ### 函数参数
 
-　　形参：`一定是变量`​，函数命名时把形参传入函数体中
+形参：`一定是变量`​，函数命名时把形参传入函数体中
 
-　　实参：`实际参数`​，具体的明确的数据
+实参：`实际参数`​，具体的明确的数据
 
-　　函数参数可以是多个, 逗号隔开，形参与实参个数可以不一致,不会报错。**参数本质是实参传值给形参**
+函数参数可以是多个, 逗号隔开，形参与实参个数可以不一致,不会报错。**参数本质是实参传值给形参**
 
 ```js
 形参：
@@ -1272,7 +1272,7 @@ fn（5）//传递进来的5就是实参，代替了形参i，结果是在控制�
 
 ### 参数默认值
 
-　　函数传递实参的时候，我们不给函数设置实参的情况，需要让形参有默认值来代替传入函数中执行
+函数传递实参的时候，我们不给函数设置实参的情况，需要让形参有默认值来代替传入函数中执行
 
 ```js
 //es6设置函数参数默认值     形参 = 默认值
@@ -1305,9 +1305,9 @@ console.log(array || []) // 不管array是什么, 总会得到一个数组
 
 ### 匿名函数
 
-　　匿名函数：没有名字的函数，可以开辟局部作用域，避免全局变量污染
+匿名函数：没有名字的函数，可以开辟局部作用域，避免全局变量污染
 
-　　使用方法: 函数表达式与具名函数使用一致，((20230129220259-2svj34p '自执行函数'))  分号隔开, 否则错误
+使用方法: 函数表达式与具名函数使用一致，((20230129220259-2svj34p '自执行函数'))  分号隔开, 否则错误
 
 ```js
 // 使用方法一: 函数表达式(与具名函数使用一致)
@@ -1350,7 +1350,7 @@ fn(1, 2)
 
 ### 回调函数
 
-　　被函数或方法或调用的函数就被称为回调函数。回调函数也是函数，只是被别的函数当作参数使用了
+被函数或方法或调用的函数就被称为回调函数。回调函数也是函数，只是被别的函数当作参数使用了
 
 ## 正则
 
@@ -1643,7 +1643,7 @@ console.log(reg2);
 
 ### arr.toString()
 
-　　将数组变成内容变成字符串，不改变原数组。
+将数组变成内容变成字符串，不改变原数组。
 
 ```js
 arr1 = [1, 2, 3,]
@@ -1657,7 +1657,7 @@ console.log(arr1.join("--")) //'1--2--3'
 
 ### arr.join()
 
-　　将数组内容进行拼接，返回一个字符串，不改变原数组
+将数组内容进行拼接，返回一个字符串，不改变原数组
 
 ```js
 arr.join('指定连接符号') 可以选定连接符号
@@ -1668,7 +1668,7 @@ console.log(arr1);// [1, 2, 3,]
 
 ### arr.concat()
 
-　　合并两个或多个数组。不会更改现有数组，而是返回一个新数组。
+合并两个或多个数组。不会更改现有数组，而是返回一个新数组。
 
 ```js
 let arr =  [1, 2, 3]
@@ -1680,7 +1680,7 @@ console.log(arr1)// [1, 2, 3]
 
 ### arr.reverse()
 
-　　将数组中元素的位置颠倒，并返回该数组。该方法会改变原数组。
+将数组中元素的位置颠倒，并返回该数组。该方法会改变原数组。
 
 ```js
 let arr1 = [1, 2, 3]
@@ -1690,9 +1690,9 @@ console.log(arr1) // [3,2,1]
 
 ### arr.sort()
 
-　　对数组进行排序，并返回数组，会改变原数组。
+对数组进行排序，并返回数组，会改变原数组。
 
-　　默认排序顺序是在将元素转换为字符串，然后比较它们的 UTF-16 代码单元值序列时构建的。
+默认排序顺序是在将元素转换为字符串，然后比较它们的 UTF-16 代码单元值序列时构建的。
 
 ```js
 let arr1 = [1, 5, 2, 4, 3]
@@ -1711,7 +1711,7 @@ console.log(arr1.sort(fn))
 
 ### arr.splice()
 
-　　通过**删除**或**替换**现有元素或者原地**添加**新的元素来修改数组，并以**数组形式返回被修改的内容**。此方法会改变原数组。
+通过**删除**或**替换**现有元素或者原地**添加**新的元素来修改数组，并以**数组形式返回被修改的内容**。此方法会改变原数组。
 
 ```js
 1.数组删除
@@ -1738,7 +1738,7 @@ console.log(arr) //[1, '插入元素1', '插入元素2', 4, 5, 6]
 
 ### arr.slice()
 
-　　返回一个新的数组，这一数组是一个由 `begin`​ 和 `end`​ 决定的原数组的 **浅拷贝** （包括 `begin`​，不包括`end`​）。原始数组不会被改变。
+返回一个新的数组，这一数组是一个由 `begin`​ 和 `end`​ 决定的原数组的 **浅拷贝** （包括 `begin`​，不包括`end`​）。原始数组不会被改变。
 
 ```js
 //slice(起始, 结束(不包括))   如果不写结束参数, 就直接截取到结束
@@ -1750,7 +1750,7 @@ console.log(arr) //[1, 2, 3, 4, 5, 6]
 
 ### arr.filter()
 
-　　遍历数组，将符合条件的数组元素返回，组成新数组，没有符合条件的元素则返回空数组。不改变原数组
+遍历数组，将符合条件的数组元素返回，组成新数组，没有符合条件的元素则返回空数组。不改变原数组
 
 ```js
 //  arr.filter(function(item){return item})
@@ -1765,7 +1765,7 @@ console.log(arr2)//[10, 20, 30, 60]
 
 ### arr.forEach()
 
-　　用于对前面的数组进行遍历操作，次对数据进行遍历时，都会调用一次回调函数，**return不会中断对数组的遍历过程**
+用于对前面的数组进行遍历操作，次对数据进行遍历时，都会调用一次回调函数，**return不会中断对数组的遍历过程**
 
 ```js
 // 数组.forEach( (item,index,arr)=>{} )
@@ -1783,9 +1783,9 @@ arr.forEach(function (item, index, arr) {
 
 ### arr.reduce()
 
-　　对数组中的每个元素按序执行一个**reducer**函数，每一次运行**reducer**会将**先前元素的计算结果作为参数传入**，最后将其结果汇总为单个返回值。
+对数组中的每个元素按序执行一个**reducer**函数，每一次运行**reducer**会将**先前元素的计算结果作为参数传入**，最后将其结果汇总为单个返回值。
 
-　　第一次执行回调函数时，不存在“上一次的计算结果”。如果需要回调函数从数组索引为 0 的元素开始执行，则需要传递初始值。否则，数组索引为 0 的元素将被作为初始值，迭代器将从第二个元素开始执行（索引为 1 而不是 0）。
+第一次执行回调函数时，不存在“上一次的计算结果”。如果需要回调函数从数组索引为 0 的元素开始执行，则需要传递初始值。否则，数组索引为 0 的元素将被作为初始值，迭代器将从第二个元素开始执行（索引为 1 而不是 0）。
 
 ```js
 // 数组.reduce((prev, item, index, arr)=>{}, 初始值 )
@@ -1809,7 +1809,7 @@ console.log(ret2);//154
 
 ### arr.find()
 
-　　用于查找满足条件的第1个元素并返回，如果没有满足条件的元素则返回`undefined`。
+用于查找满足条件的第1个元素并返回，如果没有满足条件的元素则返回`undefined`。
 
 ```js
 // 数组.find(function(item,index,arr){
@@ -1825,7 +1825,7 @@ console.log(ret);//9 返回第一个满足这个条件的值
 
 ### arr.findIndex()
 
-　　返回数组中满足提供的测试函数的第一个元素的索引 。若没有找到对应元素则返回-1。
+返回数组中满足提供的测试函数的第一个元素的索引 。若没有找到对应元素则返回-1。
 
 ```js
 // 数组.findIndex(function(item,index,arr){
@@ -1838,7 +1838,7 @@ console.log(arr1.findIndex(isLargeNumber));//3
 
 ### arr.every()
 
-　　判断数组中是否所有的元素都满足指定的条件，所有的元素必须都满足才返回true。
+判断数组中是否所有的元素都满足指定的条件，所有的元素必须都满足才返回true。
 
 ```js
 // 数组.every(function(item,index,arr){
@@ -1853,7 +1853,7 @@ console.log(res);//true
 
 ### arr.some()
 
-　　判断数组中是否所有的满足指定的条件的元素，只要有元素满足就返回true
+判断数组中是否所有的满足指定的条件的元素，只要有元素满足就返回true
 
 ```js
 // 数组.some(function(item,index,arr){
@@ -1869,9 +1869,9 @@ console.log(ret);//true
 
 ### arr.includes()
 
-　　用来判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 `true`，否则返回 `false`。
+用来判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 `true`，否则返回 `false`。
 
-　　注意：**includes只可以判断简单数据类型**。它不像`arr.some`那样，有`item`可以使用点语法。
+注意：**includes只可以判断简单数据类型**。它不像`arr.some`那样，有`item`可以使用点语法。
 
 ```js
 const array1 = [1, 2, 3];
@@ -1887,7 +1887,7 @@ console.log(arr.includes({a:1}))//false
 
 ### arr.map()
 
-　　创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
+创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
 
 ```js
 const arr = [1, 4, 9, 16];
@@ -1899,7 +1899,7 @@ console.log(map);//[2,8,18,32]
 
 ### Object.keys()
 
-　　作用：用于获取指定对象所有的成员名，返回数组
+作用：用于获取指定对象所有的成员名，返回数组
 
 ```js
 let obj = {
@@ -1913,7 +1913,7 @@ console.log(ks);//[id,age,name]
 
 ### Object.values()
 
-　　作用：用于获取指定对象所有的成员值，返回数组
+作用：用于获取指定对象所有的成员值，返回数组
 
 ```js
 let obj = {
@@ -1927,9 +1927,9 @@ console.log(vs);//[20，22，'zhangsan']
 
 ### Object.assign()
 
-　　作用：将原对象成员复制到目标对象上，有相同属性会被覆盖，如果成员是的值是简单数据类型，实现的是深拷贝
+作用：将原对象成员复制到目标对象上，有相同属性会被覆盖，如果成员是的值是简单数据类型，实现的是深拷贝
 
-　　**如果成员是的值是复杂数据类型，实现的是浅拷贝**：对象里面有对象，里面那个对象还是引用地址
+**如果成员是的值是复杂数据类型，实现的是浅拷贝**：对象里面有对象，里面那个对象还是引用地址
 
 ```js
 let tar = {
@@ -1978,7 +1978,7 @@ for (let key in obj) {
 
 ### str.startsWith()
 
-　　用来判断当前字符串是否以另外一个给定的子字符串开头，并区分大小写，返回值是`true` 或 `false`
+用来判断当前字符串是否以另外一个给定的子字符串开头，并区分大小写，返回值是`true` 或 `false`
 
 ```js
 str.startsWith(searchString[, position])
@@ -1993,7 +1993,7 @@ console.log(str1.startsWith('Sat',0));//true
 
 ### str.endsWith()
 
-　　用来判断当前字符串是否以另外一个给定的子字符串“结尾”的，并区分大小写，返回值是`true` 或 `false`
+用来判断当前字符串是否以另外一个给定的子字符串“结尾”的，并区分大小写，返回值是`true` 或 `false`
 
 ```js
 str.endsWith(searchString[, length])
@@ -2012,7 +2012,7 @@ console.log(str2.endsWith('question'));//false
 
 ### str.includes（）
 
-　　方法用于判断一个字符串是否包含在另一个字符串中，返回值是`true` 或 `false`
+方法用于判断一个字符串是否包含在另一个字符串中，返回值是`true` 或 `false`
 
 ```js
 str.includes(searchString[, position])
@@ -2026,7 +2026,7 @@ console.log(url.includes('.com',15))//false 从c开始，没有 . 所有false
 
 ### str.padStart()
 
-　　方法用另一个字符串填充当前字符串 (如果需要的话，会重复多次)，以便产生的字符串达到给定的长度。从当前字符串的左侧开始填充。
+方法用另一个字符串填充当前字符串 (如果需要的话，会重复多次)，以便产生的字符串达到给定的长度。从当前字符串的左侧开始填充。
 
 ```js
 str.padStart(targetLength [, padString])
@@ -2040,7 +2040,7 @@ console.log("123".padStart(5, "0"));//00123
 
 ### str.padEnd()
 
-　　方法会用一个字符串填充当前字符串（如果需要的话则重复填充），返回填充后达到指定长度的字符串。从末尾（右侧）开始填充。
+方法会用一个字符串填充当前字符串（如果需要的话则重复填充），返回填充后达到指定长度的字符串。从末尾（右侧）开始填充。
 
 ```js
 str.padEnd(targetLength [, padString])
@@ -2054,7 +2054,7 @@ console.log("123".padEnd(5, "0"));//12300
 
 ### str.length()
 
-　　返回字符串的长度
+返回字符串的长度
 
 ```js
 var x = "Mozilla";
@@ -2065,7 +2065,7 @@ console.log("empty.length);//0
 
 ### str.split()
 
-　　使用指定的分隔符字符串将一个String对象分割成子字符串数组，以一个指定的分割字串来决定每个拆分的位置。不改变原字符串。
+使用指定的分隔符字符串将一个String对象分割成子字符串数组，以一个指定的分割字串来决定每个拆分的位置。不改变原字符串。
 
 ```js
 //字符串.split(分割符)
@@ -2080,7 +2080,7 @@ console.log(str);//one-tow-three
 
 ### str.substring()
 
-　　在字符串中，读取从开始位置至结束位置之间的字符，含头不含尾，不改变原字符串
+在字符串中，读取从开始位置至结束位置之间的字符，含头不含尾，不改变原字符串
 
 ```js
 str.substring(indexStart[, indexEnd])
@@ -2123,7 +2123,7 @@ console.log(url)// http://www.baidu.com/admin/index.html
 
 ### str.toUpperCase()
 
-　　调用该方法的字符串转为大写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
+调用该方法的字符串转为大写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
 
 ```js
 str.toUpperCase()//点语法，调用str原型对象的方法。不改变原字符串
@@ -2134,7 +2134,7 @@ console.log(str.toUpperCase());//"THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
 
 ### str.toLowerCase()
 
-　　调用该方法的字符串转为小写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
+调用该方法的字符串转为小写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
 
 ```js
 str.toLowerCase()//点语法，调用str原型对象的方法。不改变原字符串
@@ -2144,7 +2144,7 @@ str.toLowerCase()//点语法，调用str原型对象的方法。不改变原字�
 
 ### str.indexOf()
 
-　　功能：获取某一个字符第一次出现的下标（判断一个字符串在一个另一个字符串中）
+功能：获取某一个字符第一次出现的下标（判断一个字符串在一个另一个字符串中）
 
 ```js
 str.indexOf(searchValue [, fromIndex])
@@ -2161,7 +2161,7 @@ console.log ( str.indexOf ( "z" ) );//-1  如果不存在则返回固定值-1
 
 ### str.lastIndexOf()
 
-　　返回调用String对象的指定值最后一次出现的索引，在一个字符串中的指定位置 `fromIndex`处**从后向前搜索**。如果没找到这个特定值则返回-1 。
+返回调用String对象的指定值最后一次出现的索引，在一个字符串中的指定位置 `fromIndex`处**从后向前搜索**。如果没找到这个特定值则返回-1 。
 
 ```js
 str.lastIndexOf(searchValue[, fromIndex])
@@ -2187,7 +2187,7 @@ fromIndex默认值是 +Infinity。如果 fromIndex >= str.length ，则会搜索
 
 ### str.replace()
 
-　　把字符串中的字符替换成想要的字符，不改变原字符串本身。
+把字符串中的字符替换成想要的字符，不改变原字符串本身。
 
 ```js
 str.replace('subStr ','newSubStr')
@@ -2212,7 +2212,7 @@ console.log(p4);//11223335555
 
 ### str.trim()
 
-　　去掉字符串的左右空格，不会改变原字符串
+去掉字符串的左右空格，不会改变原字符串
 
 ```js
 str.trim（）
@@ -2228,7 +2228,7 @@ console.log ( str.replace ( /\s/g, "" ) );//safgasdvdsfgs
 
 ### str.search()
 
-　　返回第一次和**正则匹配**的索引，如果没有则返回-1
+返回第一次和**正则匹配**的索引，如果没有则返回-1
 
 ```js
 str.search(regexp)
@@ -2241,7 +2241,7 @@ console.log ( str.search ( /\d/g ) );//7   此方法会忽略全局匹配g
 
 ### str.match()
 
-　　提取字符串中与**正则表达式**相匹配的文本，返回值是数组,找不到则返回null
+提取字符串中与**正则表达式**相匹配的文本，返回值是数组,找不到则返回null
 
 ```js
 str.match(regexp)
@@ -2261,7 +2261,7 @@ console.log ( str.match ( /a/g ) );// ["a", "a"]    此方法支持全局匹�
 
 ### 数值.toFixed()
 
-　　功能：对数值保留指定小数倍，并四舍五入
+功能：对数值保留指定小数倍，并四舍五入
 
 ```js
 //要保证number类型
@@ -2273,7 +2273,7 @@ console.log(num.toFixed(2));//10.46
 
 ### 数值.toString()
 
-　　功能：可以进行进制转换，结果使用字符串表示；如果省略进制，则表示转换为10进制
+功能：可以进行进制转换，结果使用字符串表示；如果省略进制，则表示转换为10进制
 
 ```js
 let n = 10;
@@ -2284,6 +2284,434 @@ console.log(n.toString());//'10'
 ```
 
 ---
+
+# TypeScript
+
+## 基本概念
+
+```js
+TS会在编译的时候进行静态检查
+any类型就是类型系统的一个逃逸舱，是一个全局的超级类型
+nukonwn也是一种全局的超级类型，
+```
+
+### 安装下载
+
+* 安装编译TS的工具包：node只能识别js代码，安装编译包可以把ts代码转成js代码
+
+  ```bash
+  npm i -g typescript
+  tsc –v (查看 typescript 的版本)
+  tsc xxx.ts //把ts文件转成node可执行的js文件
+  ```
+
+### 类型注解
+
+* 类型注解：类型注解可以为变量添加类型约束
+
+  ```js
+  let age:number = 18
+  ```
+* 类型概述
+
+  ```js
+  已有简单类型:number/string/boolean/null/undefined
+  已有复杂类型:数组\对象\函数等
+
+  新增类型:
+  联合类型\自定义类型(类型别名)\接口\元组\字面量类型\void\枚举...
+  ```
+* 简单数据类型注解
+
+  ```js
+  // 数值类型
+  let age: number = 18
+  // 字符串类型
+  let myName: string = '小花'
+  // 布尔类型
+  let isLoading: boolean = false
+  // undefined
+  let un: undefined = undefined
+  // null
+  let timer:null = null
+  // symbol
+  let uniKey:symbol = Symbol()
+  ```
+
+### 类型推论
+
+```js
+在 TS 中，某些没有明确指出类型的地方，TS 的类型推论机制会帮助提供类型
+即，定义变量或函数的时候，不用特意去定义类型，系统会自动根据你的值来给数据类型
+1.声明变量并赋初始值时
+2.决定函数返回值时
+```
+
+### 类型断言
+
+```js
+有时候你会比TS更加明确一个值的类型，此时，可以使用类型断言来指定更具体的类型。
+即，你可能知道里面值得类型，但是不知道里面具体的值就使用类型断言，先给个空的再as一下，告诉系统其实是这个as之后的东西
+类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和解构。它没有运行时的影响，只是在编译阶段起作用。
+type TObj = {
+  name：string,
+  age:number
+}
+let obj : TObj = {} as TObj
+let obj : TObj = <TObj>{}
+```
+
+### 非空断言
+
+```js
+在上下文中当类型检查器无法断定类型时，可以使用缀表达式操作符 ! 进行断言操作对象是非 null 和非 undefined 的类型。
+即x!的值不会为 null 或 undefined(有时候要.出去的那个值有可能是null或者undefined的时候，你使用.操作，系统会提示报错)
+也就是说，使用 x!. 告诉系统，这里肯定可以进行点操作的
+let user: string | null | undefined;
+console.log(user!.toUpperCase()); // 编译正确
+console.log(user.toUpperCase()); // 错误。是null的时候是无法点操作的
+```
+
+### 确定赋值断言
+
+```js
+我们定义了变量, 没有赋值就使用，则会报错
+通过 let x!: number; 确定赋值断言，TypeScript 编译器就会知道该属性会被明确地赋值。
+let value:number
+console.log(value); // Variable 'value' is used before being assigned.
+let value!:number
+console.log(value); // undefined 编译正确
+```
+
+## 数据类型
+
+### 数组类型
+
+```js
+// 写法1:
+let 变量: [] = [值1，...]:
+let numbers: number[] = [1, 3, 5] 
+//  numbers必须是数组，每个元素都必须是数字
+// 写法2:
+let 变量: Array<类型> = [值1，...]
+let strings: Array<string> = ['a', 'b', 'c'] 
+//  strings必须是数组，每个元素都必须是字符串
+```
+
+### 函数类型
+
+* 函数涉及的类型实际上指的是：`函数参数类型`​和`返回值类型`​
+* 单个函数定义
+
+  ```js
+  // 普通函数
+  function 函数名(形参1:类型=默认值,形参2:类型=默认值,...): 返回值类型 {}
+
+  // 声明式实际写法:
+  function add(num1: number, num2: number): number {
+    return num1 + num2
+  }
+
+  let fn2:(num1:number)=>number=function(){}
+
+
+  // 箭头函数
+  const 函数名（形参1:类型=默认值,形参2:类型=默认值, ...):返回值类型 => { }
+  const add2 = (a: number =100, b: number = 100): number =>{
+     return a + b
+   }
+   // 注意： 箭头函数的返回值类型要写在参数小括号的后面
+  add（1,'1') // 报错
+  ```
+* 类型别名
+
+  ```js
+  type Fn = (n1:number,n2:number) => number 
+  const add3 : Fn = (a,b)=>{return a+b }
+  ```
+* 返回值void：即没有返回值，强制`return`​得话，也不会报错
+
+  ```js
+  // 如果什么都不写，此时，add 函数的返回值类型为: void
+  const add = (num1: number):void => {}
+
+  // 如果return之后什么都不写，此时，add 函数的返回值类型为: void
+  const add = (num1: number):void => { return }
+
+  // 如果return的undefined,是你自己明确返回的undefined，不是计算之后得到的undefined
+  const add = (num1: number):undefined => {
+    return undefined  // 返回的 undefined是JS中的一个值
+  }
+  ```
+* 可选参数
+
+  ```js
+  function slice (a?: number, b?: number):void {
+      // ? 跟在参数名字的后面，表示可选的参数,可选参数只能在必须参数的后面
+      // 如果可选参数在必选参数的前面，会报错
+      console.log(111);  
+  }
+
+  注意可选和默认值的区别:
+  设置了默认值之后，就是可选的了，不写就会使用默认值，
+  可选和默认值它们不能一起使用。优先使用默认值
+  ```
+
+### 对象类型
+
+* 基本使用
+
+  ```js
+  const 对象名: {
+    属性名1:类型1,
+    属性名2?:类型2,
+    方法名1(形参1: 类型1,形参2: 类型2):返回值类型,
+    方法名2:(形参1: 类型1,形参2: 类型2) => 返回值类型
+  } = { 属性名1: 值1，属性名2: 值2  }
+
+  // 空对象
+  let person: {} = {}
+
+  // 有属性的对象
+  let person: { name: string } = {
+    name: '同学'
+  }
+
+  // 在一行代码中指定对象的多个属性类型时，使用;(分号)来分隔
+  let person: {name: 'jack'; greet1(name: string):void; greet2: (name: string) => void} = {
+    name: 'jack',
+    greet1() {},
+    greet2:()=>{}
+  }
+
+  // 对象中如果有多个类型，可以换行写，通过换行来分隔多个属性类型，可以去掉 ; 
+  let person: {
+    name: string
+    greet1(name: string):void
+    greet2: (name: string) => void
+  } = {
+    name: 'jack',
+    greet1() {},
+    greet2:()=>{}
+  }
+  ```
+* 类型别名
+
+  ```js
+  // 创建类型别名
+  type Person = {
+    name: string
+    sayHi(): void
+  }
+
+  // 使用类型别名作为对象的类型：
+  let person: Person = {
+    name: 'jack',
+    sayHi() {}
+  }
+  ```
+* 可选参数
+
+  ```js
+  let obj: {
+    name: String
+    age: Number
+    gender?: Boolean
+  } = {
+    name: 'xjj',
+    age: 18
+  }
+  ```
+
+### 联合类型
+
+```js
+| 竖线，在 TS 中叫做联合类型，即:由两个或多个其他类型组成的类型，表示可以是这些类型中的任意一种。
+let 变量: 类型1 | 类型2 | 类型3 .... = 初始值
+let arr1 :number | string = 1 // 可以写两个类型
+```
+
+### 类型别名
+
+```js
+type 别名 = 类型//别名一般首字母大写，也使用T开头
+
+type s = string // 定义
+type CustomArray = (number | string)[]
+
+const str1:s = 'abc'
+let arr1: CustomArray = [1, 'a', 3, 'b']
+```
+
+### 接口
+
+* 概念：当一个对象类型被多次使用时，可以使用类型别名(type)或接口(interface)，以达到复用的目的
+* 基本使用：接口名称(比如，此处的`Iobj`​)，可以是任意合法的变量名称，推荐以`I`​开头
+
+  ```js
+  // 使用 interface 关键字
+  interface IObj {
+    name: String
+    age: Number
+    gender: Boolean
+    sayHi: () => void
+  }
+  let obj1: IObj = {
+    name: '张三',
+    age: 18,
+    gender: false,
+    sayHi: () => console.log('Hi')
+  }
+  ```
+* 和对象类型的区别
+
+  ```js
+  接口:只能为对象指定类型。它可以继承。
+  类型别名:不仅可以为对象指定类型,实际上可以为任意类型指定别名
+  先有的 interface,后有的type,推荐使用 type
+  ```
+* 接口继承：如果两个接口之间有相同的属性或方法，可以将**公共的属性或方法抽离出来，通过继承来实现复用**
+
+  ```js
+  interface Point2D { x: number; y: number }
+  interface Point3D { x: number; y: number; z: number }
+
+  interface Point2D { x: number; y: number }
+  // 继承 Point2D
+  interface Point3D extends Point2D {
+    z: number
+  }
+  ```
+
+### 元组
+
+* 概念：**元组**是一种特殊的**数组** 。
+
+  ```js
+  1.它约定了的元素个数
+  2.它约定了特定索引对应的数据类型
+  ```
+* 定义
+
+  ```js
+  let arr: number[] = [116.27,39.527]//不严谨，因为该类型的数组中可以出现任意多个数字
+  let arr: [number, number] = [116.27,39.527]//元组确切地知道包含多少个元素，以及特定索引对应的类型
+  ```
+
+### 字面量
+
+```js
+字面量，可以说是限定了变量的取值范围
+type Gender = 'girl' | 'boy'
+// 声明一个类型，他的值 是 'girl' 或者是 'boy'
+let g1: Gender = 'girl' // 正确
+let g2: Gender = 'boy' // 正确
+let g3: Gender = 'man' // 错误
+
+let str1 = 'Hello TS'
+const str2 = 'Hello TS'
+str1 是一个变量(let)，它的值可以是任意字符串，所以类型为:string
+str2 是一个常量(const)，它的值不能变化只能是'Hello TS'，所以它的类型为:'Hello TS'，这就是字面量
+```
+
+### 枚举
+
+```js
+1.枚举（enum）的功能类似于字面量类型+联合类型组合的功能，来描述一个值。规定了某些特定的值。
+2.该值只能是一组命名常量中的一个。
+
+定义:
+enum 枚举名 { 可取值1, 可取值2,.. }
+
+使用:
+枚举名.可取值
+```
+
+### any类型
+
+```js
+当类型设置为 any 时，就取消了类型的限制,不推荐使用any这会让TypeScript变为“AnyScript”(失去TS类型保护的优势)
+隐式 any，有下面两种情况会触发:
+1.声明变量不提供类型也不提供默认值
+2.定义函数时，参数不给类型
+
+let obj: any = { x: 0 }
+obj.bar = 100
+obj()
+// obj 可以是任意类型
+const n: number = obj
+```
+
+### 泛型
+
+* 概念：泛型，类型的占位，**不预先指定具体的类型，而是在使用的时候在指定类型限制**的一种特性。  
+  ​![image](assets/image-20221014133828-fdpgaia.png)​
+* 泛型约束：用来约束泛型，即限制泛型的数据类型
+
+  ```js
+  //定义一个函数：函数的参数必须有一个属性： length
+  interface ILength {
+    length: number
+  }
+  //限制了T肯定有length属性
+  function fn<T extends ILength> (a: T): T {
+    console.log(a.length)
+    return a
+  }
+
+  let arr: Array<number> = [1, 2, 3]
+  fn(arr)
+  ```
+* 泛型函数：泛型函数，使用泛型的函数
+
+  ```js
+  //先定义，用泛型占领占位
+  function fn<type>(a:type):tpye{return a}
+
+  //使用的时候，在明确泛型的具体类型
+  fn<number>(1)
+  fn<string>('a')
+  fn('b')
+  ```
+* 泛型接口：使用泛型的接口
+
+  ```js
+  interface IObj<T> {
+    name: string
+    age: number
+    gender: number
+    height: T
+    weight: T
+  }
+
+  let o1: IObj<number> = {
+    name: 'xjj',
+    age: 18,
+    gender: 0,
+    height: 100,
+    weight: 100
+  }
+
+  let o2: IObj<string> = {
+    name: 'xjj',
+    age: 19,
+    gender: 0,
+    height: '一米八',
+    weight: '一百八'
+  }
+  ```
+
+### 装饰器
+
+* 概念
+
+  ```js
+  它是一个表达式
+  该表达式被执行后，返回一个函数
+  函数的入参分别为 target、name 和 descriptor
+  执行该函数后，可能返回 descriptor 对象，用于配置 target 对象
+
+  ```
 
 # WebAPI
 
@@ -2490,9 +2918,9 @@ console.log(oBox.clientHeight);//clientHeight获取可视区域的高
 
 ### 事件概念
 
-　　​`js`​处理用户交互的一种机制
+​`js`​处理用户交互的一种机制
 
-　　事件三要素：事件源、事件类型、事件处理函数
+事件三要素：事件源、事件类型、事件处理函数
 
 ### 事件注册
 
@@ -2503,7 +2931,7 @@ dom.onClick = function(){}
 
 ### 事件监听
 
-　　事件监听是为元素绑定事件的另一种方式，这种方式可以为一个对象的同一个事件绑定多个事件处理函数。
+事件监听是为元素绑定事件的另一种方式，这种方式可以为一个对象的同一个事件绑定多个事件处理函数。
 
 * 添加事件监听：事件名不需要加`on`​，可以绑定多个事件
 
@@ -2619,9 +3047,9 @@ dom.onClick = function(){}
 
 ### 事件流
 
-　　事件触发整套流程，win->dom->win，你触发什么事件，就执行这条链上的同名触发事件函数，vue中也有这个情况
+事件触发整套流程，win->dom->win，你触发什么事件，就执行这条链上的同名触发事件函数，vue中也有这个情况
 
-　　​![image](assets/image-20220923085931-0eifcni.png)​
+​![image](assets/image-20220923085931-0eifcni.png)​
 
 * **事件捕获阶段**：事件从父元素开始向目标元素传播，从 `Window`​ 对象开始传播。
 
@@ -2804,7 +3232,7 @@ pause : 暂停事件
 
 ### BOM概念
 
-　　Brower Object Model浏览器对象模型，浏览器厂商将浏览器设计成由多个对象组成，BOM定义了一套操作浏览器窗口的API
+Brower Object Model浏览器对象模型，浏览器厂商将浏览器设计成由多个对象组成，BOM定义了一套操作浏览器窗口的API
 
 * BOM主要由五大对象组成：
 
@@ -2816,7 +3244,7 @@ pause : 暂停事件
 
 ### BOM与DOM 关系
 
-　　​![1637143293811](assets/BOM_DOM-20220804230540-0h0z33j.png)​
+​![1637143293811](assets/BOM_DOM-20220804230540-0h0z33j.png)​
 
 ### window对象
 
@@ -2876,11 +3304,11 @@ pause : 暂停事件
 
 ### history对象
 
-　　history对象主要用于记录你当前窗口的历史记录，并为我们提供了前进与后退的功能。
+history对象主要用于记录你当前窗口的历史记录，并为我们提供了前进与后退的功能。
 
-　　​`history.forward()`​：实现前进
+​`history.forward()`​：实现前进
 
-　　​`history.back()`​：实现后退
+​`history.back()`​：实现后退
 
 ### navigator对象
 
@@ -2936,13 +3364,13 @@ pause : 暂停事件
   sessionStorage.clear()//清空数据
   ```
 
-　　‍
+‍
 
 ## 重绘（重排）与回流
 
-　　​![image](assets/image-20220804232217-69eb40a.png)​
+​![image](assets/image-20220804232217-69eb40a.png)​
 
-　　​![image](assets/image-20220804232224-6be1mrb.png)​
+​![image](assets/image-20220804232224-6be1mrb.png)​
 
 * ​`浏览器渲染解析页面完整流程`​
 * 1.先解析HTML，生成DOM树（重要步骤）
@@ -2968,7 +3396,7 @@ pause : 暂停事件
 
     * 如：修改颜色，修改透明度等，对布局没有任何影响的
 
-　　​![image](assets/image-20220804232257-30sii1t.png)
+​![image](assets/image-20220804232257-30sii1t.png)
 
 ---
 
@@ -3043,6 +3471,371 @@ pause : 暂停事件
   响应状态码是由http协议规定的，具有通用性。每个不同的状态码都有其标准的含义，不能乱用。
   业务状态码是**后端程序员**自定义的，不具有通用性。
   ```
+
+## 同源跨域
+
+### 概念
+
+同源指的是两个 URL 地址具有相同的**协议地址、主机名、端口号，其中有一个不一样就是跨域**
+
+**跨域请求产生时，请求是发出去了，也是有响应的，仅仅是浏览器同源策略，认为不安全，拦截了结果，不将数据传递我们使用罢了**
+
+### JSONP
+
+* 原理
+
+  ```js
+  利用 <script>标签没有跨域限制的漏洞，网页可以得到从其他来源动态产生的JSON数据。
+  JSONP请求一定需要对方的服务器做支持才可以
+  JSONP优点是简单兼容性好，可用于解决主流浏览器的跨域数据访问的问题。
+  缺点是仅支持get方法具有局限性,不安全可能会遭受XSS攻击。
+  ```
+* JSONP和AJAX
+
+  ```js
+  JSONP和AJAX相同，都是客户端向服务器端发送请求，从服务器端获取数据的方式
+  但AJAX属于同源策略，JSONP属于非同源策略(跨域请求)
+  //同源策略会收到同源跨域的影响
+  //非同源策略不受到跨域的影响
+  ```
+* 步骤
+
+  ```js
+  1.声明一个回调函数，其函数名(如show)当做参数值，要传递给跨域请求数据的服务器，函数形参为要获取目标数据(服务器返回的data)。
+  2.创建一个<script>标签，把那个跨域的API数据接口地址，赋值给script的src,还要在这个地址中向服务器传递该函数名(可以通过问号传参:?callback=show)
+  3.服务器接收到请求后，需要进行特殊的处理：把传递进来的函数名和它需要给你的数据拼接成一个字符串,例如:传递进去的函数名是show，它准备好的数据是show('xxx')
+  4.最后服务器把准备的数据通过HTTP协议返回给客户端，客户端再调用执行之前声明的回调函数（show），对返回的数据进行操作。
+
+  // index.html
+  //封装方法
+  function jsonp({ url, params, callback }) {
+    return new Promise((resolve, reject) => {
+      let script = document.createElement('script')
+      window[callback] = function(data) {
+        resolve(data)
+        document.body.removeChild(script)
+      }
+      params = { ...params, callback } // wd=b&callback=show
+      let arrs = []
+      for (let key in params) {
+        arrs.push(`${key}=${params[key]}`)
+      }
+      script.src = `${url}?${arrs.join('&')}`
+      document.body.appendChild(script)
+    })
+  }
+
+  //这段代码相当于向http://localhost:3000/say?wd=Iloveyou&callback=show这个地址请求数据
+  //然后后台返回show('我不爱你')，最后会运行show()这个函数，打印出'我不爱你'
+  jsonp({
+    url: 'http://localhost:3000/say',
+    params: { wd: 'Iloveyou' },
+    callback: 'show'
+  }).then(data => {
+    console.log(data)//主要看后端返回了什么数据
+  })
+  ```
+
+### CORS
+
+* 概念
+
+  ```js
+  CORS是解决跨域数据请求的终极解决方案，全称是 Cross-origin resource sharing。
+  CORS技术需要浏览器和服务器同时支持，二者缺一不可：
+  浏览器要支持 CORS 功能（主流的浏览器全部支持，IE 不能低于 IE10）
+  服务器要开启 CORS 功能（需要后端开发者为接口开启 CORS 功能）
+  ```
+* 原理：服务器端通过 Access-Control-Allow-Origin 响应头，来告诉浏览器当前的 API 接口是否允许跨域请求。
+
+  ```js
+   Access-Control-Allow-Origin:*
+  ```
+* 优势
+
+  ```js
+  CORS 是真正的 Ajax 请求，支持 GET、POST、DELETE、PUT、PATCH 等这些常见的 Ajax 请求方式
+  只需要后端开启 CORS 功能即可，前端的代码无须做任何改动
+
+  Node.js中可以通过设置如下的请求头 允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  ```
+
+### postMessage
+
+```js
+postMessage是HTML5 XMLHttpRequest Level 2中的API，且是为数不多可以跨域操作的window属性之一，它可用于解决以下方面的问题：
+1.页面和其打开的新窗口的数据传递
+2.多窗口之间消息传递
+3.页面与嵌套的iframe消息传递
+4.上面三个场景的跨域数据传递
+postMessage()方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递 。
+```
+
+### websocket
+
+```js
+Websocket是HTML5的一个持久化的协议，它实现了浏览器与服务器的全双工通信，同时也是跨域的一种解决方案。
+WebSocket和HTTP都是应用层协议，都基于 TCP 协议。
+但是WebSocket 是一种双向通信协议，在建立连接之后，WebSocket 的 server 与 client 都能主动向对方发送或接收数据。
+同时，WebSocket 在建立连接时需要借助 HTTP 协议，连接建立好了之后 client 与 server 之间的双向通信就与 HTTP 无关了。
+原生WebSocket API使用起来不太方便，我们使用Socket.io，它很好地封装了webSocket接口，提供了更简单、灵活的接口，也对不支持webSocket的浏览器提供了向下兼容。
+```
+
+### Node中间件代理(两次跨域)
+
+同源策略是浏览器需要遵循的标准，而如果是服务器向服务器请求就无需遵循同源策略。  
+代理服务器，需要做以下几个步骤：
+
+* 接受客户端请求 。
+* 将请求转发给服务器。
+* 拿到服务器响应数据。
+* 将响应转发给客户端。
+
+我们先来看个例子：本地文件index.html文件，通过代理服务器`http://localhost:3000`​向目标服务器`http://localhost:4000`​请求数据。
+
+```xml
+// index.html(http://127.0.0.1:5500)
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+   $.ajax({
+     url: 'http://localhost:3000',
+     type: 'post',
+     data: { name: 'xiamen', password: '123456' },
+     contentType: 'application/json;charset=utf-8',
+     success: function(result) {
+       console.log(result) // {"title":"fontend","password":"123456"}
+     },
+     error: function(msg) {
+       console.log(msg)
+     }
+   })
+</script>
+```
+
+```javascript
+// server1.js 代理服务器(http://localhost:3000)
+const http = require('http')
+// 第一步：接受客户端请求
+const server = http.createServer((request, response) => {
+  // 代理服务器，直接和浏览器直接交互，需要设置CORS 的首部字段
+  response.writeHead(200, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  })
+  // 第二步：将请求转发给服务器
+  const proxyRequest = http
+    .request(
+      {
+        host: '127.0.0.1',
+        port: 4000,
+        url: '/',
+        method: request.method,
+        headers: request.headers
+      },
+      serverResponse => {
+        // 第三步：收到服务器的响应
+        var body = ''
+        serverResponse.on('data', chunk => {
+          body += chunk
+        })
+        serverResponse.on('end', () => {
+          console.log('The data is ' + body)
+          // 第四步：将响应结果转发给浏览器
+          response.end(body)
+        })
+      }
+    )
+    .end()
+})
+server.listen(3000, () => {
+  console.log('The proxyServer is running at http://localhost:3000')
+})
+复制代码
+```
+
+```javascript
+// server2.js(http://localhost:4000)
+const http = require('http')
+const data = { title: 'fontend', password: '123456' }
+const server = http.createServer((request, response) => {
+  if (request.url === '/') {
+    response.end(JSON.stringify(data))
+  }
+})
+server.listen(4000, () => {
+  console.log('The server is running at http://localhost:4000')
+})
+```
+
+上述代码经过两次跨域，值得注意的是浏览器向代理服务器发送请求，也遵循同源策略，最后在index.html文件打印出`{"title":"fontend","password":"123456"}`​
+
+### nginx反向代理
+
+实现原理类似于Node中间件代理，需要你搭建一个中转nginx服务器，用于转发请求。
+
+使用nginx反向代理实现跨域，是最简单的跨域方式。只需要修改nginx的配置即可解决跨域问题，支持所有浏览器，支持session，不需要修改任何代码，并且不会影响服务器性能。
+
+实现思路：通过nginx配置一个代理服务器（域名与domain1相同，端口不同）做跳板机，反向代理访问domain2接口，并且可以顺便修改cookie中domain信息，方便当前域cookie写入，实现跨域登录。
+
+先下载[nginx](http://nginx.org/en/download.html)，然后将nginx目录下的nginx.conf修改如下:
+
+```ini
+// proxy服务器
+server {
+  listen       81;
+  server_name  www.domain1.com;
+  location / {
+    proxy_pass   http://www.domain2.com:8080;  #反向代理
+    proxy_cookie_domain www.domain2.com www.domain1.com; #修改cookie里域名
+    index  index.html index.htm;
+
+    # 当用webpack-dev-server等中间件代理接口访问nignx时，此时无浏览器参与，故没有同源限制，下面的跨域配置可不启用
+    add_header Access-Control-Allow-Origin http://www.domain1.com;  #当前端只跨域不带cookie时，可为*
+    add_header Access-Control-Allow-Credentials true;
+  }
+}
+```
+
+最后通过命令行`nginx -s reload`​启动nginx
+
+```csharp
+// index.html
+var xhr = new XMLHttpRequest();
+// 前端开关：浏览器是否读写cookie
+xhr.withCredentials = true;
+// 访问nginx中的代理服务器
+xhr.open('get', 'http://www.domain1.com:81/?user=admin', true);
+xhr.send();
+```
+
+```ini
+// server.js
+var http = require('http');
+var server = http.createServer();
+var qs = require('querystring');
+server.on('request', function(req, res) {
+    var params = qs.parse(req.url.substring(2));
+    // 向前台写cookie
+    res.writeHead(200, {
+        'Set-Cookie': 'l=a123456;Path=/;Domain=www.domain2.com;HttpOnly'   // HttpOnly:脚本无法读取
+    });
+    res.write(JSON.stringify(params));
+    res.end();
+});
+server.listen('8080');
+console.log('Server is running at port 8080...');
+```
+
+### window.name + iframe
+
+window.name属性的独特之处：name值在不同的页面（甚至不同域名）加载后依旧存在，并且可以支持非常长的 name 值（2MB）。
+
+其中a.html和b.html是同域的，都是`http://localhost:3000`​;而c.html是`http://localhost:4000`​
+
+```ini
+ // a.html(http://localhost:3000/b.html)
+  <iframe src="http://localhost:4000/c.html" frameborder="0" onload="load()" id="iframe"></iframe>
+  <script>
+    let first = true
+    // onload事件会触发2次，第1次加载跨域页，并留存数据于window.name
+    function load() {
+      if(first){
+      // 第1次onload(跨域页)成功后，切换到同域代理页面
+        let iframe = document.getElementById('iframe');
+        iframe.src = 'http://localhost:3000/b.html';
+        first = false;
+      }else{
+      // 第2次onload(同域b.html页)成功后，读取同域window.name中数据
+        console.log(iframe.contentWindow.name);
+      }
+    }
+  </script>
+复制代码
+```
+
+b.html为中间代理页，与a.html同域，内容为空。
+
+```xml
+ // c.html(http://localhost:4000/c.html)
+  <script>
+    window.name = '我不爱你'  
+  </script>
+复制代码
+```
+
+总结：通过iframe的src属性由外域转向本地域，跨域数据即由iframe的window.name从外域传递到本地域。这个就巧妙地绕过了浏览器的跨域访问限制，但同时它又是安全操作。
+
+### location.hash + iframe
+
+实现原理： a.html欲与c.html跨域相互通信，通过中间页b.html来实现。 三个页面，不同域之间利用iframe的location.hash传值，相同域之间直接js访问来通信。
+
+具体实现步骤：一开始a.html给c.html传一个hash值，然后c.html收到hash值后，再把hash值传递给b.html，最后b.html将结果放到a.html的hash值中。  
+同样的，a.html和b.html是同域的，都是`http://localhost:3000`​;而c.html是`http://localhost:4000`​
+
+```xml
+ // a.html
+  <iframe src="http://localhost:4000/c.html#iloveyou"></iframe>
+  <script>
+    window.onhashchange = function () { //检测hash的变化
+      console.log(location.hash);
+    }
+  </script>
+复制代码
+```
+
+```css
+ // b.html
+  <script>
+    window.parent.parent.location.hash = location.hash 
+    //b.html将结果放到a.html的hash值中，b.html可通过parent.parent访问a.html页面
+  </script>
+复制代码
+```
+
+```ini
+ // c.html
+ console.log(location.hash);
+  let iframe = document.createElement('iframe');
+  iframe.src = 'http://localhost:3000/b.html#idontloveyou';
+  document.body.appendChild(iframe);
+```
+
+### document.domain + iframe
+
+ **该方式只能用于二级域名相同的情况下，比如  和  适用于该方式**​**`a.test.comb.test.com`**​ 。  
+只需要给页面添加 `document.domain ='test.com'`​ 表示二级域名都相同就可以实现跨域。
+
+实现原理：两个页面都通过js强制设置document.domain为基础主域，就实现了同域。
+
+我们看个例子：页面`a.zf1.cn:3000/a.html`​获取页面`b.zf1.cn:3000/b.html`​中a的值
+
+```xml
+// a.html
+<body>
+ helloa
+  <iframe src="http://b.zf1.cn:3000/b.html" frameborder="0" onload="load()" id="frame"></iframe>
+  <script>
+    document.domain = 'zf1.cn'
+    function load() {
+      console.log(frame.contentWindow.a);
+    }
+  </script>
+</body>
+复制代码
+```
+
+```xml
+// b.html
+<body>
+   hellob
+   <script>
+     document.domain = 'zf1.cn'
+     var a = 100;
+   </script>
+</body>
+```
 
 ## [axios](https://www.axios-http.cn/docs/intro)
 
@@ -3203,9 +3996,9 @@ pause : 暂停事件
 
 ### WebSocket简介
 
-　　​`WebSocket`​是一套通讯协议，是属于WebAPI的内容，是H5新增的。
+​`WebSocket`​是一套通讯协议，是属于WebAPI的内容，是H5新增的。
 
-　　​`WebSocket`​通讯协议的特点：1.长连接；2.服务端可以主动给客户端发消息
+​`WebSocket`​通讯协议的特点：1.长连接；2.服务端可以主动给客户端发消息
 
 * 它基于`http：超文本传输协议`​，因为先用http请求建立连接，后面就是`websocke`​t的**长链接技术**进行交互
 
@@ -3276,7 +4069,7 @@ ws.onclose = function () {
 
   ```
 
-　　‍
+‍
 
 ## 原生表单提交
 
