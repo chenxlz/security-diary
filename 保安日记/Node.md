@@ -1,9 +1,3 @@
----
-title: Node
-date: 2022-07-27T20:15:24Z
-lastmod: 2023-02-04T15:37:28Z
----
-
 ![image](assets/v2-d5a78cd0626ff0acfe3f0d3a65828108_r-20220727205227-2gkknpd.jpg)
 
 # Node

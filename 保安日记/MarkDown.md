@@ -1,9 +1,3 @@
----
-title: MarkDown
-date: 2022-07-24T11:23:24Z
-lastmod: 2022-07-24T15:20:20Z
----
-
 ![image](assets/37 2-20221005172053-srd9ghs.jpg)
 
 # MarkDown

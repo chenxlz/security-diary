@@ -1,9 +1,3 @@
----
-title: JavaScript
-date: 2022-07-24T09:46:57Z
-lastmod: 2023-03-03T20:45:15Z
----
-
 ![image](assets/30-20230130221844-hxib8nk.jpg)
 
 # JavaScript
@@ -1107,6 +1101,27 @@ promise三种状态:状态一旦改变就不会回退的
     ... 
   }
   ```
+
+## class
+
+[传送门](https://typescript.bootcss.com/classes.html)
+
+### 基本概念
+
+```js
+创建对象
+extends ：继承
+public ：公开
+private ：私有
+protected ：受保护
+readonly ：只读修饰符
+get、set ：存取器，控制对象成员的访问
+static ：静态属性
+abstract ：抽象类
+
+constructor ：构造函数
+super ：调用父类的constructor再继承
+```
 
 ## 原型对象
 
@@ -2778,7 +2793,7 @@ dom.src  //获取路径(常用于img标签)
   ```js
   <img id="pic" src="./images/yshg.png" alt="" data-sex='男'>
   ```
-* 获取非标属性：**`dom.data.xx`**​
+* 获取非标属性：`**dom.data.xx**`​
 
   ```js
   document.querySelector('img').data.sex//获取dom的sex属性（标签内为data-sex="boy"）
@@ -3830,7 +3845,7 @@ b.html为中间代理页，与a.html同域，内容为空。
 
 ### document.domain + iframe
 
- **该方式只能用于二级域名相同的情况下，比如  和  适用于该方式**​**`a.test.comb.test.com`**​ 。  
+ **该方式只能用于二级域名相同的情况下，比如  和  适用于该方式**​`**a.test.comb.test.com**`​ 。  
 只需要给页面添加 `document.domain ='test.com'`​ 表示二级域名都相同就可以实现跨域。
 
 实现原理：两个页面都通过js强制设置document.domain为基础主域，就实现了同域。

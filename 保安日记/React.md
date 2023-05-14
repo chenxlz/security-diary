@@ -1,9 +1,3 @@
----
-title: React
-date: 2022-12-11T13:16:16Z
-lastmod: 2022-12-26T20:33:34Z
----
-
 ![image](assets/wallpaper_5228834-20230207221228-s3qagsd.jpg)
 
 # React
