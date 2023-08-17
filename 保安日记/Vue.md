@@ -3652,7 +3652,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
 
 # pinia
 
-### 安装下载
+### 基本使用
 
 * 下载
 
@@ -3675,8 +3675,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
   ```js
   // 导入 defineStore 函数：创建 pinia 的实例
   import { defineStore } from 'pinia'
-  // 创建一个 store 函数
-  // defineStore('store 实例的名称', { // store 实例的属性})
+  //创建一个 store 函数 defineStore('store 实例的名称', { // store 实例的属性})
   const useCouterStore = defineStore('couter', {
     state: () => {
       return {
@@ -3720,7 +3719,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
 * 定义：`src/stroe/counter.js`​
 
   ```js
-  1.defineStore("storeName",{})//创建store实例的时候，必须传入storeName,storeName是唯一的
+  defineStore(storeName,options)//创建store实例的时候，必须传入storeName,storeName是唯一的
 
   import { defineStore } from 'pinia'
   export default const useCounterStore = defineStore('main', {
@@ -3740,7 +3739,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
   counter.double//计算属性
   counter.fn()//方法
   ```
-* 解构：像`setup`​ 中的`props`​ 一样， **我们不能对其进行解构 （直接解构不是响应式）**
+* 解构`storeToRefs`​：像`setup`​ 中的`props`​ 一样，**不能对其进行解构 （直接解构不是响应式）**
 
   ```js
   //storeToRefs(store实例)
@@ -3761,16 +3760,14 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
     // 推荐使用 完整类型推断的箭头函数
     state: () => {
       return {
-        // 所有这些属性都将自动推断其类型
-        counter: 0,
+        counter: 0,// 所有这些属性都将自动推断其类型
         name: 'Eduardo',
         isAdmin: true,
       }
     },
 
-    //或者
+    //或者,少写个return
     state: () => ({
-      // 所有这些属性都将自动推断其类型
       counter: 0,
       name: 'Eduardo',
       isAdmin: true,
@@ -3783,19 +3780,23 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
   import useCounterStore from "@/store/counter.js"
   const counter = useCounterStore()
   counter.xxx
-  //部分修改
   counter.xxx++//可以直接修改
 
-  //多部分修改
+  //多部分修改直接修改
   counter.$path({
     xxx:counter.xxx+1
     name:'zhansan'
   })
+  //多部分使用回调函数，参数是store实例
+  counter.$path((store)=>{
+    state.items.push({ name: 'shoes', quantity: 1 }) //方便使用数组方法
+  })
+
   ```
 
 ### getter
 
-* 概念：pinia中的计算属性
+* 概念：pinia中的计算属性，需要传参的话，返回一个函数既可
 * 定义：和state一样
 
   ```js
@@ -3808,6 +3809,12 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
       //不传参，在ts中，使用this获得store内的值，需要明确返回值的类型
       doubleCount():number{
         return this.counter * 2//可以通过this访问
+      }
+      //利用返回值里面写一个箭头函数，箭头函数为输入的参数来达到计算属性传参的效果
+      fn():(state)=>{
+        return (num)=> {
+          return   num * this.counter
+        }
       }
     }
   })
@@ -3825,7 +3832,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
 ### actions
 
 * 概念：可以异步和同步，用来操作pinia内的state数据
-* 定义：和`methods`​一样，可以自定义传参
+* 定义：和`methods`​​一样，可以自定义传参
 
   ```js
   import { defineStore } from 'pinia'
@@ -3850,21 +3857,6 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
   }
   //解构写法
   let {getUserInfo} = counter
-  ```
-* API
-
-  ```js
-  订阅actons及其结果，执行顺序在action之前执行
-  store.$onActions(({
-       name, // action 的名字
-       store, // store 实例
-       args, // 调用这个 action 的参数
-       after, // 在这个 action 执行完毕之后，执行这个函数
-       onError, // 在这个 action 抛出异常的时候，执行这个函数
-    })=>{
-      after((result)=>{}),
-      onError((error)=>{})
-  })
   ```
 
 ### API
@@ -3904,9 +3896,84 @@ const count = useCountStore()
 const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响应式
 ```
 
+### 组合式写法
+
+* 选项式：把`state`​、`getter`​、`actions`​都定义好
+
+  ```js
+  import { defineStore } from "pinia"
+  const useStore = defineStore('mian',{
+    state:()=>({
+      ......
+    })
+    getter:{}
+    actions:{}
+  })
+  ```
+* 组合式：`state`​、`getter`​、`actions ​`​随意自己搭配写，和vue3中的组合式一样
+
+  ```js
+  1.ref 是 state
+  2.computed 是 getter
+  3.function 是 actions
+
+  import { defineStore } from "pinia"
+  import { ref,computed } from "vue"
+  const useStore = defineStore('mian',{
+    const name = ref('name')
+    const myName = computed(()=>{this.name.value})
+    const setName = (newName)=>{
+      this.name.value = newName
+    }
+    return {
+      name,
+      myName ,
+      setName 
+    }
+  })
+  ```
+
+### 持久化
+
+* 插件名称：`pinia-plugin-persistedstate`​
+* 安装：​`yarn add pinia-plugin-persistedstate`​
+* 引入
+
+  ```js
+  import { createApp } from 'vue'
+  import { createPinia } from 'pinia'
+  import piniaPluginPersistedstate  from 'pinia-plugin-persistedstate'
+  import App from './App.vue'
+
+
+  const app = createApp(App)
+  const pinia = createPinia()
+  pinia.use(piniaPluginPersistedstate)//pinia使用插件
+  app.use(pinia)
+  app.mount('#app')
+  ```
+* 使用：`defineStore`​第三个参数
+
+  ```js
+  export const useStore = defineStore("YourStore", () => {}, {
+      persist: {
+          enabled: true,
+          strategies: [{
+              // 自定义存储的 key，默认是 store.$id
+              key: "custom storageKey",
+              // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
+              storage: localStorage,
+              // state 中的字段名，按组打包储存
+              paths: ["foo", "bar"]
+          }],
+      }
+  })
+
+  ```
+
 # vuex
 
-### 下载安装
+### 基本使用
 
 * 下载安装：创建项目后，，通过`node`安装
 
@@ -3968,7 +4035,6 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
       count: 0
     }
   })
-
   ```
 * 访问数据
 
@@ -3999,7 +4065,6 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
       return newValue
     }
   }
-
   //拓展使用
   getters:{
     方法名(state,getters,rootState,rootGetters){
@@ -4012,7 +4077,6 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
     return  //这边就可以使用别的模块的数据
     },
   }
-
   ```
 * 使用方法
 
@@ -4230,10 +4294,9 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
 
 ### 创建项目
 
-```bash
+```js
 //会自动下载vite的，不需要npm i xxx
 npm create vite
-# or
 yarn create vite
 
 //快速创建项目
