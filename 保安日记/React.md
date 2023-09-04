@@ -53,7 +53,7 @@
 
 　　**一个 state 变量的值永远不会在一次渲染的内部发生变化**
 
-### 视图的更新
+### 视图更新
 
 　　**React 会等到事件处理函数中的** 所有 **代码都运行完毕再处理你的 state 更新。**
 
@@ -75,7 +75,7 @@
 
 ### 函数组件和类组件
 
-* 类组件：ES6的加入让JavaScript直接支持使用class来定义一个类，react创建组件的方式就是使用的类的继承， ES6 class 是目前官方推荐的使用方式，它使用了ES6标准语法来构建
+* 类组件：ES6的加入让`JavaScript`​直接支持使用`class`​来定义一个类，`react`​创建组件的方式就是使用的类的继承， `ES6 class ​`​是目前官方推荐的使用方式，它使用了ES6标准语法来构建
 
   ```js
   import React from 'react'
@@ -107,29 +107,41 @@
 
 ### 事件处理
 
-```js
-react中的事件绑定，使用 on + 事件名方式来绑定事件
-react的事件绑定和原生的事件绑定是不一样的
-原生事件都是小写  onclick 
-react 是驼峰写法 onClick
-react的事件不是原生事件，并不是绑定在dom上的，而是合成事件，有自己的事件处理机制，事件好像是在根节点统一处理，通过事件冒泡来的
+* 事件绑定
 
-event对象
-和普通浏览器一样，事件handler会被自动传入一个 event 对象
-这个对象和普通的浏览器 event 对象所包含的方法和属性都基本一致。
-不同的是 React中的 event 对象并不是浏览器提供的，而是它自己内部所构建的。
-它同样具有 event.stopPropagation、event.preventDefault 这种常用的方法
-```
+  ```js
+  react中的事件绑定，使用 on + 事件名方式来绑定事件
+  react的事件绑定和原生的事件绑定是不一样的
+  原生事件都是小写  onclick 
+  react 是驼峰写法 onClick
+  react的事件不是原生事件，并不是绑定在dom上的，而是合成事件，有自己的事件处理机制，事件好像是在根节点统一处理，通过事件冒泡来的
+  ```
+* ​`event`​对象
+
+  ```js
+  event对象
+  和普通浏览器一样，事件handler会被自动传入一个 event 对象
+  这个对象和普通的浏览器 event 对象所包含的方法和属性都基本一致。
+  不同的是 React中的 event 对象并不是浏览器提供的，而是它自己内部所构建的。
+  它同样具有 event.stopPropagation、event.preventDefault 这种常用的方法
+  ```
 
 ### ref
 
 ```js
+推荐的获取ref的方法
 1.定义需要的ref
 const myRef = React.createRef()
 2.挂载ref
 <div ref={this.myRef}>hello</div>
 3.获取ref
 this.myRef.current
+
+老方法
+1.挂载ref
+<div ref=myRef>hello</div>
+2.获取ref
+this.refs.myRef.current
 ```
 
 ### state
