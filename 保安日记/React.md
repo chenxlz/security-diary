@@ -2,7 +2,7 @@
 
 # React
 
-# [React](assets/React全家桶-20230902185416-dfw0shn.pdf)基础
+# [React](assets/React全家桶-20230902185416-dfw0shn.pdf)相关概念
 
 ### 关于JSX
 
@@ -73,6 +73,12 @@
 任何其他的值（例如：数字 5）会导致“替换为 5”被添加到队列中，已经在队列中的内容会被忽略。
 ```
 
+### react样式
+
+　　关于`react`​中写样式的问题，目前来说没有比较统一的方案，react比较推荐的是直接在组件中写行内样式。因为一个组件就是一个整体，直接在组件内部写行内样式即可。
+
+　　也可以单独的拿一个文件夹来存放 `css ​`​样式文件，在组件需要的地方， 使用 `import ​`​导入使用即可
+
 ### 函数组件和类组件
 
 * 类组件：ES6的加入让`JavaScript`​直接支持使用`class`​来定义一个类，`react`​创建组件的方式就是使用的类的继承， `ES6 class ​`​是目前官方推荐的使用方式，它使用了ES6标准语法来构建
@@ -142,6 +148,13 @@ this.myRef.current
 <div ref=myRef>hello</div>
 2.获取ref
 this.refs.myRef.current
+
+ref使用箭头函数返回组件实例
+设置变量接受
+let myRef = null
+再组件中获取
+<div ref={ el => this.myRef = el }>hello</div>
+
 ```
 
 ### state
@@ -208,3 +221,118 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
 
 <div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
 ```
+
+# react基础
+
+## 组件通信
+
+## 生命周期
+
+## 插槽
+
+### children
+
+　　父组件可以直接向子组件中插入内容，此时在子组件中可以在**this.props.children**获取到插入到其中传递的元素。
+
+1. 如果插入了多个元素，那么this.props.children是一个数组，此时可通过索引访问到对应位置的元素
+
+2. 如果插入了单个元素，那么this.props.children即该元素（**就不是一个数组了**）
+
+* 子组件
+
+  ```js
+  子组件通过this.props.children 获取父组件传递过来的标签
+  import React, { Component } from 'react'
+  import PropTypes from "prop-types"
+
+  export class NavBar extends Component {
+    render() {
+      const { children } = this.props
+      return (
+        &lt;div className='nav-bar'&gt;
+          &lt;div className=&quot;left&quot;&gt;{children[0]}&lt;/div&gt;
+          &lt;div className=&quot;center&quot;&gt;{children[1]}&lt;/div&gt;
+          &lt;div className=&quot;right&quot;&gt;{children[2]}&lt;/div&gt;
+        &lt;/div&gt;
+      )
+    }
+  }
+
+  NavBar.propTypes = {
+    children: PropTypes.array//表示children是数组形式，需要父组件传递多个内容进来
+    children: PropTypes.element//表示children是一个元素，父组件只能传递一个内容进来，这样的话，this.props.children 就是指该原生本身了
+  }
+
+  export default NavBar
+  ```
+* 父组件
+
+  ```js
+  import React, { Component } from 'react'
+  import NavBar from './nav-bar'
+
+  export class App extends Component {
+    render() {
+      return (
+        <div>
+          <NavBar>
+            <button>按钮</button>
+            <h2>哈哈哈</h2>
+            <i>斜体文本</i>
+          </NavBar>
+        </div>
+      )
+    }
+  }
+
+  export default App
+
+  ```
+
+### props
+
+　　使用children实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
+
+　　**在父组件中不仅可以使用props来向子组件传递数据、回调函数外，还可以传递元素**
+
+* 父组件
+
+  ```js
+  import React, { Component } from 'react'
+  import NavBar from './nav-bar'
+
+  export class App extends Component {
+    render() {
+      const btn = <button>按钮</button>
+      return (
+        <div>
+          <NavBar
+            leftSlot={btn}
+            centerSlot={<h2>哈哈哈</h2>}
+            rightSlot={<i>123</i>}
+          />
+        </div>
+      )
+    }
+  }
+  export default App
+  ```
+* 子组件
+
+  ```js
+  import React, { Component } from 'react'
+  export class NavBarTwo extends Component {
+    render() {
+      const { leftSlot, centerSlot, rightSlot } = this.props
+
+      return (
+        <div className='nav-bar'>
+          <div className="left">{leftSlot}</div>
+          <div className="center">{centerSlot}</div>
+          <div className="right">{rightSlot}</div>
+        </div>
+      )
+    }
+  }
+  export default NavBarTwo
+  ```
