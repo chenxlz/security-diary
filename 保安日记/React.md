@@ -2,7 +2,7 @@
 
 # React
 
-# [React](assets/React全家桶-20230902185416-dfw0shn.pdf)相关概念
+# React相关概念
 
 ### 关于JSX
 
@@ -631,14 +631,6 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
   Parent 组件： componentDidUpdate()
   ```
 
-　　‍
-
-　　‍
-
-　　‍
-
-　　‍
-
 ## 插槽
 
 ### children
@@ -749,3 +741,366 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
   ```
 
 ## hooks
+
+　　react中：Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
+
+　　Hook只能在函数式组件或者自定义hook中使用，不能在类式组件中使用
+
+　　Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使用，否则可能会导致预料之外的 bug
+
+### useState
+
+* 作用：让函数组件具有修改state的 能力，因为在函数式组件中没有 this，React 会在重复渲染时保留这个 state，而 useState 可以让你在函数组件中管理状态。
+* 使用
+
+  ```js
+  import React, { useState } from 'react';
+
+  function Example() {
+    // 声明一个叫 count 的 state 变量 useState(0) 传参 0 为设置的初始值
+    const [count, setCount] = useState(0); //[] 数组解构  取到数组中对应位置的值 赋给相应变量
+    // 声明多个 state 变量，给不同的 state 变量取不同的名称  state 变量可以很好地存储对象和数组
+    const [todos, setTodos] = useState([{ text: '学习 Hook' }]);
+    return (
+      <div>
+      	<!-- 在函数中，我们可以直接用 count -->
+        <p>You clicked {count} times</p>
+        <!-- 更新state  setCount 和 count 变量，所以我们不需要 this -->
+        <button onClick={() => setCount(count + 1)}>
+          Click me
+        </button>
+      </div>
+    );
+  }
+  ```
+
+### useEffect
+
+* 作用：给函数式组件提供操作副作用的能力，在render之后执行。调用 `useEffect`​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
+* 使用
+
+  ```js
+  import React, { useState, useEffect } from 'react';
+  function Example() {
+    const [count, setCount] = useState(0);
+    useEffect(
+      () => {
+        // 在函数体内部执行的操作 等价于 componentDidMount  & componentDidUpdate
+        // 使用浏览器的 API 更新页面标题     		
+        document.title = `You clicked ${count} times`;  
+        // 函数 return 时等价于 componentWillUnmount 如解绑事件 
+        return () => {
+           // do something...
+        };
+      },
+      // 监听数据，当依赖的值发生变更时，执行副作用函数
+      [ xxx，obj.xxx ]
+    );
+    return (
+      <div>
+        <p>You clicked {count} times</p>
+        <button onClick={() => setCount(count + 1)}>
+          Click me
+        </button>
+      </div>
+    );
+  }
+  ```
+* 注意点
+
+  ```js
+  1.参数有两个，一个是需要执行的回调函数，一个依赖数组
+  2.依赖数组在指定的状态变化时候，重新执行回调函数
+  3.依赖数组为[]，表示不会因为状态改变而执行回调，只会在初始化的时候执行，相对于生命周期中的 componentDdidMount
+  4.函数组件每渲染一次，该函数就执行一次
+  5.第一个参数的回调函数有返回值，可以返回一个函数，该函数会在组件被卸载前执行，用于清除之前执行的副作用操作。
+  这意味着每次执行useEffect时，都会先清除之前的副作用操作，然后再执行新的副作用操作，如果组件多次渲染，则在执行下一个 useEffect 之前，上一个 useEffect 就已被清除+
+
+  //因为组件的每次渲染，都会执行设置好的回调，所以要设置好返回函数用于清空副作用，避免一些坏的影响
+  useEffect(()=>{
+    // 右键监听事件
+    document.addEventListener('contextmenu', handleContext);
+    return ()=> {
+      // 移除事件监听
+      document.removeEventListener('contextmenu', handleContext)
+    }
+  })
+
+  ```
+* 常见用途
+
+  ```js
+  数据获取：使用useEffect可以在组件渲染后发起网络请求，获取数据并更新组件状态。
+  订阅数据源：使用useEffect可以在组件渲染后订阅数据源，并在数据更新时更新组件状态。
+  手动修改DOM：使用useEffect可以在组件渲染后手动修改DOM，例如添加、删除或更新元素。
+  绑定监听事件：在 useEffect 中绑定事件的监听或订阅，并在 return 时解除对事件的绑定。
+
+  组件初始化：使用useEffect可以在组件初始化时执行一些逻辑，例如设置初始状态、初始化数据等。
+  组件卸载：使用useEffect可以在组件卸载时执行一些清理逻辑，例如取消订阅、清除定时器等。
+  监听状态变化：使用useEffect可以监听组件状态的变化，并在变化时执行一些逻辑，例如更新DOM、触发动画等。
+  ```
+
+### useContext
+
+* 作用：实现跨组件间的数据传输，就是类组件context中的数据消费者。
+* 注意点：`useContext ​`​的参数必须是 `context ​`​对象本身。
+* 使用：传入 `context ​`​​对象本身，来获取父组件提供的上下文对象信息
+
+  ```js
+  1.创建context对象
+  import { createContext } from 'react';
+  export const MyContext = createContext();
+  2.在父组件中提供依赖信息
+  export default calss App extend Compontend {
+    render(){
+      return (
+         <MyContext.Provider value={
+            ... 需要提供的属性
+          }>
+            <Son></Son>//子组件需要被包裹
+         <MyContext.provider>
+      )
+    }
+  }
+
+  3.子接收父组件传来的context
+  import MyContext  from "xxx"
+  import { useContext } from "react"
+  export default function Son(){
+    const context = useContext(useContext)//context 就是父组件提供的数据对象
+    return <div>...</div>
+  }
+  ```
+
+### useReducer
+
+* 作用：用于管理组件中的状态。与useState不同，useReducer可以更好的处理复杂的状态逻辑，尤其是需要多个状态相互作用时，可以简单的理解成是 小号版的vuex，不是全局性的，但是可以在多个组件中使用。
+* reducer和redux区别
+
+  ```js
+  1.reducer用于单个组件的状态管理，适合复杂的state变化
+  2.redux是全局的状态管理工具
+  3.reducer在组件间的通信使用的还是 props
+  ```
+* 使用：reducer 返回值和当前的state相同，react会跳过子组件的渲染及副作用的执行
+
+  ```js
+  1.参数1：一个回调函数，该回调函数第一个形参是state，第二个形参是action，表示返回的dispath中传递的对象
+  2.参数2：默认状态的对象
+  3.返回值1：状态state
+  4.返回值2：一个回调函数，该回调的第一个参数是个对象，会传递给aciton，利用对象中的变量不同，来改变state
+  5.react会确保 dispath 函数的标识是稳定的，不会在组件重新渲染的时候改变
+  6.reducer 返回值和当前的state相同（使用Object.is 来比较），react会跳过子组件的渲染及副作用的执行
+
+  接收 (state,action)=>newState 的 reducer，并返回当前的state和配套的dispath方法。
+  const [state, dispatch] = useReducer(reducer, initialArg, init);
+  const initialState = {count: 0};
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'increment':
+        return {count: state.count + 1};
+      case 'decrement':
+        return {count: state.count - 1};
+      default:
+        throw state //这样可以跳过渲染
+    }
+  }
+
+  function Counter() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    return (
+      <>
+        Count: {state.count}
+        <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+        <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      </>
+    );
+  }
+  ```
+
+### useContext和useReducer
+
+　　​`useContext ​`​和 `useReducer ​`​经常结合在一起进行使用，用于单组件下的状态管理
+
+　　​`useContext ​`​方便管理父组件传递来的`props`​，`useReducer ​`​方便管理复杂的state
+
+* 父组件：提供props
+
+  ```js
+  // App.tsx
+  import './App.css';
+  import React, { useContext, useReducer } from 'react'
+  import Son from './pages/Son';
+  const initState = {
+    count: 1
+  } // 定义初始化数据
+  export const Context = React.createContext<{
+    state: typeof initState,
+    dispatch: React.Dispatch<any>
+  }>({
+    state: initState,
+    dispatch: () => { },
+  })
+
+
+  function App() {
+    const reducer = (preState, action) => {
+      let { type } = action;
+      if (typeof action === 'function') {
+        type = action()
+      }
+
+      switch (type) {
+        case 'increment':
+          return { count: preState.count + 1 };
+        default:
+          return preState;
+      }
+    } // 定义reducer
+    const [state, dispatch] = useReducer(reducer, initState) // 把数据传递给reducer
+
+    return (
+      <Context.Provider value={{ state, dispatch }}>
+        <div className="App">
+          <div>这是一个组件</div>
+          <Son />
+        </div>
+      </Context.Provider>
+    );
+  }
+
+  export default App;
+  ```
+* 子组件：使用 `useContext`​方便接收数据
+
+  ```js
+  // Son.tsx
+  import React, { useContext } from 'react';
+  import { Context } from '../App'
+  const Son = () => {
+    const context = useContext(Context)
+    console.log(context);
+
+    return (
+      <div>
+        这是子组件
+        {context.state.count}
+        <div onClick={() => context.dispatch({ type: 'increment' })}>子组件里点击count + 1</div>
+      </div>
+    )
+  }
+  export default Son
+  ```
+
+### useMemo
+
+* 概念：对依赖的计算结果进行缓存，可以提高组件的性能，类似vue中的computed
+* 使用：它接收两个参数：一个计算函数和一个依赖项数组。
+
+  ```js
+  1.当依赖项数组中的任何一个值发生变化时，useMemo 将重新计算计算函数，并返回新的结果。否则，它将返回之前缓存的结果。
+  2.useMemo 拥有暂存能力，缓存上一次的结果并比对，若值未发生变化则不赋值。
+  注意:传入 useMemo 的函数会在渲染期间执行。所以不要在这个函数内部执行与渲染无关的操作。否则在每次渲染时 useMemo 都会进行计算。
+  import { useMemo } from "react"
+  const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+  ```
+
+### useCallback
+
+* 概念：缓存函数，函数式组件，在state、props改变时都会渲染，为了避免`function`​的重复定义，可以使用该hook
+* 使用：把内联回调函数及依赖项数组作为参数传入 `useCallback`​，它将返回该回调函数的**缓存版本**，该回调函数只有在某个依赖项改变时才会更新。
+
+  ```js
+  1.事实上，useCallback 内部实现就是使用了 useMemo，useCallback(fn, deps) 相当于 useMemo(() => fn, deps)，它们都可以用来缓存一个函数，并在依赖项发生变化时重新创建该函数。
+
+  const memoizedCallback = useCallback(
+    () => {
+      doSomething(a, b);
+    },
+    [a, b],
+  );
+  ```
+
+### useRef
+
+* 概念：useRef 用于创建一个可变的 ref 对象。同时我们可以通过 ref 访问 DOM。只有current一个属性
+* 特点：
+
+  ```js
+  1.useRef 在每次渲染时都会返回同一个 ref 对象，因此它可以用来存储组件中的持久化数据，而不会触发组件的重新渲染。
+  2.useRef 会在每次渲染时返回同一个 ref 对象。
+  3.返回一个可变的 ref 对象，该对象只有个 current 属性，初始值为传入的参数( initialValue )
+  4.当更新 current 值时不会引发组件重新渲染
+  5.useRef 类似于类组件的 this
+
+  ```
+* 使用
+
+  ```js
+  function TextInputWithFocusButton() {
+    const inputEl = useRef(null);
+    const onButtonClick = () => {
+      // `current` 指向已挂载到 DOM 上的文本输入元素
+      // 通过 ref 获取 dom 元素
+      inputEl.current.focus();
+    };
+    return (
+      <>
+        <input ref={inputEl} type="text" />
+        <button onClick={onButtonClick}>Focus the input</button>
+      </>
+    );
+  }
+
+
+  import React,{ useState, useRef, useEffect } from 'react'
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(()=>{
+    if(!active) {
+      inputRef.current?.focus()
+    }
+  }, [active])
+  ```
+
+### useImperativeHandle
+
+* 概念：用于暴露自定义的方法或属性给父组件，从而使父组件可以直接调用子组件中的方法或属性。
+* 使用：`useImperativeHandle`​ 接受两个参数：`ref ​`​和一个回调函数。其中，`ref`​ 是一个由 `React.forwardRef ​`​创建的 ref 对象，用于在父组件中引用子组件。
+
+  ```js
+  useImperativeHandle(ref, createHandle, [deps])
+
+  1.子组件暴露
+  import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+  const MyInput = forwardRef((props, ref) => {
+    const inputRef = useRef();
+    useImperativeHandle(ref, () => ({
+      focus: () => {
+        inputRef.current.focus();
+      }
+    }));
+
+    return <input type="text" ref={inputRef} />;
+  });
+
+  2.父组件引用子组件的ref调用该方法
+  import React, { useRef } from 'react';
+  import MyInput from './MyInput';
+  function MyForm() {
+    const inputRef = useRef();
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      inputRef.current.focus();
+    };
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <MyInput ref={inputRef} />
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+  ```
+
+　　‍
