@@ -1103,4 +1103,473 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
   }
   ```
 
+# 路由
+
+　　​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用
+
+## 内置组件
+
+```js
+<BrowserRouter>  //路由模式
+<HashRouter>  //路由hash模式
+<Route>  //路由实例
+<Redirect> V6已经废弃，重定向
+<Link>  // a标签跳转
+<NavLink>
+<Switch> V6已经废弃
+```
+
+### Link
+
+```js
+有replace参数，默认是false，即代表是使用replace还是push进行跳转
+<Link to="/home">home<Link>
+编译后
+<a href="/home">home</a>
+```
+
+### Route
+
+```js
+import Home from "./pages/home";
+import About from "./pages/about";
+// V5
+<Route path="/home" component={Home} />
+<Route path="/about" component={About} />
+
+// V6中，route组件需要被包裹在 Routes 组件中
+<Routes>  
+    <Route path="/home" element={<Home />} />
+    <Route path="/about" element={<About />} />
+</Routes>
+
+```
+
+### HashRouter
+
+　　路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件    
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
+```
+
+### NavLink
+
+　　支持高亮颜色，高亮`class`​默认为`active`​
+
+* V5通过`activeClassName`​自定义选中态的类名
+* V6通过给`className`​传入**函数**，依赖`isActive`​参数确定
+
+```js
+// V5
+<NavLink className='link' activeClassName='nav-active' to="/home">
+    home
+</NavLink>
+// V6
+<NavLink className={({isActive}) => `link ${isActive ? 'nav-active' : ''}`} to="/home">
+    home
+</NavLink>
+```
+
+### Switch（Routes）
+
+　　单一路由匹配
+
+　　router V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
+
+### Navigate
+
+　　可以用来实现路由的重定向，只要该组件出现，就会执行重定向的跳转，并跳转对应的to路径中
+
+```js
+v5
+import React from "react";
+import { Navigate } from "react-router-dom";
+// 这里的isLogin就是用来标识是否登录，实际项目一般是取redux里面的相关值
+const isLogin = false;
+const AuthComp = (props) => {
+  const { comp:Comp } = props;
+  // 如果登录就放行
+  if (isLogin) return Comp;
+  // 如果没有登录就重定向到Login登录页
+  return <Navigate to="/login" replace/>;
+};
+export default AuthComp;
+
+v6
+import { useNavigate } from 'react-router-dom';
+export default function withRouter(WrapperComponent){
+  return props=>{
+    const navigate=useNavigate()
+    return <WrapperComponent {...props} router={{navigate}}/>
+  }
+}
+class TestDemo extends Component{
+  constructor(props) {
+  super(props);
+    this.props.router....
+  }
+ render() {
+    return (
+      <div>test</div>
+    )
+  }
+}
+export default withRouter(TestDemo)
+```
+
 　　‍
+
+### withRouter
+
+　　​`withRouter`​可以加工一般组件，让一般组件具备路由组件所特有的`API`​，返回的是一个新组件
+
+　　V6已废弃，V5中一般组件(非路由组件)想要用路由的API，比如`this.props.history.push()`​，需要用`withRouter`​包一层
+
+## router基础
+
+### 多级路径刷新页面样式丢失问题
+
+* ​`public/index.html`​ 中引入样式不写 `./`​ 写 `/`​
+* ​`public/index.html`​ 中引入样式不写 `./`​ 写 `%PUBLIC_URL%`​
+* 使用`HashRouter`​
+
+### 精准匹配与模糊匹配
+
+* V5默认是**模糊匹配**，通过`在Route`​配置加`exact`​开启**精准匹配**
+* V6默认开启**精准匹配**，加`/*`​开启**模糊匹配**
+
+### 重定向
+
+　　一般写在所有路由的最下方，当所有路由无法匹配的时候，跳转到兜底的路由
+
+* V5通过`<Redirect to="/home" />`​
+* V6已废除`Redirect`​标签，通过`<Route path="*" element={<Navigate to="/home" />} />`​
+
+```js
+import { Route, Routes, Navigate, Redirect } from "react-router-dom";
+// V5
+<Routes className="route">
+    <Route path="/home" component={Home} />
+    <Route path="/about" component={About} />
+    <Redirect to="/home" />
+</Routes>
+
+// V6
+<Routes className="route">
+    <Route path="/home" element={<Home />} />
+    <Route path="/about" element={<About />} />
+    <Route path="*" element={<Navigate to="/home" />} />
+</Routes>
+```
+
+### 嵌套路由
+
+* V5注册子路由需要写父路由的`path`​值
+
+* V6的版本都不需要写`/`​，只需要地址就行，也`不需要你写前面的路径`​，只需要你写下个路径是啥就行
+
+　　路由的匹配是按照注册路由的顺序执行的
+
+```js
+// V5
+
+{/* 导航区 */}
+{[
+    { to: "/home", children: "home" },
+    { to: "/about", children: "about" },
+].map((nav) => (
+    <AppNavLink key={nav.to} {...nav} />
+))}
+
+{/* 展示区 */}
+<Switch className="route">
+    <Route path="/home" component={Home} />
+    <Route path="/about" component={About} />
+    <Redirect to="/home" />
+</Switch>
+
+// pages/home/index.js
+ <div style={{ display: 'flex' }}>
+    <AppNavLink to='/home/message' children="message" />
+    <AppNavLink to='/home/news' children="news" />
+</div>
+
+<Switch>
+    <Route path="/home/message" component={HomeMessage} />
+    <Route path="/home/news" component={HomeNews} />
+</Switch>
+
+// V6
+// app.js
+{/* 导航区 */}
+{[
+    { to: "/home", children: "home" },
+    { to: "/about", children: "about" },
+].map((nav) => (
+    <AppNavLink key={nav.to} {...nav} />
+))}
+
+{/* 展示区 */}
+<Routes className="route">
+    <Route path="/home/*" element={<Home />} />
+    <Route path="/about/*" element={<About />} />
+    <Route path="*" element={<Navigate to="/home" />} />
+</Routes>
+
+// pages/home/index.js
+ <div style={{ display: 'flex' }}>
+    <AppNavLink to='message' children="message" />
+    <AppNavLink to='news' children="news" />
+</div>
+
+<Routes>
+    <Route path="message" element={<HomeMessage />} />
+    <Route path="news" element={<HomeNews />} />
+</Routes>
+
+```
+
+### 路由传参
+
+1. params：动态路由传参
+
+    ```js
+    // V5
+    {/* 向组件传递params参数 */}
+    <Link to={`detail/${msg.id}/${msg.title}`}>{msg.title}</Link>
+
+    {/* 声明接收params参数 */}
+    <Route path="detail/:id/:title" component={HomeMessageDetail} />
+
+    {/* 接收params参数 */}
+    const {id, title} = this.props.match.params
+
+    //v6
+    import {  useParams } from "react-router-dom";
+    const params=useParams()
+    ```
+2. search：查询参数
+
+    ​`urlencoded编码`​：类似`key=value&key=value`​的编码方式，可用npm包`url-parse`​处理，
+
+    ```js
+    {/* 向组件传递search参数 */}
+    <Link to={`detail?id=${msg.id}&title=${msg.title}`}>{msg.title}</Link>
+    {/* 声明接收search参数(无需声明，正常注册即可) */}
+    <Route path="detail" component={HomeMessageDetail} />
+
+    // 接收search参数
+    import qs from 'url-parse'
+    const {search} = this.props.location
+    const {id, title} = qs.parse(search)
+
+    其他方法：使用useSearchParams 或 useLocation (这个方法需要额外处理下state)
+    useSearchParams返回的是个数组，且数组里是一个当前值和set方法。
+    并且我们取值时常借助Object.fromEntries这个方法
+    Object.fromEntries() ：可以把[[key1,value1],[key2,value2]] 转成对象形式{key1:value1,key2:value2}
+
+    import React, { useEffect } from "react";
+    import { useSearchParams } from "react-router-dom";
+    const Login = () => {
+      const [searchParams]=useSearchParams()//返回一个数组，数组内是一个当前值和set方法
+      const params=Object.fromEntries(searchParams)
+      useEffect(()=>{
+        console.log('params>>', params);
+      },[])
+      return <div>Login</div>;
+    };
+
+    export default Login;
+    ```
+3. state传参：类似与vue中的 `push ​`​方法携带参数  
+    刷新并不会更新，数据存在`histroy`​中，清除浏览器缓存后再刷新会丢失
+
+    ```js
+    // V5
+    {/* 向组件传递state参数 */}
+    <Link to={{pathname: 'detail', state: {...msg}}}>{msg.title}</Link>
+    {/* 声明接收state参数(无需声明，正常注册即可) */}
+    <Route path="detail" component={HomeMessageDetail} />
+    // 接收state参数
+    const {id, title} = this.props.location.state
+
+    //v6
+    import React, { useEffect } from "react";
+    import { useLocation } from "react-router-dom";
+
+    const Login = () => {
+      const state=useLocation()
+      useEffect(()=>{
+        console.log('state>>', state);
+        //该state是个对象，里面包含了route信息
+        //如pathname，search，state，key，hash等
+      },[])
+      return <div>Login</div>;
+    };
+
+    export default Login;
+
+    ```
+
+### 编程式路由导航
+
+```js
+v5 
+通过`this.props.history`上的`push`、`replace`、`go`、`back`、`forward`方法
+
+v6
+useNavigate 的 navigate
+naviaget(to)默认就是history.push
+naviaget(to, { replace: true })就是history.replace
+naviaget(to: number)就是history.go
+```
+
+### 路由模式
+
+　　​`BrowserRouter`​ & `HashRouter`​
+
+* **原理**不一样
+
+  * ​`BrowserRouter`​使用的是H5的`history`​ API，不兼容IE9以下版本
+  * ​`HashRouter`​使用的是URL的哈希值
+* **url表现形式**不一样
+
+  * ​`BrowserRouter`​的路径中没有`#`​
+  * ​`HashRouter`​的路径中包含`#`​
+* **刷新后对路由**​**`state`**​**参数的影响**
+
+  * `BrowserRouter`没有任何影响​，因为`state`​存在`history`​对象中
+  * ​`HashRouter`​刷新后会`导致路由state参数的丢失`​
+
+### v5与v6
+
+* ​`<Switch>`​重命名为`<Routes>`​
+* ​`Route`​ 的 `render`​ 和 `component`​ 改为 `element`​
+* 嵌套路由变得更简单
+* ​`to`​、`navigate`​、`path`​ 不以 `/`​ 开头，都是相对路径
+* 用 `Navigate`​ 代替 `Redirect`​
+* 用`useNavigate`​代替`useHistory`​
+* 大小减少：从`20kb`​到`8kb`​
+
+### 路由懒加载
+
+　　使用`react`​中的`lazy`​引入组件，使用`suspense`​组件包裹懒加载的组件
+
+```js
+import React, { Component, lazy, Suspense } from "react";
+
+// 路由懒加载
+const Home = lazy(() => import("./pages/home"));
+const About = lazy(() => import("./pages/about"));
+
+<Suspense fallback={<div>Loading...</div>}>
+  <Routes className="route">
+    <Route path="home/*" element={<Home />} />
+    <Route path="about/*" element={<About />} />
+    <Route path="*" element={<Navigate to="home" />} />
+  </Routes>
+</Suspense>
+
+Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载处理时要显示的内容，一般在fallback传入loading动画来缓解白屏问题
+<React.Suspense fallback={
+        <Spin
+          size='large'
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        />
+      }>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+</React.Suspense>
+```
+
+### 路由匹配规则
+
+* ​`/xxx ​`​确定的路径名，如 ： /home 表示home页面组件能匹配上路径只能是 /home ；
+* ​`/xxx/:xxx`​ 动态路径名，:xxx会动态变化的 。如：/home/:id 表示home页面能匹配上 /home/11、/home/22、/home/abc、/home/xxx 等路径；
+* ​`/xxx/:xxx/xxx`​动态路径名后跟确定路径，如： /home/:id/abc 表示home页面能匹配上 /home/11/abc、/home/22/abc 、/home/aa/abc 等路径；
+* ​`/xxx/* ​`​确定路径名，后面可以跟多个子路径，如：/home/* 表示home页面能匹配上 /home、/home/12、/home/ab、/home/cd/123 等路径；
+* ​`/xxx/:xxx/* ​`​动态路径名后不限制子路径，如：/home/:id/* 表示home页面匹配 /home/11/abc/bcd、 /home/22/qwe 等路径；
+
+### 路由配置化
+
+　　可以本身在写组件的时候，使用route来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
+
+　　可以使用`useRoutes`​  这个钩子来生成嵌套的组件包裹形态，方便在单独的文件中管理组件间的路由映射关系。
+
+* routes：routes其本身是一个数组，数组里维护各个匹配关系的对象
+
+  ```js
+  path属性就是组件对应的路径；
+  element属性就是要对应的组件；
+  index属性就是默认要展示的页面组件;
+  children属性是路由嵌套时需要用也是一个数组，children数组里的属性和外层一样，子路由的配置就是在children属性里维护的。
+
+  import React from 'react';
+  import AuthComp from "@/components/authComp/AuthComp";
+  import Layout from '@/pages/layout/Layout';
+  import lazyLoad from "@/components/lazyLoad";
+
+  const Home = lazyLoad(React.lazy(() => import("@/pages/home/home")));
+  const TestContent = lazyLoad(React.lazy(() => import("@/pages/testContent/TestContent")));
+  const Login = lazyLoad(React.lazy(() => import("@/pages/login/login")));
+  const NotFound = lazyLoad(React.lazy(() => import("@/components/404/notFound")));
+
+  const routes=[
+    {
+      path:'/',
+      element:<AuthComp comp={<Layout/>}/>,
+      children: [{
+          index: true,
+          element: Home,
+        },
+        {
+           path:"/testContent",
+           element: TestContent,
+          }
+        ]},
+      {
+        	path:'/login',
+          element:Login,
+      },
+      {
+         path:'*',
+         element:NotFound,
+       },
+  ]
+  export default routes
+  ```
+* ​`useRoutes`​：使用`useRoutes`​替换原来的`Routes`​部分
+
+  ```js
+  import React, { useEffect } from "react";
+  import { Routes, Route,useRoutes } from "react-router-dom";
+  import routes from '@/router'
+  import style from "./index.module.less";
+
+  function App() {
+    return (
+       <div className={style.App}>
+        <div className="content">
+         {useRoutes(routes)}
+        </div>
+       </div>
+    );
+  }
+  export default App;
+  ```

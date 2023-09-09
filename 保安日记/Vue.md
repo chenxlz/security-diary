@@ -1745,10 +1745,6 @@ onMounted(()=>{})
 <div v-html="html"></div>
 ```
 
-```js
-
-```
-
 ### v-show
 
 　　​`v-show`​ 会在 DOM 渲染中保留该元素；`v-show`​ 仅切换了该元素上名为 `display`​ 的 CSS 属性，即`​ display : none`​
@@ -3648,6 +3644,49 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
   router.addRoute({ path: '/about', name: 'about', component: About })
   // 删除路由
   router.removeRoute('about')
+  ```
+
+### 路由传参数
+
+* 路由参数Router Params ：可以通过在路由路径中定义动态参数来传递参数
+
+  ```js
+  // 路由配置
+  {
+    path: '/user/:id',
+    component: UserComponent
+  }
+
+  // 组件中获取参数
+  this.$route.params.id
+  ```
+* 查询参数 Query Params：通过在url中字符串拼接的方法
+
+  ```js
+  // 路由配置
+  {
+    path: '/user',
+    component: UserComponent
+  }
+
+  // URL：/user?id=123
+  // 组件中获取参数
+  this.$route.query.id
+
+  ```
+* 编程式导航传参
+
+  ```js
+  // 路由参数
+  router.push({path: '/user/123'})
+  // 获取参数
+  console.log(this.$route.params.id);
+
+  // 查询参数
+  router.push({path: '/user', query: { id: 123 } })
+  // 获取参数
+  console.log(this.$route.query.id);
+
   ```
 
 # pinia
