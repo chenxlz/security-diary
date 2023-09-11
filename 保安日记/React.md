@@ -222,7 +222,7 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
 <div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
 ```
 
-# react基础
+# React基础
 
 ## 组件通信
 
@@ -270,22 +270,6 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
 
   ```js
   bus.publish('des')//传入事件的描述字段，用于触发事件
-  ```
-* 思考：这种是很简单的一种实现方法，可以大概理解类似原理的实现，目前来看，只要执行了publish 之后，所有的订阅事件函数都会触发一遍，并没有精确执行事件对于的事件函数
-
-  ```js
-  简单参考了网上的例子，写另外一个简单的实现
-  var bus = {
-    list:new Map([]),可以使用其他的方法，去实现事件名和对于的事件函数的对于关系
-    //订阅
-    subscribe(des,callback){
-      if(this.list.has(dex))return
-      this.list.set(des,callback)//映射关系
-    },
-    publish(des){
-      this.list.has(des) && this.list.get(dex)()//找到对应的事件函数，并触发
-    }
-  }
   ```
 
 　　‍
@@ -1573,3 +1557,231 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
   }
   export default App;
   ```
+
+# 状态管理
+
+## [redux](https://github.com/reduxjs/redux)
+
+* 概念：​`Redux ​`​是一个使用叫做`action`​的事件来管理和更新应用状态的模式和工具库 它以集中式`Store`​（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
+* 设计原则：
+
+  1. 整个应用的 state 被保存在同一个 store 上, 并且 store 和 view 分离, 这就是集中式 store 的具体体现
+  2. 单向数据流：用 state 来描述应用程序在特定时间点的状况、基于 state 来渲染出 View、当发生某些事情时（例如用户单击按钮），state 会根据发生的事情进行更新，生成新的 state、基于新的 state 重新渲染 View
+  3. 基于不可变数据, redux 的所有状态更新都是使用不可变的方式
+
+### 专业名词
+
+* ​`action`​：是一个具有 `type`​ 字段的普通 JavaScript 对象。你可以将 `action`​ 视为描述应用程序中发生了什么的事件
+
+  ```js
+  const addTodoAction = {
+    type: 'INCREMENT',
+    payload: 2
+  }
+  ```
+* ​`action creator`​： 是一个创建并返回一个 action 对象的函数。它的作用是让你不必每次都手动编写 action 对象
+
+  ```js
+  const incrementByAmount = amount => {
+    return {
+      type: 'INCREMENT',
+      payload: amount
+    }
+  }
+  ```
+* ​`reducer`​ ：是一个函数，接收当前的 `state`​ 和一个 `action`​ 对象，必要时决定如何更新状态，并返回新状态。
+
+  ```js
+  函数签名是：(state, action) => newState
+  可以将 reducer 视为一个事件监听器，它根据接收到的 action（事件）类型处理事件对state进行修改
+  ```
+* ​`Store`​：当前 Redux 应用的状态存在于一个名为 store 的对象中。
+
+  ```js
+  store是通过传入一个 reducer 来创建的
+  并且有一个名为 getState 的方法，它返回当前状态值
+  ```
+* ​`dispatch`​：事件分发方法，传入一个 `action`​ 对象。store 将执行所有 reducer 函数并计算出更新后的 state，调用 getState() 可以获取新 state。
+
+### 核心方法
+
+* ​`const store = createStore(reducer, [preloadedState], [enhancer])`​​： rootStore（存放 state 的根对象）
+
+  ```js
+  import { createStore } from "redux"
+  const store = createStore(reducer, [preloadedState], [enhancer]);
+  const { dispatch, getState, subscribe } = store;
+  const store = Redux.createStore(reducer);
+
+
+  1.reducer 为一个 function, 包含 state 和 action 两个参数，其中 action 为一个包含 type 的对象, 并返回新的 state
+  function reducer(state, action) {
+    switch (action.type) {
+      case "INCREMENT":
+        return state + 1;
+      case "DECREMENT":
+        return state - 1;
+      default:
+        return state;
+    }
+  }
+  2.preloadedState 为初始状态值
+  3.enhancer：中间件
+  const store = createStore(reducer, undefined, applyMiddleware(thunk, logger));
+
+  ```
+* ​`store.dispatch(action) ​`​​:通过传入 `action ​`​​来更新 `state`​​， `action ​`​​为对象情况下，更新是同步的（异步更新需要使用中间件来实现）
+
+  ```js
+  // action 为一个含type的对象
+  store.dispatch(action)
+
+  // action 为一个含type的对象， currentReducer 为之前的reducer对象集合
+  dispatch(action) {
+     currentState = currentReducer(currentState, action)
+  }
+  ```
+* ​`store.getState()`​​：获取当前`state`​​
+* ​`store.subscribe(()=>{})`​：订阅，state发生变化时，执行该回调函数，每个`dispatch`​都会触发`subscribe`​，**返回值是一个函数，用于注销订阅**
+* ​`const rootReducer = combineReducers({anyReducer})`​：将多个 `reducer ​`​融合成一个 `reducer`​， 因为 `createStore ​`​只接受一个 `reducer`​， 即只支持一个 `rootState`​, `dispatch ​`​与 `getState ​`​都是针对 `rootState ​`​的
+
+  ```js
+  import { combineReducers, createStore } from "redux";
+  import todosReducer from "./features/todos/todosSlice";
+  import filtersReducer from "./features/filters/filtersSlice";
+
+  const rootReducer = combineReducers({
+    //rootState下的多个子状态树，通过key，起到隔离作用
+    todos: todosReducer,
+    filters: filtersReducer,
+  });
+  const store = createStore(rootReducer);
+
+  注意：
+  action.type 没有隔离, 如果 2 个 reducer 都有同名的 action.type, 则会同时触发,
+  依据是const nextStateForKey = reducer(previousStateForKey, action);
+  当 dispatch 时，会触发所有的 reducer， 但是每个 reducer 只会处理自己的 state
+  ```
+
+### 中间件
+
+* 概念：增强`redux`​​的功能，如，正常使用是同步的去修改`state`​​，使用中间件，可以在`dispath`​​中传入`function`​​或者`promise`​​，来实现异步更新`state`​​
+
+  ```js
+  createStore 的第三个参数，使用 applyMiddleware ，传入使用的中间件
+  const store = createStore(reducer, undefined, applyMiddleware(thunk, logger));
+  ```
+* [redux-thunk](https://github.com/reduxjs/redux-thunk)：使 `dispatch`​​ 接收一个函数，该函数接收`dispatch`​​，`getState`​​，来达到异步更新数据的效果
+
+  ```js
+  //代码实现
+  export default function thunk(extraArgument?: any) {
+    // 这里的dispatch为其他中间件加强后的dispatch
+    return ({ dispatch, getState }) => {
+      // 这里的next表示的是上一次中间件加强后的dispatch，当只有一个中间件时，为原始的store.dispatch
+      // action为实际调用dispatch时传入的action参数
+      return (next) => (action) => {
+        if (typeof action === "function") {
+          return action(dispatch, getState, extraArgument);
+        }
+        return next(action);
+      };
+    };
+  }
+  //使用
+  dispatch((dispatch, getState, extraArgument?: any) => {
+    // do something
+    setTime(()=>{
+      dispatch(action)//{type:xx,value:xxx}
+    },1000)
+  });
+  ```
+* [redux-promise](https://github.com/redux-utilities/redux-promise)：使 `dispatch`​接收一个`promise`​，可以使用`promise.then()`​的这种写法
+
+  ```js
+  createAction('FETCH_THING', async id => {
+    const result = await somePromise;
+    return result.someValue;
+  });
+  createAction('FETCH_THING', async id => {
+    const result = await somePromise;
+    return result.someValue;
+  });
+  ```
+
+## [react-redux](https://github.com/reduxjs/react-redux)
+
+　　传送门：[🤘](https://cn.redux.js.org/introduction/getting-started)
+
+### redux和react-redux
+
+* [redux ](https://github.com/reduxjs/redux)为 redux core
+* [redux-toolkit](https://github.com/reduxjs/redux-toolkit) 为 redux 的工具包
+* [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch ​`​可以接受函数，赋予其执行异步操作的能力
+* [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react ​`​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
+* 核心方法和`redux`​是一样的
+
+### 容器组件、UI组件
+
+　　容器组件：负责处理逻辑
+
+　　UI组件：负责显示和交互，内部不处理逻辑，状态完全由外部掌控
+
+### Provider
+
+　　​`<Provider>`​ 组件使 Redux `store`​ 可用于任何需要访问 Redux store 的嵌套组件。
+
+　　​**这个组件的目的是让所有组件都能够访问到Redux中的数据。 ​**​
+
+　　由于 React Redux 应用中的任何 React 组件都可以连接到 store，因此大多数应用会在顶层渲染一个 `<Provider>`​，将整个应用的组件树包裹其中。
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { App } from './App'
+import store from './store'
+
+<Provider store = {store}>
+    <App />
+<Provider>
+```
+
+### connect
+
+　　高阶组件：接收组件，返回组件，给组件添加功能
+
+```js
+接收两个函数，返回一个函数
+default export connect(mapStateToProps, mapDispatchToProps)(MyComponent)
+
+const mapStateToProps = (state) => {
+  return {
+    // prop : state.xxx  | 意思是将state中的某个数据映射到props中
+    foo: state.bar
+  }
+}
+子组件可以通过 this.props.foo 获取数据
+
+
+const mapDispatchToProps = (dispatch) => { // 默认传递参数就是dispatch，把各种dispatch也变成了props让你可以直接使用
+  return {
+    onClick: () => {
+      dispatch({
+        type: 'increatment'
+      });
+    }
+  }
+};
+子组件通过 this.props.onClick() 来调用传递来的 dispatch
+```
+
+　　‍
+
+　　‍
+
+　　‍
+
+　　‍
+
+　　‍
