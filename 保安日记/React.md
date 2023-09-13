@@ -222,6 +222,50 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
 <div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
 ```
 
+### react中的css
+
+　　​`react`​中的`css`​样式会使用行内写法，因为`react`​引入使用的`css`​文件是全局的样式，这会导致在组件导入的`css`​文件样式影响到别的组件，而导致的样式错乱。
+
+```js
+//react中的导入css文件，这样导入虽然生效，可实际是全局的样式
+import "../css/home.css"
+```
+
+　　vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过`​ v-data-hash ​`​属性来区分组件，避免导致组件间的样式来相互影响。
+
+　　​`react`​要达到这样的效果，要使用`​ css module ​`​的模块化语法。
+
+* 内联样式：不太推荐
+
+  ```js
+  1.行内样式写多了，导致整个组件结构看起来怪怪的，要是样式太多，那逻辑、样式就全在一起了
+  2.不支持 伪类 的选择器
+  ```
+* ​`css module`​：组件间的样式不会相互影响，类名发生变化，后面添加了 hash 值。使用 classname.module.css 导入到组件中，是个变量。
+
+  ```js
+  文件名.module.css //开启模块化
+  /* home: index.module.css */
+  :gole
+  .content {
+    color: orange;
+    ...内容
+  }
+
+  组件中：
+  import styles from "./index.module.css"; //导入后是个对象，在组件中使用 calssName = { style.content }
+  const Home = () => {
+    return <div className={styles.content}>我是 home 页面的 content</div>;
+  };
+
+  export default Home;
+  ```
+* ​`css in js`​：这个需要使用库，各种啥的`​ css in js ​`​和`​ all in js`​
+
+　　‍
+
+　　‍
+
 # React基础
 
 ## 组件通信
@@ -1776,12 +1820,509 @@ const mapDispatchToProps = (dispatch) => { // 默认传递参数就是dispatch�
 子组件通过 this.props.onClick() 来调用传递来的 dispatch
 ```
 
-　　‍
+## [react-toolkit](https://cn.redux.js.org/introduction/getting-started/)
 
-　　‍
+　　​​![image](assets/image-20230912224500-d11pold.png)​​
 
-　　‍
+### reducer
 
-　　‍
+* 作用：理解成仓库管理员，数据的增、删、改都需要经过它。
+
+  ```js
+  注意点
+  1. 仅使用 state 和 action 进行数据的修改
+  2.禁止直接修改 state 。需要通过复制现有的state 并对复制的值进行更改的方式来实现 数据的修改操作（不可变更新）
+  3.禁止使用异步逻辑，依赖随机值或导致其他的 副作用 代码
+
+  const countReducer = (state = 0, action) => {
+      const { type, payload } = action
+      switch (type) {
+          case 'incrementCount':
+              return state + payload
+          case 'decrementCount':
+              return state - payload
+          default:
+              return state
+      }
+  }
+  ```
+
+### action
+
+* 作用：参考的行为准则，是一个有 `type`​字段的对象
+
+  ```js
+  const addCount= {
+      type: 'add'，
+      value:100  //可以添加其他参数
+  }
+
+  ```
+
+### configureStore
+
+* 作用：创建`store`​仓库
+* 参数是一个`redux`​函数
+
+  ```js
+  import { configureStore } from "redux-toolkit"
+
+  const countReducer = (state = 0, action) => {
+      const { type, payload } = action
+      switch (type) {
+          case 'incrementCount':
+              return state + payload
+          case 'decrementCount':
+              return state - payload
+          default:
+              return state
+      }
+  }
+
+  // 使用Redux Toolkit的configureStore方法创建store
+  const store = ReduxToolkit.configureStore({
+      reducer: {
+          counter: countReducer
+      },
+  })
+  ```
+
+### createAction
+
+* 作用：方便创建 `action`​ 对象
+
+  ```js
+  import { createAction } from  "redux-toolkit"
+  const incrementCount = ReduxToolkit.createAction('incrementCount')
+  console.log(incrementCount)
+  //打印
+  {
+    type:"incrementCount",
+    payload:undefined
+  }
+  ```
+
+### createSlice
+
+* 作用：切片，类似于vux中的module。**切片是应用中单个功能的 Redux reducer 逻辑和 action 的集合**，通常一起定义在一个文件中。该名称来自于将根 Redux 状态对象拆分为多个状态“切片”。
+* 参数
+
+  ```js
+  参数
+  1. name ：string，该切片的名字
+  2. initialState ：切片的初始值
+  3. reducers ：reducer函数的集合，是个对象形式，key为reducer函数的函数名，value是reducer函数
+  4. extraReducers ： 可选参数，用于定义额外的reducer，通常搭配createAsyncThunk使用。
+
+  const userInfoSlice = ReduxToolkit.createSlice({
+      name: 'userInfo',
+      initialState: {name: '张三', age: 18},
+      reducers: {
+          changeUserNameAction(state, action) {
+              state.name = action.payload
+          },
+          changeUserAgeAction(state, action) {
+              state.age = action.payload
+          }
+      }
+     extraReducers: (builder) => {
+          builder
+              .addCase(changeUserNameAction, (state, action) => {
+                  state.name = action.payload
+              })
+              .addCase(changeUserAgeAction, (state, action) => {
+                  state.age = action.payload
+              })
+              .addDefaultCase((state, action) => {
+                  return state
+              })
+      }
+  })
+
+  const { changeUserNameAction, changeUserAgeAction } = userInfoSlice.actions
+  console.log(userInfoSlice)
+  ```
+
+### createAsyncThunk
+
+* 概念：`redux`​使用redux-thunk 来提供异步修改`state`​的能力，`redux-toolkit`​封装了异步请求的方法
+* 参数：两个参数，一个 字符串，用于生产`action types ​`​的前缀，一个 `payload creator`​ 回调函数，应该返回一个 Promise。这通常使用 async/await 语法编写，因为 async 函数会自动返回一个 Promise。
+
+  ```js
+  两个参数
+  1.createAsyncThunk的第一个参数是动作的名称，Redux动作名称的标准惯例是'[slice name]/[action name]' ，例如('auth/login')。
+  2.第二个参数是执行该动作的异步函数，完成后返回结果。 ({dispatch，getState，extra, requestId, signal, rejectWithValue, fulfillWithValue}) => Promise
+
+  // 模拟异步请求
+  const simulateApiRequest = (value, delay) => {
+      return new Promise((resolve) => {
+          setTimeout(() => {
+              resolve(value)
+          }, delay)
+      })
+  }
+
+  // 创建异步thunk action
+  const asyncChangeUserNameAction = ReduxToolkit.createAsyncThunk('asyncChangeUserName', async (value) => {
+      const response = await simulateApiRequest(value, 1000)
+      return response
+  })
+
+  const userInfoSlice = ReduxToolkit.createSlice({
+      name: 'userInfo',
+      initialState: { name: '张三', age: 18 },
+      reducers: {
+          changeUserNameAction(state, action) {
+              state.name = action.payload
+          },
+          changeUserAgeAction(state, action) {
+              state.age = action.payload
+          },
+          changeUserAgeAddTwo: {
+              reducer(state, action) {
+                  state.age = action.payload
+              },
+              prepare(payload) {
+                  payload = payload + 2
+                  return { payload }
+              }
+          }
+      },
+      extraReducers: (builder) => {
+          builder
+              .addCase(asyncChangeUserNameAction.pending, (state, action) => {
+                  console.log('pending')
+              })
+              .addCase(asyncChangeUserNameAction.fulfilled, (state, action) => {
+                  console.log('fulfilled')
+                  state.name = action.payload
+              })
+              .addCase(asyncChangeUserNameAction.rejected, (state, action) => {
+                  console.log('rejected')
+              })
+            //createAsyncThunk 将生成三个 action creators 和 action types，以及一个在调用时自动 dispatch 这些 actions 的 thunk 函数。
+            //在这种情况下，action creators 和它们 types 是
+            asyncChangeUserNameAction.pending：userInfo/asyncChangeUserName/pending
+            asyncChangeUserNameAction.fulfilled：userInfo/asyncChangeUserName/fulfilled
+            asyncChangeUserNameAction.rejected：userInfo/asyncChangeUserName/rejected
+      }
+  })
+
+  dispatch(asyncChangeUserNameAction(whg))
+  ```
+
+### Provider
+
+* 作用：组件，包裹App根组件，用来传递 `store`​
+* 调用 useSelector 和 useDispatch 可以获取传递来的 `store`​
+
+  ```js
+  // index.js
+  import React from "react"
+  import ReactDOM from "react-dom"
+  import App from "./App"
+  import { BrowserRouter } from "react-router-dom"
+
+  import store from "./redux/index"
+  import { Provider } from "react-redux"
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <React.StrictMode>//严格模式
+          <App />
+        </React.StrictMode>
+      </BrowserRouter>
+    </Provider>,
+    document.getElementById("root")
+  )
+  ```
+
+### useSelector
+
+* 作用：获取仓库的数据数值，获取是上层组件传递的`store`​，如果有分片，则需要点出来
+
+  ```js
+  1.react组件使用 useSeletor 钩子获取 store 获取数据
+  2.形参是 state 对象，有返回值，返回需要的 state 数据
+  3.只要 redux store 更新，选择器会重新运行，返回值发生变化的话，使用的组件会重新渲染
+  ```
+* 使用
+
+  ```js
+  import { useSelector, useDispatch } from "react-redux"
+  import { setActiveDate } from "../../redux/modules/date"
+
+  const activeDate = useSelector((state) => state.date.activeDate)
+  const dispatch = useDispatch()  //就是以前的 store.dispatch() ,现在是直接返回一个 dispatch 
+  const setDate = (date) => dispatch(setActiveDate(date))
+  ```
+
+### useDispatch
+
+* 作用：  将 **仓管行为准则action** 发给 **Reducer仓库管理员** 的动作，如果组件想要对仓库执行某些操作就可以使用这个方法。
+
+  ```js
+  1.React 组件使用 useDispatch 钩子 dispatch action 来更新 store
+  2.在组件中调用 dispatch(someActionCreator()) 来 dispatch action
+  ```
+* 使用
+
+  ```js
+  import { useSelector, useDispatch } from "react-redux"
+  import { setActiveDate } from "../../redux/modules/date"
+
+  const activeDate = useSelector((state) => state.date.activeDate)
+  const dispatch = useDispatch()  //就是以前的 store.dispatch() ,现在是直接返回一个 dispatch 
+  const setDate = (date) => dispatch(setActiveDate(date))
+  ```
+
+### 示例
+
+```js
+import ReduxToolkit from "./redux-toolkit.umd.js"
+
+const showCount = document.getElementsByClassName('show-count')
+const addCount = document.getElementsByClassName('add-count')
+const minusCount = document.getElementsByClassName('minus-count')
+const showUserInfo = document.getElementsByClassName('show-user-info')
+const changeUserName = document.getElementsByClassName('change-user-name')
+const changeUserAge = document.getElementsByClassName('change-user-age')
+const asyncChangeUserName = document.getElementsByClassName('async-change-user-name')
+
+const incrementCount = ReduxToolkit.createAction('INCREMENT_COUNT')
+const decrementCount = ReduxToolkit.createAction('DECREMENT_COUNT')
+
+const countReducer = ReduxToolkit.createReducer(0, (builder) => {
+    builder
+        .addCase(incrementCount, (state, action) => {
+            return state + action.payload
+        })
+        .addCase(decrementCount, (state, action) => {
+            return state - action.payload
+        })
+        .addMatcher((action) => action.payload === 100, (state, action) => {
+            return state + action.payload
+        })
+        .addDefaultCase((state, action) => {
+            return state
+        })
+})
+
+// 模拟异步请求
+const simulateApiRequest = (value, delay) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(value)
+        }, delay)
+    })
+}
+
+// 创建异步thunk action
+const asyncChangeUserNameAction = ReduxToolkit.createAsyncThunk('asyncChangeUserName', async (value) => {
+    const response = await simulateApiRequest(value, 1000)
+    return response
+})
+
+const userInfoSlice = ReduxToolkit.createSlice({
+    name: 'userInfo',
+    initialState: { name: '张三', age: 18 },
+    reducers: {
+        changeUserNameAction(state, action) {
+            state.name = action.payload
+        },
+        changeUserAgeAction(state, action) {
+            state.age = action.payload
+        },
+        changeUserAgeAddTwo: {
+            reducer(state, action) {
+                state.age = action.payload
+            },
+            prepare(payload) {
+                payload = payload + 2
+                return { payload }
+            }
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(asyncChangeUserNameAction.pending, (state, action) => {
+                console.log('pending')
+            })
+            .addCase(asyncChangeUserNameAction.fulfilled, (state, action) => {
+                console.log('fulfilled')
+                state.name = action.payload
+            })
+            .addCase(asyncChangeUserNameAction.rejected, (state, action) => {
+                console.log('rejected')
+            })
+    }
+})
+
+const { changeUserNameAction, changeUserAgeAction, changeUserAgeAddTwo } = userInfoSlice.actions
+
+const loggerMiddleware = (store) => (next) => (action) => {
+    console.log('dispatching', action)
+    const result = next(action)
+    console.log('next state', store.getState())
+    return result
+}
+
+// 使用Redux Toolkit的configureStore方法创建store
+const store = ReduxToolkit.configureStore({
+    reducer: {
+        count: countReducer,
+        userInfo: userInfoSlice.reducer
+    },
+    middleware: [loggerMiddleware, ...ReduxToolkit.getDefaultMiddleware()]
+})
+
+const { dispatch, getState, subscribe } = store
+
+const assignCount = () => {
+    showCount[0].innerHTML = getState().count
+}
+const assignUserInfo = () => {
+    const userInfo = getState().userInfo
+    showUserInfo[0].innerHTML = `姓名：${userInfo.name}，年龄：${userInfo.age}`
+}
+
+assignCount()
+assignUserInfo()
+
+subscribe(assignCount)
+subscribe(assignUserInfo)
+
+const boundActionsCreators = ReduxToolkit.bindActionCreators({
+    incrementCount,
+    decrementCount,
+    changeUserNameAction,
+    changeUserAgeAction,
+    changeUserAgeAddTwo,
+    asyncChangeUserNameAction
+}, dispatch)
+
+addCount[0].addEventListener('click', () => {
+    boundActionsCreators.incrementCount(3)
+})
+
+minusCount[0].addEventListener('click', () => {
+    boundActionsCreators.decrementCount(2)
+})
+
+changeUserName[0].addEventListener('click', () => {
+    boundActionsCreators.changeUserNameAction('李四')
+})
+
+changeUserAge[0].addEventListener('click', () => {
+    boundActionsCreators.changeUserAgeAddTwo(20)
+})
+
+asyncChangeUserName[0].addEventListener('click', () => {
+    boundActionsCreators.asyncChangeUserNameAction('王五')
+})
+```
+
+## [redux-persist](https://github.com/rt2zz/redux-persist)
+
+　　​`redux ​`​的持久化插件
+
+* 安装
+
+  ```js
+  yarn add redux-persist --save
+  ```
+* 配置
+
+  ```js
+  // configureStore.js 
+  import  {  createStore  }  from  'redux' 
+  import  {  persistStore ,  persistReducer  }  from  'redux-persist' 
+  import  storage  from  'redux-persist/lib/storage'  // 默认为localStorage for web 
+  import commonReducers from './reducer';
+  const reducers = combineReducers({
+    ...commonReducers,
+  });
+
+  const persistConfig  =  { 
+    key : 'root' , 
+    storage , 
+  } 
+
+  const persistedReducer  =  persistReducer ( persistConfig , rootReducer ) 
+
+  export  default  ( )  =>  { 
+    let  store  =  createStore ( persistedReducer ) 
+    let  persistor  =  persistStore ( store ) 
+    return  { store , persistor } 
+  }
+  ```
+* 使用
+
+  ```js
+  该PersistGate组件是延迟渲染，直到持久化完成，
+  loading = { null }中，可以替换为我们自己的loading组件：loading={<Loading />}
+  const  App  =  ( )  =>  { 
+    return  ( 
+      < Provider  store = { store } > 
+        < PersistGate  loading = { null }  persistor = { persistor } > 
+          < RootComponent  / > 
+        < / PersistGate > 
+      < / Provider > 
+    ) ; 
+  } ;
+  ```
+* 配置参数
+
+  ```js
+  1. persistReducer(config, reducer)：
+  参数：
+  config：
+  所需配置： key, storage（storage默认为localStorage）
+  值得注意的其他配置： whitelist, blacklist, version, stateReconciler, debug
+  reducer:任何reducer都可以使用，通常是返回顶级的reducer--combineReducers
+   
+  返回值：
+  一个经过处理的reducer
+   
+  2. persistStore(store, [config, callback])
+  参数：
+  store:redux store,将做持久化存储
+  config: 如果要避免在调用后立即开始持久化persistStore，请设置选项 manualPersist。
+  示例：{ manualPersist: true }然后可以在任何时候使用persistor.persist().
+  如果在进行persistStore呼叫时您的存储尚未准备好，您通常希望这样做。
+  callback:回调函数
+  返回值：
+  返回持久化对象
+
+  3 .persistor
+  持久化对象由 persistStore 使用以下方法返回：
+  .purge()
+  从磁盘清除状态并返回一个承诺
+  .flush()
+  立即将所有挂起状态写入磁盘并返回一个承诺
+  .pause()
+  暂停持久性
+  .persist()
+  恢复坚持
+
+  ```
+* 白名单设置
+
+  ```js
+  // BLACKLIST 
+  const  persistConfig  =  { 
+    key : 'root' , 
+    storage : storage , 
+    blacklist : [ 'tag' ]  // 不会被持久化
+  } ; 
+
+  // WHITELIST 
+  const  persistConfig  =  { 
+    key : 'root' , 
+    storage : storage , 
+    whitelist : [ 'auth' ]  // 会被持久化
+  } ;
+  ```
 
 　　‍
