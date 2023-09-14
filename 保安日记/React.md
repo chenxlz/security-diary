@@ -2325,4 +2325,116 @@ asyncChangeUserName[0].addEventListener('click', () => {
   } ;
   ```
 
-　　‍
+## immutable
+
+　　​`immutable`​ ：不可变数据
+
+　　​`react`​在改变状态的时候，是不能直接去修改`state`​的值，需要通过复制`state`​的值，然后修改拷贝的数据并返回来达到修改`state`​的效果。
+
+　　状态的数据结构简单的情况下还好，使用方法或者解构赋值，复制数据比较方便。如果数据结构比较复杂的话，那数据的复制就很麻烦了，所以 使用 `immutable`​ 这个库，会返回一个不可变数据对象，这个对象可以直接修改数据而不影响原数据
+
+　　​`Immutable Data`​不可更改数据，一旦创建，对`Immutable`​对象的任何操作都将返回一个新的Immutable Data，其实现原理是`Persistent Data Structure`​**（持久化数据结构）** 即使用旧数据创建新数据时，要保证旧数据可以使用且不变。同时为了避免deepclone,深度拷贝对于性能的损耗，`Immutable ​`​使用了[Structural Sharing（结构共享）](https://link.juejin.cn?target=https%3A%2F%2Flink.jianshu.com%2F%3Ft%3Dhttps%253A%252F%252Fzhuanlan.zhihu.com%252Fp%252F27133830%253Fgroup_id%253D851585269567213568 "https://link.jianshu.com/?t=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27133830%3Fgroup_id%3D851585269567213568")，当对象树中一个节点发生变化时，只会改变该子节点以及受其影响的父节点，其他节点共享。
+
+　　[传送门](https://juejin.cn/post/6940640420527341599?searchId=2023091422130758558F4B8842235BD464#heading-9)
+
+* 下载
+
+  ```js
+  npm i immutable
+  ```
+* 方法：使用 `Map`​返回的 `immutable`​对象的方法和Map对象的方法类似
+
+  ```js
+  import {Map,List，fromJS} from 'immutable'
+
+  1.  
+  const immutableData = Map({name:"张三"}) // 把普通js对象转化成 immutable 对象 不过这个方法只能转化第一层的数据，如果里面嵌套对象的话，则需要再次转化
+  const immutableData = Map({
+    name:'张三',
+    obj:Map({age:20})
+  })
+
+  2.
+  const arr=List([1,2,3])//使用list方法，可以把 数组 转成 immutable 对象，并且该对象的一些方法的名称和普通数组对象的方法是一样的，减少心智负担
+  arr.push(4)//添加数据
+  const data=arr.toJs()//转成普通js数组
+
+  3.  
+  const immutableData = fromJS(obj) //懒得自己一层层去使用map去嵌套数据的话，可以使用这个，不过这个是深拷贝，比较吃性能一些
+
+
+  4.  
+  immutableData.get(key) 读取数据
+  const name = immutableData.get('name')
+
+  5. 
+  immutableData.set(key,newValue)
+  const newData=oldData.set('name','changename')
+  // set方法可以链式使用
+  const newData=oldData.set('name','changename').set('age',100)
+
+  6.
+  immutableData.toJS()//使用 immutable 对象，转化成普通 js 对象
+  ```
+* 对象设置参数：`setIn([key1,key1-1],newValue)`​ 可以使用层级方法设置数据，第一个参数为数组，按层级依次传入属性名，第二个参数为要设置的属性值
+
+  ```js
+  import React, { Component } from 'react'
+  import {fromJS} from 'immutable'
+  export default class member extends Component {
+      state={
+          userInfo:fromJS({
+              name:'test',
+              age:100,
+              children:{
+                  name:'one'
+              }
+          })
+      }
+    render() {
+      return (
+        <div>
+            <p>{this.state.userInfo.get('children').get('name')}</p>
+            <button onClick={()=>{
+               this.setState({
+                   userInfo:this.state.userInfo.setIn(['children','name'],'changeone')
+               })
+            }}>setIn修改</button>
+        </div>
+      )
+    }
+  }
+  ```
+* 数组设置参数：`updataIn([key1,key1-1],()=>{newArr})`​：数组更新方法，第一个参数为数组，同setIn一样，为层级属性名，第二个为回调函数，updataIn方法会将immutable数组更新为回调函数中返回的数组
+
+  ```js
+  import React, { Component } from 'react'
+  import {fromJS} from 'immutable'
+  export default class member extends Component {
+      state={
+          userInfo:fromJS({
+              arr:[1,2,3,4]
+          })
+      }
+    render() {
+      return (
+        <div>
+            <button onClick={()=>{
+               this.setState({
+                   userInfo:this.state.userInfo.update(['arr'],()=>[5,6,7,8])
+               },()=>{
+                   console.log(this.state.userInfo)
+               })
+            }}>updateIn修改</button>
+        </div>
+      )
+    }
+  }
+
+  ```
+* 使用方法
+
+  ```js
+  1.初始化的时候，就使用 immutable 处理数据，数据修改的时候，就直接修改 immutableData 数据，后续直接返回newImmutableData
+  2.在数据修改时先将state中将数据获取转为immutable不可变数据。修改数据时要使用immutable的API。然后再将数据转为普通对象后设置回state，state中的数据始终是普通对象。
+  ```
