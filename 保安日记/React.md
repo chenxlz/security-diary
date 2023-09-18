@@ -2223,6 +2223,111 @@ asyncChangeUserName[0].addEventListener('click', () => {
 })
 ```
 
+## mobx
+
+　　​[mobx](https://cn.mobx.js.org/)是react项目中，经常用来做数据存储的`js`​库，它的用法比`redux`​相对简单，减少了一些模板代码的使用，在使用的方面，和vuex 是有些类似的
+
+　　​`v5 ​`​版本使用的 `Object.defineProperty`​，`v6 ​`​版本使用的是`proxy`​，同时`v6`​版本取消了类的装饰器用法
+
+* 类写法
+
+  ```js
+  import { action } from 'mobx';
+
+  class TodoStore {
+    @observable todos = [];
+    
+    @action
+    addTodo(text) {
+      this.todos.push({ text, completed: false });
+    }
+    
+    @action
+    toggleTodo(index) {
+      this.todos[index].completed = !this.todos[index].completed;
+    }
+  }
+
+    @computed
+    get unfinishedTodos() {
+      return this.todos.filter(todo => !todo.completed);
+    }
+  }
+
+
+
+  ```
+* 订阅回调
+
+  ```js
+  import { autorun } from "mobx"
+  // 创建TodoStore实例
+  const todoStore = new TodoStore();
+
+  // autorun 会自动侦听所依赖的数据的改变
+  const disposer = autorun(() => {
+    console.log('Unfinished todos:', todoStore.unfinishedTodos);
+  });
+
+  // 添加新的待办事项
+  todoStore.addTodo('Learn MobX');
+
+  // 当你不再需要autorun时，可以调用返回的disposer函数取消监听
+  disposer();
+  ```
+* 全局使用stroe
+
+  ```js
+  //全局注册
+  import { provide } from "mobx"
+  <Provider store = {store} >
+      <App />
+  </Provider>
+
+
+
+  //需要使用的子组件中
+  import { observer,inject } from "mobx"
+  @inject("store")
+  @observer
+  class APP extends component{
+      componentDidMount(){
+          console.log(this.props.store.属性);
+      }
+  }
+
+  // 函数式组件的写法
+  import { Observer } from 'mobx-react' //Observer负责在state改变时，重新执行内部回调
+  import Store from 'store' //函数时组件不会自动把store注入props，需要自己引入
+
+  export default function Cinemas(props) {
+      return (
+      <Observer>
+         {
+             ()=>{
+                 store.list.map(item => <div>{item}</div>);
+             }
+         }
+      </Observer>
+      )
+  }
+  ```
+* 异步操作
+
+  ```js
+  异步操作使用 runInAction 使用回调
+
+  @action
+  addTodo(text) {
+    axio.get(...).then((data)=>{
+      runInAction(this.todos.push({ data, completed: false }));
+    })
+  }
+
+  ```
+
+　　‍
+
 ## [redux-persist](https://github.com/rt2zz/redux-persist)
 
 　　​`redux ​`​的持久化插件
