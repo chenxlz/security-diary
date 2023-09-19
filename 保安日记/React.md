@@ -2543,3 +2543,105 @@ asyncChangeUserName[0].addEventListener('click', () => {
   1.初始化的时候，就使用 immutable 处理数据，数据修改的时候，就直接修改 immutableData 数据，后续直接返回newImmutableData
   2.在数据修改时先将state中将数据获取转为immutable不可变数据。修改数据时要使用immutable的API。然后再将数据转为普通对象后设置回state，state中的数据始终是普通对象。
   ```
+
+# 其他
+
+## styled-component
+
+　　基于`js`​的样式库，可以通过标签模板字符串的方式样式化组件，可以在`js`​中直接编写`css`​样式，这样就可以达到 `all in js`​的效果
+
+　　传送门：[🔗](https://juejin.cn/post/7270760891586330679?searchId=202309192128562CF821161A533D2A4359)
+
+* 下载
+
+  ```js
+  npm i styled-components
+  ```
+* 基本使用
+
+  ```js
+  import React, { Component } from 'react'
+  import styled from 'styled-components'
+
+  export default class App extends Component {
+      render() {
+          //标签模板字符串
+          const StyledInput = styled.input`
+           outline:none;
+           border-radius:10px;
+           border-bottom:1px solid red;
+          `
+
+          const StyledDiv = styled.div`
+            background:${props=>props.bg || 'yellow'}; //使用 props 获取组件透传来的变量
+            width:100px;
+            height:100px;
+          `
+          return (
+              <div>
+                  App
+                  <StyledInput type="password" placeholder="输入"/> //使用使用标签的方法包裹内容，props的内容和组件传递属性是一样的
+
+                  <StyledDiv bg="red"></StyledDiv>
+              </div>
+          )
+      }
+  }
+  ```
+* 样式化组件：把组件作为参数传递，返回一个被样式化的组件，需要在被处理的组件需要的`dom`​节点上添加 `className`​属性
+
+  ```js
+  import React, { Component } from 'react'
+  import styled from 'styled-components'
+
+  export default class App extends Component {
+      render() {
+          const StyledChild = styled(Child)`
+            background:yellow;
+            color:red;
+          `
+          return (
+              <div>
+                  <StyledChild />
+              </div>
+          )
+      }
+  }
+
+  function Child(props) {
+      return <div className={props.className}> //需要在 dom 节点上添加 className 属性
+          child
+      </div>
+  }
+  ```
+* 动画效果样式：还是去看看文档，没仔细研究这块
+
+  ```js
+  import React, { Component } from 'react'
+  import styled,{keyframes} from 'styled-components'
+  export default class App extends Component {
+      render() {
+          const myaniamtion = keyframes`
+           from{
+               transform:rotate(0deg)
+           }
+           to{
+              transform:rotate(360deg)
+          }
+          `
+          const StyledDiv = styled.div`
+           width:100px;
+           height:100px;
+           background:yellow;
+           animation: ${myaniamtion} 1s infinite;
+          `
+          return (
+              <div>
+                  <StyledDiv/>
+              </div>
+          )
+      }
+  }
+  ```
+
+　　‍
