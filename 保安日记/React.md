@@ -2,11 +2,11 @@
 
 # React
 
-# React相关概念
+# 相关概念
 
-### 关于JSX
+### JSX
 
-　　**JSX** 是 JavaScript 语法扩展，可以让你在 JavaScript 文件中书
+　　**JSX** 是 JavaScript 语法扩展，可以让你在 JavaScript 文件中书写`html`​结构
 
 　　[JSX and React 是相互独立的](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-a-jsx-transform) 东西。但它们经常一起使用，但你 **可以** 单独使用它们中的任意一个，JSX 是一种语法扩展，而 React 则是一个 JavaScript 的库。写类似 HTML 的标签。
 
@@ -38,6 +38,7 @@
     * 可以在不同的环境下运行，总是返回相同的结果
     * 可以为那些输入未更改的组件来 [跳过渲染](https://zh-hans.react.dev/reference/react/memo)，以提高性能。这是安全的做法，因为纯函数总是返回相同的结果，所以可以安全地缓存它们。
     * 如果在渲染深层组件树的过程中，某些数据发生了变化，React 可以重新开始渲染，而不会浪费时间完成过时的渲染。纯粹性使得它随时可以安全地停止计算。
+4. 函数式编程是个编程理念
 
 ### hook
 
@@ -61,7 +62,7 @@
 
 ### [更新state](https://zh-hans.react.dev/learn/queueing-a-series-of-state-updates)
 
-　　使用`setState`​函数的时候，传入值是形成一个数据快照，原来的state其实是没有改变的
+　　使用`setState`​函数的时候，传入值是形成一个((20230826104117-969dsfb '数据快照'))，原来的state其实是没有改变的
 
 　　如果传入的是一个函数，如：`setState((n)=>n+1)`​ ，该回调函数称为 `更新函数`​  。`n`​是上一个state返回的值
 
@@ -72,12 +73,6 @@
 一个更新函数（例如：n => n + 1）会被添加到队列中。
 任何其他的值（例如：数字 5）会导致“替换为 5”被添加到队列中，已经在队列中的内容会被忽略。
 ```
-
-### react样式
-
-　　关于`react`​中写样式的问题，目前来说没有比较统一的方案，react比较推荐的是直接在组件中写行内样式。因为一个组件就是一个整体，直接在组件内部写行内样式即可。
-
-　　也可以单独的拿一个文件夹来存放 `css ​`​样式文件，在组件需要的地方， 使用 `import ​`​导入使用即可
 
 ### 函数组件和类组件
 
@@ -131,31 +126,6 @@
   不同的是 React中的 event 对象并不是浏览器提供的，而是它自己内部所构建的。
   它同样具有 event.stopPropagation、event.preventDefault 这种常用的方法
   ```
-
-### ref
-
-```js
-推荐的获取ref的方法
-1.定义需要的ref
-const myRef = React.createRef()
-2.挂载ref
-<div ref={this.myRef}>hello</div>
-3.获取ref
-this.myRef.current
-
-老方法
-1.挂载ref
-<div ref=myRef>hello</div>
-2.获取ref
-this.refs.myRef.current
-
-ref使用箭头函数返回组件实例
-设置变量接受
-let myRef = null
-再组件中获取
-<div ref={ el => this.myRef = el }>hello</div>
-
-```
 
 ### state
 
@@ -214,15 +184,7 @@ let myRef = null
   })
   ```
 
-### react中的v-html
-
-```js
-react中使用 dangerouslySetInnerHTML 来实现v-html的功能
-
-<div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
-```
-
-### react中的css
+### css样式
 
 　　​`react`​中的`css`​样式会使用行内写法，因为`react`​引入使用的`css`​文件是全局的样式，这会导致在组件导入的`css`​文件样式影响到别的组件，而导致的样式错乱。
 
@@ -261,10 +223,6 @@ import "../css/home.css"
   export default Home;
   ```
 * ​`css in js`​：这个需要使用库，各种啥的`​ css in js ​`​和`​ all in js`​
-
-　　‍
-
-　　‍
 
 # React基础
 
@@ -315,8 +273,6 @@ import "../css/home.css"
   ```js
   bus.publish('des')//传入事件的描述字段，用于触发事件
   ```
-
-　　‍
 
 ### context
 
@@ -376,15 +332,9 @@ import "../css/home.css"
   }
   ```
 
-　　‍
-
-　　‍
-
-　　‍
-
 ## 生命周期
 
-　　​![image](assets/image-20230907231035-bfpvs4r.png)​![image](assets/image-20230907231045-bd0k3wk.png)​​
+　　​![image](assets/image-20230907231035-bfpvs4r.png)![image](assets/image-20230907231045-bd0k3wk.png)​
 
 ### [概述](https://juejin.cn/post/7248890696819277885?searchId=202309072235420B1497972C1DF3676587)
 
@@ -722,7 +672,7 @@ import "../css/home.css"
 
 ### props
 
-　　使用children实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
+　　使用((20230906222130-uu07qvd 'children'))实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
 
 　　**在父组件中不仅可以使用props来向子组件传递数据、回调函数外，还可以传递元素**
 
@@ -804,7 +754,7 @@ import "../css/home.css"
 
 ### useEffect
 
-* 作用：给函数式组件提供操作副作用的能力，在render之后执行。调用 `useEffect`​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
+* 作用：给函数式组件提供操作((20230826112734-2v9mlur "副作用"))的能力，在render之后执行。调用 `useEffect`​​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
 * 使用
 
   ```js
@@ -870,9 +820,9 @@ import "../css/home.css"
 
 ### useContext
 
-* 作用：实现跨组件间的数据传输，就是类组件context中的数据消费者。
-* 注意点：`useContext ​`​的参数必须是 `context ​`​对象本身。
-* 使用：传入 `context ​`​​对象本身，来获取父组件提供的上下文对象信息
+* 作用：实现跨组件间的数据传输，就是类组件((20230907212937-5jp4nhz 'context'))中的数据消费者。
+* 注意点：`useContext ​`​​的参数必须是 `context ​`​​对象本身。
+* 使用：传入 `context ​`​​​对象本身，来获取父组件提供的上下文对象信息
 
   ```js
   1.创建context对象
@@ -948,9 +898,9 @@ import "../css/home.css"
 
 ### useContext和useReducer
 
-　　​`useContext ​`​和 `useReducer ​`​经常结合在一起进行使用，用于单组件下的状态管理
+　　​`useContext ​`​​和 `useReducer ​`​​经常结合在一起进行使用，用于单组件下的状态管理
 
-　　​`useContext ​`​方便管理父组件传递来的`props`​，`useReducer ​`​方便管理复杂的state
+　　​`useContext ​`​​方便管理父组件传递来的`props`​​，`useReducer ​`​​方便管理复杂的state
 
 * 父组件：提供props
 
@@ -999,7 +949,7 @@ import "../css/home.css"
 
   export default App;
   ```
-* 子组件：使用 `useContext`​方便接收数据
+* 子组件：使用 `useContext`​​方便接收数据
 
   ```js
   // Son.tsx
@@ -1035,8 +985,8 @@ import "../css/home.css"
 
 ### useCallback
 
-* 概念：缓存函数，函数式组件，在state、props改变时都会渲染，为了避免`function`​的重复定义，可以使用该hook
-* 使用：把内联回调函数及依赖项数组作为参数传入 `useCallback`​，它将返回该回调函数的**缓存版本**，该回调函数只有在某个依赖项改变时才会更新。
+* 概念：缓存函数，函数式组件，在state、props改变时都会渲染，为了避免`function`​​的重复定义，可以使用该hook
+* 使用：把内联回调函数及依赖项数组作为参数传入 `useCallback`​​，它将返回该回调函数的**缓存版本**，该回调函数只有在某个依赖项改变时才会更新。
 
   ```js
   1.事实上，useCallback 内部实现就是使用了 useMemo，useCallback(fn, deps) 相当于 useMemo(() => fn, deps)，它们都可以用来缓存一个函数，并在依赖项发生变化时重新创建该函数。
@@ -1094,7 +1044,7 @@ import "../css/home.css"
 ### useImperativeHandle
 
 * 概念：用于暴露自定义的方法或属性给父组件，从而使父组件可以直接调用子组件中的方法或属性。
-* 使用：`useImperativeHandle`​ 接受两个参数：`ref ​`​和一个回调函数。其中，`ref`​ 是一个由 `React.forwardRef ​`​创建的 ref 对象，用于在父组件中引用子组件。
+* 使用：`useImperativeHandle`​​ 接受两个参数：`ref ​`​​和一个回调函数。其中，`ref`​​ 是一个由 `React.forwardRef ​`​​创建的 ref 对象，用于在父组件中引用子组件。
 
   ```js
   useImperativeHandle(ref, createHandle, [deps])
@@ -1131,29 +1081,147 @@ import "../css/home.css"
   }
   ```
 
-# 路由
+## api
 
-　　​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用
+### ref
+
+```js
+推荐的获取ref的方法
+1.定义需要的ref
+const myRef = React.createRef()
+2.挂载ref
+<div ref={this.myRef}>hello</div>
+3.获取ref
+this.myRef.current
+
+老方法
+1.挂载ref
+<div ref=myRef>hello</div>
+2.获取ref
+this.refs.myRef.current
+
+ref使用箭头函数返回组件实例
+设置变量接受
+let myRef = null
+再组件中获取
+<div ref={ el => this.myRef = el }>hello</div>
+```
+
+### React.lazy
+
+```js
+懒加载
+import React,{ Suspense } from "react"
+const Child = React.lazy(()=>import('src'))
+
+使用
+render(){
+  return (
+    <div>
+      <Suspense fallbacl={<div>等待加载的组件</div>}>//需要使用 Suspense 组件把懒加载的组件包裹
+        <Child/>
+      </Suspense >
+    </div>
+  )
+}
+ 
+```
+
+### portal
+
+　　普通组件一般都是挂载在父组件的 dom 节点中，也就是说大部分的组件都是在`​ 根节点 #app ​`​中，需要把组件挂载到其他 dom 节点，就需要用到`react-dom`​ 中的 `createProtal`​方法。
+
+　　由于react是重写了自己的一套事件侦听系统，即使使用`protal`​把组件渲染在根节点之外，依旧可以触发父组件的事件冒泡
+
+```js
+import { createProtal } from "react-dom"
+createProtal(组件，被挂载的节点)
+funcion Dialog (){
+  return(
+    createProtal(<div>...组件内容</div>,document.body)
+  )
+}
+```
+
+### dangerouslySetInnerHTML
+
+```js
+react中使用 dangerouslySetInnerHTML 来实现v-html的功能
+
+<div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
+```
+
+### forwardRef
+
+　　一个高阶组件，方便把父组件传递来的`ref`​ 绑定在组件的自定义位置
+
+```js
+import { forwardRef,Component,createRef } from "react"
+
+class App extends Component {
+  const childRef = createRef()
+  render(){
+    return (<>
+      <Child ref={this.childRef}><Child>
+    </>)
+  }
+}
+
+//可以透传拿到父组件传递来的ref，把ref放到需要的dom节点上
+const Child = forwardRef((props,ref)=>{
+  return (
+    <div>
+      <input ref={ref}></input>
+    </div>
+  )
+})
+```
+
+　　‍
+
+# react-router
+
+　　​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用。
+
+　　拥抱函数式编程
 
 ## 内置组件
 
 ```js
-<BrowserRouter>  //路由模式
+<BrowserRouter>  //路由浏览器模式
 <HashRouter>  //路由hash模式
 <Route>  //路由实例
-<Redirect> V6已经废弃，重定向
-<Link>  // a标签跳转
-<NavLink>
+<Redirect> //重定向组件，V6已经废弃，
+<Link> // a标签跳转
+<NavLink> //a标签跳转，可以使用类目实现高亮效果
 <Switch> V6已经废弃
+<Routes> //v6 中 switch 组件
 ```
 
-### Link
+### HashRouter
+
+　　路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件
 
 ```js
-有replace参数，默认是false，即代表是使用replace还是push进行跳转
-<Link to="/home">home<Link>
-编译后
-<a href="/home">home</a>
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter,HashRouter } from "react-router-dom";
+import App from "./App";
+
+// 浏览器模式
+ReactDOM.render(
+  <BrowserRouter> 
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
+//hash模式
+ReactDOM.render(
+  <HashRouter> 
+    <App />
+  </HashRouter>,
+  document.getElementById("root")
+);
 ```
 
 ### Route
@@ -1173,30 +1241,42 @@ import About from "./pages/about";
 
 ```
 
-### HashRouter
+### withRouter
 
-　　路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件    
+　　​`withRouter`​可以加工一般组件，让一般组件具备路由组件所特有的`API`​，返回的是一个新组件
+
+　　V6已废弃，V5中一般组件(非路由组件)想要用路由的API，比如`this.props.history.push()`​，需要用`withRouter`​包一层
 
 ```js
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+//  实现原理
+import {useLocation, useNavigate,useParams} from "react-router-dom";
+  
+function withRouter(Component) {
+  function ComponentWithRouterProp(props) {
+  let location = useLocation();
+  let push = useNavigate();
+  let params = useParams();
+    return (
+      <Component {...props} history={{ location, push, params }}/>
+    );
+  }
+  return ComponentWithRouterProp;
+}
+  
+export default withRouter
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+//基本使用
+import { withRouter } from "react-router-dom"
+const ComponentName =  withRouter(<组件>)
+<ComponentName/>
 ```
 
-### NavLink
+### NavLink/Link
 
 　　支持高亮颜色，高亮`class`​默认为`active`​
 
 * V5通过`activeClassName`​自定义选中态的类名
-* V6通过给`className`​传入**函数**，依赖`isActive`​参数确定
+* V6通过给`className`​传入**函数**，依赖给的`isActive`​参数确定，高亮会有这个类名，自己去设置样式去实现高亮效果
 
 ```js
 // V5
@@ -1213,11 +1293,13 @@ ReactDOM.render(
 
 　　单一路由匹配
 
-　　router V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
+　　​`router ​`​V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
 
 ### Navigate
 
-　　可以用来实现路由的重定向，只要该组件出现，就会执行重定向的跳转，并跳转对应的to路径中
+　　v5版本中给，用来实现路由的((20230909155731-tavj2oq '重定向'))，只要匹配到该组件，就会执行重定向的跳转，并跳转对应的to路径中。
+
+　　v6版本中已经废弃，((20230909155731-tavj2oq '重定向'))
 
 ```js
 v5
@@ -1256,82 +1338,29 @@ class TestDemo extends Component{
 export default withRouter(TestDemo)
 ```
 
-　　‍
+## 基础使用
 
-### withRouter
-
-　　​`withRouter`​可以加工一般组件，让一般组件具备路由组件所特有的`API`​，返回的是一个新组件
-
-　　V6已废弃，V5中一般组件(非路由组件)想要用路由的API，比如`this.props.history.push()`​，需要用`withRouter`​包一层
-
-## router基础
-
-### 多级路径刷新页面样式丢失问题
-
-* ​`public/index.html`​ 中引入样式不写 `./`​ 写 `/`​
-* ​`public/index.html`​ 中引入样式不写 `./`​ 写 `%PUBLIC_URL%`​
-* 使用`HashRouter`​
-
-### 精准匹配与模糊匹配
+### 路由匹配
 
 * V5默认是**模糊匹配**，通过`在Route`​配置加`exact`​开启**精准匹配**
 * V6默认开启**精准匹配**，加`/*`​开启**模糊匹配**
-
-### 重定向
-
-　　一般写在所有路由的最下方，当所有路由无法匹配的时候，跳转到兜底的路由
-
-* V5通过`<Redirect to="/home" />`​
-* V6已废除`Redirect`​标签，通过`<Route path="*" element={<Navigate to="/home" />} />`​
-
-```js
-import { Route, Routes, Navigate, Redirect } from "react-router-dom";
-// V5
-<Routes className="route">
-    <Route path="/home" component={Home} />
-    <Route path="/about" component={About} />
-    <Redirect to="/home" />
-</Routes>
-
-// V6
-<Routes className="route">
-    <Route path="/home" element={<Home />} />
-    <Route path="/about" element={<About />} />
-    <Route path="*" element={<Navigate to="/home" />} />
-</Routes>
-```
 
 ### 嵌套路由
 
 * V5注册子路由需要写父路由的`path`​值
 
-* V6的版本都不需要写`/`​，只需要地址就行，也`不需要你写前面的路径`​，只需要你写下个路径是啥就行
+* V6不需要写`/`​，只需要地址就行，也`不需要你写前面的路径`​，只需要你写下个路径是啥就行
 
 　　路由的匹配是按照注册路由的顺序执行的
 
 ```js
 // V5
-
-{/* 导航区 */}
-{[
-    { to: "/home", children: "home" },
-    { to: "/about", children: "about" },
-].map((nav) => (
-    <AppNavLink key={nav.to} {...nav} />
-))}
-
-{/* 展示区 */}
+单一路由的基本结构，如果需要实现嵌套路由，在组件中再添加一个这样的结构，即 Home 组件中，在合适的位置再写一层这样的结构，并且，子路由中的路由需要写父组件的路由路径
 <Switch className="route">
     <Route path="/home" component={Home} />
     <Route path="/about" component={About} />
     <Redirect to="/home" />
 </Switch>
-
-// pages/home/index.js
- <div style={{ display: 'flex' }}>
-    <AppNavLink to='/home/message' children="message" />
-    <AppNavLink to='/home/news' children="news" />
-</div>
 
 <Switch>
     <Route path="/home/message" component={HomeMessage} />
@@ -1339,73 +1368,57 @@ import { Route, Routes, Navigate, Redirect } from "react-router-dom";
 </Switch>
 
 // V6
-// app.js
-{/* 导航区 */}
-{[
-    { to: "/home", children: "home" },
-    { to: "/about", children: "about" },
-].map((nav) => (
-    <AppNavLink key={nav.to} {...nav} />
-))}
+//  直接再route 组件中嵌套 route 即可
+//  index 属性，用于嵌套路由，仅匹配父路径时，设置渲染的组件。解决当嵌套路由有多个子路由但本身无法确认默认渲染哪个子路由的时候，可以增加index属性来指定默认路由。
+//  index路由和其他路由不同的地方是它没有path属性，他和父路由共享同一个路径。
 
-{/* 展示区 */}
-<Routes className="route">
-    <Route path="/home/*" element={<Home />} />
-    <Route path="/about/*" element={<About />} />
-    <Route path="*" element={<Navigate to="/home" />} />
-</Routes>
+<Route path="/film" element={<Film/>}>
+    {/* <Route index  element={<Nowplaying/>}/> */}
+    <Route path="" element={<Redirect to="/film/nowplaying"/>}/>
+    <Route path="nowplaying" element={<Nowplaying/>}/>
+    <Route path="comingsoon" element={<Comingsoon/>}/>
+</Route>
 
-// pages/home/index.js
- <div style={{ display: 'flex' }}>
-    <AppNavLink to='message' children="message" />
-    <AppNavLink to='news' children="news" />
-</div>
-
-<Routes>
-    <Route path="message" element={<HomeMessage />} />
-    <Route path="news" element={<HomeNews />} />
-</Routes>
-
+路由出口，放在组件中
+<Outlet></Outlet>
 ```
 
 ### 路由传参
 
-1. params：动态路由传参
+1. ​`useParams`​：动态路由传参
 
     ```js
-    // V5
-    {/* 向组件传递params参数 */}
+    // V5 
+    //动态路由传参，声明接收params参数 
+    <Route path="detail/:id/:title" component={xxx} />
+    //向组件传递params参数
     <Link to={`detail/${msg.id}/${msg.title}`}>{msg.title}</Link>
-
-    {/* 声明接收params参数 */}
-    <Route path="detail/:id/:title" component={HomeMessageDetail} />
-
-    {/* 接收params参数 */}
+    //接收params参数
     const {id, title} = this.props.match.params
 
+
     //v6
-    import {  useParams } from "react-router-dom";
+    import { useParams } from "react-router-dom";
     const params=useParams()
     ```
-2. search：查询参数
+2. ​`useSearchParams`​：查询参数
 
     ​`urlencoded编码`​：类似`key=value&key=value`​的编码方式，可用npm包`url-parse`​处理，
 
     ```js
-    {/* 向组件传递search参数 */}
+    1.向组件传递search参数
     <Link to={`detail?id=${msg.id}&title=${msg.title}`}>{msg.title}</Link>
-    {/* 声明接收search参数(无需声明，正常注册即可) */}
+    2.组测组件
     <Route path="detail" component={HomeMessageDetail} />
-
-    // 接收search参数
+    3.接收search参数
     import qs from 'url-parse'
     const {search} = this.props.location
     const {id, title} = qs.parse(search)
 
-    其他方法：使用useSearchParams 或 useLocation (这个方法需要额外处理下state)
+    其他方法：
+    使用useSearchParams 或 useLocation (这个方法需要额外处理下state)
     useSearchParams返回的是个数组，且数组里是一个当前值和set方法。
-    并且我们取值时常借助Object.fromEntries这个方法
-    Object.fromEntries() ：可以把[[key1,value1],[key2,value2]] 转成对象形式{key1:value1,key2:value2}
+    并且我们取值时常借助Object.fromEntries这个方法，Object.fromEntries() ：可以把[[key1,value1],[key2,value2]] 转成对象形式{key1:value1,key2:value2}
 
     import React, { useEffect } from "react";
     import { useSearchParams } from "react-router-dom";
@@ -1420,15 +1433,12 @@ import { Route, Routes, Navigate, Redirect } from "react-router-dom";
 
     export default Login;
     ```
-3. state传参：类似与vue中的 `push ​`​方法携带参数  
-    刷新并不会更新，数据存在`histroy`​中，清除浏览器缓存后再刷新会丢失
+3. state传参：类似与vue中的 `push`​方法携带参数。刷新并不会更新，数据存在`histroy`​中，清除浏览器缓存后再刷新会丢失
 
     ```js
     // V5
     {/* 向组件传递state参数 */}
     <Link to={{pathname: 'detail', state: {...msg}}}>{msg.title}</Link>
-    {/* 声明接收state参数(无需声明，正常注册即可) */}
-    <Route path="detail" component={HomeMessageDetail} />
     // 接收state参数
     const {id, title} = this.props.location.state
 
@@ -1447,10 +1457,44 @@ import { Route, Routes, Navigate, Redirect } from "react-router-dom";
     };
 
     export default Login;
-
     ```
 
-### 编程式路由导航
+### 重定向
+
+　　一般写在所有路由的最下方，当所有路由无法匹配的时候，跳转到兜底的路由
+
+* V5通过`<Redirect to="/home" />`​
+* V6已废除`Redirect`​组件，通过`<Route path="*" element={<Navigate to="/home" />} />`​
+
+```js
+import { Route, Routes, Navigate, Redirect } from "react-router-dom";
+// V5
+<Routes className="route">
+    <Route path="/home" component={Home} />
+    <Route path="/about" component={About} />
+    <Redirect to="/home" />
+</Routes>
+
+// V6
+<Routes className="route">
+    <Route path="/home" element={<Home />} />
+    <Route path="/about" element={<About />} />
+    <Route path="*" element={<Navigate to="/home" />} />
+</Routes>
+
+//V6官方推荐写法
+<Route path="*" element={<Redirect to="/film"/>}/>
+
+function Redirect({to}){
+    const navigate  =useNavigate()
+    useEffect(() => {
+        navigate(to,{replace:true})
+    })
+    return null
+}
+```
+
+### naviaget
 
 ```js
 v5 
@@ -1458,37 +1502,12 @@ v5
 
 v6
 useNavigate 的 navigate
+import { useNavigate } from "react-router-dom"
+const naviaget = useNavigate()
 naviaget(to)默认就是history.push
 naviaget(to, { replace: true })就是history.replace
 naviaget(to: number)就是history.go
 ```
-
-### 路由模式
-
-　　​`BrowserRouter`​ & `HashRouter`​
-
-* **原理**不一样
-
-  * ​`BrowserRouter`​使用的是H5的`history`​ API，不兼容IE9以下版本
-  * ​`HashRouter`​使用的是URL的哈希值
-* **url表现形式**不一样
-
-  * ​`BrowserRouter`​的路径中没有`#`​
-  * ​`HashRouter`​的路径中包含`#`​
-* **刷新后对路由**​**`state`**​**参数的影响**
-
-  * `BrowserRouter`没有任何影响​，因为`state`​存在`history`​对象中
-  * ​`HashRouter`​刷新后会`导致路由state参数的丢失`​
-
-### v5与v6
-
-* ​`<Switch>`​重命名为`<Routes>`​
-* ​`Route`​ 的 `render`​ 和 `component`​ 改为 `element`​
-* 嵌套路由变得更简单
-* ​`to`​、`navigate`​、`path`​ 不以 `/`​ 开头，都是相对路径
-* 用 `Navigate`​ 代替 `Redirect`​
-* 用`useNavigate`​代替`useHistory`​
-* 大小减少：从`20kb`​到`8kb`​
 
 ### 路由懒加载
 
@@ -1520,11 +1539,54 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
           }}
         />
       }>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 </React.Suspense>
 ```
+
+### 路由拦截
+
+　　说白了，还是使用自己去判断一个去渲染那个组件
+
+```js
+<Route path="/center" element={
+  <AuthComponent>
+    <Center></Center>
+  </AuthComponent>
+}/>
+
+function AuthComponent({children}){
+  return localStorage.getItem("token")?children:<Redirect to="/login"/>
+}
+```
+
+### 路由模式
+
+　　​`BrowserRouter`​ & `HashRouter`​
+
+* **原理**不一样
+
+  * ​`BrowserRouter`​使用的是H5的`history`​ API，不兼容IE9以下版本
+  * ​`HashRouter`​使用的是URL的哈希值
+* **url表现形式**不一样
+
+  * ​`BrowserRouter`​的路径中没有`#`​
+  * ​`HashRouter`​的路径中包含`#`​
+* **刷新后对路由**​**`state`**​**参数的影响**
+
+  * ​`BrowserRouter`​没有任何影响，因为`state`​存在`history`​对象中
+  * ​`HashRouter`​刷新后会`导致路由state参数的丢失`​
+
+### v5与v6区别
+
+* ​`<Switch>`​重命名为`<Routes>`​
+* ​`Route`​ 的 `render`​ 和 `component`​ 改为 `element`​
+* 嵌套路由变得更简单
+* ​`to`​、`navigate`​、`path`​ 不以 `/`​ 开头，都是相对路径
+* 用 `Navigate`​ 代替 `Redirect`​
+* 用`useNavigate`​代替`useHistory`​
+* 大小减少：从`20kb`​到`8kb`​
 
 ### 路由匹配规则
 
@@ -1534,7 +1596,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
 * ​`/xxx/* ​`​确定路径名，后面可以跟多个子路径，如：/home/* 表示home页面能匹配上 /home、/home/12、/home/ab、/home/cd/123 等路径；
 * ​`/xxx/:xxx/* ​`​动态路径名后不限制子路径，如：/home/:id/* 表示home页面匹配 /home/11/abc/bcd、 /home/22/qwe 等路径；
 
-### 路由配置化
+### 路由配置化useRoutes
 
 　　可以本身在写组件的时候，使用route来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
 
@@ -1602,6 +1664,8 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
   export default App;
   ```
 
+　　‍
+
 # 状态管理
 
 ## [redux](https://github.com/reduxjs/redux)
@@ -1613,7 +1677,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
   2. 单向数据流：用 state 来描述应用程序在特定时间点的状况、基于 state 来渲染出 View、当发生某些事情时（例如用户单击按钮），state 会根据发生的事情进行更新，生成新的 state、基于新的 state 重新渲染 View
   3. 基于不可变数据, redux 的所有状态更新都是使用不可变的方式
 
-### 专业名词
+### 概念
 
 * ​`action`​：是一个具有 `type`​ 字段的普通 JavaScript 对象。你可以将 `action`​ 视为描述应用程序中发生了什么的事件
 
@@ -1647,7 +1711,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
   ```
 * ​`dispatch`​：事件分发方法，传入一个 `action`​ 对象。store 将执行所有 reducer 函数并计算出更新后的 state，调用 getState() 可以获取新 state。
 
-### 核心方法
+### api
 
 * ​`const store = createStore(reducer, [preloadedState], [enhancer])`​​： rootStore（存放 state 的根对象）
 
@@ -1763,7 +1827,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
 * [redux-toolkit](https://github.com/reduxjs/redux-toolkit) 为 redux 的工具包
 * [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch ​`​可以接受函数，赋予其执行异步操作的能力
 * [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react ​`​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
-* 核心方法和`redux`​是一样的
+* api和`redux`​是一样的
 
 ### 容器组件、UI组件
 
@@ -2544,7 +2608,7 @@ asyncChangeUserName[0].addEventListener('click', () => {
   2.在数据修改时先将state中将数据获取转为immutable不可变数据。修改数据时要使用immutable的API。然后再将数据转为普通对象后设置回state，state中的数据始终是普通对象。
   ```
 
-# 其他
+# 相关库及框架
 
 ## styled-component
 
@@ -2643,5 +2707,9 @@ asyncChangeUserName[0].addEventListener('click', () => {
       }
   }
   ```
+
+## UMI.JS
+
+　　[传送门👻](https://umijs.org/docs/guides/getting-started)：`react`​的开发框架，约定式的开发流程
 
 　　‍

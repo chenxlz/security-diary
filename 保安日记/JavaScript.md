@@ -2,9 +2,7 @@
 
 # JavaScript
 
-# JavaScript
-
-## JS基础
+# JS基础
 
 ### 自执行函数
 
@@ -920,208 +918,9 @@ b//b:3
   //优先使用点语法, 在需要解析变量的时候使用[]语法
   ```
 
-## Math对象
+　　‍
 
-```js
-// 1. 生成随机数, [0-1)包括0不包括1
-console.log(Math.random())
-console.log(Math.random() * 10) //0-10  不包含10
-console.log(parseInt(Math.random() * 11)) // 0-9
-//2. 向上取整  Math.ceil()
-console.log(Math.ceil(9.003))//10
-//3. 向下取整 Math.floor()
-console.log(Math.floor(9.99))//9
-//4. 找最大最小数
-console.log(Math.max(2, 3, 15, 8, 4))//15
-console.log(Math.min(2, 3, 15, 8, 4))//2
-//5. 幂运算  10的3次幂运算  Math.pow(值, 次方数)
-console.log(Math.pow(2, 3))//8
-//6. 绝对值
-console.log(Math.abs(-10.01))//10.01
-```
-
-## Date对象
-
-```js
-// Date对象 : 日期对象
-//1. 获取当前日期和时间
-let d = new Date()
-console.log(d) // 当前日期对象
-console.log(typeof d)
-console.log(d.toString()) //当前日期字符串
-console.log(typeof d.toString())
-
-//  转为本地时间格式字符串
-console.log( d.toLocaleString() )//2022/1/18 下午3:02:53
-console.log( d.toLocaleDateString() )//2022/1/18
-console.log( d.toLocaleTimeString() )//下午3:03:29
-
-//2. 获取年份
-console.log( d.getFullYear() )//2022
-
-//3. 获取月份(0-11)
-console.log(d.getMonth() + 1)//0开始
-
-//4. 获取当前几号(1-31)
-console.log(d.getDate())
-
-//5. 获取星期几(0-6, 星期天为0)
-console.log(d.getDay())
-
-//6. 获取时间
-console.log( d.getHours() )//15
-console.log( d.getMinutes() )//5
-console.log( d.getSeconds() )//44
-
-//7. 获取 1970 年 1 月 1 日至今的毫秒数。
-console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
-```
-
-## Set对象
-
-* 概念：set是无序集合，和数组相比，是无序的，并且元素不能重复
-* 相关方法：set无法去重引用类型的数据
-
-  ```js
-  set.add(value)//添加元素到集合内，会维护插入时的顺序
-  set.delete(value)//删除元素的指定元素
-  set.clear()//清空集合内元素
-  set.forEach(callbackFn,[,context])//遍历集合内所有元素，并作为CallbackFn的参数进行调用
-  set.has(value)//检查集合内是否含有某元素
-  ```
-* 使用：数组去重
-
-  ```js
-  const arr = [1,1,2,2,3,3,4,4,5,5];
-  const setData = Array.from(new Set(arr));//Array.from(),转化为数组
-  console.log(setData);//[1,2,3,4,5]
-  ```
-
-## Promise
-
-### 基本概念
-
-```js
-异步函数：不会阻塞主线程代码执行
-回调函数：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
-promise三种状态:状态一旦改变就不会回退的
-```
-
-* 相关概念：`promise(承诺)`​可以解决多个异步操作彼此依赖，所产生的代码嵌套问题
-
-  ```js
-  异步函数：不会阻塞主线程代码执行
-  回调函数：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
-
-  promise三种状态:状态一旦改变就不会回退的
-  1.pending
-  2.fulfilled成功
-  3.refected失败
-  ```
-* 基本使用
-
-  ```js
-  //创建Promise对象
-  const p = new Promise((resolve,reject)=>{
-    //在某种条件之后，会执行到resolve或者reject，里面所包含的内容会被.then出去或者.catch捕捉到
-    resolve()
-    reject()
-  })
-
-  //使用
-  p.then(res=>{}).catch(err=>{})
-  res\err就是之前resolve()和reject()内的值（返回过来的结果）
-  ```
-* 其他注意点
-
-  ```js
-  .then的参数其实有两个 .then第二个参数可以处理上一级的错误状态
-  .then(res=>{},err=>{})
-  .catch()其实也是通过n .then 封装得到的
-
-  .then().then().catch()//前面的.then没有第二个参数（处理错误）的话，出现错误会直接执行.catch()
-  .then(res=>{},err=>{}).then().catch()//.then()中已有处理错误的情况话，会先用.then中的
-
-  .then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
-  ```
-* 方法
-
-  ```js
-  多个异步合并成一个，all接收数组，里面都是promise对象，都成功才是成功，有一个失败就是失败
-  promise.arr([p1,p2]).then(res=>{},err=>{})// .then 的第二个参数就是 .catch() 的效果
-
-  //rach比赛，失败和成功就是第一个promise对象的状态是成功还是失败。第一个成功就成功，不管后面其他promise对象的结果
-  promise.rach([p1,p2]).then(res=>{},err=>{})
-  ```
-
-## async
-
-* 概念：**本质是语法糖，是用promise包装过的，被async声明过的函数都是异步函数，适用await用于等待异步方法的执行完毕**
-
-  ```js
-  async fn(){
-    await promise  //await 会等这边返回结果之后才会执行下一步，相当于可以把异步操作变成了同步操作
-    ...
-    return xxx //返回的数据会被包装成一个promise对象
-    //没有返回值会返回undefined 也是promise对象
-  }
-
-  ```
-* 基本使用
-
-  ```js
-  async fn(){
-    ...
-    const res = await request()
-    const res2 = await request()
-    ... 
-  }
-  ```
-* 关于错误：返回值不一定都是问题的，一旦有错误访问则需要进行处理
-
-  ```js
-  try{}.catch(error){}//只能获取同步代码，异步的错误无法获取，所以使用await是很好用的
-  async fn(){
-    ...
-    try{
-      const res = await request()
-      const res2 = await request()
-    }.catch(error){
-      //错误抛出后执行的代码，不会影响后面代码的执行
-    }
-    ... 
-  }
-
-  //另一种思路：axios请求返回的结果其实都是通过promse包装的
-  async fn(){
-    ...
-    //利用promise本身的.then或.catch方法来处理错误之后再把值return
-    const res = await request().catch(err=>{ return err })//直接处理出错
-    const res2 = await request().then(res=>{},err=>{return err})
-    ... 
-  }
-  ```
-
-## class
-
-　　[传送门](https://typescript.bootcss.com/classes.html)
-
-### 基本概念
-
-```js
-创建对象
-extends ：继承
-public ：公开
-private ：私有
-protected ：受保护
-readonly ：只读修饰符
-get、set ：存取器，控制对象成员的访问
-static ：静态属性
-abstract ：抽象类
-
-constructor ：构造函数
-super ：调用父类的constructor再继承
-```
+# 对象
 
 ## 原型对象
 
@@ -1279,7 +1078,236 @@ Person.prototype.fn = function(){
 
   ```
 
-## 函数
+## Blob
+
+　　​`Blob`​​ 对象表示一个不可变、原始数据的类文件对象。它的数据可以按文本或二进制的格式进行读取，也可以转换成 [`ReadableStream`](https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream)​​ 来用于数据操作
+
+## Math
+
+```js
+// 1. 生成随机数, [0-1)包括0不包括1
+console.log(Math.random())
+console.log(Math.random() * 10) //0-10  不包含10
+console.log(parseInt(Math.random() * 11)) // 0-9
+//2. 向上取整  Math.ceil()
+console.log(Math.ceil(9.003))//10
+//3. 向下取整 Math.floor()
+console.log(Math.floor(9.99))//9
+//4. 找最大最小数
+console.log(Math.max(2, 3, 15, 8, 4))//15
+console.log(Math.min(2, 3, 15, 8, 4))//2
+//5. 幂运算  10的3次幂运算  Math.pow(值, 次方数)
+console.log(Math.pow(2, 3))//8
+//6. 绝对值
+console.log(Math.abs(-10.01))//10.01
+```
+
+## Date
+
+```js
+// Date对象 : 日期对象
+//1. 获取当前日期和时间
+let d = new Date()
+console.log(d) // 当前日期对象
+console.log(typeof d)
+console.log(d.toString()) //当前日期字符串
+console.log(typeof d.toString())
+
+//  转为本地时间格式字符串
+console.log( d.toLocaleString() )//2022/1/18 下午3:02:53
+console.log( d.toLocaleDateString() )//2022/1/18
+console.log( d.toLocaleTimeString() )//下午3:03:29
+
+//2. 获取年份
+console.log( d.getFullYear() )//2022
+
+//3. 获取月份(0-11)
+console.log(d.getMonth() + 1)//0开始
+
+//4. 获取当前几号(1-31)
+console.log(d.getDate())
+
+//5. 获取星期几(0-6, 星期天为0)
+console.log(d.getDay())
+
+//6. 获取时间
+console.log( d.getHours() )//15
+console.log( d.getMinutes() )//5
+console.log( d.getSeconds() )//44
+
+//7. 获取 1970 年 1 月 1 日至今的毫秒数。
+console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
+```
+
+## Set
+
+* 概念：`set`​是无序集合，和数组相比，是无序的，并且元素不能重复
+* 相关方法：set无法去重引用类型的数据
+
+  ```js
+  set.add(value)//添加元素到集合内，会维护插入时的顺序
+  set.delete(value)//删除元素的指定元素
+  set.clear()//清空集合内元素
+  set.forEach(callbackFn,[,context])//遍历集合内所有元素，并作为CallbackFn的参数进行调用
+  set.has(value)//检查集合内是否含有某元素
+  ```
+* 使用：数组去重
+
+  ```js
+  const arr = [1,1,2,2,3,3,4,4,5,5];
+  const setData = Array.from(new Set(arr));//Array.from(),转化为数组
+  console.log(setData);//[1,2,3,4,5]
+  ```
+
+## Map
+
+* 概念：**`Map`**​ 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者[基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive)）都可以作为一个键或一个值。
+
+  ```js
+  map 是有序的"对象"，接受一个数组参数，该数组里面的参数也是数组形式，如 [key,value]
+  const map1 = new Map();
+  const map2 = new Map([
+    [key,value]
+  ]);
+  ```
+* 和对象区别
+
+  ```js
+  1.map需要显示添加键，对象有其原型对象
+  2.map的键可以是任意的 函数、对象、基本类型； 对象的键是string或symbol，对象的key会被强转成string哦
+  3.map是有顺序的，依据插入的顺序来；对象是"无序"的，其实也有一定顺序，不过这个顺序其实不是那么明确
+  4.map可以使用size属性获取个数，map可迭代； 对象不能直接获取键值对格式，且没有迭代协议，只能通过keys、values方法
+  ```
+* map常用方法
+
+  ```js
+  const map= new Map();
+  map.set("Jessie", { phone: "213-555-1234", address: "123 N 1st Ave" });
+  map.has("Jessie"); // true
+  map.get("Hilary"); // undefined
+  map.delete("Jessie"); // true
+  map.delete("Raymond"); // false
+  map.clean() // 清空所有元素
+  console.log(contacts.size); // 1
+  ```
+
+## Promise
+
+* 相关概念：`promise(承诺)`​可以解决多个异步操作彼此依赖，所产生的代码嵌套问题
+
+  ```js
+  异步函数：不会阻塞主线程代码执行
+  回调函数：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
+  promise三种状态:状态一旦改变就不会回退的
+
+  1.pending
+  2.fulfilled成功
+  3.refected失败
+  ```
+* 基本使用
+
+  ```js
+  //创建Promise对象
+  const p = new Promise((resolve,reject)=>{
+    //在某种条件之后，会执行到resolve或者reject，里面所包含的内容会被.then出去或者.catch捕捉到
+    resolve()
+    reject()
+  })
+
+  //使用
+  p.then(res=>{}).catch(err=>{})
+  res\err就是之前resolve()和reject()内的值（返回过来的结果）
+  ```
+* 其他注意点
+
+  ```js
+  .then的参数其实有两个 .then第二个参数可以处理上一级的错误状态
+  .then(res=>{},err=>{})
+  .catch()其实也是通过 .then 封装得到的
+
+  .then().then().catch()//前面的.then没有第二个参数（处理错误）的话，出现错误会直接执行.catch()
+  .then(res=>{},err=>{}).then().catch()//.then()中已有处理错误的情况话，会先用.then中的
+
+  .then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
+  ```
+* 方法
+
+  ```js
+  多个异步合并成一个，all接收数组，里面都是promise对象，都成功才是成功，有一个失败就是失败
+  promise.arr([p1,p2]).then(res=>{},err=>{})// .then 的第二个参数就是 .catch() 的效果
+
+  //rach比赛，失败和成功就是第一个promise对象的状态是成功还是失败。第一个成功就成功，不管后面其他promise对象的结果
+  promise.rach([p1,p2]).then(res=>{},err=>{})
+  ```
+
+## async
+
+* 概念：**本质是语法糖，是用promise包装过的，被async声明过的函数都是异步函数，适用await用于等待异步方法的执行完毕**
+
+  ```js
+  async fn(){
+    await promise  //await 会等这边返回结果之后才会执行下一步，相当于可以把异步操作变成了同步操作
+    ...
+    return xxx //返回的数据会被包装成一个promise对象
+    //没有返回值会返回undefined 也是promise对象
+  }
+
+  ```
+* 基本使用
+
+  ```js
+  async fn(){
+    ...
+    const res = await request()
+    const res2 = await request()
+    ... 
+  }
+  ```
+* 关于错误：返回值不一定都是问题的，一旦有错误访问则需要进行处理
+
+  ```js
+  try{}.catch(error){}//只能获取同步代码，异步的错误无法获取，所以使用await是很好用的
+  async fn(){
+    ...
+    try{
+      const res = await request()
+      const res2 = await request()
+    }.catch(error){
+      //错误抛出后执行的代码，不会影响后面代码的执行
+    }
+    ... 
+  }
+
+  //另一种思路：axios请求返回的结果其实都是通过promse包装的
+  async fn(){
+    ...
+    //利用promise本身的.then或.catch方法来处理错误之后再把值return
+    const res = await request().catch(err=>{ return err })//直接处理出错
+    const res2 = await request().then(res=>{},err=>{return err})
+    ... 
+  }
+  ```
+
+## Class
+
+* 基本概念：[传送门](https://typescript.bootcss.com/classes.html)
+
+  ```js
+  创建对象
+  extends :继承
+  public :公开
+  private :私有
+  protected :受保护
+  readonly :只读修饰符
+  get、set :存取器，控制对象成员的访问
+  static :静态属性
+  abstract :抽象类
+
+  constructor :构造函数
+  super :调用父类的constructor再继承
+  ```
+
+# 函数
 
 ### 函数概念
 
@@ -1393,7 +1421,7 @@ fn(1, 2)
 
 　　被函数或方法或调用的函数就被称为回调函数。回调函数也是函数，只是被别的函数当作参数使用了
 
-## 正则
+# 正则
 
 ### 正则表达式
 
@@ -3467,7 +3495,7 @@ pause : 暂停事件
 * 请求报文：在使用`HTTP`​和服务器进行通讯的时候,发送的叫做请求报文，请求报文中的绝大多数内容是自动生成。
 
   ```js
-  1. 请求行（request line）：有请求的**方法**和**地址**
+  1. 请求行（request line）：有请求的方法和地址
   2. 请求头部（ header ）
   3. 空行
   4. 请求体 4 个部分组成。
