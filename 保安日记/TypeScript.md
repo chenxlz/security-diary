@@ -2,9 +2,7 @@
 
 # TypeScript
 
-# TypeScript
-
-## 基本使用
+# 基本使用
 
 * 基本命令：安装编译TS的工具包，node只能识别js代码，安装编译包可以把ts代码转成js代码
 
@@ -13,8 +11,93 @@
   tsc –v (查看 typescript 的版本)
   tsc xxx.ts //把ts文件转成node可执行的js文件
   ```
+* ​`tsconfig.js`​：`ts`​的配置文件
 
-## 数据类型
+  ```js
+  {
+      /*
+      tsconfig.json是ts编译器的配置，ts编译器可以根据他的信息来对代码进行编译
+      'include'用来指定哪些ts文件需要被编译，
+      路径： *任意文件， **任意目录
+      'exclude' 不需要背编译的文件目录，
+      默认值：['node_modules'， 'bower_components', 'jspm_packages']
+      */
+      "include": ["./src/**/*"],
+      // "exclude": ["./src/hello/**/*"],
+
+      /*
+      定义被继承的配置文件
+      */
+      // "extends": "",
+
+      /*
+      compilerOptions： 编译器选项
+      */
+      "compilerOptions": {
+          //用来指定ts被编译为的ES的版本
+          "target": "es2015",
+
+          //指定使用的模块化的规范'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node12', 'nodenext'
+          "module": "es2015",
+
+          //用来指定项目中要使用的库,代码提示，代码检查， 在浏览中执行的化不需要指定
+          // 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'esnext', 'dom', 'dom.iterable', 
+          // 'webworker', 'webworker.importscripts', 'webworker.iterable', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 
+          // 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 
+          // 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays',
+          //  'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 
+          //  'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.sharedmemory', 'es2020.string', 
+          //  'es2020.symbol.wellknown', 'es2020.intl', 'es2021.promise', 'es2021.string', 'es2021.weakref', 'es2021.intl', 'esnext.array',
+          //   'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise', 'esnext.weakref'.
+          //默认值为：es6, dom 即为浏览器的运行环境
+          // "lib": ["dom","es5"]
+
+          //指定编译后文件所在的目录
+          "outDir": "./dist",
+
+          //将代码合并为1个文件
+          //设置outFile后所有的全局作用域中的代码会合并到同一个文件中
+          //用于module: amd, system
+          // "outFile": "./dist/app.js"
+
+          //所有严格检查的总开关
+          "strict": true,
+
+          //是否对js文件进行编译，默认为false
+          "allowJs": true,
+
+          //是否检查js代码是否符合语法规范，默认为false
+          "checkJs": true,
+
+          //是否移除注释，默认为false
+          "removeComments": true,
+
+          //不生成编译后的文件，只执行编译的过程，默认为false
+          "noEmit": false,
+
+          //当有错误时，不生成编译后的文件，默认为false
+          "noEmitOnError": true,
+
+          //用来设置编译后的文件是否使用严格模式，默认为false
+          "alwaysStrict": true,
+
+          //不允许隐式any类型，默认为false
+          "noImplicitAny": true,
+
+          //不允许不明确类型this,默认为false
+          "noImplicitThis": true,
+
+          //严格的检查空值，默认为false
+          "strictNullChecks": true
+      }
+
+  }
+
+  ```
+
+‍
+
+# 数据类型
 
 ### Boolean类型
 
@@ -337,7 +420,7 @@ let strings: Array<string> = ['a', 'b', 'c']
   }
   ```
 
-## 相关概念
+# 相关概念
 
 ### 断言
 
@@ -718,7 +801,7 @@ let arr1 :number | string = 1 // 可以写两个类型
 
   ```
 
-## 类
+# 类
 
 * 继承
 * 封装
@@ -930,3 +1013,85 @@ let arr1 :number | string = 1 // 可以写两个类型
   lolo.say("I love ts!"); // lolo says I love ts!
 
   ```
+
+# 类型声明文件
+
+## 模块化
+
+### 命名空间
+
+关键字 `namespace`​ ,会在全局生成一个对象，定义在`namespace`​内部的都要通过这个对象的属性访问。
+
+通过`export`​关键字对外暴露需要在外部访问的对象。 
+
+命名空间表示一个全局变量是一个对象，可以定义很多属性类型。同时命名空间里可能会用到一些接口类型(`interface`​、`type`​)，这时候一般有两种写法：
+
+* 写在`namespace`​外层，会作为全局类型被引入，从而可能污染全局类型空间。
+* 写在`namespace`​里层，在想使用该类型的时候，可以通过`namespace.interface`​进行使用。（推荐）
+* 同时，命名空间支持嵌套使用，即：`namespace`​嵌套`namepsace`​。或者简化的写法，可以写成`namepsace.namespace`​进行声明。
+
+```js
+// ./types/test.d.ts
+declare namespace Jye {
+  interface Info {
+    name: string;
+    age: number;
+  }
+
+  function getAge(): number;
+}
+
+
+// ./src/test.ts
+let settings: Jye.Info = {
+  name: "jye",
+  age: 8,
+};
+
+Jye.getAge();
+
+```
+
+### 三斜线指令
+
+* 概念：`ts ​`​早期模块化的标签, 用来导入依赖, `ES6`​广泛使用后, 在编写TS文件中不推荐使用, 除了以下的场景使用`///`​, 其他场景使用 `import`​ 代替
+
+  1. 库依赖全局库, 因为全局库不能使用import导入
+  2. 全局库依赖于某个 UMD 模块，因为全局库中不能出现import/export, 出现则为npm/UMD
+
+  ```js
+  说白了，三斜线的path & types，和es6的import语义相似，
+  同时三斜线指令必须放在文件的最顶端。
+  例如，当我们的声明文件过于庞大，一般都会采用三斜线指令，将我们的声明文件拆分成若干个，然后由一个入口文件引入。
+
+  ///<reference types=“UMDModuleName/globalName” /> 表示对一个库的依赖
+  ///<reference path="./lib/index.d.ts" /> 表示对一个文件的依赖。
+  ```
+
+## 类型声明
+
+### 全局类型声明
+
+* 在TS中，以`.d.ts`​结尾的文件默认是全局模块，里面声明的类型，或者变量会被默认当成全局性质的，其他后缀结尾的文件默认是局部模块。对于局部模块要在文件里面显式写import或者export，否则会报错
+* 声明变量使用关键字`declare`​来表示声明其后面的**全局**变量的类型，`declare namespace`​声明全局命名空间，`interface`​可以不使用`declare`​关键字来命名全局类型声明
+* 声明文件放在项目里的**任意路径/文件名**都可以被`ts`​编译器识别，但实际开发中发现，为了规避一些奇怪的问题， **推荐放在根目录下。**
+* ‍
+
+```js
+//ts会识别 xxx.d.ts 文件为类型声明，使用 declare 修饰的就是全局类型声明，可以直接在文件中使用
+// src/jQuery.d.ts
+declare namespace jQuery {
+    const version: number;
+    class Event {
+        blur(eventType: EventType): void
+    }
+    enum EventType {
+        CustomClick
+    }
+    interface AjaxSettings {
+        method?: 'GET' | 'POST'
+        data?: any;
+    }
+    function ajax(url: string, settings?: AjaxSettings): void;
+}
+```
