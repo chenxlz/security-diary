@@ -6,9 +6,9 @@
 
 ### JSX
 
-　　**JSX** 是 JavaScript 语法扩展，可以让你在 JavaScript 文件中书写`html`​结构
+**JSX** 是 JavaScript 语法扩展，可以让你在 JavaScript 文件中书写`html`​结构
 
-　　[JSX and React 是相互独立的](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-a-jsx-transform) 东西。但它们经常一起使用，但你 **可以** 单独使用它们中的任意一个，JSX 是一种语法扩展，而 React 则是一个 JavaScript 的库。写类似 HTML 的标签。
+[JSX and React 是相互独立的](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-a-jsx-transform) 东西。但它们经常一起使用，但你 **可以** 单独使用它们中的任意一个，JSX 是一种语法扩展，而 React 则是一个 JavaScript 的库。写类似 HTML 的标签。
 
 ### JSX规则
 
@@ -42,29 +42,29 @@
 
 ### hook
 
-　　在react中，所有以 `use`​ 开头的函数都被叫做 hook
+在react中，所有以 `use`​ 开头的函数都被叫做 hook
 
-　　hook是特殊函数，只在react渲染时有效，只能在组件或自定义hook的最顶层调用
+hook是特殊函数，只在react渲染时有效，只能在组件或自定义hook的最顶层调用
 
 ### 数据快照
 
-　　react中，初始化的state数据其实是一直保留的，更改数据不能直接更改state的值，需要在setState函数中传入需要改变的值，之后会保存一个数据快照，然后通知react进行渲染。
+react中，初始化的state数据其实是一直保留的，更改数据不能直接更改state的值，需要在setState函数中传入需要改变的值，之后会保存一个数据快照，然后通知react进行渲染。
 
-　　也就是说，要把需要的值作为参数传入到setState函数中，原来的state是不会改变的
+也就是说，要把需要的值作为参数传入到setState函数中，原来的state是不会改变的
 
-　　**一个 state 变量的值永远不会在一次渲染的内部发生变化**
+**一个 state 变量的值永远不会在一次渲染的内部发生变化**
 
 ### 视图更新
 
-　　**React 会等到事件处理函数中的** 所有 **代码都运行完毕再处理你的 state 更新。**
+**React 会等到事件处理函数中的** 所有 **代码都运行完毕再处理你的 state 更新。**
 
-　　重新渲染只会发生在所有 `setState()`​ 调用 **之后** 的原因。
+重新渲染只会发生在所有 `setState()`​ 调用 **之后** 的原因。
 
 ### [更新state](https://zh-hans.react.dev/learn/queueing-a-series-of-state-updates)
 
-　　使用`setState`​函数的时候，传入值是形成一个((20230826104117-969dsfb '数据快照'))，原来的state其实是没有改变的
+使用`setState`​函数的时候，传入值是形成一个数据快照，原来的state其实是没有改变的
 
-　　如果传入的是一个函数，如：`setState((n)=>n+1)`​ ，该回调函数称为 `更新函数`​  。`n`​是上一个state返回的值
+如果传入的是一个函数，如：`setState((n)=>n+1)`​ ，该回调函数称为 `更新函数`​  。`n`​是上一个state返回的值
 
 1. React 会将此函数加入队列，以便在事件处理函数中的所有其他代码运行后进行处理。
 2. 在下一次渲染期间，React 会遍历队列并给你更新之后的最终 state。
@@ -186,16 +186,16 @@
 
 ### css样式
 
-　　​`react`​中的`css`​样式会使用行内写法，因为`react`​引入使用的`css`​文件是全局的样式，这会导致在组件导入的`css`​文件样式影响到别的组件，而导致的样式错乱。
+​`react`​中的`css`​样式会使用行内写法，因为`react`​引入使用的`css`​文件是全局的样式，这会导致在组件导入的`css`​文件样式影响到别的组件，而导致的样式错乱。
 
 ```js
 //react中的导入css文件，这样导入虽然生效，可实际是全局的样式
 import "../css/home.css"
 ```
 
-　　vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过`​ v-data-hash ​`​属性来区分组件，避免导致组件间的样式来相互影响。
+vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过`​ v-data-hash ​`​属性来区分组件，避免导致组件间的样式来相互影响。
 
-　　​`react`​要达到这样的效果，要使用`​ css module ​`​的模块化语法。
+​`react`​要达到这样的效果，要使用`​ css module ​`​的模块化语法。
 
 * 内联样式：不太推荐
 
@@ -230,17 +230,17 @@ import "../css/home.css"
 
 ### 状态提升
 
-　　尽可能使用受控组件，组件不使用内部的 `状态`​， 使用 父组件传递过来的 `属性`​ 来控制组件的显示。
+尽可能使用受控组件，组件不使用内部的 `状态`​， 使用 父组件传递过来的 `属性`​ 来控制组件的显示。
 
-　　对于多个子组件之间的通讯，使用`​ 状态提升 ​`​，子组件内的数据展示都使用父组件的状态，并把改变父组件内状态的函数传递给子组件使用，从而达到子组件通讯，共享属性的效果
+对于多个子组件之间的通讯，使用`​ 状态提升 ​`​，子组件内的数据展示都使用父组件的状态，并把改变父组件内状态的函数传递给子组件使用，从而达到子组件通讯，共享属性的效果
 
 ### 订阅发布
 
-　　类似于vue中的eventBus。
+类似于vue中的eventBus。
 
-　　核心思想是，创建个对象，里面一个数组，用于收集 组件订阅触发事件的函数， 一个`subscribe`​函数用于接受订阅函数，一个 `publish`​函数用于触发事件，把事件对于的函数执行。
+核心思想是，创建个对象，里面一个数组，用于收集 组件订阅触发事件的函数， 一个`subscribe`​函数用于接受订阅函数，一个 `publish`​函数用于触发事件，把事件对于的函数执行。
 
-　　达到一个集中手机事件，并提供触发的一个平台对象。
+达到一个集中手机事件，并提供触发的一个平台对象。
 
 * 事件平台中心创建
 
@@ -334,7 +334,7 @@ import "../css/home.css"
 
 ## 生命周期
 
-　　​![image](assets/image-20230907231035-bfpvs4r.png)![image](assets/image-20230907231045-bd0k3wk.png)​
+​![image](assets/image-20230907231035-bfpvs4r.png)![image](assets/image-20230907231045-bd0k3wk.png)​
 
 ### [概述](https://juejin.cn/post/7248890696819277885?searchId=202309072235420B1497972C1DF3676587)
 
@@ -483,7 +483,7 @@ import "../css/home.css"
 
 ### 更新阶段
 
-　　属性（Props）或状态（State）的改变会触发一次组件的更新，但是组件是否会重新渲染，这取决于 shouldComponentUpdate
+属性（Props）或状态（State）的改变会触发一次组件的更新，但是组件是否会重新渲染，这取决于 shouldComponentUpdate
 
 * shouldComponentUpdate：在组件更新之前调用，可以控制组件是否进行更新， 返回true时组件更新， 返回false则不更新 shouldComponentUpdate(nextProps, nextState)
 
@@ -532,9 +532,9 @@ import "../css/home.css"
 
 ### 组件间的周期顺序
 
-　　当子组件自身状态改变时，不会对父组件产生副作用的情况下，父组件不会进行更新，即不会触发父组件的生命周期
+当子组件自身状态改变时，不会对父组件产生副作用的情况下，父组件不会进行更新，即不会触发父组件的生命周期
 
-　　当父组件中状态发生变化（包括子组件的挂载以及卸载）时，会触发自身对应的生命周期以及子组件的更新
+当父组件中状态发生变化（包括子组件的挂载以及卸载）时，会触发自身对应的生命周期以及子组件的更新
 
 * 父子组件初始化
 
@@ -613,7 +613,7 @@ import "../css/home.css"
 
 ### children
 
-　　父组件可以直接向子组件中插入内容，此时在子组件中可以在**this.props.children**获取到插入到其中传递的元素。
+父组件可以直接向子组件中插入内容，此时在子组件中可以在**this.props.children**获取到插入到其中传递的元素。
 
 1. 如果插入了多个元素，那么this.props.children是一个数组，此时可通过索引访问到对应位置的元素
 
@@ -672,9 +672,9 @@ import "../css/home.css"
 
 ### props
 
-　　使用((20230906222130-uu07qvd 'children'))实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
+使用((20230906222130-uu07qvd 'children'))实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
 
-　　**在父组件中不仅可以使用props来向子组件传递数据、回调函数外，还可以传递元素**
+**在父组件中不仅可以使用props来向子组件传递数据、回调函数外，还可以传递元素**
 
 * 父组件
 
@@ -720,11 +720,11 @@ import "../css/home.css"
 
 ## hooks
 
-　　react中：Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
+react中：Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
 
-　　Hook只能在函数式组件或者自定义hook中使用，不能在类式组件中使用
+Hook只能在函数式组件或者自定义hook中使用，不能在类式组件中使用
 
-　　Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使用，否则可能会导致预料之外的 bug
+Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使用，否则可能会导致预料之外的 bug
 
 ### useState
 
@@ -898,9 +898,9 @@ import "../css/home.css"
 
 ### useContext和useReducer
 
-　　​`useContext ​`​​和 `useReducer ​`​​经常结合在一起进行使用，用于单组件下的状态管理
+​`useContext ​`​​和 `useReducer ​`​​经常结合在一起进行使用，用于单组件下的状态管理
 
-　　​`useContext ​`​​方便管理父组件传递来的`props`​​，`useReducer ​`​​方便管理复杂的state
+​`useContext ​`​​方便管理父组件传递来的`props`​​，`useReducer ​`​​方便管理复杂的state
 
 * 父组件：提供props
 
@@ -1129,9 +1129,9 @@ render(){
 
 ### portal
 
-　　普通组件一般都是挂载在父组件的 dom 节点中，也就是说大部分的组件都是在`​ 根节点 #app ​`​中，需要把组件挂载到其他 dom 节点，就需要用到`react-dom`​ 中的 `createProtal`​方法。
+普通组件一般都是挂载在父组件的 dom 节点中，也就是说大部分的组件都是在`​ 根节点 #app ​`​中，需要把组件挂载到其他 dom 节点，就需要用到`react-dom`​ 中的 `createProtal`​方法。
 
-　　由于react是重写了自己的一套事件侦听系统，即使使用`protal`​把组件渲染在根节点之外，依旧可以触发父组件的事件冒泡
+由于react是重写了自己的一套事件侦听系统，即使使用`protal`​把组件渲染在根节点之外，依旧可以触发父组件的事件冒泡
 
 ```js
 import { createProtal } from "react-dom"
@@ -1153,7 +1153,7 @@ react中使用 dangerouslySetInnerHTML 来实现v-html的功能
 
 ### forwardRef
 
-　　一个高阶组件，方便把父组件传递来的`ref`​ 绑定在组件的自定义位置
+一个高阶组件，方便把父组件传递来的`ref`​ 绑定在组件的自定义位置
 
 ```js
 import { forwardRef,Component,createRef } from "react"
@@ -1177,13 +1177,13 @@ const Child = forwardRef((props,ref)=>{
 })
 ```
 
-　　‍
+‍
 
 # react-router
 
-　　​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用。
+​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用。
 
-　　拥抱函数式编程
+拥抱函数式编程
 
 ## 内置组件
 
@@ -1200,7 +1200,7 @@ const Child = forwardRef((props,ref)=>{
 
 ### HashRouter
 
-　　路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件
+路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件
 
 ```js
 import React from "react";
@@ -1243,9 +1243,9 @@ import About from "./pages/about";
 
 ### withRouter
 
-　　​`withRouter`​可以加工一般组件，让一般组件具备路由组件所特有的`API`​，返回的是一个新组件
+​`withRouter`​可以加工一般组件，让一般组件具备路由组件所特有的`API`​，返回的是一个新组件
 
-　　V6已废弃，V5中一般组件(非路由组件)想要用路由的API，比如`this.props.history.push()`​，需要用`withRouter`​包一层
+V6已废弃，V5中一般组件(非路由组件)想要用路由的API，比如`this.props.history.push()`​，需要用`withRouter`​包一层
 
 ```js
 //  实现原理
@@ -1273,7 +1273,7 @@ const ComponentName =  withRouter(<组件>)
 
 ### NavLink/Link
 
-　　支持高亮颜色，高亮`class`​默认为`active`​
+支持高亮颜色，高亮`class`​默认为`active`​
 
 * V5通过`activeClassName`​自定义选中态的类名
 * V6通过给`className`​传入**函数**，依赖给的`isActive`​参数确定，高亮会有这个类名，自己去设置样式去实现高亮效果
@@ -1291,15 +1291,15 @@ const ComponentName =  withRouter(<组件>)
 
 ### Switch（Routes）
 
-　　单一路由匹配
+单一路由匹配
 
-　　​`router ​`​V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
+​`router ​`​V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
 
 ### Navigate
 
-　　v5版本中给，用来实现路由的((20230909155731-tavj2oq '重定向'))，只要匹配到该组件，就会执行重定向的跳转，并跳转对应的to路径中。
+v5版本中给，用来实现路由的((20230909155731-tavj2oq '重定向'))，只要匹配到该组件，就会执行重定向的跳转，并跳转对应的to路径中。
 
-　　v6版本中已经废弃，((20230909155731-tavj2oq '重定向'))
+v6版本中已经废弃，((20230909155731-tavj2oq '重定向'))
 
 ```js
 v5
@@ -1351,7 +1351,7 @@ export default withRouter(TestDemo)
 
 * V6不需要写`/`​，只需要地址就行，也`不需要你写前面的路径`​，只需要你写下个路径是啥就行
 
-　　路由的匹配是按照注册路由的顺序执行的
+路由的匹配是按照注册路由的顺序执行的
 
 ```js
 // V5
@@ -1461,7 +1461,7 @@ export default withRouter(TestDemo)
 
 ### 重定向
 
-　　一般写在所有路由的最下方，当所有路由无法匹配的时候，跳转到兜底的路由
+一般写在所有路由的最下方，当所有路由无法匹配的时候，跳转到兜底的路由
 
 * V5通过`<Redirect to="/home" />`​
 * V6已废除`Redirect`​组件，通过`<Route path="*" element={<Navigate to="/home" />} />`​
@@ -1511,7 +1511,7 @@ naviaget(to: number)就是history.go
 
 ### 路由懒加载
 
-　　使用`react`​中的`lazy`​引入组件，使用`suspense`​组件包裹懒加载的组件
+使用`react`​中的`lazy`​引入组件，使用`suspense`​组件包裹懒加载的组件
 
 ```js
 import React, { Component, lazy, Suspense } from "react";
@@ -1547,7 +1547,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
 
 ### 路由拦截
 
-　　说白了，还是使用自己去判断一个去渲染那个组件
+说白了，还是使用自己去判断一个去渲染那个组件
 
 ```js
 <Route path="/center" element={
@@ -1563,7 +1563,7 @@ function AuthComponent({children}){
 
 ### 路由模式
 
-　　​`BrowserRouter`​ & `HashRouter`​
+​`BrowserRouter`​ & `HashRouter`​
 
 * **原理**不一样
 
@@ -1598,9 +1598,9 @@ function AuthComponent({children}){
 
 ### 路由配置化useRoutes
 
-　　可以本身在写组件的时候，使用route来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
+可以本身在写组件的时候，使用route来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
 
-　　可以使用`useRoutes`​  这个钩子来生成嵌套的组件包裹形态，方便在单独的文件中管理组件间的路由映射关系。
+可以使用`useRoutes`​  这个钩子来生成嵌套的组件包裹形态，方便在单独的文件中管理组件间的路由映射关系。
 
 * routes：routes其本身是一个数组，数组里维护各个匹配关系的对象
 
@@ -1664,7 +1664,7 @@ function AuthComponent({children}){
   export default App;
   ```
 
-　　‍
+‍
 
 # 状态管理
 
@@ -1819,7 +1819,7 @@ function AuthComponent({children}){
 
 ## [react-redux](https://github.com/reduxjs/react-redux)
 
-　　传送门：[🤘](https://cn.redux.js.org/introduction/getting-started)
+传送门：[🤘](https://cn.redux.js.org/introduction/getting-started)
 
 ### redux和react-redux
 
@@ -1831,17 +1831,17 @@ function AuthComponent({children}){
 
 ### 容器组件、UI组件
 
-　　容器组件：负责处理逻辑
+容器组件：负责处理逻辑
 
-　　UI组件：负责显示和交互，内部不处理逻辑，状态完全由外部掌控
+UI组件：负责显示和交互，内部不处理逻辑，状态完全由外部掌控
 
 ### Provider
 
-　　​`<Provider>`​ 组件使 Redux `store`​ 可用于任何需要访问 Redux store 的嵌套组件。
+​`<Provider>`​ 组件使 Redux `store`​ 可用于任何需要访问 Redux store 的嵌套组件。
 
-　　​**这个组件的目的是让所有组件都能够访问到Redux中的数据。 ​**​
+​**这个组件的目的是让所有组件都能够访问到Redux中的数据。 ​**​
 
-　　由于 React Redux 应用中的任何 React 组件都可以连接到 store，因此大多数应用会在顶层渲染一个 `<Provider>`​，将整个应用的组件树包裹其中。
+由于 React Redux 应用中的任何 React 组件都可以连接到 store，因此大多数应用会在顶层渲染一个 `<Provider>`​，将整个应用的组件树包裹其中。
 
 ```js
 import React from 'react'
@@ -1857,7 +1857,7 @@ import store from './store'
 
 ### connect
 
-　　高阶组件：接收组件，返回组件，给组件添加功能
+高阶组件：接收组件，返回组件，给组件添加功能
 
 ```js
 接收两个函数，返回一个函数
@@ -1886,7 +1886,7 @@ const mapDispatchToProps = (dispatch) => { // 默认传递参数就是dispatch�
 
 ## [react-toolkit](https://cn.redux.js.org/introduction/getting-started/)
 
-　　​​![image](assets/image-20230912224500-d11pold.png)​​
+​​![image](assets/image-20230912224500-d11pold.png)​​
 
 ### reducer
 
@@ -2289,9 +2289,9 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ## mobx
 
-　　​[mobx](https://cn.mobx.js.org/)是react项目中，经常用来做数据存储的`js`​库，它的用法比`redux`​相对简单，减少了一些模板代码的使用，在使用的方面，和vuex 是有些类似的
+​[mobx](https://cn.mobx.js.org/)是react项目中，经常用来做数据存储的`js`​库，它的用法比`redux`​相对简单，减少了一些模板代码的使用，在使用的方面，和vuex 是有些类似的
 
-　　​`v5 ​`​版本使用的 `Object.defineProperty`​，`v6 ​`​版本使用的是`proxy`​，同时`v6`​版本取消了类的装饰器用法
+​`v5 ​`​版本使用的 `Object.defineProperty`​，`v6 ​`​版本使用的是`proxy`​，同时`v6`​版本取消了类的装饰器用法
 
 * 类写法
 
@@ -2390,11 +2390,11 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
   ```
 
-　　‍
+‍
 
 ## [redux-persist](https://github.com/rt2zz/redux-persist)
 
-　　​`redux ​`​的持久化插件
+​`redux ​`​的持久化插件
 
 * 安装
 
@@ -2496,15 +2496,15 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ## immutable
 
-　　​`immutable`​ ：不可变数据
+​`immutable`​ ：不可变数据
 
-　　​`react`​在改变状态的时候，是不能直接去修改`state`​的值，需要通过复制`state`​的值，然后修改拷贝的数据并返回来达到修改`state`​的效果。
+​`react`​在改变状态的时候，是不能直接去修改`state`​的值，需要通过复制`state`​的值，然后修改拷贝的数据并返回来达到修改`state`​的效果。
 
-　　状态的数据结构简单的情况下还好，使用方法或者解构赋值，复制数据比较方便。如果数据结构比较复杂的话，那数据的复制就很麻烦了，所以 使用 `immutable`​ 这个库，会返回一个不可变数据对象，这个对象可以直接修改数据而不影响原数据
+状态的数据结构简单的情况下还好，使用方法或者解构赋值，复制数据比较方便。如果数据结构比较复杂的话，那数据的复制就很麻烦了，所以 使用 `immutable`​ 这个库，会返回一个不可变数据对象，这个对象可以直接修改数据而不影响原数据
 
-　　​`Immutable Data`​不可更改数据，一旦创建，对`Immutable`​对象的任何操作都将返回一个新的Immutable Data，其实现原理是`Persistent Data Structure`​**（持久化数据结构）** 即使用旧数据创建新数据时，要保证旧数据可以使用且不变。同时为了避免deepclone,深度拷贝对于性能的损耗，`Immutable ​`​使用了[Structural Sharing（结构共享）](https://link.juejin.cn?target=https%3A%2F%2Flink.jianshu.com%2F%3Ft%3Dhttps%253A%252F%252Fzhuanlan.zhihu.com%252Fp%252F27133830%253Fgroup_id%253D851585269567213568 "https://link.jianshu.com/?t=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27133830%3Fgroup_id%3D851585269567213568")，当对象树中一个节点发生变化时，只会改变该子节点以及受其影响的父节点，其他节点共享。
+​`Immutable Data`​不可更改数据，一旦创建，对`Immutable`​对象的任何操作都将返回一个新的Immutable Data，其实现原理是`Persistent Data Structure`​**（持久化数据结构）** 即使用旧数据创建新数据时，要保证旧数据可以使用且不变。同时为了避免deepclone,深度拷贝对于性能的损耗，`Immutable ​`​使用了[Structural Sharing（结构共享）](https://link.juejin.cn?target=https%3A%2F%2Flink.jianshu.com%2F%3Ft%3Dhttps%253A%252F%252Fzhuanlan.zhihu.com%252Fp%252F27133830%253Fgroup_id%253D851585269567213568 "https://link.jianshu.com/?t=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27133830%3Fgroup_id%3D851585269567213568")，当对象树中一个节点发生变化时，只会改变该子节点以及受其影响的父节点，其他节点共享。
 
-　　[传送门](https://juejin.cn/post/6940640420527341599?searchId=2023091422130758558F4B8842235BD464#heading-9)
+[传送门](https://juejin.cn/post/6940640420527341599?searchId=2023091422130758558F4B8842235BD464#heading-9)
 
 * 下载
 
@@ -2612,9 +2612,9 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ## styled-component
 
-　　基于`js`​的样式库，可以通过标签模板字符串的方式样式化组件，可以在`js`​中直接编写`css`​样式，这样就可以达到 `all in js`​的效果
+基于`js`​的样式库，可以通过标签模板字符串的方式样式化组件，可以在`js`​中直接编写`css`​样式，这样就可以达到 `all in js`​的效果
 
-　　传送门：[🔗](https://juejin.cn/post/7270760891586330679?searchId=202309192128562CF821161A533D2A4359)
+传送门：[🔗](https://juejin.cn/post/7270760891586330679?searchId=202309192128562CF821161A533D2A4359)
 
 * 下载
 
@@ -2710,6 +2710,6 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ## UMI.JS
 
-　　[传送门👻](https://umijs.org/docs/guides/getting-started)：`react`​的开发框架，约定式的开发流程
+[传送门👻](https://umijs.org/docs/guides/getting-started)：`react`​的开发框架，约定式的开发流程
 
-　　‍
+‍
