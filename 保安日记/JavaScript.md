@@ -4,7 +4,97 @@
 
 # JS基础
 
-### 自执行函数
+## 变量
+
+### 变量声明
+
+​`js`​中，变量的声明名有三个关键字：`let`​、`const`​、`var`​
+
+* ​`let`​、`const`​的特点
+
+  1. 块级作用域
+  2. 暂时性死区
+  3. 不可重复声明
+* ​`var`​的特点
+
+  1. 存在变量提升
+
+### 变量提升
+
+预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
+
+函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
+
+变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
+
+块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
+
+函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
+
+```js
+var的函数作用域，会提升到当前作用域的最顶部
+function person(status) {
+    if (status) {
+        var value = "蛙人" 
+    } else {
+        console.log(value) // undefined
+    }
+    console.log(value) // undefined
+}
+person(false)
+
+let的块级作用域
+function person(status) {
+    if (status) {
+        let value = "蛙人" 
+    } else {
+        console.log(value) // 报错
+    }
+    console.log(value) // 报错
+}
+person(false)
+```
+
+### 块级作用域
+
+```js
+let声明的变量，只在 let 命令所在的代码块内有效
+{
+    let a = 10;
+    var b = 20;
+}
+console.log(a); //a is not defined
+console.log(b); //20
+```
+
+### 暂时性死区
+
+```js
+在代码块内，使用`let`命令声明变量之前，该变量都是不可用的。这在语法上，称为`暂时性死区`(temporal dead zone，简称 TDZ)
+
+为什么需要块级作用域呢？
+1.内层变量可能会覆盖外层变量
+function foo(a){
+    console.log(a);
+    if(1===2){
+        var a = 'hello 小马哥';
+    }
+}
+var a = 10;
+foo(a);
+2.用来计数的循环遍历泄露为全局变量
+var arr = []
+for(var i = 0; i < 10; i++){
+    arr[i] = function(){
+        return i;
+    }
+}
+console.log(arr[5]());
+
+
+```
+
+## 自执行函数
 
 ```js
 ;(function () {
@@ -16,7 +106,7 @@
 }())
 ```
 
-### 作用域
+## 作用域
 
 1. 全局作用域(全局变量): 函数外部声明的变量
 2. 局部作用域(局部变量): **函数内部**声明的变量
@@ -49,7 +139,7 @@ if (true) {
 console.log(num); //0
 ```
 
-### 作用域链
+## 作用域链
 
 作用域链：由全局作用域与局部作用域形成的 "链条"
 
@@ -88,7 +178,7 @@ fn();
 
 ​![image](assets/image-20220808213223-rlmdo4q.png)​
 
-### 关于this
+## 关于this
 
 * this指向
 
@@ -186,7 +276,7 @@ fn();
     fn();//22 这条语句才是调用
     ```
 
-### 异常处理
+## 异常处理
 
 * 创建异常：创建一个错误信息出来
 
@@ -234,7 +324,7 @@ fn();
   console.log("hello");//可以正常执行
   ```
 
-### 深拷贝的实现
+## 深拷贝的实现
 
 * 递归方法
 
@@ -269,7 +359,7 @@ fn();
   2.JSON.parse(JSON字符串):将JSON字符串，还原回对象或数组并赋值给新的对象或数值
   ```
 
-### 闭包
+## 闭包
 
 * 概念：闭包是`JS`​中一种特殊的代码，体现在代码上为：内部函数使用外层函数的局部变量。
 
@@ -301,7 +391,7 @@ fn();
   fn();//5
   ```
 
-### 节流防抖
+## 节流防抖
 
 * 节流：在一个时间间隔内触发多次，事件处理函数仅执行1次。节流主要用在高频事件中：鼠标移动、滚动条滚动 、页面resize
 
@@ -335,7 +425,7 @@ fn();
   }
   ```
 
-### 垃圾回收机制
+## 垃圾回收机制
 
 * 垃圾回收机制：JS内部有一段代码，负责将程序执行的过程中，将没有办法访问到的数据销毁。
 * 内存泄漏：如果有数据无法访问，但JS没有办法回收，这种情况就是内存"泄露"
@@ -398,7 +488,7 @@ fn();
   </script>
   ```
 
-### 构造函数
+## 构造函数
 
 构造函数就是函数，使用`new`​关键字调用，来创建对象的函数。如果一个函数使用 `new`​ 关键字调用，那么这个函数就是构造函数。
 
@@ -422,43 +512,7 @@ fn();
     * ​`return`​值类型：无效，还是返回new创建的对象
     * ​`return`​引用类型：有效，会覆盖new创建的对象
 
-### 变量提升
-
-预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
-
-函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
-
-变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
-
-块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
-
-函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
-
-```js
-var的函数作用域，会提升到当前作用域的最顶部
-function person(status) {
-    if (status) {
-        var value = "蛙人" 
-    } else {
-        console.log(value) // undefined
-    }
-    console.log(value) // undefined
-}
-person(false)
-
-let的块级作用域
-function person(status) {
-    if (status) {
-        let value = "蛙人" 
-    } else {
-        console.log(value) // 报错
-    }
-    console.log(value) // 报错
-}
-person(false)
-```
-
-### 动态参数
+## 动态参数
 
 * 概念：`argument`​：是用于接收函数实参的另一种方式，这种方式的特点可以不定义形参
 * 注意：
@@ -480,7 +534,7 @@ person(false)
 
   ```
 
-### 定时器
+## 定时器
 
 * setTimeout：一次性定时器当指定的毫秒数到达时，才执行指定的函数
 
@@ -506,7 +560,7 @@ person(false)
 
   ```
 
-### 展开运算符
+## 展开运算符
 
 展开运算符符号：`...`​，可以用于将数组展开，展开成由逗号分隔的多个值。
 
@@ -533,7 +587,7 @@ let min = Math.min(...arr)
 console.log(min);
 ```
 
-### 可选链操作符
+## 可选链操作符
 
 * [概念](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Optional_chaining)：允许读取位于连接对象链深处的属性的值，而不必明确验证链中的每个引用是否有效。
 * 使用：利用点语法，会先判断问号前面是否存在，存在就可以点，不存在就nudefine
@@ -556,7 +610,7 @@ console.log(min);
   })
   ```
 
-### 空值合并操作符
+## 空值合并操作符
 
 概念：[传送门](https://blog.csdn.net/weixin_43858446/article/details/117992266)，**当左侧值为 ​**​***null***​**​ 或 ​**​***undefined***​**​ 时，返回 ?? 符号右边的值**
 
@@ -574,7 +628,7 @@ b//b:3
 
 ‍
 
-### 检测数据类型
+## 检测数据类型
 
 * typeof：一元运算符，它返回一个字符串，说明运算数的类型
 
@@ -631,7 +685,7 @@ b//b:3
   Object.prototype.toString.call(window)   //"[object Window]"
   ```
 
-### 数据类型转换
+## 数据类型转换
 
 * 概念：JavaScript是弱数据类型，JavaScript也不知道变量到底属于那种数据类型，只有赋值了才清楚
 * 转number类型
@@ -731,7 +785,7 @@ b//b:3
   console.log(!0) // !Boolean(0)  true
   ```
 
-### 数据解构
+## 数据解构
 
 * 概念：解构数据的时候，数据结构上要是一致的，才能赋值到自己设置的变量
 * **注意**：如果解构赋值给的数据是`undefined`​，那么会优先使用自己的默认（原本）的值
@@ -771,7 +825,7 @@ b//b:3
   console.log(a);  //10
   console.log(b1,b2);  //'hello', 'world'
   ```
-* 对象解构：将对象中与变量同名的成员读取出来，并赋值给同名变量。如果没有找到同名的则返回`undefined`​
+* 对象解构：将对象中与变量同名的成员读取出来，并赋值给同名变量。如果没有找到同名的则返回`undefined`​。**真正被赋值的是后者，而不是前者。**
 
   ```js
   //基本语法:let {变量1, 变量2, 变量3} = 对象
@@ -817,7 +871,7 @@ b//b:3
 
   ```
 
-### 创建对象方法
+## 创建对象方法
 
 * ((20220807181438-jnka2os '构造函数'))法创建对象
 
@@ -1193,17 +1247,23 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Promise
 
-* 相关概念：`promise(承诺)`​可以解决多个异步操作彼此依赖，所产生的代码嵌套问题
+### 概念
 
-  ```js
-  异步函数：不会阻塞主线程代码执行
-  回调函数：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
-  promise三种状态:状态一旦改变就不会回退的
+Promise 是异步编程的一种解决方案
 
-  1.pending
-  2.fulfilled成功
-  3.refected失败
-  ```
+从语法上讲，Promise是一个对象，通过它可以获取异步操作的消息；
+
+从本意上讲，它是承诺，承诺它过一段时间会给你一个结果。
+
+promise有三种状态：pending(等待态)，fulfilled(成功态)，rejected(失败态)；状态一旦改变，就不会再变。
+
+创造promise实例后，它会立即执行。
+
+​`异步函数`​：不会阻塞主线程代码执行  
+​`回调函数`​：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
+
+### 方法
+
 * 基本使用
 
   ```js
@@ -1218,27 +1278,33 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
   p.then(res=>{}).catch(err=>{})
   res\err就是之前resolve()和reject()内的值（返回过来的结果）
   ```
-* 其他注意点
+* ​`Promise.all([p1,p2])`​
 
   ```js
-  .then的参数其实有两个 .then第二个参数可以处理上一级的错误状态
-  .then(res=>{},err=>{})
-  .catch()其实也是通过 .then 封装得到的
+  all()方法提供了并行执行异步操作的能力，并且再所有异步操作执行完后才执行回调
 
-  .then().then().catch()//前面的.then没有第二个参数（处理错误）的话，出现错误会直接执行.catch()
-  .then(res=>{},err=>{}).then().catch()//.then()中已有处理错误的情况话，会先用.then中的
-
-  .then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
+  Promise.all()接受一个promise对象的数组，待全部完成之后，统一执行success
+  同时成功才走 .then 有一个失败就 .catch
   ```
-* 方法
+* ​`Promise.race([p1,p2])`​
 
   ```js
-  多个异步合并成一个，all接收数组，里面都是promise对象，都成功才是成功，有一个失败就是失败
-  promise.arr([p1,p2]).then(res=>{},err=>{})// .then 的第二个参数就是 .catch() 的效果
-
-  //rach比赛，失败和成功就是第一个promise对象的状态是成功还是失败。第一个成功就成功，不管后面其他promise对象的结果
-  promise.rach([p1,p2]).then(res=>{},err=>{})
+  接受一个包含多个promise对象的数组，只要有一个完成，就执行success
+  即返回第一个成功或失败的结果
   ```
+
+### 注意点
+
+```js
+.then的参数其实有两个 .then第二个参数可以处理上一级的错误状态
+.then(res=>{},err=>{})
+.catch()其实也是通过 .then 封装得到的
+
+.then().then().catch()//前面的.then没有第二个参数（处理错误）的话，出现错误会直接执行.catch()
+.then(res=>{},err=>{}).then().catch()//.then()中已有处理错误的情况话，会先用.then中的
+
+.then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
+```
 
 ## async
 
@@ -1263,10 +1329,11 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
     ... 
   }
   ```
-* 关于错误：返回值不一定都是问题的，一旦有错误访问则需要进行处理
+* 关于错误：**await获取到的是后面Promise成功状态传递的参数**，一旦有错误访问则需要进行处理
 
   ```js
   try{}.catch(error){}//只能获取同步代码，异步的错误无法获取，所以使用await是很好用的
+
   async fn(){
     ...
     try{
@@ -1290,10 +1357,11 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Class
 
-* 基本概念：[传送门](https://typescript.bootcss.com/classes.html)
+[传送门](https://typescript.bootcss.com/classes.html)
+
+* 相关概念
 
   ```js
-  创建对象
   extends :继承
   public :公开
   private :私有
@@ -1306,6 +1374,37 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
   constructor :构造函数
   super :调用父类的constructor再继承
   ```
+* ES5：`new`​返回对象
+
+  ```js
+  function Person(name,age) {
+      this.name = name;
+      this.age = age;
+  }
+  Person.prototype.sayName  = function() {
+      return this.sayName;
+  }
+  let p = new Person('小马哥',18);
+  console.log(p);
+  ```
+* ES6：`es6`​提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过`class`​关键字，可以定义类。
+
+  ```js
+  class Person {
+      // constructor方法 是类的默认方法,通过new命令生成对象实例时,自动调用该方法,一个类必须有constructor方法,如果没有定义,会被默认添加
+      constructor(name, age) {
+          this.name = name;
+          this.age = age;
+      }
+      //等同于Person.prototype = function sayName(){}
+      sayName(){
+          return this.name;
+      }
+  }
+  console.log(Person===Person.prototype.constructor)
+  ```
+
+‍
 
 # 函数
 
@@ -1397,11 +1496,10 @@ fn(1, 2)
 
 ### 箭头函数
 
-* 概念：
+* 概念：箭头函数就是定义函数的另一种语法，属于函数表达式
 
   ```js
   (形参列表)=>{函数体代码}
-  箭头函数就是定义函数的另一种语法，属于函数表达式
   只有1个参数可以省略小括号
   在省略花括号的情况下，仅有的一条代码的值会被return出来
   省略花括号的情况下，不能明确的写一个return
@@ -1415,6 +1513,7 @@ fn(1, 2)
   ```js
   1.箭头函数里没有arguments，可以使用展开运算符(...)代替。
   2.箭头函数是没有this，如果箭头函数内使用了this，会触链式查找，找上一级作用域(函数)中的this
+  3.箭头函数无法使用 new 关键字来创建对象
   ```
 
 ### 回调函数
