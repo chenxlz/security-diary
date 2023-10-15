@@ -2,115 +2,493 @@
 
 # Node
 
-[Node.js](https://nodejs.dev/en/) 是一个基于 `Chrome V8引擎` 的 `JavaScript` 运行时环境，`Node.js` 可以运行 `JS`文件
+[Node.js](https://nodejs.dev/en/) 是一个基于 `Chrome V8引擎`​ 的 `JavaScript`​ 运行时环境，`Node.js`​ 可以运行 `JS`​文件
+
+# 基本概念
+
+## 网页加载
+
+网页资源的加载都是循序渐进的，首先获取 `HTML ​`​的内容， 然后解析 `HTML ​`​在发送其他资源的请求，如 `CSS`​，`Javascript`​，图片等。
+
+会解析 引入 文件的路径再去发起资源请求
+
+​![01b27104af8ecfe88afc6f70450cc04682d95f31](assets/01b27104af8ecfe88afc6f70450cc04682d95f31-20231014214443-8mzek1v.jpg)​
+
+## 请求路径
+
+**网页中的 URL 主要分为两大类：**​`相对路径`​ 与 `绝对路径`​
+
+结合
+
+* 绝对路径：可靠性强，而且相对容易理解，在项目中运用较多
+
+  ```js
+
+  http://atguigu.com/w eb](http://atguigu.com/web   直接向目标资源发送请求，容易理解。网站的外链会用到此形式     
+  //atguigu.com/web                                 与页面 URL 的协议拼接形成完整 URL 再发送请求。大型网站用的比较多 
+  /web                                              与页面 URL 的协议、主机名、端口拼接形成完整 URL 再发送请求。中小型网站 
+  ```
+* 相对路径：在发送请求时，需要与当前页面 URL 路径进行 `计算`​ ，得到完整 URL 后，再发送请求。
+
+  ```js
+  ./css/app.css       http://www.atguigu.com/course/css/app.css
+  js/app.js           http://www.atguigu.com/course/js/app.js
+  ../img/logo.png     http://www.atguigu.com/img/logo.png
+  ../../mp4/show.mp4  http://www.atguigu.com/mp4/show.mp4
+  ```
+
+‍
+
+## __dirname
+
+​`__dirname`​ 保存着 **当前文件夹所在目录的绝对路径**，可以使用 `__dirname`​ 与文件名拼接成绝对路径
+
+> **使用 fs 模块的时候，尽量使用 **`__dirname`​ 路径转换为绝对路径，这样可以避免相对路径产生的 Bug
+
+```js
+//=>__dirname + '/data.txt'  === 'D:\\Desktop\\Node\\code\\03-fs模块/data.txt'
+let data = fs.readFileSync(__dirname + '/data.txt')
+console.log(data) 
+```
+
+## Buffer
+
+### 概念
+
+​`Buffer ​`​是一个类似于数组的 `对象`​ ，用于表示固定长度的字节序列
+
+`Buffer ​`​本质是一段内存空间，专门用来处理 `二进制数据`​
+
+特点：
+
+* ​`Buffer ​`​大小固定且无法调整
+* ​`Buffer ​`​性能较好，可以直接对计算机内存进行操作
+* 每个元素的大小为 1 字节（`byte`​）
+
+### 基本使用
+
+* 创建
+
+  ```js
+  // 创建了一个长度为 10 字节的 Buffer，相当于申请了 10 字节的内存空间，每个字节的值为 0
+  let buf_1 = Buffer.alloc(10) //=>结果为<Buffer 00 00 00 00 00 00 00 00 00 00>
+
+  // 创建了一个长度为 10 字节的 Buffer，buffer 中可能存在旧数据，可能会影响执行结果，所以叫 unsafe ，但是效率比 alloc 高
+  let buf_2 = Buffer.allocUnsafe(10)
+
+  // 通过字符串创建 Buffer
+  let buf_3 = Buffer.from('hello')
+
+  // 通过数组创建 Buffer
+  let buf_4 = Buffer.from([105, 108, 111, 118, 101, 121, 111, 117])
+  ```
+* ​`Buffer`​和字符串转化：使用​`toString`​ 方法将 Buffer 转为字符串
+
+  ```js
+  et buf_4 = Buffer.from([105, 108, 111, 118, 101, 121, 111, 117])
+  console.log(buf_4.toString()) //=>iloveyou
+  ```
+* ​`Buffer`​读写
+
+  ```js
+  let buf_3 = Buffer.from('hello')
+  // 读取
+  console.log(buf_3[1]) //=>101
+  // 修改
+  buf_3[1] = 97
+  //查看字符串结果
+  console.log(buf_3.toString()) //=>hallo
+  ```
+
+‍
 
 # Node模块
 
-## Node模块
+## fs模块
 
-### global模块
+### writeFile
 
-类似于 `window` 对象，`global模块`是`node` 中的全局模块，除了`global模块`（全局模块）中的内容可以直接使用，其他模块都是需要加载
-
-```js
-//window 浏览器中的全局对象
-//global nodejs中的全局对象,node里面使用 global里面的变量,不需要引入
-
-//当前执行的文件所在的 文件夹 的绝对路径
-console.log(__dirname)// C:\Users\hulinghao\Desktop\xxx\Node.js - day01\04-源代码
-//当前执行的 文件 的绝对路径
-console.log(__filename)// C:\Users\hulinghao\Desktop\xxx\Node.js - day01\04-源代码\global模块测试.js
-```
-
-### fs模块
-
-* 概念：fs 模块不是全局的，不能直接使用。因此需要导入才能使用。
-
-* 读取文件：`fs.readFileSync('文件路径', '编码格式')`
-
-  ```js
-  // 1. 导入fs内置模块。类似于 script src="xxx.js"
-  const fs = require('fs')  // console.log('fs:', fs)
-
-  // 2. 调用提供的方法
-  // 不设置编码格式,返回的是Buffer对象(js中表示进制数据的格式)
-  const res = fs.readFileSync('./info/a.txt')
-  console.log('res:', res)
-
-  // 设置了编码格式之后,会返回对应编码的内容
-  const res = fs.readFileSync('./info/a.txt', 'utf-8')
-  console.log('res:', res)
-  ```
-* 关于 Buffer 对象
-
-  ```js
-  Buffer对象是Nodejs用于处理二进制数据的。
-  其实任意的数据在计算机底层都是二进制数据，因为计算机只认识二进制。
-  所以读取任意的文件，返回的结果都是二进制数据，即Buffer对象。
-  Buffer对象可以调用toString()方法转换成字符串。
-  ```
-* 写文件：`fs.writeFileSync('路径', 内容)`。覆盖写入，返回值是`undefined`，文件不存在会创建文件，文件夹不存在会报错。
-
-  ```js
-  // 1. 导入fs内置模块
-  const fs = require('fs')
-
-  const data = `
-  咏鸭-某黑鸭
-  嘎嘎嘎
-  曲项向天歌
-  黄毛浮黑水
-  黄掌拨红油
-  `
-  try {
-    const res = fs.writeFileSync('./msg/b.txt', data)
-    console.log('res:', res)
-  } catch (error) {
-    console.log('写入失败')
-  }
-  ```
-
-### path模块
-
-Node.js 提供的处理路径的模块 `path`，提供了很多处理路径的方法和属性，也是一个内置模块
+语法：`fs.writeFile(file, data[, options], callback)`​，异步
 
 ```js
-// 1. 导入path
-const path = require('path')
+- file 文件名
+- data 待写入的数据
+- options 选项设置(可选)
+- callback 写入回调
+返回值： `undefined`
 
-// 2. __dirname(文件夹) __filename(文件)
-const res3 = path.join(__dirname, './score/总成绩.txt')
-console.log('res3:', res3)
+// require 是 Node.js 环境中的 '全局' 变量，用来导入模块
+const fs = require('fs')
+
+// 将 [三人行，必有我师焉。] 写入到当前文件夹下的 [座右铭.txt] 文件中
+fs.writeFile('./座右铭.txt', '三人行，必有我师焉。', err =>{
+    // 如果写入失败，则回调函数调用时，会传入错误对象，如写入成功，会传入 null
+    if(err){
+        console.log(err)
+        return
+    }
+    console.log('写入成功')  
+})
 ```
 
-### http模块
+### writeFileSync
 
-`http`也是内置模块, `Node.js` 官方提供的、用来创建web 服务器的模块。它提供了一系列的方法和属性,让开发者(咱们)可以用代码来创建服务器,接收**请求**及响应**内容**
+语法：`fs.writeFileSync(file, data[, options])`​，同步
 
-* 创建最基本web服务器
+```js
+try{
+    fs.writeFileSync('./座右铭.txt', '三人行，必有我师焉。')
+}catch(e){
+    console.log(e)
+}
+```
+
+### appendFile 、 appendFileSync
+
+* 概念：​`appendFile`​ 作用是在文件尾部追加内容，`appendFile`​ 语法与 `writeFile`​ 语法完全相同
+* ​`fs.appendFile(file, data[, options], callback)`​、`fs.appendFileSync(file, data[, options])`​
 
   ```js
-  // 1. 导入 http 模块
-  const http = require('http')
-
-  // 2. 创建 web 服务器实例
-  const server = http.createServer()
-
-  // 3. 启动服务器
-  // 3000 端口号
-  server.listen(4399, () => {
-    console.log('my server start work')
+  fs.append('./座右铭.txt', '则其善者而从之，其不善者而改之。', err =>{
+      if(err) throw err
+      console.log('追加成功')
   })
 
-  // 4. 为服务器实例绑定 request 事件，监听客户端的请求,当客户端发送请求到服务器的时候，会触发这个事件
+  fs.appendFileSync('./座右铭.txt','\r\n温故而知新，可以为师矣')
+  ```
+
+### createWriteStream
+
+语法：`fs.createWriteStream(path[, options])`​
+
+**程序打开一个文件是需要消耗资源的**，流式写入可以减少打开关闭文件的次数。**流式写入方式适用于 ​**​****大文件写入或者频繁写入****​**的场景，**​`writeFile`​适合于 **写入频率较低的场景**
+
+```js
+let ws = fs.createWriteStream('./观书有感.txt')
+
+//写入数据到流
+ws.write('半亩方塘一鉴开\r\n')
+ws.write('天光云影共徘徊\r\n')
+ws.write('问渠那得清如许\r\n')
+ws.write('为有源头活水来\r\n')
+
+//关闭写入流，表明已没有数据要被写入可写流
+ws.end()
+```
+
+### readFile
+
+**语法**: `fs.readFile(path[, options], callback)`​ 异步
+
+```js
+// 导入 fs 模块
+fs.readFile('./座右铭.txt', (error,data) =>{
+    if(err) throw err
+    console.log(data)
+})
+
+fs.readFile('./座右铭.txt', 'uft-8', (error,data) =>{
+    if(err) throw err
+    console.log(data)
+})
+```
+
+### readFileSync
+
+语法：`fs.readFileSync(path[, options])`​
+
+```js
+返回值 ：string | Buffer
+let data = fs.readFileSync('./座右铭.txt')
+let data = fs.readFileSync('./座右铭.txt', 'utf-8')
+```
+
+### createReadStream
+
+​**`语法`**​：`fs.createReadStream(path[, options])`​
+
+### rename、renameSync
+
+​`fs.rename(oldPath, newPath, callback)`​
+
+​`fs.renameSync(oldPath, newPath)`​
+
+如果还是移动到当前路径，但是修改了名字，就是重命名了
+
+```js
+fs.rename('./观书有感.txt', './论语/观书有感.txt', err =>{
+	if(err) throw err
+    console.log('移动完成')
+})
+
+fs.renameSync('./座右铭.txt', './论语/.我的座右铭.txt')
+```
+
+### ​unlink​​、​unlinkSync​​
+
+​`fs.unlink(path, callback)`​
+
+​`fs.unlinkSync(path)`​
+
+```js
+const fs = require('fs')
+
+fs.unlink('./test.txt', err =>{
+    if(err) throw err
+    console.log('删除成功')
+})
+
+fs.unlinkSync('./test2.txt')
+
+
+// 调用 rm 方法  14.4   同步 rmSync
+fs.rm('./论语.txt', err => {
+  if (err) {
+    console.log('删除失败')
+    return
+
+  }
+  console.log('删除成功')
+})
+```
+
+### mkdir、mkdirSync
+
+​`fs.mkdir(path[, options], callback)`​
+
+​`fs.mkdirSync(path[, options])`​
+
+```js
+// 异步创建文件夹  mk  make  制作   dir  directory  文件夹
+fs.mkdir('./page', err =>{
+    if(err) throw err
+    console.log('创建成功')
+})
+
+// 递归异步创建
+fs.mkdir('./1/2/3', {recursive: true}, err =>{
+    if(err) throw err
+    console.log('递归创建成功')
+})
+
+// 递归同步创建文件夹
+fs.mkdirSync('./x/y/z', {recursive: true})
+```
+
+### readdir、readdirSync
+
+​`fs.readdir(path[, options], callback)`​
+
+​`fs.readdirSync(path[, options])`​
+
+```js
+// 异步读取
+fs.readdir('./论语', (err, data) => {
+	if(err) throw err
+    console.log(data)
+})
+// 同步读取 
+let data = fs.readdirSync('./论语')
+console.log(data)
+```
+
+### ​rmdir​​、​​redirSync​​
+
+​`fs.rmdir(path[, options], callback)`​
+
+​`fs.redirSync(path[, options])`​
+
+```js
+// 异步删除文件夹  rm  remove 移除
+fs.rmdir('./page', err => {
+    if(err) throw err
+    console.log('删除成功')
+})
+//异步递归删除文件夹  不推荐
+//=>DeprecationWarning: In future versions of Node.js, fs.rmdir(path, { recursive: true }) will be removed. Use fs.rm(path, { recursive: true }) instead
+fs.rmdirSync('./1', {recursive: true}, err => {
+    if(err){ 
+    	console.log(err)
+        return
+    }
+    console.log('递归删除')
+})
+//同步递归删除文件夹
+fs.rmdirSync('./x', {recursive: true})
+
+// 建议使用
+fs.rm('./a', { recursive: true }, err => {
+  if (err) {
+    console.log(err)
+    return
+  }
+  console.log('删除成功')
+})
+```
+
+### ​**stat、statSync**
+
+使用`stat`​ 或 `statSync`​ 来查看资源的详细信息
+
+​`fs.stat(path[, options], callback)`​
+
+​`fs.statSync(path[, options])`​
+
+```js
+// 异步获取状态
+// stat  方法  status 缩写 状态
+fs.stat('/data.txt', (err, data) =>{
+    if(err) throw err
+    console.log(data)
+})
+// 同步获取状态
+let data = fs.statSync('./data.txt')
+
+- size 文件体积
+- birthtime 创建时间
+- mtime 最后修改时间
+- isFile 检测是否为文件
+- isDirectory 检测是否为文件夹
+```
+
+​​​![3d5f0b54415a2949c04dcbc49a0452e7ec91899b](assets/3d5f0b54415a2949c04dcbc49a0452e7ec91899b-20231014202603-zee6sey.png)​
+
+## path模块
+
+Node.js 提供的处理路径的模块 `path`​，提供了很多处理路径的方法和属性，也是一个内置模块
+
+|**API**|**说明**|
+| --| ----|
+|**path.resolve**|**拼接规范的绝对路径**​`常用`​|
+|**path.sep**|**获取操作系统的路径分隔符**|
+|**path.parse**|**解析路径并返回对象**|
+|**path.basename**|**获取路径的基础名称**|
+|**path.dirname**|**获取路径的目录名**|
+|**path.extname**|**获得路径的扩展名**|
+
+```js
+ // 导入 fs 模块
+ const fs = require('fs')
+ // 导入 path 模块
+ const path = require('path')
+ 
+ // 写入文件
+ // fs.writeFileSync(__dirname + '/index.html', 'love')
+ console.log(__dirname + '/index.html') //=>D:\Desktop\Node\code\04-path/index.html
+ 
+ // resolve 解决问题  拼接绝对路径
+ console.log(path.resolve(__dirname, './index.html')) //=>D:\Desktop\Node\code\04-path\index.html
+ console.log(path.resolve(__dirname, 'index.html')) //=>D:\Desktop\Node\code\04-path\index.html
+ console.log(path.resolve(__dirname, '/index.html', './test')) //=>D:\index.html\test
+ 
+ // sep 获取路径分隔符
+ console.log(path.sep) //=> window \  linux /
+ 
+ // parse 方法  __filename  '全局变量'
+ console.log(__filename) //=>文件的绝对路径 //=>D:\Desktop\Node\code\04-path\01-path.js
+ // 解析路径
+ let str = 'D:\\Desktop\\Node\\code\\04-path\\01-path.js'
+ console.log(path.parse(str))
+ 
+ // 获取路径基础名称
+ console.log(path.basename(pathname))
+ 
+ // 获取路径的目录名
+ console.log(path.dirname(pathname))
+ 
+ // 获取路径的拓展名
+ console.log(path.extname(pathname))
+```
+
+## http模块
+
+​`http`​也是内置模块, `Node.js`​ 官方提供的、用来创建web 服务器的模块。它提供了一系列的方法和属性,让开发者(咱们)可以用代码来创建服务器,接收**请求**及响应**内容**
+
+### 基本概念
+
+​`HTTP（hypertext transport protocol）`​协议；中文叫 超文本传输协议，
+
+是一种基于TCP/IP的应用层通信协议，这个协议详细规定了 `浏览器`​ 和 万维网 `服务器`​ 之间互相通信的规则
+
+### 请求报文
+
+用来向服务器发送数据，可以被称之为**​ 请求报文**
+
+* 请求行
+
+  ```js
+  - 请求方法（get、post、put、delete等）
+  - 请求 URL（统一资源定位器）
+    例如：http://www.baidu.com/index.html?a=100&b=200#logo
+
+    - http:          协议 (https、ftp、ssh等)
+    - www.baidu.com  域名
+    - 80             端口号
+    - /index.html     路径
+    - a=100&b=200     查询字符串
+    - #logo           哈希 (锚点链接)
+
+  - HTTP协议版本号
+  ```
+* 请求头：格式：『头名：头值』
+
+  ```js
+  Host：主机名
+  Connection：连接的设置 keep-alive（保持连接）；close（关闭连接）
+  Cache-Control：缓存控制 max-age = 0 （没有缓存）
+  Upgrade-Insecure-Requests：将网页中的http请求转化为 https 请求（很少用）老网站升级
+  User-Agent：用户代理，客户端字符串标识，服务器可以通过这个标识来识别这个请求来自哪个客户端 ，一般在PC端和手机端的区分
+  Accept：设置浏览器接收的数据类型
+  Accept-Encoding：设置接收的压缩方式
+  Accept-Language：设置接收的语言 q=0.7 为喜好系数，满分为1
+  Cookie：后端设置用于保存信息
+  ```
+* 空行
+* 请求体：格式比较随意，可以是空，可以是字符串，可以是`JSON`​
+
+### 响应报文
+
+向客户端返回数据，可以被称之为 **响应报文**
+
+* 响应行:  `HTTP/1.1 200 OK`​
+
+  ```js
+  - HTTP/1.1：HTTP协议版本号
+  - 200：响应状态码 404 Not Found 500 Internal Server Error
+    还有一些状态码，参考：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status
+    OK：响应状态描述
+  ```
+* 响应头
+
+  ```js
+  Cache-Control: 缓存控制 private 私有的，只允许客户端缓存数据
+  Connection: 链接设置
+  Content-Type:text/html;charset=utf-8: 设置响应体的数据类型以及字符集,响应体为html，字符集utf-8
+  Content-Length: 响应体的长度，单位为字节
+  ```
+* 空行
+* 响应体
+
+  ```js
+  响应体内容的类型是非常灵活的，常见的类型有 HTML、CSS、JS、图片、JSON
+  ```
+
+### 创建web服务
+
+* 基本流程
+
+  ```js
+  const http = require('http')
+  const server = http.createServer()
+  server.listen(3000, () => {
+    console.log('已监听到请求')
+  })
+
   server.on('request', (request, response) => {  // request ,response 形参。名字可以改,如非必要不建议改
-    // console.log('request:', request)
     console.log('request.method:', request.method)
     console.log('request.url:', request.url)
-    // console.log('response:', response)
     // 这里要处理客户端的请求
     console.log('hello html')
-    // response.end('（￣︶￣）↗　')
     // 设置响应头
     response.setHeader('info', 'good good study daydayup')
     // 设置状态码
@@ -118,15 +496,9 @@ console.log('res3:', res3)
     // 响应内容给客户端
     response.end('nice to meet you')
   })
-  ```
-* `request(请求)对象`常见属性
 
-  ```js
-  headers:所有的请求头信息
-  method:请求的方式
-  url:请求的地址
   ```
-* `response(响应)对象`常见属性和方法
+* ​`response`​:常见属性和方法
 
   ```js
   res.write(data);  给浏览器发送响应体，可以调用多次，从而提供连续的请求体
@@ -137,7 +509,7 @@ console.log('res3:', res3)
   res.setHeader(name, value); 设置响应头信息， 比如content-type
   res.writeHead(statusCode, statusMessage, options); 设置响应头，同时可以设置状态码和状态信息。
   ```
-* 中文乱码问题：当调用 `res.end()` 方法，向客户端发送中文内容时，会出现乱码问题，需要手动设置内容编码格式
+* 中文乱码问题：当调用 `res.end()`​ 方法，向客户端发送中文内容时，会出现乱码问题，需要手动设置内容编码格式
 
   ```js
   //setHeader('Content-Type','text/plain; charset=utf-8');设置内容的格式,让浏览器知道如何解析
@@ -146,65 +518,180 @@ console.log('res3:', res3)
   // html
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   ```
-* 根据`url`响应不同的`html内容`：服务器返回的内容由服务器说了算
+
+### 获取请求报文数据
+
+|**含义**|**语法**|
+| ----------------| ------|
+|请求方法|​`request.method`​|
+|请求版本|​`request.httpVersion`​|
+|请求路径|​`request.url`​|
+|URL 路径​|​`require('url').parse(request.url).pathname`​|
+|URL 查询字符串|​`require('url').parse(request.url,  true).query`​|
+|请求头|​`request.headers`​|
+|请求体|​`request.on('data', function(chunk){}) request.on('end', function(){})`​|
+
+* 基本使用
+
+  ```js
+  // 1. 导入 http 模块
+  const http = require('http')
+  // 2. 创建服务对象
+  const server = http.createServer((request, response) => {
+    // 获取请求的方法
+    console.log(request.method)  //=>GET
+    // 获取请求的 url
+    console.log(request.url)  // 只包含 url 中的 路径 与查询字符串
+    // 获取 http 协议的版本号
+    console.log(request.httpVersion)  //=> 1.1
+    // 获取 http 的请求头
+    console.log(request.headers) //=>结果是一个对象
+    response.end('http') //=>设置响应体
+  })
+
+  // 3. 监听端口，启动服务
+  server.listen(9000, () => {
+    console.log('服务已经启动...')
+  })
+  ```
+* 注意
+
+  ```js
+  1. request.url 只能获取路径以及查询字符串，无法获取 URL 中的域名以及协议的内容
+  2. request.headers 将请求信息转化成一个对象，并将属性名都转化成了『小写』
+  3. 关于路径：如果访问网站的时候，只填写了 IP 地址或者是域名信息，此时请求的路径为『 `/` 』
+  4. 关于 favicon.ico：这个请求是属于浏览器自动发送的请求
+  ```
+* 提取请求体
 
   ```js
   // 1. 导入 http 模块
   const http = require('http')
 
-  // 2. 创建 web 服务器实例
-  const server = http.createServer()
-
-  // 3. 启动服务器
-  // 3000 端口号
-  server.listen(3000, () => {
-    console.log('my server start work')
+  // 2. 创建服务对象
+  const server = http.createServer((request, response) => {
+    // 1. 声明一个变量
+    let body = ''
+    // 2. 绑定 data 事件
+    request.on('data', chunk => {
+      body += chunk
+    })
+    // 3. 绑定 end 事件
+    request.on('end', () => {
+      console.log(body)  //=>'username=111&password=111'
+      // 响应
+      response.end('Hello Http') //=>设置响应体 
+    })
   })
 
-  // 4. 为服务器实例绑定 request 事件，监听客户端的请求
-  server.on('request', (request, response) => {
-    // 设置响应头 响应的内容 html标签编码格式为 utf-8
-    response.setHeader('Content-Type', 'text/html; charset=utf-8')
-    if (request.url === '/' || request.url === '/index.html') {
-      response.end(' <h1> 我是首页</h1>')
-    } else if (request.url === '/about.html') {
-      response.end('<h1> 我是about页面</h1>')
-    } else {
-      response.statusCode = 404
-      response.end('<h1> 404 not found</h1>')
-    }
+  // 3. 监听端口，启动服务
+  server.listen(9000, () => {
+    console.log('服务已经启动...')
   })
   ```
-
-<br />
-
-### 全局模块
-
-* 全局模块指令：全局安装的模块，在系统盘（C 盘）,通过命令 `npm root -g` 可以查看全局安装路径
+* 提取 `url ​`​路径 和查询字符串
 
   ```js
-  //安装
-  npm i 模块名 -g
-  npm i -g 模块名
-  //卸载
-  npm un 模块名 -g
-  # 或者
-  npm uninstall 模块名 -g
-  ```
+  1.使用 url 模块
+  const http = require('http')
+  const url = require('url')
+  const server = http.createServer((request, response) => {
+    // 2. 解析 request.url
+    console.log(request.url)   //=>/search?keyword=h5
+    // 使用 parse 解析 request.url 的内容
+    // true 将 query 属性将会设置为一个 对象
+    let res = url.parse(request.url, true)
+    console.log(res)  // 如下图所示，为一个对象
+    // 路径
+    let pathname = res.pathname
+    // 查询字符串
+    let keyword = res.query.keyword
+    console.log(keyword)   //=>h5
+    response.end('url')
+  })
 
-* `nrm` ：是作用是切换镜像源
+
+  2.使用 URL 类，推荐
+  const http = require('http')
+  const server = http.createServer((request, response) => {
+    // 实例化 url 对象
+    // let url = new URL('/search?a=100&b=200','http://127.0.0.1:9000')
+    let url = new URL(request.url, 'http://127.0.0.1')
+    console.log(url)  //=>如图所示，为一个对象
+    // 输出路径
+    console.log(url.pathname)  //=>/search
+    // 输出 keyword 查询字符串
+    console.log(url.searchParams.get('a'))  //=> 100
+    response.end('url new')
+  })
+  ```
+* url对象  
+  ​![image](assets/image-20231014213312-uybvgtz.png)​
+
+### 设置响应报文
+
+|**作用**|**语法**|
+| ------------------| ---------------------|
+|设置响应状态码|response.statusCode|
+|设置响应状态描述|​`response.statusMessage （ 用的非常少 ）`​|
+|设置响应头信息|​`response.setHeader('头名', '头值')`​(可以自定义)|
+|设置响应体|​`response.write('xx') response.end('xxx')`​|
+
+* 基本使用
 
   ```js
-  npm i -g nrm  //全局安装nrm
-  nrm --help   # 查看帮助
-  nrm ls    # 查看全部可用的镜像源
-  nrm test # 测试各个源的速度
-  nrm use taobao  # 切换到淘宝镜像
-  nrm use npm  # 切换到npm主站
+  // 1. 设置响应状态码
+  response.statusCode = 203
+  // 2. 响应状态的描述
+  response.statusMessage = 'i love you'
+  // 3. 响应头
+  response.setHeader('content-type', 'text/html;charset=utf-8')
+  // 自定义响应头
+  response.setHeader('myHeader', 'test test')
+  // 设置多个同名的响应头
+  response.setHeader('test', ['a', 'b', 'c'])
   ```
-* ​`serve`​：功能和自己编写的 web 服务器类似，通过 `serve`​ 托管并测试访问
+* 设置响应体
 
-## 模块化规范
+  ```js
+  // write 和 end 的两种使用情况：
+  // 1. write 和 end 的结合使用 响应体相对分散
+  response.write('xx');
+  response.write('xx');
+  response.write('xx');
+  response.end(); //每一个请求，在处理的时候必须要执行 end 方法的
+
+  //2. 单独使用 end 方法 响应体相对集中
+  response.end('xxx');
+  ```
+
+### mime
+
+​`媒体类型`​（通常称为 Multipurpose Internet Mail Extensions 或 MIME 类型 ）是一种标准，用来表示文档、文件或字节流的性质和格式。
+
+HTTP 服务可以设置响应头 Content-Type 来表明响应体的 MIME 类型，浏览器会根据该类型决定如何处理资源
+
+对于未知的资源类型，可以选择 `application/octet-stream`​ 类型，浏览器在遇到该类型的响应时，会对响应体内容进行独立存储，也就是我们常见的 `下载`​ 效果
+
+```js
+mime 类型结构： [type]/[subType]
+例如： text/html text/css image/jpeg image/png application/json
+
+常见文件对应的 mime 类型
+html: 'text/html',
+css: 'text/css',
+js: 'text/javascript',
+png: 'image/png',
+jpg: 'image/jpeg', 
+gif: 'image/gif',
+mp4: 'video/mp4',
+mp3: 'audio/mpeg',
+json: 'application/json'
+```
+
+‍
+
+# 模块化规范
 
 ### AMD
 
@@ -241,6 +728,8 @@ define(function(require, exports, module) {
 
 ```js
 Node.js是CommonJS规范的主要实践
+Node.js 是实现了 CommonJS 模块化规范，二者关系有点像 JavaScript 与 ECMAScript
+module.exports 、exports 以及 require 这些都是 `CommonJS` 模块化规范中的内容。
 ```
 
 ### EMS
@@ -248,7 +737,10 @@ Node.js是CommonJS规范的主要实践
 ```js
 - 也叫做ES6 Module
 - ES6 在语言标准的层面上，实现了模块功能，逐步会成为浏览器和服务器通用的模块解决方案
+
 ```
+
+### 关于export 和 module.exports
 
 # [Webpack](https://www.webpackjs.com/)
 
@@ -657,11 +1149,11 @@ module.exports = {
 
 # 包管理工具
 
-node.js安装完成之后，自带有npm了，可以使用npm下载使用依赖包。
+​`node.js`​安装完成之后，自带有`npm`​了，可以使用`npm`​下载使用依赖包。
 
 ## npm
 
-1. 初始化命令：初始化之后，会在项目目录中生成 `package.json`​ 的文件。
+1. 初始化命令：初始化之后，会在项目目录中生成 `package.json`​​​ 的文件。
 
     ```js
     npm init -y
@@ -688,52 +1180,196 @@ node.js安装完成之后，自带有npm了，可以使用npm下载使用依赖�
     npm un 模块名
     npm un 模块名 模块名 模块名
     ```
-5. ​`.gitignore文件`​：设置无需提交的文件目录
-
-    ```js
-    # dependencies
-    node_modules //node_modules文件夹不提交代码
-
-    # testing
-    /coverage
-    ```
 
 ## yarn
 
-​`npm`​是官方的管理工具，`yarn`​是第三方的包管理工具 , 和`npm`​相比有**缓存机制**，可以直接取缓存没必要重新下载，速度比`npm`​快一些。
+​`npm`​​是官方的管理工具，`yarn ​`​是由 `Facebook`​ 在 2016 年推出的新的 `Javascript`​ 包管理工具
 
-* 基本命令
+和`npm`​​相比有**缓存机制**，可以直接取缓存没必要重新下载，速度比`npm`​​快一些。
+
+​`npm`​ 的锁文件为 `package-lock.json`​
+
+​`yarn ​`​的锁文件为 **`yarn.lock`​
+
+基本命令
+
+```js
+1.安装yarn
+npm i yarn -g    // 全局安装使用yarn
+
+2.初始化
+yarn init  //  yarn init -y
+
+3.安装插件
+npm:   npm i 插件名
+yarn:  yarn add 插件名
+       yarn global add 插件名//全局安装
+
+4.安装所有依赖
+npm:   npm i
+yarn:  yarn
+
+5.删除插件
+npm:   npm uninstall  插件名
+yarn:  yarn remove 插件名
+       yarn global remove 插件名//全局卸载
+
+6.运行项目
+npm:   npm run serve
+yarn:  yarn serve
+
+7.设置淘宝镜像
+npm:   npm config set registry http://registry.npm.taobao.org/
+yarn:  yarn config set registry http://registry.npm.taobao.org/
+
+8.npm换成yarn：删掉node_module,package-lock.json然后安装使用yarn
+```
+
+## nrm
+
+​`NRM ​`的全称是`​ npm registry manager ​`​，是一个 `npm ​`​的镜像源管理工具  
+  
+
+* 基本使用
 
   ```js
-  1.安装yarn
-  npm i yarn -g    // 全局安装使用yarn
+  npm i -g nrm //全局安装
+  nrm use taobao  //修改镜像
+  npm config list  //检查是否配置成功（选做）
+  ```
+* 查看源
 
-  2.初始化
-  yarn init  //  yarn init -y
+  ```js
+  nrm ls
 
-  3.安装插件
-  npm:   npm i 插件名
-  yarn:  yarn add 插件名
-         yarn global add 插件名//全局安装
+  npm -------- https://registry.npmjs.org/
+  yarn ------- https://registry.yarnpkg.com/
+  cnpm ------- http://r.cnpmjs.org/
+  taobao ----- https://registry.npm.taobao.org/
+  nj --------- https://registry.nodejitsu.com/
+  npmMirror -- https://skimdb.npmjs.com/registry/
+  edunpm ----- http://registry.enpmjs.org/
+  qunhe ------ http://npm-registry.qunhequnhe.com/
 
-  4.安装所有依赖
-  npm:   npm i
-  yarn:  yarn
 
-  5.删除插件
-  npm:   npm uninstall  插件名
-  yarn:  yarn remove 插件名
-         yarn global remove 插件名//全局卸载
+  ```
+* 切换镜像
 
-  6.运行项目
-  npm:   npm run serve
-  yarn:  yarn serve
+  ```js
+  nrm use 镜像别名
+  // 切换至 taobao 的镜像源
+  nrm use taobao
+  // 切换至 cnpm 的镜像源
+  nrm use cnpm
+  ```
+* 添加镜像
 
-  7.设置淘宝镜像
-  npm:   npm config set registry http://registry.npm.taobao.org/
-  yarn:  yarn config set registry http://registry.npm.taobao.org/
+  ```js
+  reigstry 为源名，url 为源的路径
+  nrm add registry http://npm-registry.qunhequnhe.com/
+  ```
+* 删除镜像
 
-  8.npm换成yarn：删掉node_module,package-lock.json然后安装使用yarn
+  ```js
+  // 其中 reigstry 为源名
+  nrm del <registry>
+  ```
+* 测试镜像响应时间
+
+  ```js
+  nrm test npm
+  ```
+
+## [nvm](https://github.com/coreybutler/nvm-windows/releases )
+
+​`nvm ​`​​全称 `Node Version Manager`​ 顾名思义它是用来管理 `node ​`​版本的工具，方便切换不同版本的`Node.js`​
+
+```js
+nvm list available  //显示所有可以下载的 Node.js 版本
+nvm list //显示已安装的版本
+nvm install 18.12.1  //安装 18.12.1 版本的 Node.js
+nvm install latest  //安装最新版的 Node.js
+nvm uninstall 18.12.1  //删除某个版本的 Node.js
+nvm use 18.12.1  //切换 18.12.1 的 Node.js
+```
+
+## 其他
+
+### 环境依赖
+
+设置选项来区分**依赖的类型**
+
+```js
+1.生产依赖：S 等效于 --save，-S 是默认选项 **包信息保存在 package.json 中 dependencies属性
+npm i -S uniq 
+npm i --save uniq
+
+2.开发依赖：-D 等效于 --save-dev** 包信息保存在 package.json 中devDependencies属性
+npm i -D less 
+npm i --save-dev less
+
+3.npm i -g nodemon //全局安装，安装在c盘，后续可以使用全局命令
+```
+
+### 命名别名
+
+配置 package.json 中的 `scripts`​ 属性：设置好后可以使用`​ npm run  xxx`​ 执行命令
+
+​`npm start`​ ：比较特别，使用时可以省略 `run`​
+
+​`npm run`​ 有自动向上级目录查找的特性，跟 `require`​ 函数也一样
+
+```js
+{
+  "scripts": {
+    "server": "node server.js",
+    "start": "node index.js",
+  },
+}
+```
+
+### ​`.gitignore`​
+
+设置无需提交的文件目录
+
+```js
+# dependencies
+node_modules //node_modules文件夹不提交代码
+
+# testing
+/coverage
+```
+
+### 自己的包
+
+* 创建发包
+
+  ```js
+  1. 创建文件夹，并创建文件 index.js， 在文件中声明函数，使用 module.exports 暴露
+  2. npm 初始化工具包，package.json 填写包的信息 (包的名字是唯一的)
+  3. 注册账号 https://www.npmjs.com/signup
+  4. 激活账号 （ <span style="color:red">一定要激活账号</span> ）
+  5. 修改为官方的官方镜像 (命令行中运行 `nrm use npm` )
+  6. 命令行下 npm login 填写相关用户信息
+  7. 命令行下 npm publish 提交包 👌
+  ```
+* 更新
+
+  ```js
+  1. 更新包中的代码
+  2. 测试代码是否可用
+  3. 修改 package.json 中的版本号
+  4. 发布更新
+  npm publish
+  ```
+* 删除包
+
+  ```js
+  npm unpublish --force
+  删除包需要满足一定的条件， https://docs.npmjs.com/policies/unpublish
+  - 你是包的作者
+  - 发布小于 24 小时
+  - 大于 24 小时后，没有其他包依赖，并且每周小于 300 下载量，并且只有一个维护者
   ```
 
 # Git

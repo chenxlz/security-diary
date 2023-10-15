@@ -3150,7 +3150,7 @@ history对象主要用于记录你当前窗口的历史记录，并为我们提�
 
   ```js
   1.在响应中 Content-Type 告诉客户端实际返回的内容的内容类型(浏览器根据这个判断如何解析)
-  2.在请求中 Content-type 客户端告诉服务器实际发送的数据类型
+  2.在请求中 Content-Type 客户端告诉服务器实际发送的数据类型
   3.使用axios提交不同格式的数据时，content-type是axios帮咱们设置的
   ```
 * Content-Type类型
