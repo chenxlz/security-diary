@@ -16,9 +16,11 @@
 
 ## 请求路径
 
-**网页中的 URL 主要分为两大类：**​`相对路径`​ 与 `绝对路径`​
+网页中的 URL 主要分为两大类：`相对路径`​​ 与 `绝对路径`​​
 
-结合
+开发中，相对路径是相对代码执行的文件为参照
+
+在网页中，相对路径是以请求发起的时候，网页的`URL`​为参照，要留意页面的协议，主机地址，端口号改变导致的路径变动问题
 
 * 绝对路径：可靠性强，而且相对容易理解，在项目中运用较多
 
@@ -26,18 +28,18 @@
 
   http://atguigu.com/w eb](http://atguigu.com/web   直接向目标资源发送请求，容易理解。网站的外链会用到此形式     
   //atguigu.com/web                                 与页面 URL 的协议拼接形成完整 URL 再发送请求。大型网站用的比较多 
-  /web                                              与页面 URL 的协议、主机名、端口拼接形成完整 URL 再发送请求。中小型网站 
+  /web                                              与页面 URL 的协议、主机名、端口拼接形成完整 URL 再发送请求。
   ```
 * 相对路径：在发送请求时，需要与当前页面 URL 路径进行 `计算`​ ，得到完整 URL 后，再发送请求。
 
   ```js
-  ./css/app.css       http://www.atguigu.com/course/css/app.css
-  js/app.js           http://www.atguigu.com/course/js/app.js
-  ../img/logo.png     http://www.atguigu.com/img/logo.png
-  ../../mp4/show.mp4  http://www.atguigu.com/mp4/show.mp4
+  此时的网页URL http://www.xxx.com/course
+  和当前URL进行拼接
+  ./css/app.css       http://www.xxx.com/course/css/app.css
+  js/app.js           http://www.xxx.com/course/js/app.js
+  ../img/logo.png     http://www.xxx.com/img/logo.png
+  ../../mp4/show.mp4  http://www.xxx.com/mp4/show.mp4
   ```
-
-‍
 
 ## __dirname
 
