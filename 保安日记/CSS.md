@@ -503,9 +503,9 @@ align-self: ;该盒子在侧轴上的对齐方式。
 }
 ```
 
-## Less
+# Less
 
-* 概念：Less、Sass、Stylus三大css预处理语言
+* 概念：`Less`​、`Sass`​、`Stylus`​三大css预处理语言
 * 变量：`@`​定义变量
 
   ```less
@@ -619,7 +619,7 @@ align-self: ;该盒子在侧轴上的对齐方式。
   @import (once) "foo.less"; // this statement will be ignored
   ```
 
-## Scss
+# Scss
 
 ​`scss`​和`sass`​其实是一样的`css`​预处理语言，`scss`​是 `sass3 ​`​引入新的语法。后缀名分别为：`.scss`​、`.sass`​。
 

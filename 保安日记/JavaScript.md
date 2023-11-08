@@ -90,8 +90,6 @@ for(var i = 0; i < 10; i++){
     }
 }
 console.log(arr[5]());
-
-
 ```
 
 ## 自执行函数
@@ -278,13 +276,11 @@ fn();
 
 ## 异常处理
 
-* 创建异常：创建一个错误信息出来
+* 创建异常
 
   ```js
-  // Error()  
   // new Error(错误描述)
-  // Error(错误描述)
-  let er = Error('年龄不合法');
+  let er = new  Error('年龄不合法');
   console.log(er);//该对象本身
   //错误对象.message,从错误对象上获取错误信息
   console.log(er.message);//"年龄不合法"
@@ -299,17 +295,6 @@ fn();
 * 捕捉异常：当一个错误被抛出后，必须使用特殊的语法进行处理，不处理程序就会中断
 
   ```js
-  // 异常捕获以及处理
-  // try{
-  //   代码块
-  // }catch(形参){
-  //     // 异常处理的代码块，只有try里的异常错误对象被throw才会被执行
-  // }finally{
-  //     // 无论是否有异常发生，都会执行到这里
-  // }
-  //     try代码块要将可能抛出异常的代码括起来
-  //     catch代码块，当try代码块中的异常被抛出了，catch代码块捕获这个错误对象，并传递给形参。
-
   try {
     let age = 210;
     if (age > 200) {
@@ -319,9 +304,9 @@ fn();
     console.log(err);//错误本身
     console.log(err.message);//"年龄不合法..." 错误对象包含的信息
   } finally {
-    console.log("finllay....");//可以正常执行
+    console.log("finllay....");//可以正常执行，不管try、catch 中是否 return 或者 再出错，这里面的代码还是会执行
   }
-  console.log("hello");//可以正常执行
+  console.log("hello");//可以正常执行，如果catch中还是有错误或return 这个代码就不会执行了
   ```
 
 ## 深拷贝的实现
