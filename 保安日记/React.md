@@ -6,19 +6,21 @@
 
 ### JSX
 
-**JSX** 是 JavaScript 语法扩展，可以让你在 JavaScript 文件中书写`html`​结构
+**JSX** 是 `JavaScript `​语法扩展，可以让你在 `JavaScript `​文件中书写`html`​​结构
 
-[JSX and React 是相互独立的](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-a-jsx-transform) 东西。但它们经常一起使用，但你 **可以** 单独使用它们中的任意一个，JSX 是一种语法扩展，而 React 则是一个 JavaScript 的库。写类似 HTML 的标签。
+[JSX and React 是相互独立的](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-a-jsx-transform) 东西。但它们经常一起使用，但你可以单独使用它们中的任意一个，`JSX`​是一种语法扩展，而 `React`​则是一个 `JavaScript`​的库。
 
-### JSX规则
+​`jsx`​就是可以在`js`​中写类似 `HTML `​的标签结构，可以简单理解成vue中的`template`​结构。
+
+​`jsx`​的相关规则：
 
 1. 只能返回一个根元素  
-    如果想要在一个组件中包含多个元素，**需要用一个父标签把它们包裹起来**。如`<div></div>`​ 或者说`​ <></>`​  
+    如果想要在一个组件中包含多个元素，**需要用一个父标签把它们包裹起来**。如`<div></div>`​ 或者说` <></>`​  
     JSX的底层是把内容都转化成对象，一个函数中只能返回一个对象，除非是返回的一个数组内容。
 2. 标签必须闭合  
     即原来html中的可以不闭合标签在jsx中必须闭合，不然会出现报错信息
-3. 使用驼峰命名 ~~所有~~ 大部分属性命名  
-    jsx底层是转化成对象，所以要遵守js对 对象 命名时候的规则，如不能出现 中划线 - ， 不能使用 class 这种内置关键字等，所以使用 `class`​ 可以写成 `className`​ 这种方式
+3. 使用驼峰（小）命名 ~~所有~~ 大部分属性命名  
+    jsx底层是转化成对象，所以要遵守 `js `​对 对象 命名时候的规则，如不能出现 中划线 - ， 不能使用 class 这种内置关键字等，所以使用 `class`​ 可以写成 `className`​ 这种方式
 4. 使用花括号`{}`​在jsx中写 js 逻辑部分，如果需要在里面使用对象的话，那么就使用双花括号`{{}}`​，外面一次表示js区域，里面一成表示值为对象
 
 ### 纯函数和副作用
@@ -29,7 +31,7 @@
     * **输入相同，则输出相同**。给定相同的输入，纯函数应总是返回相同的结果。
 2. 副作用：会出现不符合预期的结果，会影响到不属于自己变量之外的值的改变，
 
-    * 如：更新屏幕、启动动画、更改数据等，它们是 **“额外”** 发生的事情，与渲染过程无关。
+    * 如：更新屏幕、启动动画、更改数据等，它们是  **“额外”**  发生的事情，与渲染过程无关。
     * 在 React 中，**副作用通常属于事件处理程序**。
     * 事件处理程序是 React 在你执行某些操作（如单击按钮）时运行的函数
     * 即使事件处理程序是在你的组件 **内部** 定义的，它们也不会在渲染期间运行，**因此事件处理程序无需是纯函数**。
@@ -42,9 +44,9 @@
 
 ### hook
 
-在react中，所有以 `use`​ 开头的函数都被叫做 hook
+在react中，所有以 `use`​​ 开头的函数都被叫做 `hook`​
 
-hook是特殊函数，只在react渲染时有效，只能在组件或自定义hook的最顶层调用
+​`hook`​是特殊函数，只在`react`​渲染时有效，只能在组件或自定义hook的最顶层调用
 
 ### 数据快照
 
@@ -56,7 +58,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
 
 ### 视图更新
 
-**React 会等到事件处理函数中的** 所有 **代码都运行完毕再处理你的 state 更新。**
+**React 会等到事件处理函数中的所有代码都运行完毕再处理 state 更新。**
 
 重新渲染只会发生在所有 `setState()`​ 调用 **之后** 的原因。
 
@@ -64,19 +66,14 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
 
 使用`setState`​函数的时候，传入值是形成一个数据快照，原来的state其实是没有改变的
 
-如果传入的是一个函数，如：`setState((n)=>n+1)`​ ，该回调函数称为 `更新函数`​  。`n`​是上一个state返回的值
+如果传入的是一个回调函数，如：`setState((oldState)=>oldState+1)`​ ，该回调函数称为 `更新函数`​  。`oldState`​（形参）是上一个state返回的值
 
 1. React 会将此函数加入队列，以便在事件处理函数中的所有其他代码运行后进行处理。
 2. 在下一次渲染期间，React 会遍历队列并给你更新之后的最终 state。
 
-```js
-一个更新函数（例如：n => n + 1）会被添加到队列中。
-任何其他的值（例如：数字 5）会导致“替换为 5”被添加到队列中，已经在队列中的内容会被忽略。
-```
-
 ### 函数组件和类组件
 
-* 类组件：ES6的加入让`JavaScript`​直接支持使用`class`​来定义一个类，`react`​创建组件的方式就是使用的类的继承， `ES6 class ​`​是目前官方推荐的使用方式，它使用了ES6标准语法来构建
+* 类组件：ES6的加入让`JavaScript`​直接支持使用`class`​来定义一个类，`react`​创建组件的方式就是使用的类的继承， `ES6 class`​是目前官方推荐的使用方式，它使用了ES6标准语法来构建
 
   ```js
   import React from 'react'
@@ -84,7 +81,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
 
   class App extends React.Component {
   render () {
-    return (<h1>欢迎进入React的世界</h1>)
+    return (<h1>我是react中的类组件</h1>)
     }
   }
   ReactDOM.render(
@@ -98,7 +95,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
   import React from 'react'
   import ReactDOM from 'react-dom'
 
-  const App = (props) => <h1>欢迎进入React的世界</h1>
+  const App = (props) => <h1>我是函数式组件</h1>
   ReactDOM.render(
     // React组件的调用方式
     <App/>,
@@ -115,7 +112,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
   react的事件绑定和原生的事件绑定是不一样的
   原生事件都是小写  onclick 
   react 是驼峰写法 onClick
-  react的事件不是原生事件，并不是绑定在dom上的，而是合成事件，有自己的事件处理机制，事件好像是在根节点统一处理，通过事件冒泡来的
+  react的事件不是原生事件，并不是绑定在dom上的，而是合成事件，有自己的事件处理机制，事件好像是在根节点统一处理，通过事件冒泡来处置事件的执行
   ```
 * ​`event`​对象
 
@@ -138,7 +135,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
     }
   }
   ```
-* 使用类的 `constructor ​`​函数
+* 使用类的 `constructor `​函数
 
   ```js
   class App extends Component {
@@ -167,7 +164,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
     })
   }
 
-  该函数有第二个参数，参数的形式是回调函数，会在state改变之后，dom更新完成之后调用
+  该函数有第二个参数，参数的形式是回调函数，会在state改变之后，dom更新完成之后调用第二个回调函数，类似于vue中的nextTick(()=>{})
   handleChange(){
     this.setState({
       ...state中需要被替换的内容
@@ -193,9 +190,9 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
 import "../css/home.css"
 ```
 
-vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过`​ v-data-hash ​`​属性来区分组件，避免导致组件间的样式来相互影响。
+vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过` v-data-hash `​属性来区分组件，避免导致组件间的样式来相互影响。
 
-​`react`​要达到这样的效果，要使用`​ css module ​`​的模块化语法。
+​`react`​要达到这样的效果，要使用` css module `​的模块化语法。
 
 * 内联样式：不太推荐
 
@@ -203,10 +200,10 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   1.行内样式写多了，导致整个组件结构看起来怪怪的，要是样式太多，那逻辑、样式就全在一起了
   2.不支持 伪类 的选择器
   ```
-* ​`css module`​：组件间的样式不会相互影响，类名发生变化，后面添加了 hash 值。使用 classname.module.css 导入到组件中，是个变量。
+* ​`css module`​​：组件间的样式不会相互影响，类名发生变化，后面添加了 hash 值。使用 `** classname.module.css **` ​导入到组件中，是个变量。
 
   ```js
-  文件名.module.css //开启模块化
+  样式文件名称.module.css //开启模块化
   /* home: index.module.css */
   :gole
   .content {
@@ -222,9 +219,9 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
   export default Home;
   ```
-* ​`css in js`​：这个需要使用库，各种啥的`​ css in js ​`​和`​ all in js`​
+* ​`css in js`​：这个需要使用库，各种啥的`css in js `​和`all in js`​
 
-# React基础
+# React
 
 ## 组件通信
 
@@ -232,7 +229,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
 尽可能使用受控组件，组件不使用内部的 `状态`​， 使用 父组件传递过来的 `属性`​ 来控制组件的显示。
 
-对于多个子组件之间的通讯，使用`​ 状态提升 ​`​，子组件内的数据展示都使用父组件的状态，并把改变父组件内状态的函数传递给子组件使用，从而达到子组件通讯，共享属性的效果
+对于多个子组件之间的通讯，使用`状态提升`​，子组件内的数据展示都使用父组件的状态，并把改变父组件内状态的函数传递给子组件使用，从而达到子组件通讯，共享属性的效果
 
 ### 订阅发布
 
@@ -247,7 +244,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   ```js
   //调度中心
   var bus = {
-      list:[],
+      list:[],//用于收集事件函数
       //订阅
       subscribe(callback){
           this.list.push(callback)//组件订阅的触发函数进行收集
@@ -276,8 +273,8 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
 ### context
 
-* 概念：`context`​ 上下文对象，react可以使用 `context`​对子组件提供依赖。这个方法和vue中的provide、inject蛮像的
-* 基本使用，需要`​ React.createContext() ​`​
+* 概念：`context`​​ 上下文对象，react可以使用 `context`​​对子组件提供依赖。这个方法和vue中的provide、inject蛮像的
+* 基本使用，需要` React.createContext() `​
 
   ```js
   import React, { Component } from 'react'
@@ -293,7 +290,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
           }
       }
       render() {
-          return (//  需要使用 xxx.Provider 来提供依赖，需要在组件的最外层进行包裹。 value 来提供需要传递的参数
+          return (  //需要使用 xxx.Provider 来提供依赖，需要在组件的最外层进行包裹。 value 来提供需要传递的参数
               <GlobalContext.Provider value={{
                   info: this.state.info,
                   changeInfo: (value) => {
@@ -303,14 +300,14 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
                   }
               }}>
                   <div>
-                     <FilmItem ></FilmItem>
+                     <FilmItem></FilmItem>
                   </div>
               </GlobalContext.Provider>
           )
       }
   }
   //使用  xx.Consumer 包裹组件，来对父组件提供的数据进行消费。
-  //同时要使用回调函数 （val）=> { return 组件 } 形式，通过value形参来拿到value
+  //同时要使用回调函数 （val）=> { return 组件 } 形式，通过value形参来拿到value（获取提供的依赖值）
   class FilmItem extends Component {
       render() {
           let { name, poster, grade, synopsis } = this.props
@@ -338,7 +335,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
 ### [概述](https://juejin.cn/post/7248890696819277885?searchId=202309072235420B1497972C1DF3676587)
 
-* react中自带的生命周期函数好像都是类组件中的，函数时组件需要使用生命周期的功能，需要使用hooks来实现。
+* ​`react`​中自带的生命周期函数好像都是类组件中的，函数时组件需要使用生命周期的功能，需要使用`hooks`​来实现。
 * 生命周期一览
 
   ```js
@@ -358,7 +355,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   3.卸载
   componentWillUnmount
   ```
-* 将被废弃的钩子：从 v16.3 开始废弃了 componentWillMount、componentWillReceiveProps、componentWillUpdate 三个钩子，并为这几个钩子提供了别名。以别名的方式就是来恶心你的，让你不要使用🤣。
+* 将被废弃的钩子：从 v16.3 开始废弃了 `componentWillMount`​、`componentWillReceiveProps`​、`componentWillUpdate`​ 三个钩子，并为这几个钩子提供了别名。以别名的方式就是来恶心你的，让你不要使用🤣。
 
   ```js
   UNSAFE_componentWillMount：当组件被渲染出来之前
@@ -385,7 +382,8 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   commit 阶段负责去构建 DOM
 
   2.Fiber 对生命周期的影响
-  在React Fiber中，一次更新过程会分成多个分片完成，所以完全有可能一个更新任务还没有完成，就被另一个更高优先级的更新过程打断，这时，优先级高的更新任务会优先处理完，而低优先级更新任务所做的工作则会完全作废，然后等待机会重头再来。
+  在React Fiber中，一次更新过程会分成多个分片完成，所以完全有可能一个更新任务还没有完成，就被另一个更高优先级的更新过程打断，
+  这时，优先级高的更新任务会优先处理完，而低优先级更新任务所做的工作则会完全作废，然后等待机会重头再来。
   React Fiber一个更新过程被分为两个阶段(Phase)：第一个阶段Reconciliation Phase和第二阶段Commit Phase。
 
   第一阶段：构建 Fiber 对象，构建链表，在链表中标记要执行的 DOM 操作 ，这个阶段是可以被打断的
@@ -396,9 +394,9 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   componentWillUpdate
 
   第二阶段：根据构建好的链表DOM 的，更新DOM的过程中不会被打断
-  componentDidMount
-  componentDidUpdate
-  componentWillUnmount
+  componentDidMount //加载完成
+  componentDidUpdate //更新完成
+  componentWillUnmount  //即将卸载
 
   在React Fiber中，第一阶段中的生命周期函数在一次加载和更新过程中可能会被多次调用！ 
   React Fiber Reconciliation 这个过程有可能暂停然后继续执行，所以挂载和更新之前的生命周期钩子就有可能不执行或者多次执行。
@@ -587,16 +585,15 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   Parent 组件： getSnapshotBeforeUpdate()
   Child 组件： componentDidUpdate()
   Parent 组件： componentDidUpdate()
-
   ```
 * 子组件修改自身state
 
   ```js
-  子组件 getDerivedStateFromProps
-  子组件 shouldComponentUpdate
-  子组件 render
-  子组件 getSnapShotBeforeUpdate
-  子组件 componentDidUpdate
+  Child 组件: getDerivedStateFromProps
+  Child 组件: shouldComponentUpdate
+  Child 组件: render
+  Child 组件: getSnapShotBeforeUpdate
+  Child 组件: componentDidUpdate
   ```
 * 卸载子组件
 
@@ -613,11 +610,11 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
 ### children
 
-父组件可以直接向子组件中插入内容，此时在子组件中可以在**this.props.children**获取到插入到其中传递的元素。
+父组件可以直接向子组件中插入内容，此时在子组件中可以在**`this.props.children`**​获取到插入到其中传递的元素。
 
-1. 如果插入了多个元素，那么this.props.children是一个数组，此时可通过索引访问到对应位置的元素
+1. 如果插入了多个元素，那么`this.props.children`​是一个数组，此时可通过索引访问到对应位置的元素
 
-2. 如果插入了单个元素，那么this.props.children即该元素（**就不是一个数组了**）
+2. 如果插入了单个元素，那么`this.props.children`​即该元素（**就不是一个数组了**）
 
 * 子组件
 
@@ -667,12 +664,11 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   }
 
   export default App
-
   ```
 
 ### props
 
-使用((20230906222130-uu07qvd 'children'))实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
+使用children实现插槽或许是比较方便，但是使用索引获取传入进来的元素容易出错，需要明确顺序，涉及到索引变动就比较麻烦
 
 **在父组件中不仅可以使用props来向子组件传递数据、回调函数外，还可以传递元素**
 
@@ -705,7 +701,6 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
   export class NavBarTwo extends Component {
     render() {
       const { leftSlot, centerSlot, rightSlot } = this.props
-
       return (
         <div className='nav-bar'>
           <div className="left">{leftSlot}</div>
@@ -720,7 +715,7 @@ vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`st
 
 ## hooks
 
-react中：Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
+react中：Hook 是 React 16.8 的新增特性。它可以让你在不编写 class组件的 的情况下使用 state 以及其他的 React 特性。
 
 Hook只能在函数式组件或者自定义hook中使用，不能在类式组件中使用
 
@@ -728,7 +723,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useState
 
-* 作用：让函数组件具有修改state的 能力，因为在函数式组件中没有 this，React 会在重复渲染时保留这个 state，而 useState 可以让你在函数组件中管理状态。
+* 作用：让函数组件具有修改`state`​的能力，因为在函数式组件中没有 `this`​，`React `​会在重复渲染时保留这个 `state`​，而 `useState `​可以让你在函数组件中管理状态。
 * 使用
 
   ```js
@@ -741,7 +736,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
     const [todos, setTodos] = useState([{ text: '学习 Hook' }]);
     return (
       <div>
-      	<!-- 在函数中，我们可以直接用 count -->
+      	<!-- 在函数中，直接用 count -->
         <p>You clicked {count} times</p>
         <!-- 更新state  setCount 和 count 变量，所以我们不需要 this -->
         <button onClick={() => setCount(count + 1)}>
@@ -754,7 +749,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useEffect
 
-* 作用：给函数式组件提供操作((20230826112734-2v9mlur "副作用"))的能力，在render之后执行。调用 `useEffect`​​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
+* 作用：给函数式组件提供操作`副作用`​的能力，在render之后执行。调用 `useEffect`​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
 * 使用
 
   ```js
@@ -764,15 +759,14 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
     useEffect(
       () => {
         // 在函数体内部执行的操作 等价于 componentDidMount  & componentDidUpdate
-        // 使用浏览器的 API 更新页面标题     		
+        // 使用浏览器的 API 更新页面标题   
         document.title = `You clicked ${count} times`;  
         // 函数 return 时等价于 componentWillUnmount 如解绑事件 
         return () => {
            // do something...
         };
       },
-      // 监听数据，当依赖的值发生变更时，执行副作用函数
-      [ xxx，obj.xxx ]
+      [ xxx , obj.xxx ]// 监听数据，当依赖的值发生变更时，执行副作用函数
     );
     return (
       <div>
@@ -789,10 +783,10 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
   ```js
   1.参数有两个，一个是需要执行的回调函数，一个依赖数组
   2.依赖数组在指定的状态变化时候，重新执行回调函数
-  3.依赖数组为[]，表示不会因为状态改变而执行回调，只会在初始化的时候执行，相对于生命周期中的 componentDdidMount
+  3.依赖数组为 [] ，表示不会因为状态改变而执行回调，只会在初始化的时候执行，相对于生命周期中的 componentDdidMount
   4.函数组件每渲染一次，该函数就执行一次
   5.第一个参数的回调函数有返回值，可以返回一个函数，该函数会在组件被卸载前执行，用于清除之前执行的副作用操作。
-  这意味着每次执行useEffect时，都会先清除之前的副作用操作，然后再执行新的副作用操作，如果组件多次渲染，则在执行下一个 useEffect 之前，上一个 useEffect 就已被清除+
+  这意味着每次执行useEffect时，都会先清除之前的副作用操作，然后再执行新的副作用操作，如果组件多次渲染，则在执行下一个 useEffect 之前，上一个 useEffect 就已被清除
 
   //因为组件的每次渲染，都会执行设置好的回调，所以要设置好返回函数用于清空副作用，避免一些坏的影响
   useEffect(()=>{
@@ -808,9 +802,9 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 * 常见用途
 
   ```js
-  数据获取：使用useEffect可以在组件渲染后发起网络请求，获取数据并更新组件状态。
-  订阅数据源：使用useEffect可以在组件渲染后订阅数据源，并在数据更新时更新组件状态。
-  手动修改DOM：使用useEffect可以在组件渲染后手动修改DOM，例如添加、删除或更新元素。
+  数据获取：使用 useEffect 可以在组件渲染后发起网络请求，获取数据并更新组件状态。
+  订阅数据源：使用 useEffect 可以在组件渲染后订阅数据源，并在数据更新时更新组件状态。
+  手动修改DOM：使用 useEffect 可以在组件渲染后手动修改DOM，例如添加、删除或更新元素。
   绑定监听事件：在 useEffect 中绑定事件的监听或订阅，并在 return 时解除对事件的绑定。
 
   组件初始化：使用useEffect可以在组件初始化时执行一些逻辑，例如设置初始状态、初始化数据等。
@@ -821,28 +815,29 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 ### useContext
 
 * 作用：实现跨组件间的数据传输，就是类组件((20230907212937-5jp4nhz 'context'))中的数据消费者。
-* 注意点：`useContext ​`​​的参数必须是 `context ​`​​对象本身。
-* 使用：传入 `context ​`​​​对象本身，来获取父组件提供的上下文对象信息
+* 注意点：`useContext`​的参数必须是 `context`​对象本身。
+* 使用：传入 `context `​​​对象本身，来获取父组件提供的上下文对象信息
 
   ```js
   1.创建context对象
   import { createContext } from 'react';
   export const MyContext = createContext();
+
   2.在父组件中提供依赖信息
   export default calss App extend Compontend {
     render(){
       return (
          <MyContext.Provider value={
-            ... 需要提供的属性
+           // ... 需要提供的属性
           }>
             <Son></Son>//子组件需要被包裹
          <MyContext.provider>
       )
     }
   }
-
   3.子接收父组件传来的context
-  import MyContext  from "xxx"
+
+  import MyContext from "xxx"
   import { useContext } from "react"
   export default function Son(){
     const context = useContext(useContext)//context 就是父组件提供的数据对象
@@ -852,7 +847,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useReducer
 
-* 作用：用于管理组件中的状态。与useState不同，useReducer可以更好的处理复杂的状态逻辑，尤其是需要多个状态相互作用时，可以简单的理解成是 小号版的vuex，不是全局性的，但是可以在多个组件中使用。
+* 作用：用于管理组件中的状态。与useState不同，useReducer可以更好的处理复杂的状态逻辑，尤其是需要多个状态相互作用时，可以简单的理解成是小号版的vuex，不是全局性的，但是可以在多个组件中使用。
 * reducer和redux区别
 
   ```js
@@ -863,15 +858,17 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 * 使用：reducer 返回值和当前的state相同，react会跳过子组件的渲染及副作用的执行
 
   ```js
-  1.参数1：一个回调函数，该回调函数第一个形参是state，第二个形参是action，表示返回的dispath中传递的对象
-  2.参数2：默认状态的对象
+  const [state, dispatch] = useReducer(reducer, initialArg, init?);
+  1.参数1：一个回调函数，该回调函数第一个形参是state，第二个形参是action，表示返回的dispath中传递的对象。返回值是下一个状态
+  2.参数2：初始状态：初始状态的计算值。
+  3.参数3：可选。初始化参数，用于返回初始状态。如果未指定，初始状态将设置为 initialArg；如果有指定，初始状态将被设置为调用init(initialArg)的结果
   3.返回值1：状态state
   4.返回值2：一个回调函数，该回调的第一个参数是个对象，会传递给aciton，利用对象中的变量不同，来改变state
   5.react会确保 dispath 函数的标识是稳定的，不会在组件重新渲染的时候改变
   6.reducer 返回值和当前的state相同（使用Object.is 来比较），react会跳过子组件的渲染及副作用的执行
-
   接收 (state,action)=>newState 的 reducer，并返回当前的state和配套的dispath方法。
-  const [state, dispatch] = useReducer(reducer, initialArg, init);
+
+  const [state, dispatch] = useReducer(reducer, initialState, init);
   const initialState = {count: 0};
   function reducer(state, action) {
     switch (action.type) {
@@ -898,20 +895,20 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useContext和useReducer
 
-​`useContext ​`​​和 `useReducer ​`​​经常结合在一起进行使用，用于单组件下的状态管理
+​`useContext `​​和 `useReducer `​​经常结合在一起进行使用，用于单组件下的状态管理
 
-​`useContext ​`​​方便管理父组件传递来的`props`​​，`useReducer ​`​​方便管理复杂的state
+​`useContext `​​方便管理父组件传递来的`props`​​，`useReducer `​​方便管理复杂的state
 
 * 父组件：提供props
 
   ```js
-  // App.tsx
-  import './App.css';
   import React, { useContext, useReducer } from 'react'
   import Son from './pages/Son';
+  // 定义初始化数据
   const initState = {
     count: 1
-  } // 定义初始化数据
+  }
+
   export const Context = React.createContext<{
     state: typeof initState,
     dispatch: React.Dispatch<any>
@@ -940,7 +937,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
     return (
       <Context.Provider value={{ state, dispatch }}>
         <div className="App">
-          <div>这是一个组件</div>
+          <div>我是父组件内容</div>
           <Son />
         </div>
       </Context.Provider>
@@ -958,7 +955,6 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
   const Son = () => {
     const context = useContext(Context)
     console.log(context);
-
     return (
       <div>
         这是子组件
@@ -989,7 +985,8 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 * 使用：把内联回调函数及依赖项数组作为参数传入 `useCallback`​​，它将返回该回调函数的**缓存版本**，该回调函数只有在某个依赖项改变时才会更新。
 
   ```js
-  1.事实上，useCallback 内部实现就是使用了 useMemo，useCallback(fn, deps) 相当于 useMemo(() => fn, deps)，它们都可以用来缓存一个函数，并在依赖项发生变化时重新创建该函数。
+  1.事实上，useCallback 内部实现就是使用了 useMemo
+  2.useCallback(fn, deps) 相当于 useMemo(() => fn, deps)，它们都可以用来缓存一个函数，并在依赖项发生变化时重新创建该函数。
 
   const memoizedCallback = useCallback(
     () => {
@@ -1001,16 +998,14 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useRef
 
-* 概念：useRef 用于创建一个可变的 ref 对象。同时我们可以通过 ref 访问 DOM。只有current一个属性
-* 特点：
+* 概念：`useRef `​用于创建一个可变的 `ref `​对象。同时我们可以通过 ref 访问 DOM。只有current一个属性
+* 特点：useRef 在每次渲染时都会返回同一个 ref 对象，因此它可以用来存储组件中的持久化数据，而不会触发组件的重新渲染。
 
   ```js
-  1.useRef 在每次渲染时都会返回同一个 ref 对象，因此它可以用来存储组件中的持久化数据，而不会触发组件的重新渲染。
-  2.useRef 会在每次渲染时返回同一个 ref 对象。
-  3.返回一个可变的 ref 对象，该对象只有个 current 属性，初始值为传入的参数( initialValue )
-  4.当更新 current 值时不会引发组件重新渲染
-  5.useRef 类似于类组件的 this
-
+  1.useRef 会在每次渲染时返回同一个 ref 对象。
+  3.该对象只有个 current 属性，初始值为传入的参数( initialValue )
+  3.当更新 current 值时不会引发组件重新渲染
+  4.useRef 类似于类组件的 this
   ```
 * 使用
 
@@ -1044,7 +1039,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 ### useImperativeHandle
 
 * 概念：用于暴露自定义的方法或属性给父组件，从而使父组件可以直接调用子组件中的方法或属性。
-* 使用：`useImperativeHandle`​​ 接受两个参数：`ref ​`​​和一个回调函数。其中，`ref`​​ 是一个由 `React.forwardRef ​`​​创建的 ref 对象，用于在父组件中引用子组件。
+* 使用：`useImperativeHandle`​​ 接受两个参数：`ref `​​和一个回调函数。其中，`ref`​​ 是一个由 `React.forwardRef `​​创建的 ref 对象，用于在父组件中引用子组件。
 
   ```js
   useImperativeHandle(ref, createHandle, [deps])
@@ -1129,13 +1124,14 @@ render(){
 
 ### portal
 
-普通组件一般都是挂载在父组件的 dom 节点中，也就是说大部分的组件都是在`​ 根节点 #app ​`​中，需要把组件挂载到其他 dom 节点，就需要用到`react-dom`​ 中的 `createProtal`​方法。
+​`createProtal(组件，被挂载的节点)`​
+
+普通组件一般都是挂载在父组件的 dom 节点中，也就是说大部分的组件都是在` 根节点 #app `​中，需要把组件挂载到其他 dom 节点，就需要用到`react-dom`​ 中的 `createProtal`​方法。
 
 由于react是重写了自己的一套事件侦听系统，即使使用`protal`​把组件渲染在根节点之外，依旧可以触发父组件的事件冒泡
 
 ```js
 import { createProtal } from "react-dom"
-createProtal(组件，被挂载的节点)
 funcion Dialog (){
   return(
     createProtal(<div>...组件内容</div>,document.body)
@@ -1147,7 +1143,6 @@ funcion Dialog (){
 
 ```js
 react中使用 dangerouslySetInnerHTML 来实现v-html的功能
-
 <div dangerouslySetInnerHTML={ { __html:this.state.htmlContent } }></div>
 ```
 
@@ -1200,7 +1195,7 @@ const Child = forwardRef((props,ref)=>{
 
 ### HashRouter
 
-路由控制的最外一层需要包裹 `HashRouter ​`​或者 `BrowserRouter`​组件
+路由控制的最外一层需要包裹 `HashRouter `​或者 `BrowserRouter`​组件
 
 ```js
 import React from "react";
@@ -1293,7 +1288,7 @@ const ComponentName =  withRouter(<组件>)
 
 单一路由匹配
 
-​`router ​`​V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
+​`router `​V5有这个标签，V6已被重命名为`<Routes>`​ **单一匹配路由**，通常情况下`path`​和`component`​是`一一对应`​的关系，`Switch`​可以提高路由匹配效率
 
 ### Navigate
 
@@ -1590,11 +1585,11 @@ function AuthComponent({children}){
 
 ### 路由匹配规则
 
-* ​`/xxx ​`​确定的路径名，如 ： /home 表示home页面组件能匹配上路径只能是 /home ；
+* ​`/xxx `​确定的路径名，如 ： /home 表示home页面组件能匹配上路径只能是 /home ；
 * ​`/xxx/:xxx`​ 动态路径名，:xxx会动态变化的 。如：/home/:id 表示home页面能匹配上 /home/11、/home/22、/home/abc、/home/xxx 等路径；
 * ​`/xxx/:xxx/xxx`​动态路径名后跟确定路径，如： /home/:id/abc 表示home页面能匹配上 /home/11/abc、/home/22/abc 、/home/aa/abc 等路径；
-* ​`/xxx/* ​`​确定路径名，后面可以跟多个子路径，如：/home/* 表示home页面能匹配上 /home、/home/12、/home/ab、/home/cd/123 等路径；
-* ​`/xxx/:xxx/* ​`​动态路径名后不限制子路径，如：/home/:id/* 表示home页面匹配 /home/11/abc/bcd、 /home/22/qwe 等路径；
+* ​`/xxx/* `​确定路径名，后面可以跟多个子路径，如：/home/* 表示home页面能匹配上 /home、/home/12、/home/ab、/home/cd/123 等路径；
+* ​`/xxx/:xxx/* `​动态路径名后不限制子路径，如：/home/:id/* 表示home页面匹配 /home/11/abc/bcd、 /home/22/qwe 等路径；
 
 ### 路由配置化useRoutes
 
@@ -1670,7 +1665,7 @@ function AuthComponent({children}){
 
 ## [redux](https://github.com/reduxjs/redux)
 
-* 概念：​`Redux ​`​是一个使用叫做`action`​的事件来管理和更新应用状态的模式和工具库 它以集中式`Store`​（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
+* 概念：​`Redux `​是一个使用叫做`action`​的事件来管理和更新应用状态的模式和工具库 它以集中式`Store`​（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
 * 设计原则：
 
   1. 整个应用的 state 被保存在同一个 store 上, 并且 store 和 view 分离, 这就是集中式 store 的具体体现
@@ -1738,7 +1733,7 @@ function AuthComponent({children}){
   const store = createStore(reducer, undefined, applyMiddleware(thunk, logger));
 
   ```
-* ​`store.dispatch(action) ​`​​:通过传入 `action ​`​​来更新 `state`​​， `action ​`​​为对象情况下，更新是同步的（异步更新需要使用中间件来实现）
+* ​`store.dispatch(action) `​​:通过传入 `action `​​来更新 `state`​​， `action `​​为对象情况下，更新是同步的（异步更新需要使用中间件来实现）
 
   ```js
   // action 为一个含type的对象
@@ -1751,7 +1746,7 @@ function AuthComponent({children}){
   ```
 * ​`store.getState()`​​：获取当前`state`​​
 * ​`store.subscribe(()=>{})`​：订阅，state发生变化时，执行该回调函数，每个`dispatch`​都会触发`subscribe`​，**返回值是一个函数，用于注销订阅**
-* ​`const rootReducer = combineReducers({anyReducer})`​：将多个 `reducer ​`​融合成一个 `reducer`​， 因为 `createStore ​`​只接受一个 `reducer`​， 即只支持一个 `rootState`​, `dispatch ​`​与 `getState ​`​都是针对 `rootState ​`​的
+* ​`const rootReducer = combineReducers({anyReducer})`​：将多个 `reducer `​融合成一个 `reducer`​， 因为 `createStore `​只接受一个 `reducer`​， 即只支持一个 `rootState`​, `dispatch `​与 `getState `​都是针对 `rootState `​的
 
   ```js
   import { combineReducers, createStore } from "redux";
@@ -1825,8 +1820,8 @@ function AuthComponent({children}){
 
 * [redux ](https://github.com/reduxjs/redux)为 redux core
 * [redux-toolkit](https://github.com/reduxjs/redux-toolkit) 为 redux 的工具包
-* [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch ​`​可以接受函数，赋予其执行异步操作的能力
-* [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react ​`​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
+* [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch `​可以接受函数，赋予其执行异步操作的能力
+* [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react `​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
 * api和`redux`​是一样的
 
 ### 容器组件、UI组件
@@ -1839,7 +1834,7 @@ UI组件：负责显示和交互，内部不处理逻辑，状态完全由外部
 
 ​`<Provider>`​ 组件使 Redux `store`​ 可用于任何需要访问 Redux store 的嵌套组件。
 
-​**这个组件的目的是让所有组件都能够访问到Redux中的数据。 ​**​
+​**这个组件的目的是让所有组件都能够访问到Redux中的数据。 ** ​
 
 由于 React Redux 应用中的任何 React 组件都可以连接到 store，因此大多数应用会在顶层渲染一个 `<Provider>`​，将整个应用的组件树包裹其中。
 
@@ -2010,7 +2005,7 @@ const mapDispatchToProps = (dispatch) => { // 默认传递参数就是dispatch�
 ### createAsyncThunk
 
 * 概念：`redux`​使用redux-thunk 来提供异步修改`state`​的能力，`redux-toolkit`​封装了异步请求的方法
-* 参数：两个参数，一个 字符串，用于生产`action types ​`​的前缀，一个 `payload creator`​ 回调函数，应该返回一个 Promise。这通常使用 async/await 语法编写，因为 async 函数会自动返回一个 Promise。
+* 参数：两个参数，一个 字符串，用于生产`action types `​的前缀，一个 `payload creator`​ 回调函数，应该返回一个 Promise。这通常使用 async/await 语法编写，因为 async 函数会自动返回一个 Promise。
 
   ```js
   两个参数
@@ -2291,7 +2286,7 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ​[mobx](https://cn.mobx.js.org/)是react项目中，经常用来做数据存储的`js`​库，它的用法比`redux`​相对简单，减少了一些模板代码的使用，在使用的方面，和vuex 是有些类似的
 
-​`v5 ​`​版本使用的 `Object.defineProperty`​，`v6 ​`​版本使用的是`proxy`​，同时`v6`​版本取消了类的装饰器用法
+​`v5 `​版本使用的 `Object.defineProperty`​，`v6 `​版本使用的是`proxy`​，同时`v6`​版本取消了类的装饰器用法
 
 * 类写法
 
@@ -2394,7 +2389,7 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 ## [redux-persist](https://github.com/rt2zz/redux-persist)
 
-​`redux ​`​的持久化插件
+​`redux `​的持久化插件
 
 * 安装
 
@@ -2502,7 +2497,7 @@ asyncChangeUserName[0].addEventListener('click', () => {
 
 状态的数据结构简单的情况下还好，使用方法或者解构赋值，复制数据比较方便。如果数据结构比较复杂的话，那数据的复制就很麻烦了，所以 使用 `immutable`​ 这个库，会返回一个不可变数据对象，这个对象可以直接修改数据而不影响原数据
 
-​`Immutable Data`​不可更改数据，一旦创建，对`Immutable`​对象的任何操作都将返回一个新的Immutable Data，其实现原理是`Persistent Data Structure`​**（持久化数据结构）** 即使用旧数据创建新数据时，要保证旧数据可以使用且不变。同时为了避免deepclone,深度拷贝对于性能的损耗，`Immutable ​`​使用了[Structural Sharing（结构共享）](https://link.juejin.cn?target=https%3A%2F%2Flink.jianshu.com%2F%3Ft%3Dhttps%253A%252F%252Fzhuanlan.zhihu.com%252Fp%252F27133830%253Fgroup_id%253D851585269567213568 "https://link.jianshu.com/?t=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27133830%3Fgroup_id%3D851585269567213568")，当对象树中一个节点发生变化时，只会改变该子节点以及受其影响的父节点，其他节点共享。
+​`Immutable Data`​不可更改数据，一旦创建，对`Immutable`​对象的任何操作都将返回一个新的Immutable Data，其实现原理是`Persistent Data Structure`​ **（持久化数据结构）**  即使用旧数据创建新数据时，要保证旧数据可以使用且不变。同时为了避免deepclone,深度拷贝对于性能的损耗，`Immutable `​使用了[Structural Sharing（结构共享）](https://link.juejin.cn?target=https%3A%2F%2Flink.jianshu.com%2F%3Ft%3Dhttps%253A%252F%252Fzhuanlan.zhihu.com%252Fp%252F27133830%253Fgroup_id%253D851585269567213568 "https://link.jianshu.com/?t=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F27133830%3Fgroup_id%3D851585269567213568")，当对象树中一个节点发生变化时，只会改变该子节点以及受其影响的父节点，其他节点共享。
 
 [传送门](https://juejin.cn/post/6940640420527341599?searchId=2023091422130758558F4B8842235BD464#heading-9)
 

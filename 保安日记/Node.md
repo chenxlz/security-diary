@@ -6,11 +6,11 @@
 
 ​`Node.js`​ 使用了一个**事件驱动**、**非阻塞式 I/O**的模型，使其轻量又高效。
 
-​`Node.js ​`​不是一门语言，也不是 `JavaScript ​`​的框架，也不是像`Nginx`​一样的`Web`​服务器 。
+​`Node.js `​不是一门语言，也不是 `JavaScript `​的框架，也不是像`Nginx`​一样的`Web`​服务器 。
 
-​`Node.js`​ 是 `JavaScript ​`​在服务器端的运行环境（平台）。
+​`Node.js`​ 是 `JavaScript `​在服务器端的运行环境（平台）。
 
-​`Node.js ​`​的组成分为：
+​`Node.js `​的组成分为：
 
 * ​**ECMAScript**​。`ECMAScript`​ 的所有语法在 Node 环境中都可以使用。
 * Node 环境提供的一些附加 API(包括文件、网络等相关的 API)。
@@ -25,7 +25,7 @@
 
   * 前端通过一大堆接口请求数据，然后通过 `JS`​ 动态处理和生成页面结构和展示。
   * 优点是**前后端分离**、减小服务器压力、局部刷新。
-  * 缺点是不利于 SEO（如果你的页面然后通过 `Ajax ​`​异步获取内容，抓取工具并不会等待异步完成后再行抓取页面内容）、首屏渲染慢。
+  * 缺点是不利于 SEO（如果你的页面然后通过 `Ajax `​异步获取内容，抓取工具并不会等待异步完成后再行抓取页面内容）、首屏渲染慢。
 * **服务端渲染（SSR / Server Side Render）：**
 
   * 服务器返回的不是接口数据，而是一整个页面（或整个楼层）的 HTML 字符串，浏览器直接显示即可。也就是说，在服务器端直接就渲染好了，然后一次性打包返回给前端。
@@ -33,7 +33,7 @@
 
 ## 网页加载
 
-网页资源的加载都是循序渐进的，首先获取 `HTML ​`​的内容， 然后解析 `HTML ​`​在发送其他资源的请求，如 `CSS`​，`Javascript`​，图片等。
+网页资源的加载都是循序渐进的，首先获取 `HTML `​的内容， 然后解析 `HTML `​在发送其他资源的请求，如 `CSS`​，`Javascript`​，图片等。
 
 会解析 引入 文件的路径再去发起资源请求
 
@@ -88,7 +88,7 @@
 
 ​`__dirname`​​ 保存着 **当前文件夹所在目录的绝对路径**，可以使用 `__dirname`​​ 与文件名拼接成绝对路径
 
-使用 `fs ​`​模块的时候，尽量使用 `__dirname`​​ 路径转换为绝对路径，这样可以避免相对路径产生的 `Bug`​​
+使用 `fs `​模块的时候，尽量使用 `__dirname`​​ 路径转换为绝对路径，这样可以避免相对路径产生的 `Bug`​​
 
 ```js
 console.log(__dirname); //  /Users/smyhvae/dselegent
@@ -104,9 +104,9 @@ console.log(__filename); //  /Users/smyhvae/dselegent/app.js
 
 ## mime
 
-​`媒体类型`​​（通常称为 `Multipurpose Internet Mail Extensions ​`​或 `MIME ​`​类型 ）是一种标准，用来表示文档、文件或字节流的性质和格式。
+​`媒体类型`​​（通常称为 `Multipurpose Internet Mail Extensions `​或 `MIME `​类型 ）是一种标准，用来表示文档、文件或字节流的性质和格式。
 
-​`HTTP ​`​服务可以设置响应头`​ Content-Type`​ 来表明响应体的 `MIME ​`​类型，浏览器会根据该类型决定如何处理资源
+​`HTTP `​服务可以设置响应头` Content-Type`​ 来表明响应体的 `MIME `​类型，浏览器会根据该类型决定如何处理资源
 
 对于未知的资源类型，可以选择 `application/octet-stream`​ 类型，浏览器在遇到该类型的响应时，会对响应体内容进行独立存储，也就是我们常见的 `下载`​ 效果
 
@@ -130,14 +130,14 @@ json: 'application/json'
 
 ### 概念
 
-​`Buffer ​`​是一个类似于数组的 `对象`​ ，用于表示固定长度的字节序列
+​`Buffer `​是一个类似于数组的 `对象`​ ，用于表示固定长度的字节序列
 
-`Buffer ​`​本质是一段内存空间，专门用来处理 `二进制数据`​
+`Buffer `​本质是一段内存空间，专门用来处理 `二进制数据`​
 
 特点：
 
-* ​`Buffer ​`​大小固定且无法调整
-* ​`Buffer ​`​性能较好，可以直接对计算机内存进行操作
+* ​`Buffer `​大小固定且无法调整
+* ​`Buffer `​性能较好，可以直接对计算机内存进行操作
 * 每个元素的大小为 1 字节（`byte`​）
 
 ### 基本使用
@@ -226,13 +226,13 @@ json: 'application/json'
 
 ## [会话控制](https://juejin.cn/post/6844904034181070861)
 
-​`HTTP ​`​是一种无状态的协议，它没有办法区分多次的请求是否来自于同一个客户端，无法区分用户
+​`HTTP `​是一种无状态的协议，它没有办法区分多次的请求是否来自于同一个客户端，无法区分用户
 
 ### cookie
 
-​`cookie ​`​是 `HTTP ​`​服务器发送到用户浏览器并保存在本地的一小块数据
+​`cookie `​是 `HTTP `​服务器发送到用户浏览器并保存在本地的一小块数据
 
-​`cookie ​`​是按照域名划分保存的
+​`cookie `​是按照域名划分保存的
 
 浏览器向服务器发送请求时，会自动将 `当前域名下`​ 可用的 cookie 设置在请求头中，然后传递给服务器
 
@@ -240,7 +240,7 @@ json: 'application/json'
 
 ​![image](assets/image-20231021202545-xotzynl.png)​
 
-* 在 `express ​`​中使用
+* 在 `express `​中使用
 
   ```js
   const express = require("express");
@@ -280,11 +280,11 @@ json: 'application/json'
 
 ### session
 
-​`session ​`​是保存在服务器端的一块儿数据，保存当前访问用户的相关信息，可以识别用户的身份，快速获取当前用户的相关信息。
+​`session `​是保存在服务器端的一块儿数据，保存当前访问用户的相关信息，可以识别用户的身份，快速获取当前用户的相关信息。
 
 填写账号和密码校验身份，校验通过后创建`session 信息`​，然后将 `session_id`​ 的值通过响应头返回给浏览器
 
-有了cookie，下次发送请求时会自动携带cookie，服务器通过 `cookie`​**​ ​**中的 `session_id`​**​ ​**的值来使用
+有了cookie，下次发送请求时会自动携带cookie，服务器通过 `cookie`​ ** ** 中的 `session_id`​ ** ** 的值来使用
 
 ```js
 const express = require("express");
@@ -342,9 +342,9 @@ app.listen(3000, () => {
 
 ​`token`​ 是服务端生成并返回给 HTTP 客户端的一串加密字符串， `token`​ 中保存着`用户信息`​
 
-​`token ​`​不属于 `http ​`​标准，完全由前后端协商而定，但 `cookie ​`​属于 `http ​`​标准
+​`token `​不属于 `http `​标准，完全由前后端协商而定，但 `cookie `​属于 `http `​标准
 
-填写账号和密码校验身份，校验通过后响应 `token`​，`token ​`​一般是在响应体中返回给客户端的
+填写账号和密码校验身份，校验通过后响应 `token`​，`token `​一般是在响应体中返回给客户端的
 
 后续发送请求时，需要`手动`​将 token 添加在请求报文中(`cookie`​是自动携带的)，一般是放在请求头中
 
@@ -358,7 +358,7 @@ app.listen(3000, () => {
 
 ​`JWT（JSON Web Token ）`​是目前最流行的跨域认证解决方案，可用于基于 `token`​ 的身份验证
 
-​`JWT ​`​使 `token ​`​的生成与校验更规范
+​`JWT `​使 `token `​的生成与校验更规范
 
 ```js
 //导入 jsonwebtokan
@@ -382,7 +382,7 @@ jwt.verify(token, "atguigu", (err, data) => {
 
 浏览器端规范
 
-​`AMD`​规范：是 `RequireJS ​`​在推广过程中对模块化定义的规范化产出。
+​`AMD`​规范：是 `RequireJS `​在推广过程中对模块化定义的规范化产出。
 
 ```js
 - AMD规范采用异步方式加载模块，模块的加载不影响它后面语句的运行。
@@ -399,7 +399,7 @@ require([`foo`,`bar`],function(foo,bar){});   //也就是说把所有的包都 r
 
 浏览器端规范
 
-​`CMD`​规范：是 `SeaJS ​`​在推广过程中对模块化定义的规范化产出。淘宝团队开发。
+​`CMD`​规范：是 `SeaJS `​在推广过程中对模块化定义的规范化产出。淘宝团队开发。
 
 ```js
 - CMD是另一种js模块化方案，它与AMD很类似。
@@ -417,9 +417,9 @@ define(function(require, export, module){});
 
 服务器端规范
 
-​`CommonJS ​`​就是**一套约定标准，不是技术**。用于约定我们的代码应该是怎样的一种结构。
+​`CommonJS `​就是**一套约定标准，不是技术**。用于约定我们的代码应该是怎样的一种结构。
 
-​`CommonJS ​`​规范规定：每个模块内部，`module`​ 变量代表当前模块。这个变量是一个对象，它的 `exports ​`​属性（即 `module.exports`​）是对外的接口对象。加载某个模块，其实是加载该模块的 `module.exports`​ 对象。
+​`CommonJS `​规范规定：每个模块内部，`module`​ 变量代表当前模块。这个变量是一个对象，它的 `exports `​属性（即 `module.exports`​）是对外的接口对象。加载某个模块，其实是加载该模块的 `module.exports`​ 对象。
 
 在 CommonJS 中，每个文件都可以当作一个模块：
 
@@ -550,7 +550,7 @@ try{
 
 语法：`fs.createWriteStream(path[, options])`​
 
-程序打开一个文件是需要消耗资源的，流式写入可以减少打开关闭文件的次数。**流式写入方式适用于 ​**​****大文件写入或者频繁写入****​**的场景，**​`writeFile`​​适合于 **写入频率较低的场景**
+程序打开一个文件是需要消耗资源的，流式写入可以减少打开关闭文件的次数。**流式写入方式适用于 **​****大文件写入或者频繁写入****​**的场景，**​`writeFile`​​适合于 **写入频率较低的场景**
 
 ```js
 let ws = fs.createWriteStream('./观书有感.txt')
@@ -778,7 +778,7 @@ console.log( path.dirname(extname));// 输出：.js
 
 ### **resolve**
 
-​`path.resolve([...myPaths])`​：将路径或路径片段的序列解析为绝对路径，返回的路径是从右往左处理，后面的每个 `myPath ​`​​被依次解析，直到构造出一个完整的绝对路径。
+​`path.resolve([...myPaths])`​：将路径或路径片段的序列解析为绝对路径，返回的路径是从右往左处理，后面的每个 `myPath `​​被依次解析，直到构造出一个完整的绝对路径。
 
 ```js
 const path = require('path');
@@ -855,7 +855,7 @@ console.log(result3); // 返回：/foo1/foo2/foo3
 
 ### 请求报文
 
-用来向服务器发送数据，可以被称之为**​ 请求报文**
+用来向服务器发送数据，可以被称之为 ** 请求报文**
 
 * 请求行
 
@@ -1030,7 +1030,7 @@ console.log(result3); // 返回：/foo1/foo2/foo3
     console.log('服务已经启动...')
   })
   ```
-* 提取 `url ​`​路径 和查询字符串
+* 提取 `url `​路径 和查询字符串
 
   ```js
   1.使用 url 模块
@@ -1126,7 +1126,7 @@ console.log(a);
 
 ## events
 
-实例化 `EventEmitter ​`​类来绑定和监听事件
+实例化 `EventEmitter `​类来绑定和监听事件
 
 ```js
 // 引入 events 模块
@@ -1154,9 +1154,9 @@ event.emit('someEvent', 'arg1 参数', 'arg2 参数');
 
 ​`stream`​是`Node.js`​提供的一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。
 
-​流是一种抽象的数据结构。想象水流，当在水管中流动时，就可以从某个地方（例如自来水厂）源源不断地到达另一个地方（比如你家的洗手池）。我们也可以把数据看成是数据流，比如你敲键盘的时候，就可以把每个字符依次连起来，看成字符流。这个流是从键盘输入到应用程序，实际上它还对应着一个名字：**标准输入流（**​**`stdin`**​**）**。
+​流是一种抽象的数据结构。想象水流，当在水管中流动时，就可以从某个地方（例如自来水厂）源源不断地到达另一个地方（比如你家的洗手池）。我们也可以把数据看成是数据流，比如你敲键盘的时候，就可以把每个字符依次连起来，看成字符流。这个流是从键盘输入到应用程序，实际上它还对应着一个名字：**标准输入流（**​**`stdin`**​ **）** 。
 
-如果应用程序把字符一个一个输出到显示器上，这也可以看成是一个流，这个流也有名字：**标准输出流（**​**`stdout`**​**）**。
+如果应用程序把字符一个一个输出到显示器上，这也可以看成是一个流，这个流也有名字：**标准输出流（**​**`stdout`**​ **）** 。
 
 **流的特点是数据是有序的，而且必须依次读取，或者依次写入，不能像Array那样随机定位。**
 
@@ -1230,7 +1230,7 @@ ws.end(function () {
 
 一个`Readable`​流和一个`Writable`​流串起来后，所有的数据自动从`Readable`​流进入`Writable`​流，这种操作叫`pipe`​。
 
-在`Node.js`​中**，**​`Readable`​流有一个`pipe()`​方法，就是用来干这件事的。
+在`Node.js`​中 **，**​`Readable`​流有一个`pipe()`​方法，就是用来干这件事的。
 
 用`pipe()`​把一个文件流和另一个文件流串起来，这样源文件的所有数据就自动写入到目标文件里了，所以，这实际上是一个复制文件的程序
 
@@ -1396,7 +1396,7 @@ readstream.pipe(gunzip).pipe(writestream);
 
 ​`hash.update(data[, input_encoding])：input_encoding`​可以是`utf8`​、`ascii`​或者`latin1`​。
 
-如果`data`​是字符串，且没有指定`​ input_encoding`​，则默认是`utf8`​。注意，`hash.update()`​方法可以调用多次。
+如果`data`​是字符串，且没有指定` input_encoding`​，则默认是`utf8`​。注意，`hash.update()`​方法可以调用多次。
 
 ```js
 var crypto = require('crypto');
@@ -1658,7 +1658,7 @@ app.get("/", function(request, response) {
 
 ### 路由中间件
 
-只需要对某一些路由进行功能封装**，则就需要路由中间件**
+只需要对某一些路由进行功能封装 **，则就需要路由中间件**
 
 ```js
 //中间件函数和全局函数是一样的
@@ -1853,7 +1853,7 @@ mongoose中的对象：
 
 * ​`Schema`​模式对象（Schema对象定义约束了数据库中的文档结构）
 * ​`Model`​模型对象（Model对象作为集合中的所有文档的表示，相当于MongoDB数据库中的集合collection）
-* ​`Document ​`​文档对象（Document表示集合中的具体文档，相当于集合中的一个具体的文档）
+* ​`Document `​文档对象（Document表示集合中的具体文档，相当于集合中的一个具体的文档）
 
 ## MongoDB
 
@@ -2321,7 +2321,7 @@ SongModel.find().skip(10).limit(10).exec(function(err,data){
 
 ### 热替换设置
 
-​`HMR`​：修改了代码并保存时，`HMR`​ 会在应用程序运行过程中替换、添加或删除模块，而**无需重新加载整个页面（入口代码修改还是会刷新）**。
+​`HMR`​：修改了代码并保存时，`HMR`​ 会在应用程序运行过程中替换、添加或删除模块，而**无需重新加载整个页面（入口代码修改还是会刷新）** 。
 
 开启了 `dev-server`​ 之后，会**默认开启**​`HMR(hot module replacement)`​。
 
@@ -2480,7 +2480,7 @@ module.exports = {
 
 ​`webpack-dev-server`​ 的本质是开启了一个测试用服务器，`dev-server`​，开启一个服务器，并自动监测文件变更，刷新页面。
 
-凡是修改了`webpack.config.js ​`​配置文件，或修改了`​ package.json ​`​配置文件，必须重启实时打包的服务器，否则最新的配置文件无法生效。
+凡是修改了`webpack.config.js `​配置文件，或修改了` package.json `​配置文件，必须重启实时打包的服务器，否则最新的配置文件无法生效。
 
 1. 下载`webpack-dev-server`​：
 
@@ -2536,7 +2536,7 @@ module.exports = {
 
 ### npm脚本
 
-​`npm ​`​允许在`package.json`​文件里面，使用`scripts`​字段定义脚本命令。
+​`npm `​允许在`package.json`​文件里面，使用`scripts`​字段定义脚本命令。
 
 ​`package.json`​ 里面的`scripts`​ 字段是一个对象。它的每一个属性，对应一段脚本。定义在`package.json`​里面的脚本，就称为 `npm`​ 脚本。
 
@@ -2597,7 +2597,7 @@ npm i --save-dev less
 
 ### 命名别名
 
-配置 package.json 中的 `scripts`​ 属性：设置好后可以使用`​ npm run  xxx`​ 执行命令
+配置 package.json 中的 `scripts`​ 属性：设置好后可以使用` npm run  xxx`​ 执行命令
 
 ​`npm start`​ ：比较特别，使用时可以省略 `run`​
 
@@ -2688,7 +2688,7 @@ node_modules //node_modules文件夹不提交代码
 
 ## [cnpm](https://npmmirror.com/)
 
-安装`cnpm`​替换 `npm`​（`npm ​`​由于源服务器在国外，下载包的速度较慢，`cnpm ​`​会使用国内镜像）：
+安装`cnpm`​替换 `npm`​（`npm `​由于源服务器在国外，下载包的速度较慢，`cnpm `​会使用国内镜像）：
 
 ```js
 npm install -g cnpm --registry=https://registry.npmmirror.com
@@ -2698,7 +2698,7 @@ cnpm install vue
 
 ## yarn
 
-​`npm`​​是官方的管理工具，`yarn ​`​是由 `Facebook`​ 在 2016 年推出的新的 `Javascript`​ 包管理工具
+​`npm`​​是官方的管理工具，`yarn `​是由 `Facebook`​ 在 2016 年推出的新的 `Javascript`​ 包管理工具
 
 和`npm`​​相比有**缓存机制**，可以直接取缓存没必要重新下载，速度比`npm`​​快一些。
 
@@ -2742,7 +2742,7 @@ yarn:  yarn config set registry http://registry.npm.taobao.org/
 
 ## nrm
 
-​`NRM ​`​的全称是`​ npm registry manager ​`​，是一个 `npm ​`​的镜像源管理工具，用来**切换和管理 ​**​`npm ​`​包的镜像源
+​`NRM `​的全称是` npm registry manager `​，是一个 `npm `​的镜像源管理工具，用来**切换和管理 **​`npm `​包的镜像源
 
 * 基本使用
 
@@ -2794,9 +2794,9 @@ yarn:  yarn config set registry http://registry.npm.taobao.org/
   nrm test npm
   ```
 
-## [nvm](https://github.com/coreybutler/nvm-windows/releases )
+## [nvm](https://github.com/coreybutler/nvm-windows/releases%20)
 
-​`nvm ​`​​全称 `Node Version Manager`​ 顾名思义它是用来管理 `node ​`​版本的工具，方便切换不同版本的`Node.js`​
+​`nvm `​​全称 `Node Version Manager`​ 顾名思义它是用来管理 `node `​版本的工具，方便切换不同版本的`Node.js`​
 
 ```js
 nvm list available  //显示所有可以下载的 Node.js 版本
@@ -2818,7 +2818,7 @@ nvm use 18.12.1  //切换 18.12.1 的 Node.js
   例如，当使用 npm 或 yarn 时，如果您有 100 个使用 lodash 的包，则磁盘上将有 100 个 lodash 副本。
   pnpm 可让您节省数 GB 的磁盘空间！
   ```
-* ​`pnpm ​`​拥有 `Yarn`​ 超过 `npm`​ 的所有附加功能：
+* ​`pnpm `​拥有 `Yarn`​ 超过 `npm`​ 的所有附加功能：
 
   ```js
   安全: 

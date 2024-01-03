@@ -1,4 +1,4 @@
-![image](assets/37 2-20221005172053-srd9ghs.jpg)
+![image](assets/37%202-20221005172053-srd9ghs.jpg)
 
 # MarkDown
 

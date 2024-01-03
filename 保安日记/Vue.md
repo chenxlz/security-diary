@@ -348,7 +348,7 @@ ref将内部值包装在特殊对象中，`reactive()`​ 将使对象本身具�
 
 ​`reactive()`​ 将深层地转换对象，当访问嵌套对象时，它们也会被 `reactive()`​ 包装。当 ref 的值是一个对象时，`ref()`​ 也会在内部调用它。
 
-​`shallowReactive() ​`​可以选择退出深层响应性，就是只包装最外面这层。
+​`shallowReactive() `​可以选择退出深层响应性，就是只包装最外面这层。
 
 * 概念：reactive是使用Proxy的，返回的是代理对象，里面的对象也是，所以和原对象是不一致的，不是全等关系，**只有代理对象是响应式的，更改原始对象不会触发更新。**
 
@@ -840,7 +840,7 @@ export default {
   state.value.count = 2// 不会触发更改
   state.value = { count: 2 }// 会触发更改
   ```
-* triggerRef()：强制触发依赖于一个`浅层 ref ​`​的副作用，这通常在对浅引用的内部值进行深度变更后使用。
+* triggerRef()：强制触发依赖于一个`浅层 ref `​的副作用，这通常在对浅引用的内部值进行深度变更后使用。
 
   ```js
   const shallow = shallowRef({
@@ -1267,7 +1267,7 @@ onMounted(()=>{})
 
 * 注意：使用useAttrs方法返回的attrs对象不是响应式的，不用通过watch去侦听它的变化。
 
-* 概念：“透传 attribute”指的是传递给一个组件，却没有被该组件声明为`​ props`​ 或 `emits ​`​的`attribute`​或者 `v-on`​ 事件监听器。
+* 概念：“透传 attribute”指的是传递给一个组件，却没有被该组件声明为` props`​ 或 `emits `​的`attribute`​或者 `v-on`​ 事件监听器。
 
   ```html
   1.简单来说，就是没有被props、emit显示声明的，由父组件对在子组件身上传递过来的属性和触发方法
@@ -1292,7 +1292,7 @@ onMounted(()=>{})
     <Footer v-bind="$attrs"/>//需要显示的一个警告，把$attrs绑定报节点上，警告就会消失
   </template>
   ```
-* 关闭透传：透传是自动开启的（关闭属性继承）。利用`**inheritAttrs:false**`​，使用`**$attrs**`​来获得传入的attrs和事
+* 关闭透传：透传是自动开启的（关闭属性继承）。利用`**inheritAttrs:false**`​，使用 `**$attrs**`​来获得传入的attrs和事
 
   ```js
   1.关闭透传后，可以使用 $attrs 在模板的表达式中直接使用。
@@ -1431,7 +1431,7 @@ onMounted(()=>{})
     {{ slotProps.text }} {{ slotProps.count }} //父组件中，使用 v-slot="slotProps" 或者 #default=“obj” ，设置一个变量名称，来接收子组件传递过来的数据，这些数据会变成一个对象
   </MyComponent>
   ```
-* 注意：**同时使用了具名插槽与默认插槽，则需要为默认插槽使用显式的 ​**​`**<template>**`​**​ 标签**
+* 注意：**同时使用了具名插槽与默认插槽，则需要为默认插槽使用显式的 **​ `**<template>**` ​ ** 标签**
 
   ```html
   <template>
@@ -1747,7 +1747,7 @@ onMounted(()=>{})
 
 ### v-show
 
-​`v-show`​ 会在 DOM 渲染中保留该元素；`v-show`​ 仅切换了该元素上名为 `display`​ 的 CSS 属性，即`​ display : none`​
+​`v-show`​ 会在 DOM 渲染中保留该元素；`v-show`​ 仅切换了该元素上名为 `display`​ 的 CSS 属性，即` display : none`​
 
 ​`v-show`​ 不支持在 `<template>`​ 元素上使用，也不能和 `v-else`​ 搭配使用
 
@@ -2153,7 +2153,7 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
 
 ### 自定义指令
 
-* 概念：在`​ <script setup>`​ 中，任何以 **v 开头的驼峰式命名的变量**都可以被用作一个自定义指令。
+* 概念：在` <script setup>`​ 中，任何以 **v 开头的驼峰式命名的变量**都可以被用作一个自定义指令。
 * 基本使用
 
   ```js
@@ -2257,7 +2257,7 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
 
 注意：**组合起来的组件，混入的生命周期钩子会比组件的钩子先执行，有同名函数、数据，混入会被组件的覆盖。**
 
-混入和``​的区别：
+混入和((20220926111147-vttccs8 "vuex"))​的区别：
 
 * Vuex：公共状态管理，如果在一个组件中更改了Vuex中的某个数据，那么其它所有引用了Vuex中该数据的组件也会跟着变化。
 * Mixin：数据和方法都是独立的，组件之间使用后是互相不影响的。
@@ -2461,7 +2461,7 @@ this.$set(要修改的数组, 下标, 值)
 
 ​`nextTick`​：当数据发生变化，更新后执行回调。
 
-​`**Vue**`​**​ 的 ​**​`**dom**`​**​ 渲染都是异步渲染**，所以改变数据后，没有立即渲染 `dom`​，如果此时要操作 `dom`​可能会操作不到最新的 `dom`​，也就是操作完`dom`​后，数据后面才渲染上来。
+​`**Vue**`​ ** 的 **​`**dom**`​ ** 渲染都是异步渲染**，所以改变数据后，没有立即渲染 `dom`​，如果此时要操作 `dom`​可能会操作不到最新的 `dom`​，也就是操作完`dom`​后，数据后面才渲染上来。
 
 ## 进阶用法
 
@@ -2960,7 +2960,7 @@ eventBus：专业术语事件总线
 
 ### 默认插槽
 
-概念：在组件中设置插槽，在使用这个组件的时候，把组件写成双标签，在双标签内添加的内容，默认显示在组件的 `<slot></slot> ​`​的位置上，`<slot></slot>`​就是组件的插槽
+概念：在组件中设置插槽，在使用这个组件的时候，把组件写成双标签，在双标签内添加的内容，默认显示在组件的 `<slot></slot> `​的位置上，`<slot></slot>`​就是组件的插槽
 
 **默认插槽**：插槽有默认值，没被使用就显示默认值，被使用，页面在子组件中写什么就在这个位置显示什么
 
@@ -3066,7 +3066,7 @@ eventBus：专业术语事件总线
     await router.push('/my-profile')
     this.isMenuOpen = false
     ```
-2. 路由默认不区分大小写和最后的`​ /`​​
+2. 路由默认不区分大小写和最后的` /`​​
 
     ```js
     const router = createRouter({
@@ -3082,8 +3082,8 @@ eventBus：专业术语事件总线
       strict: true, // applies to all routes
     })
     ```
-3. 路由默认`​ / ​`​​是根路径
-4. 路由参数：`params`​、`query`​。`query 查询参数`​，拼接在`url`​上面的，`params ​`​在内存中，刷新就无了
+3. 路由默认` / `​​是根路径
+4. 路由参数：`params`​、`query`​。`query 查询参数`​，拼接在`url`​上面的，`params `​在内存中，刷新就无了
 5. routes配置时候的一些属性
 
     ```js
@@ -3180,7 +3180,7 @@ eventBus：专业术语事件总线
 ### useRoute
 
 * ​`useRoute()`​​返回的路由组件实例对象，里面有当前路由所携带的信息
-* ​`route ​`​的类型：最好还是看文档，小小脑子完全记不住😭
+* ​`route `​的类型：最好还是看文档，小小脑子完全记不住😭
 
   ```js
   query: LocationQuery//代表当前地址的 search 属性的对象
@@ -3210,7 +3210,7 @@ eventBus：专业术语事件总线
     { path: '/users/:id', component: User },
   ]
   ```
-* 参数的自定义：可利用正则，或限制参数格式 `* ​`​（0或更多） `+`​（至少一个） `?`​可选参数
+* 参数的自定义：可利用正则，或限制参数格式 `* `​（0或更多） `+`​（至少一个） `?`​可选参数
 
   ```js
   const routes = [ //routes 数组的顺序并不重要
@@ -3305,7 +3305,7 @@ eventBus：专业术语事件总线
   <router-link :to="/user"> //跳转到 /user
   <router-link :to="{ name: 'user', params: { username: 'erina' }}">User</router-link>
   ```
-* 编程式跳转：js中使用 `router ​`​实例的方法，来进行路由跳转。
+* 编程式跳转：js中使用 `router `​实例的方法，来进行路由跳转。
 * ​`router.push()`​：参数可以是对象，也可以是字符串
 
   ```js
@@ -3340,7 +3340,7 @@ eventBus：专业术语事件总线
 
 ### 命名视图
 
-* 概念：给`​ <router-view name="componentName"><router-view> ​`​ 添加`name`​属性，匹配`routes`​中的`components`​的组件名称
+* 概念：给` <router-view name="componentName"><router-view> `​ 添加`name`​属性，匹配`routes`​中的`components`​的组件名称
 
   ```js
   <router-view class="view left-sidebar" name="LeftSidebar"></router-view>
@@ -3368,7 +3368,7 @@ eventBus：专业术语事件总线
 
 注意：
 
-1. ****​**并没有应用在跳转路由上，而仅仅应用在其目标上**。在上面的例子中，在 `/home`​ 路由中添加 `beforeEnter`​ 守卫不会有任何效果。
+1. **[导航守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html)**​**并没有应用在跳转路由上，而仅仅应用在其目标上**。在上面的例子中，在 `/home`​ 路由中添加 `beforeEnter`​ 守卫不会有任何效果。
 2. 在写 `redirect`​ 的时候，可以省略 `component`​ 配置，因为它从来没有被直接访问过，所以没有组件要渲染。唯一的例外是[嵌套路由](https://router.vuejs.org/zh/guide/essentials/nested-routes.html)：如果一个路由记录有 `children`​ 和 `redirect`​ 属性，它也应该有 `component`​ 属性。
 
 * 概念：将路由重定向到其他路径，访问 `/home`​ 时，URL 会被 `/`​ 替换，然后匹配成 `/`​
@@ -3406,7 +3406,7 @@ eventBus：专业术语事件总线
 
 ### 路径别名
 
-* 概念：**访问 ​**​**`/home`**​**​ 时，URL 仍然是 ​**​**`/home`**​**，但会被匹配为用户正在访问 ​**​**`/`**​**。**
+* 概念：**访问 **​ **`/home`**​ ** 时，URL 仍然是 **​ **`/home`**​ **，但会被匹配为用户正在访问 **​ **`/`** ​ **。**
 
   ```js
   const routes = [{ path: '/', component: Homepage, alias: '/home' }]
@@ -3527,7 +3527,7 @@ eventBus：专业术语事件总线
   ```
 * 组件内守卫：
 
-  * ​`beforeRouteEnter(to, from,next)`​ ，只有改钩子可以通过 `next ​`​拿到组件实例，另外两个不行，因为没有必要了
+  * ​`beforeRouteEnter(to, from,next)`​ ，只有改钩子可以通过 `next `​拿到组件实例，另外两个不行，因为没有必要了
   * ​`beforeRouteUpdate(to, from))`​
   * ​`beforeRouteLeave(to, from))`​ ：通常用来预防用户在还未保存修改前突然离开。该导航可以通过返回 `false`​ 来取消。
 
@@ -3949,7 +3949,7 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
     actions:{}
   })
   ```
-* 组合式：`state`​、`getter`​、`actions ​`​随意自己搭配写，和vue3中的组合式一样
+* 组合式：`state`​、`getter`​、`actions `​随意自己搭配写，和vue3中的组合式一样
 
   ```js
   1.ref 是 state
@@ -4128,7 +4128,7 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
 
 ### mutations
 
-* 概念：state数据的修改**只能**通过mutations，并且mutations必须是同步更新，目的是形成**数据快照。**有一个命名规定：**名字全大写。**
+* 概念：state数据的修改**只能**通过mutations，并且mutations必须是同步更新，目的是形成**数据快照。** 有一个命名规定：**名字全大写。**
 * 设置方法：和state平级
 
   ```js

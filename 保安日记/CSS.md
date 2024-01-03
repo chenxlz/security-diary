@@ -628,7 +628,7 @@ align-self: ;该盒子在侧轴上的对齐方式。
 
 # Scss
 
-​`scss`​和`sass`​其实是一样的`css`​预处理语言，`scss`​是 `sass3 ​`​引入新的语法。后缀名分别为：`.scss`​、`.sass`​。
+​`scss`​和`sass`​其实是一样的`css`​预处理语言，`scss`​是 `sass3 `​引入新的语法。后缀名分别为：`.scss`​、`.sass`​。
 
 * 变量
 
