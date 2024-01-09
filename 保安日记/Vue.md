@@ -2,13 +2,23 @@
 
 # Vue
 
-# vue3
+# vue
 
 ## 基本概念
 
-### [响应式原理](https://cn.vuejs.org/guide/extras/reactivity-in-depth.html#how-reactivity-works-in-vue)
+### 响应式原理
 
-* vue2：数据劫持，订阅者模式
+响应式的基本原理：数据和函数之间的关联关系
+
+函数：render、computed、watch、watchEffect
+
+数据：响应式数据
+
+只有这样，数据和函数产生关系之后，才会在数据发生变化的时候，去通知视图层去更新
+
+### [响应式数据](https://cn.vuejs.org/guide/extras/reactivity-in-depth.html#how-reactivity-works-in-vue)
+
+* ​`vue2`​：数据劫持，订阅者模式
 
   ```js
   1.使用 setter 、getter 来对数据进行劫持
@@ -17,14 +27,14 @@
 
 ### DOM 更新
 
-当你修改了响应式状态时，DOM 会被自动更新。但是需要注意的是，**DOM 更新不是同步的**。Vue 会在“next tick”更新周期中缓冲所有状态的修改，以确保不管你进行了多少次状态修改，每个组件都只会被更新一次。
+当你修改了响应式状态时，`DOM`​会被自动更新。但是需要注意的是，**DOM 更新不是同步的**。Vue 会在`“next tick”`​更新周期中缓冲所有状态的修改，以确保不管进行了多少次状态修改，每个组件都只会被更新一次。
 
 ### VNode
 
-* 概念：VNode是一个类，通过属性来描述dom结构的对象
-* 节点概念
+* 概念：`VNode`​是一个类，通过属性来描述`dom`​结构的对象
 
   ```js
+  原生js中的各种节点概念
   元素节点:div
   属性节点:class属性
   文本节点:标签内的文字
@@ -119,8 +129,12 @@
 
 ### scoped
 
-* 属性选择器：`div[属性名] { 样式 }`​
-* 设置scoped
+* 作用：达到组件样式独有的效果
+
+  ```js
+  属性选择器：`div[属性名] { 样式 }`
+  ```
+* 设置
 
   ```css
   <style scoped>
@@ -142,38 +156,25 @@
     <div class="example" data-v-f3f3eg9>hi</div>
   </template>
   ```
-* Scoped和属性选择器的关系
+* ​`scoped`​和属性选择器的关系
 
-  * 如果某个组件加了`scoped`​​，那么它会帮这个组件内所有的标签都加一个行内属性：`data-v-自己的hash`​​，并且把这个组件里加了`scoped`​​ 的`style`​​里的样式，变成 `属性选择器[data-v-自己的hash]`​​，通过这个操作，就意味着让这些样式只能给自己用了，因为只有自己才有`[data-v-自己的hash]`​​的行内属性
-  * 也就是说，在设置了`scoped`​​中写的样式，这个样式只会作用到该标签上面，如果这个标签里面也有标签，那里面的标签是无法接受到该样式的`scoped`​​
-* 深度作用选择器：组件加了 `scoped`​​，它的样式只能给自己用，子组件的内部标签，**甚至该标签里面的内部标签**，也用不了（相当于你写谁谁才可以用，它的子标签是无法继承它的样式属性）。如果希望某个样式能作用的更深（也就是作用到子组件内部），就要用 **深度作用选择器**，有些不专业的叫法也叫 `样式穿透`​​
+  ```js
+  1.
+  如果某个组件的样式加了scoped，那么它会帮这个组件内所有的标签都加一个行内属性：data-v-hash，
+  并且把这个组件里加了 scoped 的 style 里的样式，变成 属性选择器 [data-v-hash]，
+  通过这个操作，就意味着让这些样式只能给自己用了，因为只有自己才有 [data-v-自己的hash] 的行内属性
+
+  2.
+  也就是说，在设置了 scoped 中写的样式，这个样式只会作用到该标签上面，如果这个标签里面也有标签，那里面的标签是无法接受到该样式的 scoped
+  ```
+* 深度作用选择器：组件加了 `scoped`​，它的样式只能给自己用，子组件的内部标签，**甚至该标签里面的内部标签**，也用不了（相当于你写谁谁才可以用，它的子标签是无法继承它的样式属性）。如果希望某个样式能作用的更深（也就是作用到子组件内部），就要用 **深度作用选择器**，有些叫法叫 `样式穿透`​
 
   ```css
-  //vue3的写法
 
-
-  默认情况下，作用域样式不会影响到 <slot/> 渲染出来的内容，因为它们被认为是父组件所持有并传递进来的。
-  使用 :slotted 伪类以明确地将插槽内容作为选择器的目标：
-  <style scoped>
-  :slotted(div) {
-    color: red;
-  }
-  </style>
-
-  vue2的写法
-
-
-  <style scoped>
-  //加了scoped，会让当前组件里写过的标签用上样式
-  //当前组件里没写的标签肯定用不上，所以意味着组件里的子组件内部的标签用不上
-  ::v-deep p {
-    color: red;//现在p标签作用的更深：能影响到子组件里的标签
-  }
-  </style>
 
 
   ```
-* 深度作用选择器原理：就是把这个选择器的 `data-v-hash`​​ 的属性选择器提升到前面，变成后代选择器，既然是后代选择器，所有当前组件里的后代就能匹配的上了
+* 深度作用选择器原理：就是把这个选择器的 `data-v-hash`​​​ 的属性选择器提升到前面，变成后代选择器，既然是后代选择器，所有当前组件里的后代就能匹配的上了
 
   ```css
   p[data-v-hash]{} //交集选择器
@@ -186,25 +187,34 @@
   >>>       less不支持 
   /deep/    less 支持，但是vscode报错
   ::v-deep  推荐，不会报错，less 和 scss 都支持
+
+  //vue2的写法
+  <style scoped>
+  //加了scoped，会让当前组件里写过的标签用上样式
+  //当前组件里没写的标签肯定用不上，所以意味着组件里的子组件内部的标签用不上
+  ::v-deep p {
+    color: red;//现在p标签作用的更深：能影响到子组件里的标签
+  }
+  </style>
   ```
 * vue3写法
 
   ```css
-  深度选择器
-  :deep()
+  1.深度选择器
+  :deep(选择器)
   <style scoped>
   .a :deep(.b) {
   }
   </style>
 
-  插槽选择器
+  2.插槽选择器：默认情况下，作用域样式不会影响到 <slot/> 渲染出来的内容，因为它们被认为是父组件所持有并传递进来的。
   <style scoped>
   :slotted(div) {
     color: red;
   }
   </style>
 
-  全局选择器
+  3.全局选择器
   <style scoped>
   :global(.red) {
     color: red;
@@ -212,10 +222,10 @@
   </style>
   ```
 
-### css-modules
+### style-module
 
-* 概念：一个 `<style module>`​ 标签会被编译为 [CSS Modules](https://github.com/css-modules/css-modules) 并且将生成的 CSS class 作为 `$style`​ 对象暴露给组件
-* $style
+* 概念：一个 `<style module>`​​ 标签会被编译为 [CSS Modules](https://github.com/css-modules/css-modules) 并且将生成的 `CSS class`​ 作为 `$style`​​ 对象暴露给组件
+* ​`<style module></style> === $style`​
 
   ```css
   <template>
@@ -228,7 +238,7 @@
   }
   </style>
   ```
-* module=“name”
+* ​`<style module="moduleName"></style> === $classes`​
 
   ```css
   <template>
@@ -241,27 +251,27 @@
   }
   </style>
   ```
-* ​`useCssModule`​
+* ​`vue3:useCssModule(name?):$style|$classes`​
 
   ```css
   import { useCssModule } from 'vue'
-  // 在 setup() 作用域中...
-  // 默认情况下, 返回 <style module> 的 class
-  useCssModule()
-  // 具名情况下, 返回 <style module="classes"> 的 class
-  useCssModule('classes')
+  useCssModule()// 在 setup() 作用域中,默认情况下, 返回 <style module> 的 class
+  useCssModule('classes')// 具名情况下, 返回 <style module="classes"> 的 class
   ```
 
 ### hook
 
-* 概念：可以说是代替了vue2中的mixins。和react中的hook（钩子）一样。
-* 官方解释：“组合式函数”(Composables) 是一个利用 Vue 的组合式 API 来封装和复用**有状态逻辑**的函数
+* 概念：可以说是代替了`vue2`​中的mixins。和`react`​中的`hook（钩子）`​一样。
+* 官方解释：“组合式函数”(`Composables`​) 是一个利用 `Vue `​的组合式 API 来封装和复用**有状态逻辑**的函数
 * 混入的缺点
 
   ```js
-  1.不清晰的数据来源：使用多个mixin时候，数据的来源就会不清晰。混入是导入注册就可以直接当属性或方法使用，一旦mixins多了，就不容易搞清楚那个属性是那个文件里面的
-  2.命名空间会产生冲突：因为混入的时候不可以改名，一旦混入进来的文件多了，里面中的属性或方法名重复，那么就会发生命名冲突
-  3.隐式的跨 mixin 交流：多个 mixin 需要依赖共享的属性名来进行相互作用，这使得它们隐性地耦合在一起
+  1.不清晰的数据来源：
+  使用多个mixin时候，数据的来源就会不清晰。混入是导入注册就可以直接当属性或方法使用，一旦mixins多了，就不容易搞清楚那个属性是那个文件里面的
+  2.命名空间会产生冲突：
+  因为混入的时候不可以改名，一旦混入进来的文件多了，里面中的属性或方法名重复，那么就会发生命名冲突
+  3.隐式的跨 mixin 交流：
+  多个 mixin 需要依赖共享的属性名来进行相互作用，这使得它们隐性地耦合在一起
   ```
 * 基本使用
 
@@ -273,17 +283,17 @@
   5.组合式函数约定用驼峰命名法命名，并以“use”作为开头。=
   ```
 
-## 响应式
+## 常用API
 
 ### ref
 
-​`ref()`​ 接收参数，并将其包裹在一个带有 `.value`​ 属性的 ref 对象中返回。
+​`ref()`​ 接收参数，并将其包裹在一个带有 `.value`​ 属性的 `ref对象`​中返回。
 
-**可以是简单或复杂数据类型**，返回一个响应式的、可更改的 ref 对象，此对象只有一个指向其内部值的属性 `.value`​。
+**可以是简单或复杂数据类型**，返回一个响应式的、可更改的`ref对象`​，此对象只有一个指向其内部值的属性 `.value`​。
 
-ref 可以持有任何类型的值，包括深层嵌套的对象、数组或者 JavaScript 内置的数据结构，比如 `Map`​
+​`ref`​可以持有任何类型的值，包括深层嵌套的对象、数组或者 JavaScript 内置的数据结构，比如 `Map`​
 
-也通过 `shallowRef()`​这个api来传建浅层的响应式对象，只会对 .value 的访问是响应式的，再某种情况下可以减少性能的浪费
+也通过 `shallowRef()`​这个api来**传建浅层的响应式对象**，只会对`.value `​的访问是响应式的，再某种情况下可以减少性能的浪费
 
 * 基本使用
 
@@ -300,7 +310,7 @@ ref 可以持有任何类型的值，包括深层嵌套的对象、数组或者 
     <div>{{ obj.count }}</div>//在模板中会自动解包，不在需要.value
   </template>
   ```
-* 解包：简单来说就是使用ref变量的时候，需不需要 .value 解包拿到最新的值
+* 解包：简单来说就是在模板中使用ref变量的时候，需不需要 .value 解包拿到最新的值
 
   ```js
   在模板中ref会自动解包（最顶级），作为响应式数据的对象属性会自动解包，作为Array、Map 的值的时候，需要手动解包
@@ -309,8 +319,7 @@ ref 可以持有任何类型的值，包括深层嵌套的对象、数组或者 
   const state = reactive({
     count
   })
-
-  console.log(state.count) // 0  赋值没有用 .value 吧
+  console.log(state.count) // 0  赋值没有用 .value
 
   state.count = 1
   console.log(count.value) // 1
@@ -342,11 +351,11 @@ ref 可以持有任何类型的值，包括深层嵌套的对象、数组或者 
 
 ### reactive
 
-((20230809212828-za2tyo3 'ref'))可以声明简单、复杂数据类型，reactive只能声明复杂数据类型
+ref可以声明简单、复杂数据类型，`reactive`​只能声明复杂数据类型
 
-ref将内部值包装在特殊对象中，`reactive()`​ 将使对象本身具有响应性
+​`ref`​将内部值包装在特殊对象中，`reactive()`​​ 将使对象本身具有响应性
 
-​`reactive()`​ 将深层地转换对象，当访问嵌套对象时，它们也会被 `reactive()`​ 包装。当 ref 的值是一个对象时，`ref()`​ 也会在内部调用它。
+​`reactive()`​​ 将深层地转换对象，当访问嵌套对象时，它们也会被 `reactive()`​​ 包装。当 `ref`​ 的值是一个对象时，`ref()`​​ 也会在内部调用它。
 
 ​`shallowReactive() `​可以选择退出深层响应性，就是只包装最外面这层。
 
@@ -358,7 +367,8 @@ ref将内部值包装在特殊对象中，`reactive()`​ 将使对象本身具�
   console.log(proxy === raw) // false// 代理对象和原始对象不是全等的
 
 
-  为保证访问代理的一致性，对同一个原始对象调用 reactive() 会总是返回同样的代理对象，而对一个已存在的代理对象调用 reactive() 会返回其本身：意思就是说，不是代理我给你一个代理，这个代理对象是不会变得，对代理对象进行代理，会把本身这个代理对象返回
+  为保证访问代理的一致性，对同一个原始对象调用 reactive() 会总是返回同样的代理对象，而对一个已存在的代理对象调用 reactive() 会返回其本身：
+  意思就是说，不是代理我给你一个代理，这个代理对象是不会变得，对代理对象进行代理，会把本身这个代理对象返回
   console.log(reactive(raw) === proxy) // true// 在同一个对象上调用 reactive() 会返回相同的代理
   console.log(reactive(proxy) === proxy) // true// 在一个代理上调用 reactive() 会返回它自己
 
@@ -759,8 +769,6 @@ defineExpose({
   copy.count++ // warning! // 更改该只读副本将会失败，并会得到一个警告
   ```
 
-## [API](https://cn.vuejs.org/api/application.html#app-use)
-
 ### setup
 
 ```js
@@ -777,7 +785,6 @@ export default {
     console.log(context.emit)
     // 暴露公共属性（函数）
     console.log(context.expose)
-   
   }
 }
 ```
@@ -804,7 +811,6 @@ export default {
   // 更改源属性也会更新该 ref
   state.foo++
   console.log(fooRef.value) // 3
-
   ```
 * torefs（）：将一个响应式对象转换为一个普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。每个单独的 ref 都是使用 [`toRef()`](https://cn.vuejs.org/api/reactivity-utilities.html#toref)​ 创建的。
 
@@ -908,7 +914,7 @@ export default {
   scope.stop()
   ```
 
-### h函数
+### 渲染函数
 
 ​`h()`​ 是 **hyperscript** 的简称——意思是“能生成 HTML (超文本标记语言) 的 JavaScript”。
 
@@ -981,7 +987,6 @@ export default {
     bar: () => [h('span', 'one'), h('span', 'two')]
   })
   ```
-* ‍
 
 ### 生命周期
 
@@ -1037,11 +1042,11 @@ onMounted(()=>{})
   </template>
   ```
 
-* defineAsyncComponent：远程获取
+* ​`defineAsyncComponent`​：远程获取
 
   ```js
   import { defineAsyncComponent } from 'vue'
-  // ... 像使用其他一般组件一样使用 `AsyncComp`
+  // ... 像使用其他一般组件一样使用 AsyncComp
   const AsyncComp = defineAsyncComponent(() => {
     return new Promise((resolve, reject) => {
       // ...从服务器获取组件
@@ -1050,7 +1055,7 @@ onMounted(()=>{})
   })
 
   ```
-* defineAsyncComponent：es动态引入
+* ​`defineAsyncComponent`​：懒加载
 
   ```js
   import { defineAsyncComponent } from 'vue'
@@ -1084,7 +1089,7 @@ onMounted(()=>{})
 * 概念：有些场景会需要在两个组件间来回切换
 * 使用
 
-  ```html
+  ```js
   :is可输入的值  组件的名称，导入的组件对象
   可以使用<KeepAlive></KeepAlive>再组件切换之后，保留在内存中，减少切换的损耗
   <component :is="tabs[currentTab]"></component>
@@ -1265,7 +1270,7 @@ onMounted(()=>{})
 
 ### useAttrs
 
-* 注意：使用useAttrs方法返回的attrs对象不是响应式的，不用通过watch去侦听它的变化。
+* 注意：使用useAttrs方法返回的attrs对象不是响应式的，不能通过watch去侦听它的变化。
 
 * 概念：“透传 attribute”指的是传递给一个组件，却没有被该组件声明为` props`​ 或 `emits `​的`attribute`​或者 `v-on`​ 事件监听器。
 
@@ -1637,8 +1642,6 @@ onMounted(()=>{})
   // ... 像使用其他一般组件一样使用 `AsyncComp`
   ```
 
-‍
-
 ## 指令
 
 ### v-model
@@ -1652,7 +1655,7 @@ onMounted(()=>{})
   .trim  移除输入内容两端空格
   .capitalize  输入的字符第一个大写
   ```
-* 自定义修饰符：给v-model添加的自定义修饰符，可以通过 `modelModifiers`​ 拿到
+* 自定义修饰符：给v-model添加的自定义修饰符，可以通过 `modelModifiers`​​ 拿到
 
   ```js
   <MyComponent v-model.capitalize="myText" /> 自定义加了一个capitalize修饰符
@@ -1670,10 +1673,9 @@ onMounted(()=>{})
     emit('update:modelValue', value)
   }
 
-  <MyComponent v-model:title.capitalize="myText">//这种就是又带参数，又带修饰符的  defineProp（['title']）
-
+  <MyComponent v-model:title.capitalize="myText">//这种就是又带参数，又带修饰符的  defineProp(['title'])
   ```
-* 语法糖：和vue2中的基本一样，vue2使用的`:value`​，`:input`​，vue3使用的是`:modelValue`​，`updata:modelValue`​
+* 语法糖：和vue2中的基本一样，vue2使用的`:value`​​，`:input`​​，vue3使用的是`:modelValue`​​，`updata:modelValue`​​
 
   ```html
   v-model会根据绑定的不同标签使用对应的dom属性和事件组合
@@ -1717,17 +1719,6 @@ onMounted(()=>{})
   defineEmits(['update:name'])
   </script>
   ```
-* 特殊attribute（属性）
-
-  ```js
-  1.true-value \ false-value 只能搭配v-model使用，是vue特有的attribute
-  2.true-value和false-value是不会影响到表单本身的value特性，所以使用的时候确定表单时单选框 type='checkbox'
-  <input
-    type="checkbox"
-    v-model="toggle"
-    true-value="yes"
-    false-value="no" />
-  ```
 
 ### v-text
 
@@ -1757,7 +1748,7 @@ onMounted(()=>{})
 
 ### v-if
 
-**vue3里面，v-if和v-for，v-if比v-for的优先级要更高，一起使用的话，会导致v-if没法使用到v-for作用域的变量别名。**
+**vue3里面，v-if比v-for的优先级要更高，一起使用的话，会导致v-if没法使用到v-for作用域的变量别名。vue2优先级相反**
 
 ​`v-if`​ 指令用于条件性地渲染一块内容。这块内容只会在指令的表达式返回真值时才被渲染。
 
@@ -1772,8 +1763,6 @@ const type = ref('B')
 
 <template></template> 包装器容器，实际是不会渲染的
 ```
-
-‍
 
 ### v-for
 
@@ -1793,13 +1782,13 @@ item是迭代项的别名，index是数组的下标
 可以使用 of 作为分隔符来替代 in，这更接近 JavaScript 的迭代器语法
 <div v-for="item of items" :key="item.messgae"></div>
 
-可以使用 v-for 来遍历一个对象的所有属性。遍历的顺序会基于对该对象调用 Object.keys() 的返回值来决定。
+可以使用 v-for 来遍历一个对象的所有属性。遍历的顺序会基于对该对象调用 Object.keys() 的返回值来决定。 // vaule , key , index 
 const myObject = reactive({
   title: 'How to do lists in Vue',
   author: 'Jane Doe',
   publishedAt: '2016-04-10'
 })
-<li v-for="(value, key, index) in myObject" :key="item.title">
+<li v-for="(value, key, index) in myObject" :key="item.title">  
   {{ index }}. {{ key }}: {{ value }}
 </li>
 
@@ -1822,7 +1811,6 @@ v-on：监听事件，`v-on`​ 指令 (简写为 `@`​) 来监听 DOM 事件�
   内联事件处理器
   const count = ref(0)
   <button @click="count++">Add 1</button>
-  &lt;p&gt;Count is: {{ count }}&lt;/p&gt;
 
   方法事件处理器
   <button @click="greet">Greet</button>
@@ -1844,7 +1832,7 @@ v-on：监听事件，`v-on`​ 指令 (简写为 `@`​) 来监听 DOM 事件�
   </button>
 
   <!-- 使用内联箭头函数 -->
-  <button @click="(event) => warn('Form cannot be submitted yet.', event)">
+  <button @click="($event) => warn('Form cannot be submitted yet.', $event)">
     Submit
   </button>
   ```
@@ -1874,6 +1862,7 @@ v-on：监听事件，`v-on`​ 指令 (简写为 `@`​) 来监听 DOM 事件�
 1.动态绑定attribute（特性），也可以是组件的prop（属性---所传入组件所需要的组件属性）
 2.vue会优先对传入的值对prop进行匹配，然后才是attr，需要强制匹配prop或者attr可以使用修饰符
 3.缩写 v-bind:src=''   ===   :src=''
+
 修饰符：
 .camel ——将短横线命名的 attribute 转变为驼峰式命名。
 .prop ——强制绑定为 DOM property。3.2+
@@ -1979,6 +1968,8 @@ v-on：监听事件，`v-on`​ 指令 (简写为 `@`​) 来监听 DOM 事件�
 
 ### v-pre
 
+跳过编译
+
 ```js
 跳过该元素及其所有子元素的编译。
 元素内具有 v-pre，所有 Vue 模板语法都会被保留并按原样渲染。最常见的用例就是显示原始双大括号标签及内容
@@ -2007,6 +1998,8 @@ v-on：监听事件，`v-on`​ 指令 (简写为 `@`​) 来监听 DOM 事件�
 
 ### v-memo
 
+缓存组件
+
 ```js
 缓存一个模板的子树。在元素和组件上都可以使用。为了实现缓存，该指令需要传入一个固定长度的依赖值数组进行比较。
 如果数组里的每个值都与最后一次的渲染相同，那么整个子树的更新将被跳过。
@@ -2017,7 +2010,6 @@ v-memo=any[]
 当组件重新渲染，如果 valueA 和 valueB 都保持不变，这个 <div> 及其子项的所有更新都将被跳过。
 实际上，甚至虚拟 DOM 的 vnode 创建也将被跳过，因为缓存的子树副本可以被重新使用。
 v-memo 传入空依赖数组 (v-memo="[]") 将与 v-once 效果相同。
-
 ```
 
 ### v-cloak
@@ -2074,7 +2066,6 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   //使用.sync修饰符,就相当是上面的写法了，替你写了 @update:show="editShow = $event"
   <子组件 :show.sync="editShow" />
 
-
   :show.sync="editShow"   ===   @update:show="editShow = $event"
   ```
 
@@ -2100,7 +2091,7 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
 * 自定义指令的钩子
 
   ```js
-  const myDirective = {
+  const vMyDirective = {
     // 在绑定元素的 attribute 前或事件监听器应用前调用
     created(el, binding, vnode, prevVnode) {},
     // 在元素被插入到 DOM 前调用
@@ -2117,19 +2108,18 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
     unmounted(el, binding, vnode, prevVnode) {}
   }
   ```
-* 参数：除了**`el`**​外，其他属性都是只读的
+* 参数：除了**`el`**​​外，**其他属性都是只读的**
 
   ```js
   el：指令绑定到的元素。这可以用于直接操作 DOM。
 
   binding：一个对象，包含以下属性。
-  value：传递给指令的值。例如在 v-my-directive="1 + 1" 中，值是 2。
-  oldValue：之前的值，仅在 beforeUpdate 和 updated 中可用。无论值是否更改，它都可用。
-  arg：传递给指令的参数 (如果有的话)。例如在 v-my-directive:foo 中，参数是 "foo"。
-  modifiers：一个包含修饰符的对象 (如果有的话)。如 v-my-directive.foo.bar 中，修饰符对象是 { foo: true, bar: true }。
-  instance：使用该指令的组件实例。
-  dir：指令的定义对象。
-
+    value：传递给指令的值。例如在 v-my-directive="1 + 1" 中，值是 2。
+    oldValue：之前的值，仅在 beforeUpdate 和 updated 中可用。无论值是否更改，它都可用。
+    arg：传递给指令的参数 (如果有的话)。例如在 v-my-directive:foo 中，参数是 "foo"。
+    modifiers：一个包含修饰符的对象 (如果有的话)。如 v-my-directive.foo.bar 中，修饰符对象是 { foo: true, bar: true }。
+    instance：使用该指令的组件实例。
+    dir：指令的定义对象。
   vnode：代表绑定元素的底层 VNode。
   prevNode：之前的渲染中代表指令所绑定元素的 VNode。仅在 beforeUpdate 和 updated 钩子中可用。
 
@@ -2149,73 +2139,6 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   ```js
   1.自定义指令作用到根节点的时候，会抛出警告。
   2.和 attribute 不同，指令不能通过 v-bind="$attrs" 来传递给一个不同的元素
-  ```
-
-### 自定义指令
-
-* 概念：在` <script setup>`​ 中，任何以 **v 开头的驼峰式命名的变量**都可以被用作一个自定义指令。
-* 基本使用
-
-  ```js
-  1. <script upset> 中
-  <script setup>
-  // 在模板中启用 v-focus
-  const vFocus = {
-    mounted: (el) => el.focus()
-  }
-  </script>
-
-  2.<script upset> 需要在directives  中注册
-  export default {
-    setup() {},
-    directives: {
-      // 在模板中启用 v-focus
-      focus: {}
-    }
-  }
-
-  3.vue3全局自定义指令
-  const app = createApp({})
-  app.directive('focus', {})// 使 v-focus 在所有组件中都可用
-  ```
-* 自定义指令的钩子及参数
-
-  ```js
-  const myDirective = {
-    created(el, binding, vnode, prevVnode) {},// 在绑定元素的 attribute 前 或事件监听器应用前调用
-    beforeMount(el, binding, vnode, prevVnode) {},// 在元素被插入到 DOM 前调用
-    mounted(el, binding, vnode, prevVnode) {},// 在绑定元素的父组件及他自己的所有子节点都挂载完成后调用
-    beforeUpdate(el, binding, vnode, prevVnode) {},// 绑定元素的父组件更新前调用
-    updated(el, binding, vnode, prevVnode) {}, // 在绑定元素的父组件 及他自己的所有子节点都更新后调用
-    beforeUnmount(el, binding, vnode, prevVnode) {},// 绑定元素的父组件卸载前调用
-    unmounted(el, binding, vnode, prevVnode) {} // 绑定元素的父组件卸载后调用
-  }
-
-  参数
-  el：指令绑定到的元素。这可以用于直接操作 DOM。
-
-  binding：{ 一个对象，包含以下属性。
-    value：传递给指令的值。例如在 v-my-directive="1 + 1" 中，值是 2。
-    oldValue：之前的值，仅在 beforeUpdate 和 updated 中可用。无论值是否更改，它都可用。
-    arg：传递给指令的参数 (如果有的话)。例如在 v-my-directive:foo 中，参数是 "foo"。
-    modifiers：一个包含修饰符的对象 (如果有的话)。例如在 v-my-directive.foo.bar 中，修饰符对象是 { foo: true }。
-    instance：使用该指令的组件实例。
-    dir：指令的定义对象。
-  }
-
-  vnode：代表绑定元素的底层 VNode。
-
-  prevNode：代表之前的渲染中指令所绑定元素的 VNode。仅在 beforeUpdate 和 updated 钩子中可用。
-  ```
-* 简化形式：一般用不到那么多的生命周期，可以默认写成一个回调函数的形式，默认该回调函数在mounted和updataed周期中执行
-
-  ```js
-  app.directive('color', (el, binding) => {
-    // 这会在 `mounted` 和 `updated` 时都调用
-    el.style.color = binding.value
-  })
-
-  const vFoucs = (el,binding,vnode,preVnode){}
   ```
 
 # vue2
@@ -2407,20 +2330,19 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   ```
 * 注意：vue中，数组的push、pop、shift、unshift、sort、reverse、splice方法被重新包装，通过这几种方法修改数组，数组的数据是响应式的，不需要再开启深度侦听了
 
-### $set
+## API
 
-**这是 Vue2 的缺陷，Vue3 没有这个缺陷**
+### $nextTick
 
-缺陷：不能给对象动态添加属性，如果你动态添加它就不是响应式（不是响应式的意思：数据变了，界面不会更新）
+​`$nextTick`​和`nextTick`​都是`Vue`​提供的全局API。 本质上是使用 `promise`​ 封装的，和 `axios`​ 一样可以，使用 `async-wait`​
 
-```js
-this.$set(要修改的对象, 属性名, 属性值)  
-// 例 this.$set(this.obj, 'height', 175) 
-// 给obj动态添加height属性，属性值是175，这样添加的属性就是响应式的
-this.$set(要修改的数组, 下标, 值) 
-```
+​`$nextTick`​：在下次 DOM 更新循环结束之后执行延迟回调。用在修改数据之后立即使用这个方法，获取更新后的 DOM。
 
-### $ref
+​`nextTick`​：当数据发生变化，更新后执行回调。
+
+​`**Vue**`​ **的** `**dom**`​ **渲染都是异步渲染**，所以改变数据后，没有立即渲染 `dom`​，如果此时要操作 `dom`​可能会操作不到最新的 `dom`​，也就是操作完`dom`​后，数据后面才渲染上来。
+
+### $refs
 
 ​`ref`​就是 vue 里面专门用来找到 dom 元素和子组件的方法，以后在 vue 里推荐如果要找 dom 元素，不要再用 `document.querySelector`​ 而是推荐用 `ref`​ 和 `$refs`​ 配合的形式找到 dom 元素
 
@@ -2453,59 +2375,20 @@ this.$set(要修改的数组, 下标, 值)
     <button @click="$refs.son.name ='rose' ">父传子</button>
     ```
 
-### $nextTick
+### $set
 
-​`$nextTick`​和`nextTick`​都是`Vue`​提供的全局API。 本质上是使用 `promise`​ 封装的，和 `axios`​ 一样可以，使用 `async-wait`​
+**这是 Vue2 的缺陷，Vue3 没有这个缺陷**
 
-​`$nextTick`​：在下次 DOM 更新循环结束之后执行延迟回调。用在修改数据之后立即使用这个方法，获取更新后的 DOM。
+缺陷：不能给对象动态添加属性，如果你动态添加它就不是响应式（不是响应式的意思：数据变了，界面不会更新）
 
-​`nextTick`​：当数据发生变化，更新后执行回调。
-
-​`**Vue**`​ ** 的 **​`**dom**`​ ** 渲染都是异步渲染**，所以改变数据后，没有立即渲染 `dom`​，如果此时要操作 `dom`​可能会操作不到最新的 `dom`​，也就是操作完`dom`​后，数据后面才渲染上来。
+```js
+this.$set(要修改的对象, 属性名, 属性值)  
+// 例 this.$set(this.obj, 'height', 175) 
+// 给obj动态添加height属性，属性值是175，这样添加的属性就是响应式的
+this.$set(要修改的数组, 下标, 值) 
+```
 
 ## 进阶用法
-
-### v-model
-
-* 概念：双向绑定，可以用来控制表单元素上的值，可以达到页面数值和`vue`​实例中的数据实时同步的效果。
-
-  ```html
-  //v-model常用在表单元素上，使表单元素内的value和我们data中的值同步
-  表单元素：就是放在 form 标签中的元素，比如：<input /> 、<textarea /> 、<select/> 等
-   <input type="text" v-model="msg" >
-  ```
-* 本质：`v-model`​的本质就是一个((20230205171722-zn68566 '语法糖'))。
-
-  ```js
-  <子组件标签  :value='appValue'   @input='appValue=$event.target.value'  />
-  <子组件标签  v-model='appValue'  />
-  上面两种其实是一样的，v-model帮你省略了后面的部分。$event就是事件对象
-
-  子组件中设置：和父子传值没太大区别。可以通过model的设置，可以设置v-model的value和input方法。
-  props:['value'],
-  model:{
-    prop:'value',
-    event:'input'
-  }
-  this.$emit('input',实参)
-  ```
-* v-model的绑定值：`v-model`​ 会绑定 `vue`​ 里面的数据来进行表单标签的值进行同步，会先判断绑定的是不是数组
-
-  ```js
-  v-model 与 checkbox 绑定的数据是数组的，那么拿到的是 checkbox 的 value 值
-  v-model 与 checkbox 绑定的数据是非数组的，那么拿到的是 checkbox 的选择状态（true  或 false）
-  ```
-* ​`v-model`​ 的修饰符：`v-model`​用来收集表单数据的，它的修饰符是用来修饰所收集到的表单数据
-
-  ```html
-  <表单元素 v-model.修饰符="数据"></表单元素>
-  <input type="text" v-model.number="num1">
-  <input type="text" v-model.trim.lazy="msg">//修饰符可以连用
-  v-model常见修饰符:
-  .number  //把输入的内容转换为数值类型
-  .trim  //去除首尾空格
-  .lazy  //默认情况下是一边输入一边就会改变数据的值,加了lazy后，会输入完(按回车或者失去焦点)才会改变数据的值
-  ```
 
 ### 生命周期
 
@@ -2552,9 +2435,9 @@ this.$set(要修改的数组, 下标, 值)
 
 ​![image-20220729111126171](assets/net-img-9uDZymi1T4KQHwa-20220729215719-g1l2xim.png)​
 
-### 自定义指令基本使用
+### 自定义指令
 
-* 自定义指令生命周期
+* 生命周期
 
   ```js
   //指令的生命周期：绑定-插入-更新-更新结束-销毁
@@ -2575,7 +2458,7 @@ this.$set(要修改的数组, 下标, 值)
   //回调函数的简写：如果当inserted里的代码和update里的代码一样时，可以简写
   指令名 (el, binding)=>{}
   ```
-* 设置自定义指令:`v-指令名:属性.修饰符=“值”`​
+* 设置: `v-指令名:属性.修饰符=“值”`​
 
   ```js
   在组件中，设置局部指令
@@ -3057,7 +2940,7 @@ eventBus：专业术语事件总线
 
 # [router-v4.x](https://router.vuejs.org/zh/api/)
 
-### 一些事项
+### 基本规则
 
 1. 导航是异步的，返回值一般是`false`​​​或`undefined`​​​，有返回值说明路由跳转失败
 

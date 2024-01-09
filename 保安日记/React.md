@@ -190,7 +190,7 @@ react中，初始化的state数据其实是一直保留的，更改数据不能�
 import "../css/home.css"
 ```
 
-vue中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过` v-data-hash `​属性来区分组件，避免导致组件间的样式来相互影响。
+((20230809210345-p2l1dui "vue"))中，一个 `.vue`​文件，里面就有区分出来，`template`​、`style`​、`js`​ 部分，`vue`​中的`style`​是有通过` v-data-hash `​属性来区分组件，避免导致组件间的样式来相互影响。
 
 ​`react`​要达到这样的效果，要使用` css module `​的模块化语法。
 
@@ -2630,7 +2630,6 @@ asyncChangeUserName[0].addEventListener('click', () => {
            border-radius:10px;
            border-bottom:1px solid red;
           `
-
           const StyledDiv = styled.div`
             background:${props=>props.bg || 'yellow'}; //使用 props 获取组件透传来的变量
             width:100px;

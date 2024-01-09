@@ -51,9 +51,9 @@
 
   ```js
 
-  http://atguigu.com/w eb](http://atguigu.com/web   直接向目标资源发送请求，容易理解。网站的外链会用到此形式     
-  //atguigu.com/web                                 与页面 URL 的协议拼接形成完整 URL 再发送请求。大型网站用的比较多 
-  /web                                              与页面 URL 的协议、主机名、端口拼接形成完整 URL 再发送请求。
+  http://atguigu.com/web       直接向目标资源发送请求，容易理解。网站的外链会用到此形式   
+  //atguigu.com/web            与页面 URL 的协议拼接形成完整 URL 再发送请求。大型网站用的比较多 
+  /web                         与页面 URL 的协议、主机名、端口拼接形成完整 URL 再发送请求。
   ```
 * 相对路径：在发送请求时，需要与当前页面 URL 路径进行 `计算`​ ，得到完整 URL 后，再发送请求。
 
