@@ -2,7 +2,7 @@
 
 # Vue
 
-# vue
+# vue3
 
 ## 基本概念
 
@@ -3245,8 +3245,6 @@ eventBus：专业术语事件总线
   })
   ```
 
-‍
-
 ### 路由重定向
 
 注意：
@@ -3866,7 +3864,6 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
   import { createPinia } from 'pinia'
   import piniaPluginPersistedstate  from 'pinia-plugin-persistedstate'
   import App from './App.vue'
-
 
   const app = createApp(App)
   const pinia = createPinia()

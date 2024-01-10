@@ -1172,8 +1172,6 @@ const Child = forwardRef((props,ref)=>{
 })
 ```
 
-‍
-
 # react-router
 
 ​`react`​中使用路由的`react-router-dom`​插件，目前最新版本v6，和之前v5版本差距较大，主要差别是在`hooks`​上，很多`api`​在类组件中无法被使用。
