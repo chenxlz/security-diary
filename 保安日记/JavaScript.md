@@ -4,6 +4,51 @@
 
 # JS基础
 
+## 模块化
+
+### 导入导出
+
+```js
+1.按需导入
+import {sayHi, sayBye} from './say.js';
+2.全部导入并重命名
+import * as say from './say.js';
+say.default //获取默认导出的内容
+3.全部导入
+import * from './say.js';
+4.按需导入并重命名
+import {sayHi as hi, sayBye as bye} from './say.js';
+5.导入默认内容
+import say from './say.js';
+import {default as say} from './say.js';//和上面等价
+
+6.导出
+export sayHi 
+7.导出并重命名
+export {sayHi as hi, sayBye as bye};
+8.默认导出
+export default sayHi 
+export { sayHi as default } //和上面等价
+
+9.重新导出sayHi
+export {sayHi} from './say.js'; 
+10.重新导出 默认导出 并重命名
+export {default as User} from './user.js';
+export User from './user.js' //无效。这会导致一个语法错误。
+11.导出命名的导出，默认导出的内容没有
+export * from './user.js'
+```
+
+### 按需导入
+
+​`import(module)`​ 表达式：加载模块并返回一个 `promise`​，该 `promise `​resolve 为一个包含其所有导出的模块对象。我们可以在代码中的任意位置调用这个表达式。
+
+注意点：
+
+1. 动态导入在常规脚本中工作时，它们不需要 script type="module"
+2. 尽管 `import()`​ 看起来像一个函数调用，但它只是一种特殊语法，只是恰好使用了括号（类似于 `super()`​）。
+3. 因此，不能将 `import`​ 复制到一个变量中，或者对其使用 `call/apply`​。因为它不是一个函数。
+
 ## 变量
 
 ### 变量声明
@@ -1117,9 +1162,20 @@ Person.prototype.fn = function(){
 
   ```
 
-## Blob
+## Proxy
 
-​`Blob`​​ 对象表示一个不可变、原始数据的类文件对象。它的数据可以按文本或二进制的格式进行读取，也可以转换成 [`ReadableStream`](https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream)​​ 来用于数据操作
+## Reflect
+
+​`Reflect`​ 是一个内建对象，可简化 `Proxy`​ 的创建。
+
+**对于每个可被** Proxy **捕获的内部方法，在** **`Reflect`**​ **中都有一个对应的方法，其名称和参数与** **`Proxy`**​ **捕捉器相同。**
+
+|操作|​`Reflect`​ 调用|内部方法|
+| ------| -----------| ----------|
+|​`obj[prop]`​|​`Reflect.get(obj, prop)`​|​`[[Get]]`​|
+|​`obj[prop] = value`​|​`Reflect.set(obj, prop, value)`​|​`[[Set]]`​|
+|​`delete obj[prop]`​|​`Reflect.deleteProperty(obj, prop)`​|​`[[Delete]]`​|
+|​`new F(value)`​|​`Reflect.construct(F, value)`​|​`[[Construct]]`​|
 
 ## Math
 
@@ -1232,8 +1288,6 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Promise
 
-### 概念
-
 Promise 是异步编程的一种解决方案
 
 从语法上讲，Promise是一个对象，通过它可以获取异步操作的消息；
@@ -1291,7 +1345,7 @@ promise有三种状态：pending(等待态)，fulfilled(成功态)，rejected(�
 .then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
 ```
 
-## async
+### async
 
 * 概念：**本质是语法糖，是用promise包装过的，被async声明过的函数都是异步函数，适用await用于等待异步方法的执行完毕**
 
@@ -1389,7 +1443,561 @@ promise有三种状态：pending(等待态)，fulfilled(成功态)，rejected(�
   console.log(Person===Person.prototype.constructor)
   ```
 
+## ArrayBuffer
+
+与其他语言相比，JavaScript 中的二进制数据是以非标准方式实现的。
+
+**基本的二进制对象是** `**ArrayBuffer**`​  **—— 对固定长度的连续内存空间的引用。**
+
+```js
+// 创建一个长度为 16 的 buffer
+// 它会分配一个 16 字节的连续内存空间，并用 0 进行预填充。 
+let buffer = new ArrayBuffer(16); 
+alert(buffer.byteLength); // 16
+```
+
+`ArrayBuffer`​ 与 `Array`​ 没有任何共同之处：
+
+* 它的长度是固定的，我们无法增加或减少它的长度。
+* 它正好占用了内存中的那么多空间。
+* **要访问单个字节，需要另一个“视图”对象**，而不是 `buffer[index]`​。
+
+​`ArrayBuffer`​​ 是一个内存区域。它里面存储了什么？无从判断。只是一个原始的字节序列。
+
+**如要操作** **`ArrayBuffer`**​ **，需要使用“视图”对象。**
+
+视图对象本身并不存储任何东西。它是一副“眼镜”，透过它来解释存储在 `ArrayBuffer`​ 中的字节。
+
+* ​**`Uint8Array`**​ —— 将 `ArrayBuffer`​ 中的每个字节视为 0 到 255 之间的单个数字（每个字节是 8 位，因此只能容纳那么多）。这称为 “8 位无符号整数”。
+* ​**`Uint16Array`**​ —— 将每 2 个字节视为一个 0 到 65535 之间的整数。这称为 “16 位无符号整数”。
+* ​**`Uint32Array`**​ —— 将每 4 个字节视为一个 0 到 4294967295 之间的整数。这称为 “32 位无符号整数”。
+* ​**`Float64Array`**​ —— 将每 8 个字节视为一个 5.0x10^-324^ 到 1.8x10^308^ 之间的浮点数。
+
+​![image](assets/image-20240226193315-7ijdlhv.png)​
+
+### TypedArray
+
+所有这些视图（`Uint8Array`​，`Uint32Array`​ 等）的通用术语是 [TypedArray](https://tc39.github.io/ecma262/#sec-typedarray-objects)。它们共享同一方法和属性集。
+
+**请注意，没有名为** `**TypedArray**` **的构造器，它只是表示** `**ArrayBuffer**` **上的视图之一的通用总称术语：**​`**Int8Array**`​ **，**​`**Uint8Array**` **及其他。**
+
+**当看到** `**new TypedArray**` **之类的内容时，它表示** `**new Int8Array**`​ **、**​`**new Uint8Array**` **及其他中之一。**
+
+类型化数组的行为类似于常规数组：具有索引，并且是可迭代的。
+
+一个类型化数组的构造器（无论是 `Int8Array`​ 或 `Float64Array`​，都无关紧要），其行为各不相同，并且取决于参数类型。
+
+```js
+new TypedArray(buffer, [byteOffset], [length]);
+new TypedArray(object);
+new TypedArray(typedArray);
+new TypedArray(length);
+new TypedArray();
+```
+
+1. 如果给定的是 `ArrayBuffer`​ 参数，则会在其上创建视图。  
+    可选，我们可以给定起始位置 `byteOffset`​（默认为 0）以及 `length`​（默认至 buffer 的末尾），这样视图将仅涵盖 `buffer`​ 的一部分。
+2. 如果给定的是 `Array`​，或任何类数组对象，则会创建一个相同长度的类型化数组，并复制其内容。
+
+    ```js
+    我们可以使用它来预填充数组的数据：
+    let arr = new Uint8Array([0, 1, 2, 3]);
+    alert( arr.length ); // 4，创建了相同长度的二进制数组
+    alert( arr[1] ); // 1，用给定值填充了 4 个字节（无符号 8 位整数）
+    ```
+3. 如果给定的是另一个 `TypedArray`​，也是如此：创建一个相同长度的类型化数组，并复制其内容。如果需要的话，数据在此过程中会被转换为新的类型。
+
+    ```js
+    let arr16 = new Uint16Array([1, 1000]);
+    let arr8 = new Uint8Array(arr16);
+    alert( arr8[0] ); // 1
+    alert( arr8[1] ); // 232，试图复制 1000，但无法将 1000 放进 8 位字节中（详述见下文）。
+    ```
+4. 对于数字参数 `length`​ —— 创建类型化数组以包含这么多元素。它的字节长度将是 `length`​ 乘以单个 `TypedArray.BYTES_PER_ELEMENT`​ 中的字节数：
+
+    ```js
+    let arr = new Uint16Array(4); // 为 4 个整数创建类型化数组
+    alert( Uint16Array.BYTES_PER_ELEMENT ); // 每个整数 2 个字节
+    alert( arr.byteLength ); // 8（字节中的大小）
+    ```
+5. 不带参数的情况下，创建长度为零的类型化数组。
+
+我们可以直接创建一个 `TypedArray`​，而无需提及 `ArrayBuffer`​。但是，视图离不开底层的 `ArrayBuffer`​，因此，除第一种情况（已提供 `ArrayBuffer`​）外，其他所有情况都会自动创建 `ArrayBuffer`​。
+
+如要访问底层的 `ArrayBuffer`​，那么在 `TypedArray`​ 中有如下的属性：
+
+* ​`arr.buffer`​ —— 引用 `ArrayBuffer`​。
+* ​`arr.byteLength`​ —— `ArrayBuffer`​ 的长度。
+
+```js
+可以从一个视图转到另一个视图：
+let arr8 = new Uint8Array([0, 1, 2, 3]);
+// 同一数据的另一个视图
+let arr16 = new Uint16Array(arr8.buffer);
+```
+
+### TypedArray方法
+
+​`TypedArray`​ 具有常规的 `Array`​ 方法，但有个明显的例外。
+
+我们可以遍历（iterate），`map`​，`slice`​，`find`​ 和 `reduce`​ 等。
+
+但有几件事我们做不了：
+
+* 没有 `splice`​ —— 我们无法“删除”一个值，因为**类型化数组是缓冲区（buffer）上的视图**，并且缓冲区（buffer）是固定的、连续的内存区域。我们所能做的就是分配一个零值。
+* 无 `concat`​ 方法。
+
+还有两种其他方法：
+
+* ​`arr.set(fromArr, [offset])`​ 从 `offset`​（默认为 0）开始，将 `fromArr`​ 中的所有元素复制到 `arr`​。
+* ​`arr.subarray([begin, end])`​ 创建一个从 `begin`​ 到 `end`​（不包括）相同类型的新视图。这类似于 `slice`​ 方法（同样也支持），但不复制任何内容 —— 只是创建一个新视图，以对给定片段的数据进行操作。
+
+有了这些方法，我们可以复制、混合类型化数组，从现有数组创建新数组等。
+
+### DataView
+
+[DataView](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/DataView) 是在 `ArrayBuffer`​ 上的一种特殊的超灵活“未类型化”视图。它允许以任何格式访问任何偏移量（offset）的数据。
+
+* 对于类型化的数组，构造器决定了其格式。整个数组应该是统一的。第 i 个数字是 `arr[i]`​。
+* 通过 `DataView`​，我们可以使用 `.getUint8(i)`​ 或 `.getUint16(i)`​ 之类的方法访问数据。我们在调用方法时选择格式，而不是在构造的时候。
+
+```js
+new DataView(buffer, [byteOffset], [byteLength])
+```
+
+* ​**`buffer`**​ —— 底层的 `ArrayBuffer`​。与类型化数组不同，`DataView`​ 不会自行创建缓冲区（buffer）。我们需要事先准备好。
+* ​**`byteOffset`**​ —— 视图的起始字节位置（默认为 0）。
+* ​**`byteLength`**​ —— 视图的字节长度（默认至 `buffer`​ 的末尾）。
+
+```js
+// 4 个字节的二进制数组，每个都是最大值 255
+let buffer = new Uint8Array([255, 255, 255, 255]).buffer;
+
+let dataView = new DataView(buffer);
+
+// 在偏移量为 0 处获取 8 位数字
+alert( dataView.getUint8(0) ); // 255
+
+// 现在在偏移量为 0 处获取 16 位数字，它由 2 个字节组成，一起解析为 65535
+alert( dataView.getUint16(0) ); // 65535（最大的 16 位无符号整数）
+
+// 在偏移量为 0 处获取 32 位数字
+alert( dataView.getUint32(0) ); // 4294967295（最大的 32 位无符号整数）
+
+dataView.setUint32(0, 0); // 将 4 个字节的数字设为 0，即将所有字节都设为 0
+```
+
+当我们将混合格式的数据存储在同一缓冲区（buffer）中时，`DataView`​ 非常有用。例如，当我们存储一个成对序列（16 位整数，32 位浮点数）时，用 `DataView`​ 可以轻松访问它们。
+
 ‍
+
+​`ArrayBufferView`​​ 是所有这些视图的总称。
+
+​`BufferSource`​ 是 `ArrayBuffer`​ 或 `ArrayBufferView`​ 的总称。`BufferSource`​ 是最常用的术语之一，因为它的意思是“任何类型的二进制数据” —— `ArrayBuffer`​ 或其上的视图。
+
+​![image](assets/image-20240226195108-s5zskzj.png)​
+
+## TextDecoder
+
+内建的 [TextDecoder](https://encoding.spec.whatwg.org/#interface-textdecoder) 对象在给定缓冲区（buffer）和编码格式（encoding）的情况下，允许将值读取为实际的 JavaScript 字符串。
+
+```js
+1.创建对象
+let decoder = new TextDecoder([label], [options]);
+label —— 编码格式，默认为 utf-8，但同时也支持 big5，windows-1251 等许多其他编码格式。
+options —— 可选对象：
+fatal —— 布尔值，如果为 true 则为无效（不可解码）字符抛出异常，否则（默认）用字符 \uFFFD 替换无效字符。
+ignoreBOM —— 布尔值，如果为 true 则忽略 BOM（可选的字节顺序 Unicode 标记），很少需要使用。
+
+2.解码
+let str = decoder.decode([input], [options]);
+input —— 要被解码的 BufferSource。
+options —— 可选对象：
+stream —— 对于解码流，为 true，则将传入的数据块（chunk）作为参数重复调用 decoder。在这种情况下，多字节的字符可能偶尔会在块与块之间被分割。这个选项告诉 TextDecoder 记住“未完成”的字符，并在下一个数据块来的时候进行解码。
+```
+
+例如：
+
+```js
+let uint8Array = new Uint8Array([72, 101, 108, 108, 111]);
+
+alert( new TextDecoder().decode(uint8Array) ); // Hello
+```
+
+## TextEncoder
+
+[TextEncoder](https://encoding.spec.whatwg.org/#interface-textencoder) 做相反的事情 —— 将字符串转换为字节。
+
+```js
+let encoder = new TextEncoder();
+只支持 utf-8 编码。
+它有两种方法：
+encode(str) —— 从字符串返回 Uint8Array。
+encodeInto(str, destination) —— 将 str 编码到 destination 中，该目标必须为 Uint8Array。
+
+//示例
+let encoder = new TextEncoder();
+let uint8Array = encoder.encode("Hello");
+alert(uint8Array); // 72,101,108,108,111
+```
+
+## Blob
+
+### 概念
+
+​`arrayBuffer`​ 和视图（view）都是 ECMA 标准的一部分，是 JavaScript 的一部分。
+
+在浏览器中，还有其他更高级的对象，特别是 `Blob`​，在 [File API](https://www.w3.org/TR/FileAPI/) 中有相关描述。
+
+​`Blob`​ 由一个可选的字符串 `type`​（通常是 MIME 类型）和 `blobParts`​ 组成 —— 一系列其他 `Blob`​ 对象，字符串和 `BufferSource`​。
+
+​![image](assets/image-20240226200732-i1z8xm2.png)​
+
+```js
+new Blob(blobParts, options);
+blobParts 是 Blob/BufferSource/String 类型的值的数组。
+options 可选对象：
+type —— Blob 类型，通常是 MIME 类型，例如 image/png，
+endings —— 是否转换换行符，使 Blob 对应于当前操作系统的换行符（\r\n 或 \n）。默认为 "transparent"（啥也不做），不过也可以是 "native"（转换）。
+
+// 从字符串创建 Blob
+let blob = new Blob(["<html>…</html>"], {type: 'text/html'});
+// 请注意：第一个参数必须是一个数组 [...]
+
+// 从类型化数组（typed array）和字符串创建 Blob
+let hello = new Uint8Array([72, 101, 108, 108, 111]); // 二进制格式的 "hello"
+let blob = new Blob([hello, ' ', 'world'], {type: 'text/plain'});
+```
+
+可以用 `slice`​ 方法来提取 `Blob`​ 片段：
+
+```js
+blob.slice([byteStart], [byteEnd], [contentType]);
+byteStart —— 起始字节，默认为 0。
+byteEnd —— 最后一个字节（不包括，默认为最后）。
+contentType —— 新 blob 的 type，默认与源 blob 相同。
+参数值类似于 array.slice，也允许是负数。
+```
+
+​`Blob`​ **对象是不可改变的**
+
+* 我们无法直接在 `Blob`​ 中更改数据，但我们可以通过 `slice`​ 获得 `Blob`​ 的多个部分，从这些部分创建新的 `Blob`​ 对象，将它们组成新的 `Blob`​，等。
+* 这种行为类似于 JavaScript 字符串：我们无法更改字符串中的字符，但可以生成一个新的改动过的字符串。
+
+### Blob用于URL
+
+Blob 可以很容易用作 `<a>`​、`<img>`​ 或其他标签的 URL，来显示它们的内容。
+
+多亏了 `type`​，让我们也可以下载/上传 `Blob`​ 对象，而在网络请求中，`type`​ 自然地变成了 `Content-Type`​。
+
+‍
+
+通过点击链接，你可以下载一个具有动态生成的内容为 `hello world`​ 的 `Blob`​ 的文件：
+
+```js
+<!-- download 特性（attribute）强制浏览器下载而不是导航 -->
+<a download="hello.txt" href='#' id="link">Download</a>
+
+<script>
+let blob = new Blob(["Hello, world!"], {type: 'text/plain'});
+link.href = URL.createObjectURL(blob);
+</script>
+```
+
+‍
+
+可以在 Javascript 中动态创建一个链接，通过 `link.click()`​ 模拟一个点击，然后便自动下载了。
+
+```js
+let link = document.createElement('a');
+link.download = 'hello.txt';
+let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
+link.href = URL.createObjectURL(blob);
+link.click();
+URL.revokeObjectURL(link.href);
+```
+
+​`URL.createObjectURL`​ 取一个 `Blob`​，并为其创建一个唯一的 URL，形式为 `blob:<origin>/<uuid>`​。
+
+也就是 `link.href`​ 的值的样子：
+
+```js
+blob:https://javascript.info/1e67e00e-860d-40a5-89ae-6ab0cbee6273
+```
+
+浏览器内部为每个通过 `URL.createObjectURL`​ 生成的 URL 存储了一个 URL → `Blob`​ 映射。因此，此类 URL 很短，但可以访问 `Blob`​。
+
+生成的 URL（即其链接）仅在当前文档打开的状态下才有效。它允许引用 `<img>`​、`<a>`​ 中的 `Blob`​，以及基本上任何其他期望 URL 的对象。
+
+不过它有个副作用。虽然这里有 `Blob`​ 的映射，但 `Blob`​ 本身只保存在内存中的。浏览器无法释放它。
+
+在文档退出时（unload），该映射会被自动清除，因此 `Blob`​ 也相应被释放了。但是，如果应用程序寿命很长，那这个释放就不会很快发生。
+
+**因此，如果我们创建一个 URL，那么即使我们不再需要该** **`Blob`**​ **了，它也会被挂在内存中。**
+
+​`URL.revokeObjectURL(url)`​ 从内部映射中移除引用，因此允许 `Blob`​ 被删除（如果没有其他引用的话），并释放内存。
+
+在上面最后一个示例中，我们打算仅使用一次 `Blob`​，来进行即时下载，因此我们立即调用 `URL.revokeObjectURL(link.href)`​。
+
+而在前一个带有可点击的 HTML 链接的示例中，我们不调用 `URL.revokeObjectURL(link.href)`​，因为那样会使 `Blob`​ URL 无效。在调用该方法后，由于映射被删除了，因此该 URL 也就不再起作用了。
+
+### Blob转base64
+
+​`URL.createObjectURL`​ 的一个替代方法是，将 `Blob`​ 转换为 base64-编码的字符串。
+
+这种编码将二进制数据表示为一个由 0 到 64 的 `ASCII`​码组成的字符串，非常安全且“可读“。更重要的是 —— 我们可以在 “data-url” 中使用此编码。
+
+[“data-url”](https://developer.mozilla.org/zh/docs/Web/http/Data_URIs) 的形式为 `data:[<mediatype>][;base64],<data>`​。我们可以在任何地方使用这种 url，和使用“常规” url 一样。
+
+```js
+<img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7">
+```
+
+‍
+
+使用内建的 `FileReader`​ 对象来将 `Blob`​ 转换为 base64。它可以将 `Blob`​ 中的数据读取为多种格式。
+
+```js
+let link = document.createElement('a');
+link.download = 'hello.txt';
+
+let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
+
+let reader = new FileReader();
+reader.readAsDataURL(blob); // 将 Blob 转换为 base64 并调用 onload
+
+reader.onload = function() {
+  link.href = reader.result; // data url
+  link.click();
+};
+```
+
+这两种从 `Blob`​ 创建 URL 的方法都可以用。但通常 `URL.createObjectURL(blob)`​ 更简单快捷。
+
+​`URL.createObjectURL(blob)`​
+
+* 如果介意内存，我们需要撤销（revoke）它们
+* 直接访问 `Blob`​，无需“编码/解码”
+
+Blob 转换为 data url
+
+* 无需撤销（revoke）任何操作。
+* 对大的 `Blob`​ 进行编码时，性能和内存会有损耗。
+
+### Blob 转换为 ArrayBuffer
+
+Blob 构造器允许从几乎任何东西创建 blob，包括任何 BufferSource。
+
+但是，如果我们需要执行低级别的处理时，我们可以从 `blob.arrayBuffer()`​ 中获取最低级别的 `ArrayBuffer`​：
+
+```js
+// 从 blob 获取 arrayBuffer
+const bufferPromise = await blob.arrayBuffer();
+
+// 或
+blob.arrayBuffer().then(buffer => /* 处理 ArrayBuffer */);
+```
+
+### Blob 转换为 Stream
+
+当我们读取和写入超过 `2 GB`​ 的 blob 时，将其转换为 `arrayBuffer`​ 的使用对我们来说会更加占用内存。这种情况下，我们可以直接将 blob 转换为 stream 进行处理。
+
+stream 是一种特殊的对象，我们可以从它那里逐部分地读取（或写入）。
+
+​`Blob`​ 接口里的 `stream()`​ 方法返回一个 `ReadableStream`​，在被读取时可以返回 `Blob`​ 中包含的数据。
+
+```js
+// 从 blob 获取可读流（readableStream）
+const readableStream = blob.stream();
+const stream = readableStream.getReader();
+
+while (true) {
+  // 对于每次迭代：value 是下一个 blob 数据片段
+  let { done, value } = await stream.read();
+  if (done) {
+    // 读取完毕，stream 里已经没有数据了
+    console.log('all blob processed.');
+    break;
+  }
+
+  // 对刚从 blob 中读取的数据片段做一些处理
+  console.log(value);
+}
+```
+
+​`arrayBuffer`​​，`Uint8Array`​​ 及其他 `BufferSource`​​ 是“二进制数据”，而 `Blob `​​则表示“具有类型的二进制数据”。
+
+## File
+
+[File](https://www.w3.org/TR/FileAPI/#dfn-file) 对象继承自 `Blob`​，并扩展了与文件系统相关的功能。
+
+有两种方式可以获取它。
+
+第一种，与 `Blob`​ 类似，有一个构造器：
+
+```js
+new File(fileParts, fileName, [options])
+fileParts —— Blob/BufferSource/String 类型值的数组。
+fileName —— 文件名字符串。
+options —— 可选对象：
+lastModified —— 最后一次修改的时间戳（整数日期）。
+```
+
+第二种，更常见的是，我们从 `<input type="file">`​ 或拖放或其他浏览器接口来获取文件。在这种情况下，file 将从操作系统（OS）获得 this 信息。
+
+由于 `File`​ 是继承自 `Blob`​ 的，所以 `File`​ 对象具有相同的属性，附加：
+
+* ​`name`​ —— 文件名，
+* ​`lastModified`​ —— 最后一次修改的时间戳。
+
+这就是我们从 `<input type="file">`​ 中获取 `File`​ 对象的方式：
+
+```js
+<input type="file" onchange="showFile(this)">
+
+<script>
+function showFile(input) {
+  let file = input.files[0];
+  alert(`File name: ${file.name}`); // 例如 my.png
+  alert(`Last modified: ${file.lastModified}`); // 例如 1552830408824
+}
+</script>
+
+```
+
+注意：输入（input）可以选择多个文件，因此 `input.files`​ 是一个类数组对象。这里我们只有一个文件，所以我们只取 `input.files[0]`​。
+
+## FileReader
+
+[FileReader](https://www.w3.org/TR/FileAPI/#dfn-filereader) 是一个对象，其唯一目的是从 `Blob`​（因此也从 `File`​）对象中读取数据。
+
+它使用事件来传递数据，因为从磁盘读取数据可能比较费时间。
+
+构造函数：
+
+```js
+let reader = new FileReader(); // 没有参数
+```
+
+### 方法
+
+* ​**`readAsArrayBuffer(blob)`** ​ —— 将数据读取为二进制格式的 `ArrayBuffer`​。
+* ​**`readAsText(blob, [encoding])`** ​ —— 将数据读取为给定编码（默认为 `utf-8`​ 编码）的文本字符串。
+* ​**`readAsDataURL(blob)`** ​ —— 读取二进制数据，并将其编码为 base64 的 data url。
+* ​**`abort()`** ​ —— 取消操作。
+
+​`read*`​ 方法的选择，取决于我们喜欢哪种格式，以及如何使用数据。
+
+* ​`readAsArrayBuffer`​ —— 用于二进制文件，执行低级别的二进制操作。对于诸如切片（slicing）之类的高级别的操作，`File`​ 是继承自 `Blob`​ 的，所以我们可以直接调用它们，而无需读取。
+* ​`readAsText`​ —— 用于文本文件，当我们想要获取字符串时。
+* ​`readAsDataURL`​ —— 当我们想在 `src`​ 中使用此数据，并将其用于 `img`​ 或其他标签时。正如我们在 [Blob](https://zh.javascript.info/blob) 一章中所讲的，还有一种用于此的读取文件的替代方案：`URL.createObjectURL(file)`​。
+
+读取过程中，有以下事件：
+
+* ​`loadstart`​ —— 开始加载。
+* ​`progress`​ —— 在读取过程中出现。
+* ​`load`​ —— 读取完成，没有 error。
+* ​`abort`​ —— 调用了 `abort()`​。
+* ​`error`​ —— 出现 error。
+* ​`loadend`​ —— 读取完成，无论成功还是失败。
+
+读取完成后，我们可以通过以下方式访问读取结果：
+
+* ​`reader.result`​ 是结果（如果成功）
+* ​`reader.error`​ 是 error（如果失败）
+
+‍
+
+```js
+<input type="file" onchange="readFile(this)">
+
+<script>
+function readFile(input) {
+  let file = input.files[0];
+
+  let reader = new FileReader();
+
+  reader.readAsText(file);
+
+  reader.onload = function() {
+    console.log(reader.result);
+  };
+
+  reader.onerror = function() {
+    console.log(reader.error);
+  };
+
+}
+</script>
+```
+
+> **在 Web Workers 中可以使用** `FileReaderSync`​
+>
+> 对于 Web Worker，还有一种同步的 `FileReader`​ 变体，称为 [FileReaderSync](https://www.w3.org/TR/FileAPI/#FileReaderSync)。
+>
+> 它的读取方法 `read*`​ 不会生成事件，但是会像常规函数那样返回一个结果。
+>
+> 不过，这仅在 Web Worker 中可用，因为在读取文件的时候，同步调用会有延迟，而在 Web Worker 中，这种延迟并不是很重要。它不会影响页面。
+
+## FormData
+
+​`FormData`​表示 HTML 表单数据的对象。表单始终以 `Content-Type: multipart/form-data`​ 来发送数据
+
+```js
+let formData = new FormData([form]);
+```
+
+​`FormData`​ 的特殊之处在于网络方法（network methods），例如 `fetch`​ 可以接受一个 `FormData`​ 对象作为 body。它会被编码并发送出去，带有 `Content-Type: multipart/form-data`​。
+
+```html
+<form id="formElem">
+  <input type="text" name="name" value="John">
+  <input type="text" name="surname" value="Smith">
+  <input type="submit">
+</form>
+
+<script>
+  formElem.onsubmit = async (e) => {
+    e.preventDefault();
+    let response = await fetch('/article/formdata/post/user', {
+      method: 'POST',
+      body: new FormData(formElem)
+    });
+    let result = await response.json();
+    alert(result.message);
+  };
+</script>
+```
+
+### FormData方法
+
+我们可以使用以下方法修改 `FormData`​ 中的字段：
+
+* ​`formData.append(name, value)`​ —— 添加具有给定 `name`​ 和 `value`​ 的表单字段，
+* ​`formData.append(name, blob, fileName)`​ —— 添加一个字段，就像它是 `<input type="file">`​，第三个参数 `fileName`​ 设置文件名（而不是表单字段名），因为它是用户文件系统中文件的名称，
+* ​`formData.delete(name)`​ —— 移除带有给定 `name`​ 的字段，
+* ​`formData.get(name)`​ —— 获取带有给定 `name`​ 的字段值，
+* ​`formData.has(name)`​ —— 如果存在带有给定 `name`​ 的字段，则返回 `true`​，否则返回 `false`​。
+
+从技术上来讲，一个表单可以包含多个具有相同 `name`​ 的字段，因此，多次调用 `append`​ 将会添加多个具有相同名称的字段。
+
+还有一个 `set`​ 方法，语法与 `append`​ 相同。不同之处在于 `.set`​ 移除所有具有给定 `name`​ 的字段，然后附加一个新字段。因此，它确保了只有一个具有这种 `name`​ 的字段，其他的和`append`​ 一样：
+
+* ​`formData.set(name, value)`​，
+* ​`formData.set(name, blob, fileName)`​。
+
+我们也可以使用 `for..of`​ 循环迭代 formData 字段：
+
+```js
+let formData = new FormData();
+formData.append('key1', 'value1');
+formData.append('key2', 'value2');
+
+// 列出 key/value 对
+for(let [name, value] of formData) {
+  alert(`${name} = ${value}`); // key1 = value1，然后是 key2 = value2
+}
+```
 
 # 函数
 
