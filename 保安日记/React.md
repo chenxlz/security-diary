@@ -1,7 +1,5 @@
 ![image](assets/wallpaper_5228834-20230207221228-s3qagsd.jpg)
 
-# React
-
 # 相关概念
 
 ### JSX
@@ -749,7 +747,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useEffect
 
-* 作用：给函数式组件提供操作`副作用`​的能力，在render之后执行。调用 `useEffect`​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
+* 作用：给函数式组件提供操作`副作用`​​的能力，在`render`​之后执行。调用 `useEffect`​​时，就是告诉react在完成对dom的更改后运行设置好的副作用函数
 * 使用
 
   ```js
@@ -847,15 +845,15 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useReducer
 
-* 作用：用于管理组件中的状态。与useState不同，useReducer可以更好的处理复杂的状态逻辑，尤其是需要多个状态相互作用时，可以简单的理解成是小号版的vuex，不是全局性的，但是可以在多个组件中使用。
+* 作用：用于管理组件中的状态。与`useState`​不同，`useReducer`​可以更好的处理复杂的状态逻辑，尤其是需要多个状态相互作用时，可以简单的理解成是小号版的vuex，不是全局性的，但是可以在多个组件中使用。
 * reducer和redux区别
 
   ```js
-  1.reducer用于单个组件的状态管理，适合复杂的state变化
-  2.redux是全局的状态管理工具
-  3.reducer在组件间的通信使用的还是 props
+  1.reducer 用于单个组件的状态管理，适合复杂的state变化
+  2.redux 是全局的状态管理工具
+  3.reducer 在组件间的通信使用的还是props
   ```
-* 使用：reducer 返回值和当前的state相同，react会跳过子组件的渲染及副作用的执行
+* 使用：`reducer`​返回值和当前的state相同，react会跳过子组件的渲染及副作用的执行
 
   ```js
   const [state, dispatch] = useReducer(reducer, initialArg, init?);
@@ -895,9 +893,9 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useContext和useReducer
 
-​`useContext `​​和 `useReducer `​​经常结合在一起进行使用，用于单组件下的状态管理
+​`useContext`​和 `useReducer`​经常结合在一起进行使用，用于单组件下的状态管理
 
-​`useContext `​​方便管理父组件传递来的`props`​​，`useReducer `​​方便管理复杂的state
+​`useContext`​方便管理父组件传递来的`props`​，`useReducer `​方便管理复杂的state
 
 * 父组件：提供props
 
@@ -1039,21 +1037,21 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 ### useImperativeHandle
 
 * 概念：用于暴露自定义的方法或属性给父组件，从而使父组件可以直接调用子组件中的方法或属性。
-* 使用：`useImperativeHandle`​​ 接受两个参数：`ref `​​和一个回调函数。其中，`ref`​​ 是一个由 `React.forwardRef `​​创建的 ref 对象，用于在父组件中引用子组件。
+* 使用：`useImperativeHandle`​ 接受两个参数：`ref `​和一个回调函数。其中，`ref`​ 是一个由 `React.forwardRef`​创建的 ref 对象，用于在父组件中引用子组件。
 
   ```js
   useImperativeHandle(ref, createHandle, [deps])
 
   1.子组件暴露
   import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-  const MyInput = forwardRef((props, ref) => {
+  //refparams 参数是父组件传递进来的ref
+  const MyInput = forwardRef((props, refparams) => {
     const inputRef = useRef();
-    useImperativeHandle(ref, () => ({
+    useImperativeHandle(refparams , () => ({
       focus: () => {
         inputRef.current.focus();
       }
     }));
-
     return <input type="text" ref={inputRef} />;
   });
 
@@ -1187,7 +1185,7 @@ const Child = forwardRef((props,ref)=>{
 <Redirect> //重定向组件，V6已经废弃，
 <Link> // a标签跳转
 <NavLink> //a标签跳转，可以使用类目实现高亮效果
-<Switch> V6已经废弃
+<Switch> //V6已经废弃
 <Routes> //v6 中 switch 组件
 ```
 
@@ -1491,7 +1489,7 @@ function Redirect({to}){
 
 ```js
 v5 
-通过`this.props.history`上的`push`、`replace`、`go`、`back`、`forward`方法
+通过this.props.history上的push、replace、go、back、forward方法
 
 v6
 useNavigate 的 navigate
@@ -1540,7 +1538,7 @@ Suspense 中的 fallback 属性：处理lazy处理的懒加载组件还没加载
 
 ### 路由拦截
 
-说白了，还是使用自己去判断一个去渲染那个组件
+说白了，还是使用自己的js去判断一个去渲染那个组件
 
 ```js
 <Route path="/center" element={
@@ -1556,7 +1554,7 @@ function AuthComponent({children}){
 
 ### 路由模式
 
-​`BrowserRouter`​ & `HashRouter`​
+​`BrowserRouter`​ 、 `HashRouter`​
 
 * **原理**不一样
 
@@ -1591,17 +1589,17 @@ function AuthComponent({children}){
 
 ### 路由配置化useRoutes
 
-可以本身在写组件的时候，使用route来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
+可以本身在写组件的时候，使用`route`​来直接写组件，但是这样的话，就没那么直观的看到各个组件间的路由间关系。
 
 可以使用`useRoutes`​  这个钩子来生成嵌套的组件包裹形态，方便在单独的文件中管理组件间的路由映射关系。
 
 * routes：routes其本身是一个数组，数组里维护各个匹配关系的对象
 
   ```js
-  path属性就是组件对应的路径；
-  element属性就是要对应的组件；
-  index属性就是默认要展示的页面组件;
-  children属性是路由嵌套时需要用也是一个数组，children数组里的属性和外层一样，子路由的配置就是在children属性里维护的。
+  path：属性就是组件对应的路径；
+  element：属性就是要对应的组件；
+  index：属性就是默认要展示的页面组件;
+  children：属性是路由嵌套时需要用也是一个数组，children数组里的属性和外层一样，子路由的配置就是在children属性里维护的。
 
   import React from 'react';
   import AuthComp from "@/components/authComp/AuthComp";
@@ -1641,7 +1639,7 @@ function AuthComponent({children}){
 
   ```js
   import React, { useEffect } from "react";
-  import { Routes, Route,useRoutes } from "react-router-dom";
+  import { Routes, Route, useRoutes } from "react-router-dom";
   import routes from '@/router'
   import style from "./index.module.less";
 
@@ -1672,7 +1670,7 @@ function AuthComponent({children}){
 
 ### 概念
 
-* ​`action`​：是一个具有 `type`​ 字段的普通 JavaScript 对象。你可以将 `action`​ 视为描述应用程序中发生了什么的事件
+* ​`action`​​：是一个具有 `type`​​ 字段的普通 `JavaScript `​对象。你可以将 `action`​​ 视为描述应用程序中发生了什么的事件
 
   ```js
   const addTodoAction = {
@@ -1744,7 +1742,7 @@ function AuthComponent({children}){
   ```
 * ​`store.getState()`​​：获取当前`state`​​
 * ​`store.subscribe(()=>{})`​：订阅，state发生变化时，执行该回调函数，每个`dispatch`​都会触发`subscribe`​，**返回值是一个函数，用于注销订阅**
-* ​`const rootReducer = combineReducers({anyReducer})`​：将多个 `reducer `​融合成一个 `reducer`​， 因为 `createStore `​只接受一个 `reducer`​， 即只支持一个 `rootState`​, `dispatch `​与 `getState `​都是针对 `rootState `​的
+* ​`const rootReducer = combineReducers({anyReducer})`​：将多个 `reducer`​融合成一个 `reducer`​， 因为 `createStore `​只接受一个 `reducer`​， 即只支持一个 `rootState`​, `dispatch `​与 `getState `​都是针对 `rootState `​的
 
   ```js
   import { combineReducers, createStore } from "redux";
@@ -1818,8 +1816,8 @@ function AuthComponent({children}){
 
 * [redux ](https://github.com/reduxjs/redux)为 redux core
 * [redux-toolkit](https://github.com/reduxjs/redux-toolkit) 为 redux 的工具包
-* [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch `​可以接受函数，赋予其执行异步操作的能力
-* [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react `​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
+* [redux-thunk](https://github.com/reduxjs/redux-thunk)为 redux 的中间件, 使 `dispatch`​可以接受函数，赋予其执行异步操作的能力
+* [react-redux](https://github.com/reduxjs/react-redux) 为 react 的 redux 绑定库, 使 `react`​组件可以使用 `redux`​， 且当 `redux store`​ 发生变化时，可以自动更新 `react`​ 组件
 * api和`redux`​是一样的
 
 ### 容器组件、UI组件
@@ -1887,7 +1885,7 @@ const mapDispatchToProps = (dispatch) => { // 默认传递参数就是dispatch�
 
   ```js
   注意点
-  1. 仅使用 state 和 action 进行数据的修改
+  1.仅使用 state 和 action 进行数据的修改
   2.禁止直接修改 state 。需要通过复制现有的state 并对复制的值进行更改的方式来实现 数据的修改操作（不可变更新）
   3.禁止使用异步逻辑，依赖随机值或导致其他的 副作用 代码
 

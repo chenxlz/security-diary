@@ -1,8 +1,8 @@
 ![image](assets/16263U495-5-20230926223425-dv65gmt.jpg)
 
-# TypeScript
-
 # 基本使用
+
+## 基本配置
 
 * 基本命令：安装编译TS的工具包，node只能识别js代码，安装编译包可以把ts代码转成js代码
 
@@ -95,9 +95,7 @@
 
   ```
 
-‍
-
-# 数据类型
+## 数据类型
 
 ### Boolean类型
 
@@ -124,6 +122,7 @@ let name: string = "semliker";
   ```js
   1.枚举（enum）的功能类似于字面量类型+联合类型组合的功能，来描述一个值。规定了某些特定的值。
   2.该值只能是一组命名常量中的一个。
+  3.枚举值不能使用计算属性，即定义的时候必须要有明确的数据定义
 
   定义:
   enum 枚举名 { 可取值1, 可取值2,.. }
@@ -205,7 +204,7 @@ let name: string = "semliker";
 
 ### Any类型
 
-* 任何类型都可以被归为 any 类型。这让 any 类型成为了类型系统的顶级类型（也被称作全局超级类型）。
+* 任何类型都可以被归为 `any `​类型。这让 `any `​类型成为了类型系统的顶级类型（也被称作全局超级类型）。
 
   ```js
   当类型设置为 any 时，就取消了类型的限制,不推荐使用any这会让TypeScript变为“AnyScript”(失去TS类型保护的优势)
@@ -420,7 +419,7 @@ let strings: Array<string> = ['a', 'b', 'c']
   }
   ```
 
-# 相关概念
+## 相关概念
 
 ### 断言
 
@@ -800,6 +799,87 @@ let arr1 :number | string = 1 // 可以写两个类型
   }
   ```
 
+## 模块化
+
+### 命名空间
+
+关键字 `namespace`​ ,会在全局生成一个对象，定义在`namespace`​内部的都要通过这个对象的属性访问。
+
+通过`export`​关键字对外暴露需要在外部访问的对象。
+
+命名空间表示一个全局变量是一个对象，可以定义很多属性类型。同时命名空间里可能会用到一些接口类型(`interface`​、`type`​)，这时候一般有两种写法：
+
+* 写在`namespace`​外层，会作为全局类型被引入，从而可能污染全局类型空间。
+* 写在`namespace`​里层，在想使用该类型的时候，可以通过`namespace.interface`​进行使用。（推荐）
+* 同时，命名空间支持嵌套使用，即：`namespace`​嵌套`namepsace`​。或者简化的写法，可以写成`namepsace.namespace`​进行声明。
+
+```js
+// ./types/test.d.ts
+declare namespace Jye {
+  interface Info {
+    name: string;
+    age: number;
+  }
+
+  function getAge(): number;
+}
+
+
+// ./src/test.ts
+let settings: Jye.Info = {
+  name: "jye",
+  age: 8,
+};
+
+Jye.getAge();
+
+```
+
+### 三斜线指令
+
+* 概念：`ts `​早期模块化的标签, 用来导入依赖, `ES6`​广泛使用后, 在编写TS文件中不推荐使用, 除了以下的场景使用`///`​, 其他场景使用 `import`​ 代替
+
+  1. 库依赖全局库, 因为全局库不能使用import导入
+  2. 全局库依赖于某个 UMD 模块，因为全局库中不能出现import/export, 出现则为npm/UMD
+
+  ```js
+  说白了，三斜线的path & types，和es6的import语义相似，
+  同时三斜线指令必须放在文件的最顶端。
+  例如，当我们的声明文件过于庞大，一般都会采用三斜线指令，将我们的声明文件拆分成若干个，然后由一个入口文件引入。
+
+  ///<reference types=“UMDModuleName/globalName” /> 表示对一个库的依赖
+  ///<reference path="./lib/index.d.ts" /> 表示对一个文件的依赖。
+  ```
+
+‍
+
+## 类型声明
+
+### 全局类型声明
+
+* 在TS中，以`.d.ts`​结尾的文件默认是全局模块，里面声明的类型，或者变量会被默认当成全局性质的，其他后缀结尾的文件默认是局部模块。对于局部模块要在文件里面显式写import或者export，否则会报错
+* 声明变量使用关键字`declare`​来表示声明其后面的**全局**变量的类型，`declare namespace`​声明全局命名空间，`interface`​可以不使用`declare`​关键字来命名全局类型声明
+* 声明文件放在项目里的**任意路径/文件名**都可以被`ts`​编译器识别，但实际开发中发现，为了规避一些奇怪的问题， **推荐放在根目录下。**
+
+```js
+//ts会识别 xxx.d.ts 文件为类型声明，使用 declare 修饰的就是全局类型声明，可以直接在文件中使用
+// src/jQuery.d.ts
+declare namespace jQuery {
+    const version: number;
+    class Event {
+        blur(eventType: EventType): void
+    }
+    enum EventType {
+        CustomClick
+    }
+    interface AjaxSettings {
+        method?: 'GET' | 'POST'
+        data?: any;
+    }
+    function ajax(url: string, settings?: AjaxSettings): void;
+}
+```
+
 # 类
 
 * 继承
@@ -1012,84 +1092,3 @@ let arr1 :number | string = 1 // 可以写两个类型
   lolo.say("I love ts!"); // lolo says I love ts!
 
   ```
-
-# 类型声明文件
-
-## 模块化
-
-### 命名空间
-
-关键字 `namespace`​ ,会在全局生成一个对象，定义在`namespace`​内部的都要通过这个对象的属性访问。
-
-通过`export`​关键字对外暴露需要在外部访问的对象。 
-
-命名空间表示一个全局变量是一个对象，可以定义很多属性类型。同时命名空间里可能会用到一些接口类型(`interface`​、`type`​)，这时候一般有两种写法：
-
-* 写在`namespace`​外层，会作为全局类型被引入，从而可能污染全局类型空间。
-* 写在`namespace`​里层，在想使用该类型的时候，可以通过`namespace.interface`​进行使用。（推荐）
-* 同时，命名空间支持嵌套使用，即：`namespace`​嵌套`namepsace`​。或者简化的写法，可以写成`namepsace.namespace`​进行声明。
-
-```js
-// ./types/test.d.ts
-declare namespace Jye {
-  interface Info {
-    name: string;
-    age: number;
-  }
-
-  function getAge(): number;
-}
-
-
-// ./src/test.ts
-let settings: Jye.Info = {
-  name: "jye",
-  age: 8,
-};
-
-Jye.getAge();
-
-```
-
-### 三斜线指令
-
-* 概念：`ts `​早期模块化的标签, 用来导入依赖, `ES6`​广泛使用后, 在编写TS文件中不推荐使用, 除了以下的场景使用`///`​, 其他场景使用 `import`​ 代替
-
-  1. 库依赖全局库, 因为全局库不能使用import导入
-  2. 全局库依赖于某个 UMD 模块，因为全局库中不能出现import/export, 出现则为npm/UMD
-
-  ```js
-  说白了，三斜线的path & types，和es6的import语义相似，
-  同时三斜线指令必须放在文件的最顶端。
-  例如，当我们的声明文件过于庞大，一般都会采用三斜线指令，将我们的声明文件拆分成若干个，然后由一个入口文件引入。
-
-  ///<reference types=“UMDModuleName/globalName” /> 表示对一个库的依赖
-  ///<reference path="./lib/index.d.ts" /> 表示对一个文件的依赖。
-  ```
-
-## 类型声明
-
-### 全局类型声明
-
-* 在TS中，以`.d.ts`​​结尾的文件默认是全局模块，里面声明的类型，或者变量会被默认当成全局性质的，其他后缀结尾的文件默认是局部模块。对于局部模块要在文件里面显式写import或者export，否则会报错
-* 声明变量使用关键字`declare`​​来表示声明其后面的**全局**变量的类型，`declare namespace`​​声明全局命名空间，`interface`​​可以不使用`declare`​​关键字来命名全局类型声明
-* 声明文件放在项目里的**任意路径/文件名**都可以被`ts`​​编译器识别，但实际开发中发现，为了规避一些奇怪的问题， **推荐放在根目录下。**
-
-```js
-//ts会识别 xxx.d.ts 文件为类型声明，使用 declare 修饰的就是全局类型声明，可以直接在文件中使用
-// src/jQuery.d.ts
-declare namespace jQuery {
-    const version: number;
-    class Event {
-        blur(eventType: EventType): void
-    }
-    enum EventType {
-        CustomClick
-    }
-    interface AjaxSettings {
-        method?: 'GET' | 'POST'
-        data?: any;
-    }
-    function ajax(url: string, settings?: AjaxSettings): void;
-}
-```

@@ -1,6 +1,6 @@
 ![image](assets/30-20230130221844-hxib8nk.jpg)
 
-# JavaScript
+‍
 
 # JS基础
 
@@ -57,24 +57,27 @@ export * from './user.js'
 
 * ​`let`​、`const`​的特点
 
-  1. 块级作用域
-  2. 暂时性死区
+  1. 块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
+  2. 暂时性死区：在声明前无法使用该变量
   3. 不可重复声明
 * ​`var`​的特点
 
-  1. 存在变量提升
+  1. 存在变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
+  2. 函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
+  3. 可以重复声明
+  4. 在未声明前使用，其值是`undefined`​
 
 ### 变量提升
 
-预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
+1. 预解析：就代码执行之前的一个阶段，这个阶段完成的工作有很多，其中一个就是函数提升。
 
-函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
+2. 函数提升：函数提升就是在预解析阶段，JS会搜索所有的函数的定义，并将定义提升最前面，体现在代码上就是书写代码时，函数调用可以放在定义之前。
 
-变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
+3. 变量提升：变量提升仅出现在`var`​定义的变量上。在预解析阶段，JS会搜索所有使用`var`​声明的变量，并**将声明**提升到**当前作用域最前面**。`var`​只是声明，并没有赋值
 
-块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
+4. 块级作用域：只在当前函数下声明的变量有效，在代码块和`{ }`​括号之内有效
 
-函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
+5. 函数作用域：其作用域为该语句所在的函数，且存在变量提升(提升到函数的顶层)
 
 ```js
 var的函数作用域，会提升到当前作用域的最顶部
@@ -152,8 +155,8 @@ console.log(arr[5]());
 ## 作用域
 
 1. 全局作用域(全局变量): 函数外部声明的变量
-2. 局部作用域(局部变量): **函数内部**声明的变量
-3. 块级作用域(块级变量): 分支或循环大括号里声明的变量
+2. 局部（函数）作用域(局部变量): **函数内部**声明的变量
+3. 块级作用域(块级变量): **分支或循环大括号里声明的变量**
 
 注意：如果一个变量在声明的时候没有使用关键字。 例如： `num = 10`​,此时这个变量**无论写在哪里都是全局变量**。
 
@@ -221,15 +224,15 @@ fn();
 
 ​![image](assets/image-20220808213223-rlmdo4q.png)​
 
-## 关于this
+## this
 
-* this指向
+* ​`this`​指向
 
   ```js
   构造函数里的this:代表本次实例化出来的那个对象。
   方法里的this:代表调用方法的对象，也就是谁调用就代表谁。
   箭头函数的this:找上一级函数里的this
-  普通函数的this:（函数名()）：指向window
+  普通函数的this:指向window
   ```
 * 修改this指向：通过修改this的指向，达到方法的**借用**
 
@@ -352,41 +355,6 @@ fn();
     console.log("finllay....");//可以正常执行，不管try、catch 中是否 return 或者 再出错，这里面的代码还是会执行
   }
   console.log("hello");//可以正常执行，如果catch中还是有错误或return 这个代码就不会执行了
-  ```
-
-## 深拷贝的实现
-
-* 递归方法
-
-  ```js
-  let target = {};
-  function deepCopy(t, o) {
-    for (let key in o) {
-      // key得到的是 ：前面的键名  如果想得到：后面的，键值 o[key]
-      // key : o[key]
-      if (Array.isArray(o[key])) {
-        // 要先判断数组  Array.isArray()判断数据
-        // 遇到数组，在t中创建一个空数组
-        t[key] = [];
-        deepCopy(t[key], o[key]);
-      } else if (o[key] instanceof Object) {
-        // 判断对象
-        // 遇到对象，在t中创建一个空对象
-        t[key] = {};
-        deepCopy(t[key], o[key]);
-      } else {
-        // 简单数据类型
-        t[key] = o[key];
-      }
-    }
-  }
-  deepCopy(target, obj);
-  ```
-* JSON
-
-  ```js
-  1.JSON.stringify(对象或数组):将对象或数组转换成JSON格式的字符串
-  2.JSON.parse(JSON字符串):将JSON字符串，还原回对象或数组并赋值给新的对象或数值
   ```
 
 ## 闭包
@@ -527,7 +495,7 @@ fn();
 * 实例化
 
   * 由构造函数得到实例对象的过程就是实例化
-  * 使用`new`​ 关键字调用函数的行为被称为实例化
+  * 使用 `new`​ 关键字调用函数的行为被称为实例化
   * 实例化构造函数时没有参数时可以省略`（）`​
 * 实例
 
@@ -547,9 +515,9 @@ fn();
 * 概念：`argument`​：是用于接收函数实参的另一种方式，这种方式的特点可以不定义形参
 * 注意：
 
-  1. argument**只能在函数内部使用;**
-  2. argument是一个伪数组;
-  3. 有数组三要素(元素、下标、长度)，但是不能使用数组的方法，内部修改参数的值arguments存储的值也会修改。
+  1. ​`argument`​**只能在函数内部使用;**
+  2. ​`argument`​是一个伪数组;
+  3. 有数组三要素(元素、下标、长度)，但是不能使用数组的方法，内部修改参数的值`arguments`​存储的值也会修改。
 * 应用：一般用户参数数量不限的函数，如`arr.push()`​ 等函数实参数量不限，底层原理就是使用`arguments`​来接收所有的实参
 
   ```js
@@ -561,32 +529,6 @@ fn();
   }
   fn()
   fn(1, 2, 3)
-
-  ```
-
-## 定时器
-
-* setTimeout：一次性定时器当指定的毫秒数到达时，才执行指定的函数
-
-  ```js
-  setTimeout(()=>{},time)
-  //设置一次性定时器，返回定时器标识
-  let timer = setTimeout(function(){
-    console.log('hello');
-  },3000);
-  //清除一次性定时器
-  clearTimeout(timer);
-  ```
-* setInterval：重复定时器，每间隔指定的毫秒数，就执行一次指定的 函数
-
-  ```js
-  setInterval(()=>{},tiem)
-  //设置重复定时器，返回定时器标识
-  let timer = setInterval(function(){
-    console.log('hello');
-  },2000);
-  //清除重复定时器
-  clearInterval(timer);
 
   ```
 
@@ -617,10 +559,35 @@ let min = Math.min(...arr)
 console.log(min);
 ```
 
+## 定时器
+
+* ​`setTimeout(callback):timer`​：一次性定时器当指定的毫秒数到达时，才执行指定的函数
+
+  ```js
+  setTimeout(()=>{},time)
+  //设置一次性定时器，返回定时器标识
+  let timer = setTimeout(function(){
+    console.log('hello');
+  },3000);
+  //清除一次性定时器
+  clearTimeout(timer);
+  ```
+* ​`setInterval(callback):timer`​：重复定时器，每间隔指定的毫秒数，就执行一次指定的函数
+
+  ```js
+  setInterval(()=>{},tiem)
+  //设置重复定时器，返回定时器标识
+  let timer = setInterval(function(){
+    console.log('hello');
+  },2000);
+  //清除重复定时器
+  clearInterval(timer);
+  ```
+
 ## 可选链操作符
 
 * [概念](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Optional_chaining)：允许读取位于连接对象链深处的属性的值，而不必明确验证链中的每个引用是否有效。
-* 使用：利用点语法，会先判断问号前面是否存在，存在就可以点，不存在就nudefine
+* 使用：利用点语法，会先判断问号前面是否存在，存在就可以点，不存在就`nudefined`​
 
   ```js
 
@@ -642,7 +609,7 @@ console.log(min);
 
 ## 空值合并操作符
 
-概念：[传送门](https://blog.csdn.net/weixin_43858446/article/details/117992266)，**当左侧值为 **​***null***​ ** 或 **​***undefined***​ ** 时，返回 ?? 符号右边的值**
+空值合并操作符：**当左侧值为** ***null*** **或** ***undefined*** **时，返回 ?? 符号右边的值**
 
 ```js
 a = 0
@@ -656,11 +623,9 @@ a ?? (b=3)
 b//b:3
 ```
 
-‍
-
 ## 检测数据类型
 
-* typeof：一元运算符，它返回一个字符串，说明运算数的类型
+* ​`typeof`​：一元运算符，它返回一个字符串，说明运算数的类型
 
   ```js
   typeof xxx 或 typeof(xxx)
@@ -682,7 +647,7 @@ b//b:3
   typeof只能准确判断原始数据类型和函数（函数其实是对象，并不属于另一种数据类型，但也能够使用 typeof 进行区分），无法精确判断出引用数据类型（统统返回 object）。
   有一点需要注意，调用typeof null返回的是object，这是因为特殊值null被认为是一个对空对象的引用（也叫空对象指针）
   ```
-* instanceof：作用于判断构造函数与实例对象的关系，依据是构造函数对应的原型对象是否在以实例为起点的原型链上。
+* ​`instanceof`​：作用于判断构造函数与实例对象的关系，依据是构造函数对应的原型对象是否在以实例为起点的原型链上。
 
   ```js
   //对象 instanceof 函数 ,返回值是boolean
@@ -717,7 +682,7 @@ b//b:3
 
 ## 数据类型转换
 
-* 概念：JavaScript是弱数据类型，JavaScript也不知道变量到底属于那种数据类型，只有赋值了才清楚
+* 概念：`JavaScript`​是弱数据类型，`JavaScript`​也不知道变量到底属于那种数据类型，只有赋值了才清楚
 * 转number类型
 
   ```js
@@ -903,7 +868,10 @@ b//b:3
 
 ## 创建对象方法
 
-* ((20220807181438-jnka2os '构造函数'))法创建对象
+* 构造函数法：配合 `new`​ 关键字使用  
+
+  1. 构造函数首字母一般大写, 为了提醒调用者不要忘记 `new `​关键字
+  2. 如果在构造函数内部手动`return`​：简单数据类型， 无效，还是返回创建的对象；引用类型，有效，会覆盖new创建的对象
 
   ```js
   /* 
@@ -914,37 +882,19 @@ b//b:3
           (4)返回这个对象  return this
   this: 代表当前对象的一个引用, 会随着调用者变化而改变  
   */
-
-  // 继续优化代码, 去掉函数内部的实例对象声明和返回值, 在调用函数时使用new替代
   function Person(name, sex) {
-    // 1. 当我们把函数内部的声明变量这一步取消时, 函数内部的obj已经不存在了, 会报错 : obj is not defined
-    // let obj = new Object()
-    // 2. 所以需要使用this来代表当前对象的引用 :  this = obj
     this.name = name
     this.sex = sex
     this.sayHi = function () {
       alert(`大家好! 我是${name}`)
       alert("大家好! 我是" + this.name)
     }
-    // 3. 调用构造函数使用new创建对象时, 构造函数内部可以省略返回这一步骤
-    return obj
   }
-
-  // 将内部的new Object()的过程放到调用函数这里, 简化内部代码
   let obj1 = new Person("张三", "man")
   console.log(obj1)
   obj1.sayHi()
-
-  let obj2 = new Person("李四", "woman")
-  console.log(obj2)
-  obj2.sayHi()
-  构造函数new在使用时需要注意的地方
-  1 构造函数首字母一般大写, 为了提醒调用者不要忘记new关键字
-  2 如果在构造函数内部 手动return
-  return 值类型: 无效,还是返回new创建的对象
-  return 引用类型: 有效，会覆盖new创建的对象
   ```
-* 内置对象法创建对象
+* 内置对象法
 
   ```js
   // 内置对象法声明对象 new Object()
@@ -976,8 +926,8 @@ b//b:3
 * 工厂函数法创建对象
 
   ```js
-  //工厂函数 :  用于创建对象的函数
-  //工厂函数: 就是把字面量创建对象的过程封装成函数, 可以像工厂的流水线一样批量创建对象
+  //工厂函数:用于创建对象的函数
+  //工厂函数:就是把字面量创建对象的过程封装成函数, 可以像工厂的流水线一样批量创建对象
   function createPerson(name, age, sex) {
       //1.创建对象
       let p = {}
@@ -991,15 +941,6 @@ b//b:3
   let p1 = createPerson("张三", 20, "男")
   let p2 = createPerson("李四", 22, "女")
   console.log(p1, p2)
-  ```
-
-* 对象查询
-
-  ```js
-  //对象名.属性名
-  //对象名['属性名']
-  //对象名[变量名]
-  //优先使用点语法, 在需要解析变量的时候使用[]语法
   ```
 
 ‍
@@ -1022,112 +963,34 @@ b//b:3
 构造函数、实例对象没有直接链接关系，要通过原型对象来中转
 ```
 
-### 原型对象作用
-
-原型对象上的成员会被所有的实例对象所共享。就是当一个**实例对象访问某个成员时，如果不存在会自动到原型对象上找**。
-
-使用原则：所有实例共享(一份)保存到原型对象上，如果每个实例都要独有的(多份)定义在构造函数内
-
-```js
-function Person(){}
-// 在原型对象上添加成员
-Person.prototype.age = 22
-Person.prototype.say = function(){
- console.log('hello');
-}
-
-// 得到实例对象
-let obj = new Person();
-
-console.log(obj);
-console.log(obj.__proto__);
-
-// 实例对象访问某个成员不存在是会到原型对象上找
-console.log(obj.age);
-obj.say();
-
-// 验证：同一个构造函数实例化的对象，共享同一个成员。
-let obj2 = new Person();
-console.log(obj.say === obj2.say)
-```
-
-### 原型对象的this
-
-原型对象方法里的`this`​，哪个实例对象调用这个方法，this就代表谁。
-
-```js
-function Person(){
-  // 构造函数内的this，代表的是实例化出来的对象   this.xx = xxx
-  this.age = 20;
-  this.say = function(){
-    // 方法内的this，代表谁调用就代表谁
-    console.log(this);
-  }
-}
-Person.prototype.fn = function(){
-  // 原型对象方法里的this，谁调用就代表谁
-  console.log(this);
-}
-```
-
 ### 原型继承
 
-* 原型替换：原型对象也是对象，可以把原型对象上的东西替换掉
+原型继承：也称之为替换原型继承
 
-  ```js
-  替换之前实例化的对象，访问之前的原型对象上的方法。
-  替换之后实例化的对象，访问之后的原型对象上的方法。
-  function Fn(){}
-  // 向默认的原型对象上添加成员
-  Fn.prototype.run = function(){
-   console.log('我跑的很快...');
-  }
-  let oA = new Fn();
-  // oA.run();
-  // 创建一个对象，把fn默认的原型对象替换掉
-  let obj = {}
-  // ---------------------------
-  Fn.prototype = obj
-  let oB = new Fn();
-  oA.run();//我跑很快
-  oB.run();//undefined   替换了，没有该方法了
-  ```
-* 原型继承：也称之为替换原型继承
+主要思想是使用父的实例对象来替换子的原型对象。实现了一个对象可以使用另一个对象的属性和方法。
 
-  ```js
-  主要思想是使用父的实例对象来替换子的原型对象。实现了一个对象可以使用另一个对象的属性和方法。
-  用该构造函数创建的实体来替换成所需要函数的原型对象。
-  就是说，利用函数实例化的对象，给需要的函数统一赋予所需要的方法和属性
-  // Human为父
-  function Human(){
-   this.eyes = 2;
-   this.legs = 2;
-   this.say = function(){
+用该构造函数创建的实体来替换成所需要函数的原型对象。
 
-   }
-  }
+就是说，利用函数实例化的对象，给需要的函数统一赋予所需要的方法和属性
 
-  // Woman与Man为子
-  function Woman(){}
-  function Man(){}
-
-  // ------使用父的实例替换子的原型对象------
-  // 1. 得到父的实例
-  let ha = new Human()
-  let hb = new Human()
-
-  // 2. 使用父的实例替换子的元素
-  Woman.prototype = ha
-  let wa = new Woman();
-  console.log(wa.eyes);//2
-
-  // 2. 使用父的实例替换子的元素
-  Man.prototype = hb;
-  let ma = new Man()
-  console.log(ma.legs);//2
-
-  ma.smoke();//报错， smoke没有定义该方法
-  ```
+```js
+替换之前实例化的对象，访问之前的原型对象上的方法。
+替换之后实例化的对象，访问之后的原型对象上的方法。
+function Fn(){}
+// 向默认的原型对象上添加成员
+Fn.prototype.run = function(){
+ console.log('我跑的很快...');
+}
+let oA = new Fn();
+// oA.run();
+// 创建一个对象，把fn默认的原型对象替换掉
+let obj = {}
+// ---------------------------
+Fn.prototype = obj
+let oB = new Fn();
+oA.run();//我跑很快
+oB.run();//undefined   替换了，没有该方法了
+```
 
 ### 原型链
 
@@ -1159,7 +1022,6 @@ Person.prototype.fn = function(){
   console.log(p.__proto__.__proto__.__proto__);
 
   //二级原型再向上找则是null
-
   ```
 
 # 内建类
@@ -1169,6 +1031,8 @@ Person.prototype.fn = function(){
 [传送门](https://typescript.bootcss.com/classes.html)
 
 在面向对象的编程中，*`class`*​ 是用于创建对象的可扩展的程序代码模版，它为对象提供了状态（成员变量）的初始值和行为（成员函数或方法）的实现。
+
+使用`class`​关键字创建的对象，在其中定义的方法会挂载在原型上
 
 * 相关概念
 
@@ -1181,7 +1045,6 @@ Person.prototype.fn = function(){
   get、set :存取器，控制对象成员的访问
   static :静态属性
   abstract :抽象类
-
   constructor :构造函数
   super :调用父类的constructor再继承
   ```
@@ -1220,9 +1083,9 @@ Person.prototype.fn = function(){
 ​`class User {...}`​ 构造实际上做了如下的事儿：
 
 1. 创建一个名为 `User`​ 的函数，该函数成为类声明的结果。该函数的代码来自于 `constructor`​ 方法（如果我们不编写这种方法，那么它就被假定为空）。
-2. 存储类中的方法，例如 `User.prototype`​ 中的 `sayHi`​。
+2. **存储类中的方法，例如** `**User.prototype**` **中的** `**sayHi**`​ **。**
 
-当 `new User`​ 对象被创建后，当我们调用其方法时，**它会从原型中获取对应的方法**，正如我们在 [F.prototype](https://zh.javascript.info/function-prototype) 一章中所讲的那样。因此，对象 `new User`​ 可以访问类中的方法。
+当 `new User`​​ 对象被创建后，当我们调用其方法时，**它会从原型中获取对应的方法**
 
 我们可以将 `class User`​ 声明的结果解释为：
 
@@ -1247,13 +1110,12 @@ alert(User.prototype.sayHi); // sayHi 方法的代码
 alert(Object.getOwnPropertyNames(User.prototype)); // constructor, sayHi
 ```
 
-### 与函数语法糖
+### 函数语法糖
 
 常说 `class`​ 是一个语法糖（旨在使内容更易阅读，但不引入任何新内容的语法），因为我们实际上可以在不使用 `class`​ 的情况下声明相同的内容：
 
 ```js
 // 用纯函数重写 class User
-
 // 1. 创建构造器函数
 function User(name) {
   this.name = name;
@@ -1351,7 +1213,7 @@ new User().sayHi(); // Hello
 
 ### Getter/Setter
 
-技术上来说，`MyClass`​ 是一个函数（我们提供作为 `constructor`​ 的那个），而 methods、getters 和 setters 都被写入了 `MyClass.prototype`​。
+技术上来说，`MyClass`​​ 是一个函数（我们提供作为 `constructor`​​ 的那个），**而 methods、getters 和 setters 都被写入了** `**MyClass.prototype**`​ **** 。
 
 就像对象字面量，类可能包括 getters/setters，计算属性（computed properties）等。
 
@@ -1434,7 +1296,7 @@ let user = new User();
 alert(user.name); // John
 ```
 
-正如 [函数绑定](https://zh.javascript.info/bind) 一章中所讲的，JavaScript 中的函数具有动态的 `this`​。它取决于调用上下文。
+JavaScript 中的函数具有动态的 `this`​​。它取决于调用上下文。
 
 因此，如果一个对象方法被传递到某处，或者在另一个上下文中被调用，则 `this`​ 将不再是对其对象的引用。
 
@@ -1476,9 +1338,16 @@ setTimeout(button.click, 1000); // undefined
     setTimeout(button.click, 1000); // hello
     ```
 
-    **类字段** `**click = () => {...}**` ​ **是基于每一个对象被创建的，在这里对于每一个** `**Button**`​ **对象都有一个独立的方法，在内部都有一个指向此对象的** `**this**`​ **。我们可以把** `**button.click**`​ **传递到任何地方，而且** `**this**`​ **的值总是正确的。**
+**类字段** `**click = () => {...}**` ​ **是基于每一个对象被创建的，在这里对于每一个** `**Button**`​ **对象都有一个独立的方法，在内部都有一个指向此对象的** `**this**`​ **。我们可以把** `**button.click**`​ **传递到任何地方，而且** `**this**`​ **的值总是正确的。**
 
-### 继承extends
+### extends
+
+**对于父类方法的调用而言，使用this时候，优先使用父类本身的类字段。**
+
+类字段的初始化：
+
+* **对于基类（还未继承任何东西的那种），在构造函数调用前初始化。**
+* **对于派生类，在** `**super()**` ​ **后立刻初始化。**
 
 类继承是一个类扩展另一个类的一种方式。我们可以在现有功能之上创建新功能。
 
@@ -1610,13 +1479,11 @@ class Animal {
 }
 
 class Rabbit extends Animal {
-
   constructor(name, earLength) {
     this.speed = 0;
     this.name = name;
     this.earLength = earLength;
   }
-
   // ...
 }
 
@@ -1639,7 +1506,7 @@ let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
 该标签会影响它的 `new`​ 行为：
 
 * 当通过 `new`​ 执行一个常规函数时，它将创建一个空对象，并将这个空对象赋值给 `this`​。
-* 但是当继承的 constructor 执行时，它不会执行此操作。它期望父类的 constructor 来完成这项工作。
+* **但是当继承的 constructor 执行时，它不会执行此操作。它期望父类的 constructor 来完成这项工作。**
 
 因此，派生的 constructor 必须调用 `super`​ 才能执行其父类（base）的 constructor，否则 `this`​ 指向的那个对象将不会被创建。并且我们会收到一个报错。
 
@@ -1654,7 +1521,6 @@ let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
 ```js
 class Animal {
   name = 'animal';
-
   constructor() {
     alert(this.name); // (*)
   }
@@ -1687,7 +1553,6 @@ class Animal {
   showName() {  // 而不是 this.name = 'animal'
     alert('animal');
   }
-
   constructor() {
     this.showName(); // 而不是 alert(this.name);
   }
@@ -2016,9 +1881,7 @@ coffeeMachine.#waterLimit = 1000; // Error
 
 ```js
 class CoffeeMachine {
-
   #waterAmount = 0;
-
   get waterAmount() {
     return this.#waterAmount;
   }
@@ -2053,9 +1916,7 @@ class MegaCoffeeMachine extends CoffeeMachine {
 
 > **私有字段不能通过 this[name] 访问**
 >
-> 私有字段很特别。
->
-> 正如我们所知道的，通常我们可以使用 `this[name]`​ 访问字段：
+> 私有字段很特别。正如我们所知道的，通常我们可以使用 `this[name]`​​ 访问字段：
 >
 > ```js
 > class User {
@@ -2145,7 +2006,7 @@ alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
 
 如我们所知道的，原生的类互相扩展。例如，`Array`​ 扩展自 `Object`​。
 
-通常，当一个类扩展另一个类时，静态方法和非静态方法都会被继承。这已经在 [静态属性和静态方法](https://zh.javascript.info/static-properties-methods#statics-and-inheritance) 中详细地解释过了。
+通常，当一个类扩展另一个类时，静态方法和非静态方法都会被继承。
 
 但内建类却是一个例外。它们相互间不继承静态方法。
 
@@ -2158,6 +2019,8 @@ alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
 正如你所看到的，`Date`​ 和 `Object`​ 之间没有连结。它们是独立的，只有 `Date.prototype`​ 继承自 `Object.prototype`​，仅此而已。
 
 与我们所了解的通过 `extends`​ 获得的继承相比，这是内建对象之间继承的一个重要区别。
+
+**即，**​**`Date`**​**和**​**`Object`**​**是继承关系，但是只是在原型对象上有继承关系，本身的构造上没有继承关系，在类的继承中，有原型对象的继承和构造函数上的继承。**
 
 **静态方法归属于类构造器对象，实例方法归属于原型对象上**
 
@@ -2273,13 +2136,12 @@ Rabbit.prototype = {};
 alert( rabbit instanceof Rabbit ); // false
 ```
 
-### 对象的打印
+### 对象打印
 
 大家都知道，一个普通对象被转化为字符串时为 `[object Object]`​：
 
 ```javascript
 let obj = {};
-
 alert(obj); // [object Object]
 alert(obj.toString()); // 同上
 ```
@@ -2451,18 +2313,877 @@ new User("Dude").sayHi(); // Hello Dude!
 
 ## Proxy
 
+一个 `Proxy`​ 对象包装另一个对象并拦截诸如读取/写入属性和其他操作，可以选择自行处理它们，或者透明地允许该对象处理它们。
+
+```javascript
+let proxy = new Proxy(target, handler)
+```
+
+* ​`target`​ —— 是要包装的对象，可以是任何东西，包括函数。
+* ​`handler`​ —— 代理配置：带有“捕捉器”（“traps”，即拦截操作的方法）的对象。比如 `get`​ 捕捉器用于读取 `target`​ 的属性，`set`​ 捕捉器用于写入 `target`​ 的属性，等等。
+
+对 `proxy`​ 进行操作，如果在 `handler`​ 中存在相应的捕捉器，则它将运行，并且 Proxy 有机会对其进行处理，否则将直接对 target 进行处理。
+
+首先，让我们创建一个没有任何捕捉器的代理（Proxy）：
+
+```js
+let target = {};
+let proxy = new Proxy(target, {}); // 空的 handler 对象
+
+proxy.test = 5; // 写入 proxy 对象 (1)
+alert(target.test); // 5，test 属性出现在了 target 中！
+
+alert(proxy.test); // 5，我们也可以从 proxy 对象读取它 (2)
+
+for(let key in proxy) alert(key); // test，迭代也正常工作 (3)
+```
+
+由于没有捕捉器，所有对 `proxy`​ 的操作都直接转发给了 `target`​。
+
+1. 写入操作 `proxy.test=`​ 会将值写入 `target`​。
+2. 读取操作 `proxy.test`​ 会从 `target`​ 返回对应的值。
+3. 迭代 `proxy`​ 会从 `target`​ 返回对应的值。
+
+我们可以看到，没有任何捕捉器，`proxy`​ 是一个 `target`​ 的透明包装器（wrapper）。
+
+​![image](assets/image-20240309194529-vlzhuuo.png)​
+
+​`Proxy`​ 是一种特殊的“奇异对象（exotic object）”。它没有自己的属性。如果 `handler`​ 为空，则透明地将操作转发给 `target`​。
+
+---
+
+### 捕捉器
+
+要激活更多功能，让我们添加捕捉器。
+
+我们可以用它们拦截什么？
+
+对于对象的大多数操作，JavaScript 规范中有一个所谓的“内部方法”，它描述了最底层的工作方式。例如 `[[Get]]`​，用于读取属性的内部方法，`[[Set]]`​，用于写入属性的内部方法，等等。**这些方法仅在规范中使用，我们不能直接通过方法名调用它们。**
+
+Proxy 捕捉器会拦截这些方法的调用。它们在 [proxy 规范](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) 和下表中被列出。
+
+对于每个内部方法，此表中都有一个捕捉器：可用于添加到 `new Proxy`​ 的 `handler`​ 参数中以拦截操作的方法名称：
+
+|内部方法|Handler 方法|何时触发|
+| ----------| --------------| -------------|
+|​`[[Get]]`​|​`get`​|读取属性|
+|​`[[Set]]`​|​`set`​|写入属性|
+|​`[[HasProperty]]`​|​`has`​|​`in`​ 操作符|
+|​`[[Delete]]`​|​`deleteProperty`​|​`delete`​ 操作符|
+|​`[[Call]]`​|​`apply`​|函数调用|
+|​`[[Construct]]`​|​`construct`​|​`new`​ 操作符|
+|​`[[GetPrototypeOf]]`​|​`getPrototypeOf`​|[Object.getPrototypeOf](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf)|
+|​`[[SetPrototypeOf]]`​|​`setPrototypeOf`​|[Object.setPrototypeOf](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf)|
+|​`[[IsExtensible]]`​|​`isExtensible`​|[Object.isExtensible](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/isExtensible)|
+|​`[[PreventExtensions]]`​|​`preventExtensions`​|[Object.preventExtensions](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions)|
+|​`[[DefineOwnProperty]]`​|​`defineProperty`​|[Object.defineProperty](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty), [Object.defineProperties](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)|
+|​`[[GetOwnProperty]]`​|​`getOwnPropertyDescriptor`​|[Object.getOwnPropertyDescriptor](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor), `for..in`​, `Object.keys/values/entries`​|
+|​`[[OwnPropertyKeys]]`​|​`ownKeys`​|[Object.getOwnPropertyNames](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames), [Object.getOwnPropertySymbols](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols), `for..in`​, `Object.keys/values/entries`​|
+
+---
+
+> **不变量（Invariant）**
+>
+> JavaScript 强制执行某些不变量 —— 内部方法和捕捉器必须满足的条件。
+>
+> 其中大多数用于返回值：
+>
+> * ​`[[Set]]`​ 如果值已成功写入，则必须返回 `true`​，否则返回 `false`​。
+> * ​`[[Delete]]`​ 如果已成功删除该值，则必须返回 `true`​，否则返回 `false`​。
+> * ……依此类推，我们将在下面的示例中看到更多内容。
+>
+> 还有其他一些不变量，例如：
+>
+> * 应用于代理（proxy）对象的 `[[GetPrototypeOf]]`​，必须返回与应用于被代理对象的 `[[GetPrototypeOf]]`​ 相同的值。换句话说，读取代理对象的原型必须始终返回被代理对象的原型。
+>
+> 捕捉器可以拦截这些操作，但是必须遵循上面这些规则。
+>
+> 不变量确保语言功能的正确和一致的行为。完整的不变量列表在 [规范](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) 中。如果你不做奇怪的事情，你可能就不会违反它们。
+>
+> 让我们来看看它们是如何在实际示例中工作的。
+
+### get
+
+最常见的捕捉器是用于读取/写入的属性。
+
+要拦截读取操作，`handler`​ 应该有 `get(target, property, receiver)`​ 方法。
+
+读取属性时触发该方法，参数如下：
+
+* ​`target`​ —— 是目标对象，该对象被作为第一个参数传递给 `new Proxy`​，
+* ​`property`​ —— 目标属性名，
+* ​`receiver`​ —— 如果目标属性是一个 getter 访问器属性，则 `receiver`​ 就是本次读取属性所在的 `this`​ 对象。通常，这就是 `proxy`​ 对象本身（或者，如果我们从 proxy 继承，则是从该 proxy 继承的对象）。
+
+让我们用 `get`​ 来实现一个对象的默认值。
+
+我们将创建一个对不存在的数组项返回 `0`​ 的数组。
+
+通常，当人们尝试获取不存在的数组项时，他们会得到 `undefined`​，但是我们在这将常规数组包装到代理（proxy）中，以捕获读取操作，并在没有要读取的属性的时返回 `0`​：
+
+```javascript
+let numbers = [0, 1, 2];
+
+numbers = new Proxy(numbers, {
+  get(target, prop) {
+    if (prop in target) {
+      return target[prop];
+    } else {
+      return 0; // 默认值
+    }
+  }
+});
+
+alert( numbers[1] ); // 1
+alert( numbers[123] ); // 0（没有这个数组项）
+```
+
+### set
+
+假设我们想要一个专门用于数字的数组。如果添加了其他类型的值，则应该抛出一个错误。
+
+当写入属性时 `set`​ 捕捉器被触发。
+
+​`set(target, property, value, receiver)`​：
+
+* ​`target`​ —— 是目标对象，该对象被作为第一个参数传递给 `new Proxy`​，
+* ​`property`​ —— 目标属性名称，
+* ​`value`​ —— 目标属性的值，
+* ​`receiver`​ —— 与 `get`​ 捕捉器类似，仅与 setter 访问器属性相关。
+
+如果写入操作（setting）成功，`set`​ 捕捉器应该返回 `true`​，否则返回 `false`​（触发 `TypeError`​）。
+
+让我们用它来验证新值：
+
+```javascript
+let numbers = [];
+
+numbers = new Proxy(numbers, { // (*)
+  set(target, prop, val) { // 拦截写入属性操作
+    if (typeof val == 'number') {
+      target[prop] = val;
+      return true;
+    } else {
+      return false;
+    }
+  }
+});
+
+numbers.push(1); // 添加成功
+numbers.push(2); // 添加成功
+alert("Length is: " + numbers.length); // 2
+
+numbers.push("test"); // TypeError（proxy 的 'set' 返回 false）
+
+alert("This line is never reached (error in the line above)");
+```
+
+请注意：数组的内建方法依然有效！值被使用 `push`​ 方法添加到数组。当值被添加到数组后，数组的 `length`​ 属性会自动增加。我们的代理对象 proxy 不会破坏任何东西。
+
+我们不必重写诸如 `push`​ 和 `unshift`​ 等添加元素的数组方法，就可以在其中添加检查，因为在内部它们使用代理所拦截的 `[[Set]]`​ 操作。
+
+因此，代码简洁明了。
+
+> **别忘了返回** `true`​
+>
+> 如上所述，要保持不变量。
+>
+> 对于 `set`​ 操作，它必须在成功写入时返回 `true`​。
+>
+> 如果我们忘记这样做，或返回任何假（falsy）值，则该操作将触发 `TypeError`​。
+
+### ownKeys、getOwnPropertyDescriptor
+
+​`Object.keys`​，`for..in`​ 循环和大多数其他遍历对象属性的方法都使用内部方法 `[[OwnPropertyKeys]]`​（由 `ownKeys`​ 捕捉器拦截) 来获取属性列表。
+
+这些方法在细节上有所不 同：
+
+* ​`Object.getOwnPropertyNames(obj)`​ 返回非 symbol 键。
+* ​`Object.getOwnPropertySymbols(obj)`​ 返回 symbol 键。
+* ​`Object.keys/values()`​ 返回带有 `enumerable`​ 标志的非 symbol 键/值。
+* ​`for..in`​ 循环遍历所有带有 `enumerable`​ 标志的非 symbol 键，以及原型对象的键。
+
+……但是所有这些都从该列表开始。
+
+在下面这个示例中，我们使用 `ownKeys`​ 捕捉器拦截 `for..in`​ 对 `user`​ 的遍历，并使用 `Object.keys`​ 和 `Object.values`​ 来跳过以下划线 `_`​ 开头的属性：
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+  _password: "***"
+};
+
+user = new Proxy(user, {
+  ownKeys(target) {
+    return Object.keys(target).filter(key => !key.startsWith('_'));
+  }
+});
+
+// "ownKeys" 过滤掉了 _password
+for(let key in user) alert(key); // name，然后是 age
+
+// 对这些方法的效果相同：
+alert( Object.keys(user) ); // name,age
+alert( Object.values(user) ); // John,30
+```
+
+到目前为止，它仍然有效。
+
+尽管如此，但如果我们返回对象中不存在的键，`Object.keys`​ 并不会列出这些键：
+
+```javascript
+let user = { };
+
+user = new Proxy(user, {
+  ownKeys(target) {
+    return ['a', 'b', 'c'];
+  }
+});
+
+alert( Object.keys(user) ); // <empty>
+```
+
+为什么？原因很简单：`Object.keys`​ 仅返回带有 `enumerable`​ 标志的属性。为了检查它，该方法会对每个属性调用内部方法 `[[GetOwnProperty]]`​ 来获取 [它的描述符（descriptor）](https://zh.javascript.info/property-descriptors)。在这里，由于没有属性，其描述符为空，没有 `enumerable`​ 标志，因此它被略过。
+
+为了让 `Object.keys`​ 返回一个属性，我们需要它要么存在于带有 `enumerable`​ 标志的对象，要么我们可以拦截对 `[[GetOwnProperty]]`​ 的调用（捕捉器 `getOwnPropertyDescriptor`​ 可以做到这一点)，并返回带有 `enumerable: true`​ 的描述符。
+
+这是关于此的一个例子：
+
+```javascript
+let user = { };
+
+user = new Proxy(user, {
+  ownKeys(target) { // 一旦要获取属性列表就会被调用
+    return ['a', 'b', 'c'];
+  },
+
+  getOwnPropertyDescriptor(target, prop) { // 被每个属性调用
+    return {
+      enumerable: true,
+      configurable: true
+      /* ...其他标志，可能是 "value:..." */
+    };
+  }
+
+});
+
+alert( Object.keys(user) ); // a, b, c
+```
+
+让我们再次注意：如果该属性在对象中不存在，那么我们只需要拦截 `[[GetOwnProperty]]`​。  
+
+### deleteProperty
+
+有一个普遍的约定，即以下划线 `_`​ 开头的属性和方法是内部的。不应从对象外部访问它们。
+
+从技术上讲，我们也是能访问到这样的属性的：
+
+```javascript
+let user = {
+  name: "John",
+  _password: "secret"
+};
+
+alert(user._password); // secret
+```
+
+让我们使用代理来防止对以 `_`​ 开头的属性的任何访问。
+
+我们将需要以下捕捉器：
+
+* ​`get`​ 读取此类属性时抛出错误，
+* ​`set`​ 写入属性时抛出错误，
+* ​`deleteProperty`​ 删除属性时抛出错误，
+* ​`ownKeys`​ 在使用 `for..in`​ 和像 `Object.keys`​ 这样的的方法时排除以 `_`​ 开头的属性。
+
+代码如下：
+
+```javascript
+let user = {
+  name: "John",
+  _password: "***"
+};
+
+user = new Proxy(user, {
+  get(target, prop) {
+    if (prop.startsWith('_')) {
+      throw new Error("Access denied");
+    }
+    let value = target[prop];
+    return (typeof value === 'function') ? value.bind(target) : value; // (*)
+  },
+  set(target, prop, val) { // 拦截属性写入
+    if (prop.startsWith('_')) {
+      throw new Error("Access denied");
+    } else {
+      target[prop] = val;
+      return true;
+    }
+  },
+  deleteProperty(target, prop) { // 拦截属性删除
+    if (prop.startsWith('_')) {
+      throw new Error("Access denied");
+    } else {
+      delete target[prop];
+      return true;
+    }
+  },
+  ownKeys(target) { // 拦截读取属性列表
+    return Object.keys(target).filter(key => !key.startsWith('_'));
+  }
+});
+
+// "get" 不允许读取 _password
+try {
+  alert(user._password); // Error: Access denied
+} catch(e) { alert(e.message); }
+
+// "set" 不允许写入 _password
+try {
+  user._password = "test"; // Error: Access denied
+} catch(e) { alert(e.message); }
+
+// "deleteProperty" 不允许删除 _password
+try {
+  delete user._password; // Error: Access denied
+} catch(e) { alert(e.message); }
+
+// "ownKeys" 将 _password 过滤出去
+for(let key in user) alert(key); // name
+```
+
+请注意在 `(*)`​ 行中 `get`​ 捕捉器的重要细节：
+
+```javascript
+get(target, prop) {
+  // ...
+  let value = target[prop];
+  return (typeof value === 'function') ? value.bind(target) : value; // (*)
+}
+```
+
+为什么我们需要一个函数去调用 `value.bind(target)`​？
+
+原因是对象方法（例如 `user.checkPassword()`​）必须能够访问 `_password`​：
+
+```javascript
+user = {
+  // ...
+  checkPassword(value) {
+    //对象方法必须能读取 _password
+    return value === this._password;
+  }
+}
+```
+
+对 `user.checkPassword()`​ 的调用会将被代理的对象 `user`​ 作为 `this`​（点符号之前的对象会成为 `this`​），因此，当它尝试访问 `this._password`​ 时，`get`​ 捕捉器将激活（在任何属性读取时，它都会被触发）并抛出错误。
+
+因此，我们在 `(*)`​ 行中将对象方法的上下文绑定到原始对象 `target`​。然后，它们将来的调用将使用 `target`​ 作为 `this`​，不会触发任何捕捉器。
+
+该解决方案通常可行，但并不理想，因为一个方法可能会将未被代理的对象传递到其他地方，然后我们就会陷入困境：原始对象在哪里，被代理的对象在哪里？
+
+此外，一个对象可能会被代理多次（多个代理可能会对该对象添加不同的“调整”），并且如果我们将未包装的对象传递给方法，则可能会产生意想不到的后果。
+
+因此，在任何地方都不应使用这种代理。
+
+> **类的私有属性**
+>
+> 现代 JavaScript 引擎原生支持 class 中的私有属性，这些私有属性以 `#`​ 为前缀。它们在 [私有的和受保护的属性和方法](https://zh.javascript.info/private-protected-properties-methods) 一章中有详细描述。无需代理（proxy）。
+>
+> 但是，此类属性有其自身的问题。特别是，它们是不可继承的。
+
+‍
+
+### has
+
+我们有一个 range 对象：
+
+```javascript
+let range = {
+  start: 1,
+  end: 10
+};
+```
+
+我们想使用 `in`​ 操作符来检查一个数字是否在 `range`​ 范围内。
+
+​`has`​ 捕捉器会拦截 `in`​ 调用。
+
+​`has(target, property)`​
+
+* ​`target`​ —— 是目标对象，被作为第一个参数传递给 `new Proxy`​，
+* ​`property`​ —— 属性名称。
+
+示例如下
+
+```javascript
+let range = {
+  start: 1,
+  end: 10
+};
+
+range = new Proxy(range, {
+  has(target, prop) {
+    return prop >= target.start && prop <= target.end;
+  }
+});
+
+alert(5 in range); // true
+alert(50 in range); // false
+```
+
+### apply
+
+我们也可以将代理（proxy）包装在函数周围。
+
+​`apply(target, thisArg, args)`​ 捕捉器能使代理以函数的方式被调用：
+
+* ​`target`​ 是目标对象（在 JavaScript 中，函数就是一个对象），
+* ​`thisArg`​ 是 `this`​ 的值。
+* ​`args`​ 是参数列表。
+
+例如，让我们回忆一下我们在 [装饰器模式和转发，call/apply](https://zh.javascript.info/call-apply-decorators) 一章中所讲的 `delay(f, ms)`​ 装饰器。
+
+在该章中，我们没有用 proxy 来实现它。调用 `delay(f, ms)`​ 会返回一个函数，该函数会在 `ms`​ 毫秒后把所有调用转发给 `f`​。
+
+这是以前的基于函数的实现：
+
+```javascript
+function delay(f, ms) {
+  // 返回一个包装器（wrapper），该包装器将在时间到了的时候将调用转发给函数 f
+  return function() { // (*)
+    setTimeout(() => f.apply(this, arguments), ms);
+  };
+}
+
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+
+// 在进行这个包装后，sayHi 函数会被延迟 3 秒后被调用
+sayHi = delay(sayHi, 3000);
+
+sayHi("John"); // Hello, John! (after 3 seconds)
+```
+
+正如我们所看到的那样，大多数情况下它都是可行的。包装函数 `(*)`​ 在到达延迟的时间后后执行调用。
+
+但是包装函数不会转发属性读取/写入操作或者任何其他操作。进行包装后，就失去了对原始函数属性的访问，例如 `name`​，`length`​ 和其他属性：
+
+```javascript
+function delay(f, ms) {
+  return function() {
+    setTimeout(() => f.apply(this, arguments), ms);
+  };
+}
+
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+
+alert(sayHi.length); // 1（函数的 length 是函数声明中的参数个数）
+
+sayHi = delay(sayHi, 3000);
+
+alert(sayHi.length); // 0（在包装器声明中，参数个数为 0)
+```
+
+​`Proxy`​ 的功能要强大得多，因为它可以将所有东西转发到目标对象。
+
+让我们使用 `Proxy`​ 来替换掉包装函数：
+
+```javascript
+function delay(f, ms) {
+  return new Proxy(f, {
+    apply(target, thisArg, args) {
+      setTimeout(() => target.apply(thisArg, args), ms);
+    }
+  });
+}
+
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+
+sayHi = delay(sayHi, 3000);
+
+alert(sayHi.length); // 1 (*) proxy 将“获取 length”的操作转发给目标对象
+
+sayHi("John"); // Hello, John!（3 秒后）
+```
+
+结果是相同的，但现在不仅仅调用，而且代理上的所有操作都能被转发到原始函数。所以在 `(*)`​ 行包装后的 `sayHi.length`​ 会返回正确的结果。
+
+我们得到了一个“更丰富”的包装器。
+
+还存在其他捕捉器：完整列表在本文的开头。它们的使用模式与上述类似。
+
+### [内部插槽（Internal slot）](https://zh.javascript.info/proxy#nei-jian-dui-xiang-nei-bu-cha-cao-internalslot)
+
+许多内建对象，例如 `Map`​，`Set`​，`Date`​，`Promise`​ 等，都使用了所谓的“内部插槽”。
+
+它们类似于属性，但仅限于内部使用，仅用于规范目的。例如，`Map`​ 将项目（item）存储在 `[[MapData]]`​ 中。内建方法可以直接访问它们，而不通过 `[[Get]]/[[Set]]`​ 内部方法。所以 `Proxy`​ 无法拦截它们。
+
+为什么要在意这些呢？毕竟它们是内部的！
+
+好吧，问题在这儿。在类似这样的内建对象被代理后，代理对象没有这些内部插槽，因此内建方法将会失败。
+
+例如：
+
+```javascript
+let map = new Map();
+let proxy = new Proxy(map, {});
+proxy.set('test', 1); // Error
+```
+
+在内部，一个 `Map`​ 将所有数据存储在其 `[[MapData]]`​ 内部插槽中。代理对象没有这样的插槽。[内建方法 ](https://tc39.es/ecma262/#sec-map.prototype.set)​[`Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set)​ 方法试图访问内部属性 `this.[[MapData]]`​，但由于 `this=proxy`​，在 `proxy`​ 中无法找到它，只能失败。
+
+幸运的是，这有一种解决方法：
+
+```javascript
+let map = new Map();
+
+let proxy = new Proxy(map, {
+  get(target, prop, receiver) {
+    let value = Reflect.get(...arguments);
+    return typeof value == 'function' ? value.bind(target) : value;
+  }
+});
+
+proxy.set('test', 1);
+alert(proxy.get('test')); // 1（工作了！）
+```
+
+现在它正常工作了，因为 `get`​ 捕捉器将函数属性（例如 `map.set`​）绑定到了目标对象（`map`​）本身。
+
+与前面的示例不同，`proxy.set(...)`​ 内部 `this`​ 的值并不是 `proxy`​，而是原始的 `map`​。因此，当`set`​ 捕捉器的内部实现尝试访问 `this.[[MapData]]`​ 内部插槽时，它会成功。
+
+> ​`Array`​ **没有内部插槽**
+>
+> 一个值得注意的例外：内建 `Array`​ 没有使用内部插槽。那是出于历史原因，因为它出现于很久以前。
+>
+> 所以，代理数组时没有这种问题。
+
+### [私有字段](https://zh.javascript.info/proxy#si-you-zi-duan)
+
+类的私有字段也会发生类似的情况。
+
+例如，`getName()`​ 方法访问私有的 `#name`​ 属性，并在代理后中断：
+
+```javascript
+class User {
+  #name = "Guest";
+
+  getName() {
+    return this.#name;
+  }
+}
+
+let user = new User();
+
+user = new Proxy(user, {});
+
+alert(user.getName()); // Error
+```
+
+原因是私有字段是通过内部插槽实现的。JavaScript 在访问它们时不使用 `[[Get]]/[[Set]]`​。
+
+在调用 `getName()`​ 时，`this`​ 的值是代理后的 `user`​，它没有带有私有字段的插槽。
+
+再次，带有 `bind`​ 方法的解决方案使它恢复正常：
+
+```javascript
+class User {
+  #name = "Guest";
+
+  getName() {
+    return this.#name;
+  }
+}
+
+let user = new User();
+
+user = new Proxy(user, {
+  get(target, prop, receiver) {
+    let value = Reflect.get(...arguments);
+    return typeof value == 'function' ? value.bind(target) : value;
+  }
+});
+
+alert(user.getName()); // Guest
+```
+
+如前所述，该解决方案也有缺点：它将原始对象暴露给该方法，可能使其进一步传递并破坏其他代理功能。
+
+### [Proxy != target](https://zh.javascript.info/proxy#proxytarget)
+
+代理和原始对象是不同的对象。这很自然，对吧？
+
+所以，如果我们使用原始对象作为键，然后对其进行代理，之后却无法找到代理了：
+
+```javascript
+let allUsers = new Set();
+
+class User {
+  constructor(name) {
+    this.name = name;
+    allUsers.add(this);
+  }
+}
+
+let user = new User("John");
+
+alert(allUsers.has(user)); // true
+
+user = new Proxy(user, {});
+
+alert(allUsers.has(user)); // false
+```
+
+如我们所见，进行代理后，我们在 `allUsers`​ 中找不到 `user`​，因为代理是一个不同的对象。
+
+**Proxy 无法拦截严格相等性检查** `===`​
+
+Proxy 可以拦截许多操作符，例如 `new`​（使用 `construct`​），`in`​（使用 `has`​），`delete`​（使用 `deleteProperty`​）等。
+
+但是没有办法拦截对于对象的严格相等性检查。一个对象只严格等于其自身，没有其他值。
+
+因此，比较对象是否相等的所有操作和内建类都会区分对象和代理。这里没有透明的替代品。
+
+### [可撤销 Proxy](https://zh.javascript.info/proxy#ke-che-xiao-proxy)
+
+一个 **可撤销** 的代理是可以被禁用的代理。
+
+假设我们有一个资源，并且想随时关闭对该资源的访问。
+
+我们可以做的是将它包装成可一个撤销的代理，没有任何捕捉器。这样的代理会将操作转发给对象，并且我们可以随时将其禁用。
+
+语法为：
+
+```javascript
+let {proxy, revoke} = Proxy.revocable(target, handler)
+```
+
+该调用返回一个带有 `proxy`​ 和 `revoke`​ 函数的对象以将其禁用。
+
+这是一个例子：
+
+```javascript
+let object = {
+  data: "Valuable data"
+};
+
+let {proxy, revoke} = Proxy.revocable(object, {});
+
+// 将 proxy 传递到其他某处，而不是对象...
+alert(proxy.data); // Valuable data
+
+// 稍后，在我们的代码中
+revoke();
+
+// proxy 不再工作（revoked）
+alert(proxy.data); // Error
+```
+
+对 `revoke()`​ 的调用会从代理中删除对目标对象的所有内部引用，因此它们之间再无连接。
+
+最初，`revoke`​ 与 `proxy`​ 是分开的，因此我们可以传递 `proxy`​，同时将 `revoke`​ 留在当前范围内。
+
+我们也可以通过设置 `proxy.revoke = revoke`​ 来将 `revoke`​ 绑定到 `proxy`​。
+
+另一种选择是创建一个 `WeakMap`​，其中 `proxy`​ 作为键，相应的 `revoke`​ 作为值，这样可以轻松找到 `proxy`​ 所对应的 `revoke`​：
+
+```javascript
+let revokes = new WeakMap();
+
+let object = {
+  data: "Valuable data"
+};
+
+let {proxy, revoke} = Proxy.revocable(object, {});
+
+revokes.set(proxy, revoke);
+
+// ...我们代码中的其他位置...
+revoke = revokes.get(proxy);
+revoke();
+
+alert(proxy.data); // Error（revoked）
+```
+
+此处我们使用 `WeakMap`​ 而不是 `Map`​，因为它不会阻止垃圾回收。如果一个代理对象变得“不可访问”（例如，没有变量再引用它），则 `WeakMap`​ 允许将其与它的 `revoke`​ 一起从内存中清除，因为我们不再需要它了。
+
 ## Reflect
 
 ​`Reflect`​ 是一个内建对象，可简化 `Proxy`​ 的创建。
 
-**对于每个可被** Proxy **捕获的内部方法，在** **`Reflect`**​ **中都有一个对应的方法，其名称和参数与** **`Proxy`**​ **捕捉器相同。**
+例如 `[[Get]]`​ 和 `[[Set]]`​ 等，都只是规范性的，不能直接调用。
 
-|操作|​`Reflect`​ 调用|内部方法|
-| ------| -----------| ----------|
-|​`obj[prop]`​|​`Reflect.get(obj, prop)`​|​`[[Get]]`​|
-|​`obj[prop] = value`​|​`Reflect.set(obj, prop, value)`​|​`[[Set]]`​|
-|​`delete obj[prop]`​|​`Reflect.deleteProperty(obj, prop)`​|​`[[Delete]]`​|
-|​`new F(value)`​|​`Reflect.construct(F, value)`​|​`[[Construct]]`​|
+​`Reflect`​ 对象使调用这些内部方法成为了可能。它的方法是内部方法的最小包装。
+
+|操作|​`Reflect`​​ 调用|内部方法|
+| --------| -------------| ----------|
+|​`obj[prop]`​​|​`Reflect.get(obj, prop)`​​|​`[[Get]]`​​|
+|​`obj[prop] = value`​​|​`Reflect.set(obj, prop, value)`​​|​`[[Set]]`​​|
+|​`delete obj[prop]`​​|​`Reflect.deleteProperty(obj, prop)`​​|​`[[Delete]]`​​|
+|​`new F(value)`​​|​`Reflect.construct(F, value)`​​|​`[[Construct]]`​​|
+
+```js
+let user = {};
+
+Reflect.set(user, 'name', 'John');
+
+alert(user.name); // John
+```
+
+尤其是，`Reflect`​ 允许我们将操作符（`new`​，`delete`​，……）作为函数（`Reflect.construct`​，`Reflect.deleteProperty`​，……）执行调用。这是一个有趣的功能，但是这里还有一点很重要。
+
+**对于每个可被** **`Proxy`**​ **捕获的内部方法，在** **`Reflect`**​ **中都有一个对应的方法，其名称和参数与** **`Proxy`**​ **捕捉器相同。**
+
+所以，我们可以使用 `Reflect`​ 来将操作转发给原始对象。
+
+在下面这个示例中，捕捉器 `get`​ 和 `set`​ 均透明地（好像它们都不存在一样）将读取/写入操作转发到对象，并显示一条消息：
+
+```javascript
+let user = {
+  name: "John",
+};
+
+user = new Proxy(user, {
+  get(target, prop, receiver) {
+    alert(`GET ${prop}`);
+    return Reflect.get(target, prop, receiver); // (1)
+  },
+  set(target, prop, val, receiver) {
+    alert(`SET ${prop}=${val}`);
+    return Reflect.set(target, prop, val, receiver); // (2)
+  }
+});
+
+let name = user.name; // 显示 "GET name"
+user.name = "Pete"; // 显示 "SET name=Pete"
+```
+
+这里：
+
+* ​`Reflect.get`​ 读取一个对象属性。
+* ​`Reflect.set`​ 写入一个对象属性，如果写入成功则返回 `true`​，否则返回 `false`​。
+
+这样，一切都很简单：如果一个捕捉器想要将调用转发给对象，则只需使用相同的参数调用 `Reflect.<method>`​ 就足够了。
+
+在大多数情况下，我们可以不使用 `Reflect`​ 完成相同的事情，例如，用于读取属性的 `Reflect.get(target, prop, receiver)`​ 可以被替换为 `target[prop]`​。尽管有一些细微的差别。
+
+---
+
+让我们看一个示例，来说明为什么 `Reflect.get`​ 更好。此外，我们还将看到为什么 `get/set`​ 有第三个参数 `receiver`​，而且我们之前从来没有使用过它。
+
+我们有一个带有 `_name`​ 属性和 getter 的对象 `user`​。
+
+这是对 `user`​ 对象的一个代理：
+
+```javascript
+let user = {
+  _name: "Guest",
+  get name() {
+    return this._name;
+  }
+};
+
+let userProxy = new Proxy(user, {
+  get(target, prop, receiver) {
+    return target[prop];
+  }
+});
+
+alert(userProxy.name); // Guest
+```
+
+其 `get`​ 捕捉器在这里是“透明的”，它返回原来的属性，不会做任何其他的事。这对于我们的示例而言就足够了。
+
+一切似乎都很好。但是让我们将示例变得稍微复杂一点。
+
+另一个对象 `admin`​ 从 `user`​ 继承后，我们可以观察到错误的行为：
+
+```javascript
+let user = {
+  _name: "Guest",
+  get name() {
+    return this._name;
+  }
+};
+
+let userProxy = new Proxy(user, {
+  get(target, prop, receiver) {
+    return target[prop]; // (*) target = user
+  }
+});
+
+let admin = {
+  __proto__: userProxy,
+  _name: "Admin"
+};
+
+// 期望输出：Admin
+alert(admin.name); // 输出：Guest (?!?)
+```
+
+读取 `admin.name`​ 应该返回 `"Admin"`​，而不是 `"Guest"`​！
+
+发生了什么？或许我们在继承方面做错了什么？
+
+但是，如果我们移除代理，那么一切都会按预期进行。
+
+问题实际上出在代理中，在 `(*)`​ 行。
+
+1. 当我们读取 `admin.name`​ 时，由于 `admin`​ 对象自身没有对应的的属性，搜索将转到其原型。
+2. 原型是 `userProxy`​。
+3. 从代理读取 `name`​ 属性时，`get`​ 捕捉器会被触发，并从原始对象返回 `target[prop]`​ 属性，在 `(*)`​ 行。  
+    当调用 `target[prop]`​ 时，若 `prop`​ 是一个 getter，它将在 `this=target`​ 上下文中运行其代码。因此，结果是来自原始对象 `target`​ 的 `this._name`​，即来自 `user`​。
+
+为了解决这种情况，我们需要 `get`​ 捕捉器的第三个参数 `receiver`​。它保证将正确的 `this`​ 传递给 getter。在我们的例子中是 `admin`​。
+
+如何把上下文传递给 getter？对于一个常规函数，我们可以使用 `call/apply`​，但这是一个 getter，它不能“被调用”，只能被访问。
+
+​`Reflect.get`​ 可以做到。如果我们使用它，一切都会正常运行。
+
+这是更正后的变体：
+
+```javascript
+let user = {
+  _name: "Guest",
+  get name() {
+    return this._name;
+  }
+};
+
+let userProxy = new Proxy(user, {
+  get(target, prop, receiver) { // receiver = admin
+    return Reflect.get(target, prop, receiver); // (*)
+  }
+});
+
+
+let admin = {
+  __proto__: userProxy,
+  _name: "Admin"
+};
+
+alert(admin.name); // Admin
+```
+
+现在 `receiver`​ 保留了对正确 `this`​ 的引用（即 `admin`​），该引用是在 `(*)`​ 行中被通过 `Reflect.get`​ 传递给 getter 的。
+
+我们可以把捕捉器重写得更短：
+
+```javascript
+get(target, prop, receiver) {
+  return Reflect.get(...arguments);
+}
+```
+
+​`Reflect`​ 调用的命名与捕捉器的命名完全相同，并且接受相同的参数。它们是以这种方式专门设计的。
+
+因此，`return Reflect...`​ 提供了一个安全的方式，可以轻松地转发操作，并确保我们不会忘记与此相关的任何内容。
 
 ## Math
 
@@ -2491,9 +3212,9 @@ console.log(Math.abs(-10.01))//10.01
 //1. 获取当前日期和时间
 let d = new Date()
 console.log(d) // 当前日期对象
-console.log(typeof d)
+console.log(typeof d) //object
 console.log(d.toString()) //当前日期字符串
-console.log(typeof d.toString())
+console.log(typeof d.toString()) //string
 
 //  转为本地时间格式字符串
 console.log( d.toLocaleString() )//2022/1/18 下午3:02:53
@@ -2524,7 +3245,7 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 ## Set
 
 * 概念：`set`​是无序集合，和数组相比，是无序的，并且元素不能重复
-* 相关方法：set无法去重引用类型的数据
+* 相关方法：`set`​无法去重引用类型的数据
 
   ```js
   set.add(value)//添加元素到集合内，会维护插入时的顺序
@@ -2575,62 +3296,362 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Promise
 
-Promise 是异步编程的一种解决方案
+​`new Promise`​ 构造器返回的 `promise`​ 对象具有以下内部属性：
 
-从语法上讲，Promise是一个对象，通过它可以获取异步操作的消息；
+* ​`state`​ —— 最初是 `"pending"`​，然后在 `resolve`​ 被调用时变为 `"fulfilled"`​，或者在 `reject`​ 被调用时变为 `"rejected"`​。
+* ​`result`​ —— 最初是 `undefined`​，然后在 `resolve(value)`​ 被调用时变为 `value`​，或者在 `reject(error)`​ 被调用时变为 `error`​。
 
-从本意上讲，它是承诺，承诺它过一段时间会给你一个结果。
+​![image](assets/image-20240309203927-vdwaaou.png)​
 
-promise有三种状态：pending(等待态)，fulfilled(成功态)，rejected(失败态)；状态一旦改变，就不会再变。
+### Promist.all()
 
-创造promise实例后，它会立即执行。
+​`Promise.all`​ 接受一个可迭代对象（通常是一个数组项为 promise 的数组），并返回一个新的 promise。
 
-​`异步函数`​：不会阻塞主线程代码执行  
-​`回调函数`​：把一个函数当参数传递，在特定的时机调用，这个叫做回调函数
-
-### 方法
-
-* 基本使用
-
-  ```js
-  //创建Promise对象
-  const p = new Promise((resolve,reject)=>{
-    //在某种条件之后，会执行到resolve或者reject，里面所包含的内容会被.then出去或者.catch捕捉到
-    resolve()
-    reject()
-  })
-
-  //使用
-  p.then(res=>{}).catch(err=>{})
-  res\err就是之前resolve()和reject()内的值（返回过来的结果）
-  ```
-* ​`Promise.all([p1,p2])`​
-
-  ```js
-  all()方法提供了并行执行异步操作的能力，并且再所有异步操作执行完后才执行回调
-
-  Promise.all()接受一个promise对象的数组，待全部完成之后，统一执行success
-  同时成功才走 .then 有一个失败就 .catch
-  ```
-* ​`Promise.race([p1,p2])`​
-
-  ```js
-  接受一个包含多个promise对象的数组，只要有一个完成，就执行success
-  即返回第一个成功或失败的结果
-  ```
-
-### 注意点
+当所有给定的 promise 都 resolve 时，新的 promise 才会 resolve，并且其结果数组将成为新 promise 的结果。
 
 ```js
-.then的参数其实有两个 .then第二个参数可以处理上一级的错误状态
-.then(res=>{},err=>{})
-.catch()其实也是通过 .then 封装得到的
+let promise = Promise.all(iterable);
 
-.then().then().catch()//前面的.then没有第二个参数（处理错误）的话，出现错误会直接执行.catch()
-.then(res=>{},err=>{}).then().catch()//.then()中已有处理错误的情况话，会先用.then中的
-
-.then的返回值会默认给你包装成一个 新的promise对象，即使你没有自己return，没有return默认是return undefined。
+Promise.all([
+  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
+  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
+]).then(alert); // 1,2,3 当上面这些 promise 准备好时：每个 promise 都贡献了数组中的一个元素
 ```
+
+请注意，结果数组中元素的顺序与其在源 promise 中的顺序相同。即使第一个 promise 花费了最长的时间才 resolve，但它仍是结果数组中的第一个。
+
+**如果任意一个 promise 被 reject，由** **`Promise.all`**​ **返回的 promise 就会立即 reject，并且带有的就是这个 error。**
+
+```js
+Promise.all([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).catch(alert); // Error: Whoops!
+```
+
+> **如果出现 error，其他 promise 将被忽略**
+>
+> 如果其中一个 promise 被 reject，`Promise.all`​ 就会立即被 reject，完全忽略列表中其他的 promise。它们的结果也被忽略。
+>
+> 例如，像上面那个例子，如果有多个同时进行的 `fetch`​ 调用，其中一个失败，其他的 `fetch`​ 操作仍然会继续执行，但是 `Promise.all`​ 将不会再关心（watch）它们。它们可能会 settle，但是它们的结果将被忽略。
+>
+> ​`Promise.all`​ 没有采取任何措施来取消它们，因为 promise 中没有“取消”的概念。在 [另一个章节](https://zh.javascript.info/fetch-abort) 中，我们将介绍可以帮助我们解决这个问题（译注：指的是“取消” promise）的 `AbortController`​，但它不是 Promise API 的一部分。
+
+> ​`Promise.all(iterable)`​ **允许在** `iterable`​ **中使用非 promise 的“常规”值**
+>
+> 通常，`Promise.all(...)`​ 接受含有 promise 项的可迭代对象（大多数情况下是数组）作为参数。但是，如果这些对象中的任何一个不是 promise，那么它将被“按原样”传递给结果数组。
+>
+> 例如，这里的结果是 `[1, 2, 3]`​：
+>
+> ```javascript
+> Promise.all([
+>   new Promise((resolve, reject) => {
+>     setTimeout(() => resolve(1), 1000)
+>   }),
+>   2,
+>   3
+> ]).then(alert); // 1, 2, 3
+> ```
+>
+> 所以我们可以在方便的地方将准备好的值传递给 `Promise.all`​。
+
+### Promise.allSettled
+
+​`Promise.allSettled`​ 等待所有的 promise 都被 settle，无论结果如何。结果数组具有：
+
+* ​`{status:"fulfilled", value:result}`​ 对于成功的响应，
+* ​`{status:"rejected", reason:error}`​ 对于 error。
+
+```js
+let urls = [
+  "https://api.github.com/users/iliakan",
+  "https://api.github.com/users/remy",
+  "https://no-such-url",
+];
+
+Promise.allSettled(urls.map((url) => fetch(url))).then((results) => {
+  // (*)
+  results.forEach((result, num) => {
+    if (result.status == "fulfilled") {
+      alert(`${urls[num]}: ${result.value.status}`);
+    }
+    if (result.status == "rejected") {
+      alert(`${urls[num]}: ${result.reason}`);
+    }
+  });
+});
+```
+
+上面的 `(*)`​ 行中的 `results`​ 将会是：
+
+```javascript
+[
+  {status: 'fulfilled', value: ...response...},
+  {status: 'fulfilled', value: ...response...},
+  {status: 'rejected', reason: ...error object...}
+]
+```
+
+### Promise.race
+
+只等待第一个 settled 的 promise 并获取其结果（或 error）。
+
+例如，这里的结果将是 `1`​：
+
+```javascript
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).then(alert); // 1
+```
+
+这里第一个 promise 最快，所以它变成了结果。第一个 settled 的 promise “赢得了比赛”之后，所有进一步的 result/error 都会被忽略。
+
+### Promise.any
+
+ `Promise.race`​ 类似，区别在于 `Promise.any`​ 只等待第一个 fulfilled 的 promise，并将这个 fulfilled 的 promise 返回。如果给出的 promise 都 rejected，那么返回的 promise 会带有 [`AggregateError`](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/AggregateError)​ —— 一个特殊的 error 对象，在其 `errors`​ 属性中存储着所有 promise error。
+
+语法如下：
+
+```javascript
+let promise = Promise.any(iterable);
+```
+
+例如，这里的结果将是 `1`​：
+
+```javascript
+Promise.any([
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).then(alert); // 1
+```
+
+这里的第一个 promise 是最快的，但 rejected 了，所以第二个 promise 则成为了结果。在第一个 fulfilled 的 promise “赢得比赛”后，所有进一步的结果都将被忽略。
+
+### Promise.resolve
+
+​`Promise.resolve(value)`​ 用结果 `value`​ 创建一个 resolved 的 promise。
+
+如同：
+
+```javascript
+let promise = new Promise(resolve => resolve(value));
+```
+
+当一个函数被期望返回一个 promise 时，这个方法用于兼容性。（译注：这里的兼容性是指，我们直接从缓存中获取了当前操作的结果 `value`​，但是期望返回的是一个 promise，所以可以使用 `Promise.resolve(value)`​ 将 `value`​ “封装”进 promise，以满足期望返回一个 promise 的这个需求。）
+
+例如，下面的 `loadCached`​ 函数获取（fetch）一个 URL 并记住其内容。以便将来对使用相同 URL 的调用，它能立即从缓存中获取先前的内容，但使用 `Promise.resolve`​ 创建了一个该内容的 promise，所以返回的值始终是一个 promise。
+
+```javascript
+let cache = new Map();
+
+function loadCached(url) {
+  if (cache.has(url)) {
+    return Promise.resolve(cache.get(url)); // (*)
+  }
+
+  return fetch(url)
+    .then(response => response.text())
+    .then(text => {
+      cache.set(url,text);
+      return text;
+    });
+}
+```
+
+我们可以使用 `loadCached(url).then(…)`​，因为该函数保证了会返回一个 promise。我们就可以放心地在 `loadCached`​ 后面使用 `.then`​。这就是 `(*)`​ 行中 `Promise.resolve`​ 的目的。
+
+### Promise.reject
+
+​`Promise.reject(error)`​ 用 `error`​ 创建一个 rejected 的 promise。
+
+如同：
+
+```javascript
+let promise = new Promise((resolve, reject) => reject(error));
+```
+
+### Promist.then()
+
+​`.then`​ 的第一个参数是一个函数，该函数将在 promise resolved 且接收到结果后执行。
+
+​`.then`​ 的第二个参数也是一个函数，该函数将在 promise rejected 且接收到 error 信息后执行。
+
+```js
+let promise = new Promise(function(resolve, reject) {
+  setTimeout(() => resolve("done!"), 1000);
+});
+
+// resolve 运行 .then 中的第一个函数
+promise.then(
+  result => alert(result), // 1 秒后显示 "done!"
+  error => alert(error) // 不运行
+);
+```
+
+### Promist.catch()
+
+如果我们只对 error 感兴趣，那么我们可以使用 `null`​ 作为第一个参数：`.then(null, errorHandlingFunction)`​。或者我们也可以使用 `.catch(errorHandlingFunction)`​，其实是一样的：
+
+​`.catch(f)`​ 调用是 `.then(null, f)`​ 的完全的模拟，它只是一个简写形式。
+
+```js
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => reject(new Error("Whoops!")), 1000);
+});
+
+// .catch(f) 与 promise.then(null, f) 一样
+promise.catch(alert); // 1 秒后显示 "Error: Whoops!"
+```
+
+### Promist.finally()
+
+就像常规 `try {...} catch {...}`​ 中的 `finally`​ 子句一样，`promise `​中也有 `finally`​。
+
+调用 `.finally(f)`​ 类似于 `.then(f, f)`​，因为当 promise settled 时 `f`​ 就会执行：无论 promise 被 resolve 还是 reject。
+
+​`finally`​ 的功能是设置一个处理程序在前面的操作完成后，执行清理/终结。
+
+例如，停止加载指示器，关闭不再需要的连接等。
+
+把它想象成派对的终结者。无论派对是好是坏，有多少朋友参加，我们都需要（或者至少应该）在它之后进行清理。
+
+```js
+new Promise((resolve, reject) => {
+  /* 做一些需要时间的事，之后调用可能会 resolve 也可能会 reject */
+})
+  // 在 promise 为 settled 时运行，无论成功与否
+  .finally(() => stop loading indicator)
+  // 所以，加载指示器（loading indicator）始终会在我们继续之前停止
+  .then(result => show result, err => show error)
+```
+
+请注意，`finally(f)`​ 并不完全是 `then(f,f)`​ 的别名。
+
+它们之间有重要的区别：
+
+1. ​`finally`​ 处理程序（handler）没有参数。在 `finally`​ 中，我们不知道 promise 是否成功。没关系，因为我们的任务通常是执行“常规”的完成程序（finalizing procedures）。  
+    请看上面的例子：如你所见，`finally`​ 处理程序没有参数，promise 的结果由下一个处理程序处理。
+2. ​`finally`​ 处理程序将结果或 error “传递”给下一个合适的处理程序。  
+    例如，在这结果被从 `finally`​ 传递给了 `then`​：
+
+    ```js
+    new Promise((resolve, reject) => {
+      setTimeout(() => resolve("value"), 2000)
+    })
+      .finally(() => alert("Promise ready")) // 先触发
+      .then(result => alert(result)); // <-- .then 显示 "value"
+
+    ```
+
+    正如我们所看到的，第一个 promise 返回的 `value`​ 通过 `finally`​ 被传递给了下一个 `then`​。
+
+    这非常方便，因为 `finally`​ 并不意味着处理一个 promise 的结果。如前所述，无论结果是什么，它都是进行常规清理的地方。
+
+    下面是一个 promise 返回结果为 error 的示例，让我们看看它是如何通过 `finally`​ 被传递给 `catch`​ 的：
+
+    ```js
+    new Promise((resolve, reject) => {
+      throw new Error("error");
+    })
+      .finally(() => alert("Promise ready")) // 先触发
+      .catch(err => alert(err));  // <-- .catch 显示这个 error
+    ```
+3. ​`finally`​ 处理程序也不应该返回任何内容。如果它返回了，返回的值会默认被忽略。  
+    此规则的唯一例外是当 `finally`​ 处理程序抛出 error 时。此时这个 error（而不是任何之前的结果）会被转到下一个处理程序。
+
+‍
+
+### 隐式try...catch
+
+​`promise `​的执行者（executor）和 `promise `​的处理程序周围有一个“隐式的 `try..catch`​”。如果发生异常，它就会被捕获，并被视为 rejection 进行处理。
+
+```js
+new Promise((resolve, reject) => {
+  throw new Error("Whoops!");
+}).catch(alert); // Error: Whoops!
+```
+
+……与下面这段代码工作上完全相同：
+
+```javascript
+new Promise((resolve, reject) => {
+  reject(new Error("Whoops!"));
+}).catch(alert); // Error: Whoops!
+```
+
+在 executor 周围的“隐式 `try..catch`​”自动捕获了 error，并将其变为 rejected promise。
+
+这不仅仅发生在 executor 函数中，同样也发生在其处理程序中。如果我们在 `.then`​ 处理程序中 `throw`​，这意味着 promise rejected，因此控制权移交至最近的 error 处理程序。
+
+这是一个例子：
+
+```javascript
+new Promise((resolve, reject) => {
+  resolve("ok");
+}).then((result) => {
+  throw new Error("Whoops!"); // reject 这个 promise
+}).catch(alert); // Error: Whoops!
+```
+
+对于所有的 error 都会发生这种情况，而不仅仅是由 `throw`​ 语句导致的这些 error。例如，一个编程错误：
+
+```javascript
+new Promise((resolve, reject) => {
+  resolve("ok");
+}).then((result) => {
+  blabla(); // 没有这个函数
+}).catch(alert); // ReferenceError: blabla is not defined
+```
+
+最后的 `.catch`​ 不仅会捕获显式的 rejection，还会捕获它上面的处理程序中意外出现的 error。
+
+### 未处理的rejection
+
+当一个 error 没有被处理会发生什么？例如，我们忘了在链的尾端附加 `.catch`​，像这样：
+
+```javascript
+new Promise(function() {
+  noSuchFunction(); // 这里出现 error（没有这个函数）
+})
+  .then(() => {
+    // 一个或多个成功的 promise 处理程序
+  }); // 尾端没有 .catch！
+```
+
+如果出现 error，promise 的状态将变为 “rejected”，然后执行应该跳转至最近的 rejection 处理程序。但上面这个例子中并没有这样的处理程序。因此 error 会“卡住”。没有代码来处理它。
+
+在实际开发中，就像代码中常规的未处理的 error 一样，这意味着某些东西出了问题。
+
+当发生一个常规的 error 并且未被 `try..catch`​ 捕获时会发生什么？脚本死了，并在控制台中留下了一个信息。对于在 promise 中未被处理的 rejection，也会发生类似的事。
+
+**JavaScript 引擎会跟踪此类 rejection，在这种情况下会生成一个全局的 error。** 如果你运行上面这个代码，你可以在控制台中看到。
+
+在浏览器中，我们可以使用 `unhandledrejection`​ 事件来捕获这类 error：
+
+```javascript
+window.addEventListener('unhandledrejection', function(event) {
+  // 这个事件对象有两个特殊的属性：
+  alert(event.promise); // [object Promise] —— 生成该全局 error 的 promise
+  alert(event.reason); // Error: Whoops! —— 未处理的 error 对象
+});
+
+new Promise(function() {
+  throw new Error("Whoops!");
+}); // 没有用来处理 error 的 catch
+```
+
+这个事件是 [HTML 标准](https://html.spec.whatwg.org/multipage/webappapis.html#unhandled-promise-rejections) 的一部分。
+
+如果出现了一个 error，并且在这没有 `.catch`​，那么 `unhandledrejection`​ 处理程序就会被触发，并获取具有 error 相关信息的 `event`​ 对象，所以我们就能做一些后续处理了。
+
+通常此类 error 是无法恢复的，所以我们最好的解决方案是将问题告知用户，并且可以将事件报告给服务器。
+
+在 Node.js 等非浏览器环境中，有其他用于跟踪未处理的 error 的方法。
 
 ### async
 
@@ -3117,7 +4138,7 @@ function showFile(input) {
 let reader = new FileReader(); // 没有参数
 ```
 
-### 方法
+---
 
 * ​**`readAsArrayBuffer(blob)`** ​ —— 将数据读取为二进制格式的 `ArrayBuffer`​。
 * ​**`readAsText(blob, [encoding])`** ​ —— 将数据读取为给定编码（默认为 `utf-8`​ 编码）的文本字符串。
@@ -3142,9 +4163,7 @@ let reader = new FileReader(); // 没有参数
 读取完成后，我们可以通过以下方式访问读取结果：
 
 * ​`reader.result`​ 是结果（如果成功）
-* ​`reader.error`​ 是 error（如果失败）
-
-‍
+* ​`reader.error`​​ 是 error（如果失败）
 
 ```js
 <input type="file" onchange="readFile(this)">
@@ -3207,7 +4226,7 @@ let formData = new FormData([form]);
 </script>
 ```
 
-### FormData方法
+---
 
 我们可以使用以下方法修改 `FormData`​ 中的字段：
 
@@ -3222,7 +4241,7 @@ let formData = new FormData([form]);
 还有一个 `set`​ 方法，语法与 `append`​ 相同。不同之处在于 `.set`​ 移除所有具有给定 `name`​ 的字段，然后附加一个新字段。因此，它确保了只有一个具有这种 `name`​ 的字段，其他的和`append`​ 一样：
 
 * ​`formData.set(name, value)`​，
-* ​`formData.set(name, blob, fileName)`​。
+* ​`formData.set(name, blob, fileName)`​​。
 
 我们也可以使用 `for..of`​ 循环迭代 formData 字段：
 
@@ -3237,198 +4256,212 @@ for(let [name, value] of formData) {
 }
 ```
 
-# 函数
+## URL
 
-### 函数概念
+内建的 `URL`​ 类提供了用于创建和解析 URL 的便捷接口。
 
-函数是一个数据类型，可以理解为存储代码的容器。 把这些代码给存到变量中，要使用的时候取出来执行即可。函数是解决重复功能的`代码复用问题`​
+创建一个新 `URL`​ 对象的语法：
 
-```js
-//函数声明：
-function fn(){
-    函数体
-}
-//函数执行：
-fn()
+```javascript
+new URL(url, [base])
 ```
 
-### 函数参数
+* ​**`url`**​ —— 完整的 URL，或者仅路径（如果设置了 base），
+* ​**`base`**​ —— 可选的 base URL：如果设置了此参数，且参数 `url`​ 只有路径，则会根据这个 `base`​ 生成 URL。
 
-形参：`一定是变量`​，函数命名时把形参传入函数体中
+例如：
 
-实参：`实际参数`​，具体的明确的数据
-
-函数参数可以是多个, 逗号隔开，形参与实参个数可以不一致,不会报错。**参数本质是实参传值给形参**
-
-```js
-形参：
-function fn(i){
-  console.log(i)
-}
-实参：
-fn（5）//传递进来的5就是实参，代替了形参i，结果是在控制台打印出来5
+```javascript
+let url = new URL('https://javascript.info/profile/admin');
 ```
 
-### 参数默认值
+下面这两个 URL 是一样的：
 
-函数传递实参的时候，我们不给函数设置实参的情况，需要让形参有默认值来代替传入函数中执行
+```javascript
+let url1 = new URL('https://javascript.info/profile/admin');
+let url2 = new URL('/profile/admin', 'https://javascript.info');
 
-```js
-//es6设置函数参数默认值     形参 = 默认值
-//es5设置函数参数默认值     逻辑短路    array = array || []
-
-function getSum(array = []) {
-  let sum = 0
-  for (let i = 0; i < array.length; i++) {
-     sum += array[i]
-  }
-  return sum
-}
-// es5版本函数参数默认值
-// 让函数的参数有一个默认值, 如果调用者传递了参数就用调用者的参数, 如果没传就为[]
-function getSum(array) {
-    array = array || [] 
-    let sum = 0
-    for (let i = 0; i < array.length; i++) {
-        sum += array[i]
-    }
-    return sum
-}
-console.log(getSum([0, 4, 3, 5, 8, 2]))
-console.log(getSum()
-console.log(undefined || 1) //1
-console.log(undefined || []) // []
-console.log([1, 2, 3] || []) // [1,2,3]
-console.log(array || []) // 不管array是什么, 总会得到一个数组 
+alert(url1); // https://javascript.info/profile/admin
+alert(url2); // https://javascript.info/profile/admin
 ```
 
-### 匿名函数
+我们可以根据相对于现有 URL 的路径轻松创建一个新的 URL：
 
-匿名函数：没有名字的函数，可以开辟局部作用域，避免全局变量污染
+```javascript
+let url = new URL('https://javascript.info/profile/admin');
+let newUrl = new URL('tester', url);
 
-使用方法: 函数表达式与具名函数使用一致，((20230129220259-2svj34p '自执行函数'))  分号隔开, 否则错误
-
-```js
-// 使用方法一: 函数表达式(与具名函数使用一致)
-let fn = function (num1, num2) {
-  console.log(num1 + num2);
-}
-fn(1, 2)
-
-// 使用方法二: 立即执行函数, 分号隔开, 否则错误
-(function () {
-   console.log(11)
-})();
-
-(function () {
-    console.log(22)
-}());
+alert(newUrl); // https://javascript.info/profile/tester
 ```
 
-### 箭头函数
+​`URL`​ 对象立即允许我们访问其组件，因此这是一个解析 url 的好方法，例如：
 
-* 概念：箭头函数就是定义函数的另一种语法，属于函数表达式
+```javascript
+let url = new URL('https://javascript.info/url');
+alert(url.protocol); // https:
+alert(url.host);     // javascript.info
+alert(url.pathname); // /url
+```
 
-  ```js
-  (形参列表)=>{函数体代码}
-  只有1个参数可以省略小括号
-  在省略花括号的情况下，仅有的一条代码的值会被return出来
-  省略花括号的情况下，不能明确的写一个return
+这是 URL 组件的备忘单：
 
-  let fn = a => a * a;  // 内部会return a * a
-  let ret = fn(10)
-  console.log(ret);//100
-  ```
-* 注意点：
+​![image](assets/image-20240310104227-wjm0mh6.png)​
 
-  ```js
-  1.箭头函数里没有arguments，可以使用展开运算符(...)代替。
-  2.箭头函数是没有this，如果箭头函数内使用了this，会触链式查找，找上一级作用域(函数)中的this
-  3.箭头函数无法使用 new 关键字来创建对象
-  ```
+* ​`href`​ 是完整的 URL，与 `url.toString()`​ 相同
+* ​`protocol`​ 以冒号字符 `:`​ 结尾
+* ​`search`​ —— 以问号 `?`​ 开头的一串参数
+* ​`hash`​ 以哈希字符 `#`​ 开头
+* 如果存在 HTTP 身份验证，则这里可能还会有 `user`​ 和 `password`​ 属性：`http://login:password@site.com`​（图片上没有，很少被用到）。
 
-### 回调函数
+> **我们可以将** `URL`​ **对象传递给网络（和大多数其他）方法，而不是字符串**
+>
+> 我们可以在 `fetch`​ 或 `XMLHttpRequest`​ 中使用 `URL`​ 对象，几乎可以在任何需要 URL 字符串的地方都能使用 `URL`​ 对象。
+>
+> 通常，`URL`​ 对象可以替代字符串传递给任何方法，因为大多数方法都会执行字符串转换，这会将 `URL`​ 对象转换为具有完整 URL 的字符串。
 
-被函数或方法或调用的函数就被称为回调函数。回调函数也是函数，只是被别的函数当作参数使用了
+### [SearchParams](https://zh.javascript.info/url#searchparams)
+
+假设，我们想要创建一个具有给定搜索参数的 url，例如：`https://google.com/search?query=JavaScript`​。
+
+我们可以在 URL 字符串中提供它们：
+
+```javascript
+new URL('https://google.com/search?query=JavaScript')
+```
+
+……但是，如果参数中包含空格，非拉丁字母等（具体参见下文），参数就需要被编码。
+
+因此，有一个 URL 属性用于解决这个问题：`url.searchParams`​，[URLSearchParams](https://url.spec.whatwg.org/#urlsearchparams) 类型的对象。
+
+它为搜索参数提供了简便的方法：
+
+* ​**`append(name, value)`** ​ —— 按照 `name`​ 添加参数，
+* ​**`delete(name)`** ​ —— 按照 `name`​ 移除参数，
+* ​**`get(name)`** ​ —— 按照 `name`​ 获取参数，
+* ​**`getAll(name)`** ​ —— 获取相同 `name`​ 的所有参数（这是可行的，例如 `?user=John&user=Pete`​），
+* ​**`has(name)`** ​ —— 按照 `name`​ 检查参数是否存在，
+* ​**`set(name, value)`** ​ —— set/replace 参数，
+* ​**`sort()`** ​ —— 按 name 对参数进行排序，很少使用，
+* ……并且它是可迭代的，类似于 `Map`​。
+
+包含空格和标点符号的参数的示例：
+
+```javascript
+let url = new URL('https://google.com/search');
+url.searchParams.set('q', 'test me!'); // 添加带有一个空格和一个 ! 的参数
+alert(url); // https://google.com/search?q=test+me%21
+url.searchParams.set('tbs', 'qdr:y'); // 添加带有一个冒号 : 的参数
+// 参数会被自动编码
+alert(url); // https://google.com/search?q=test+me%21&tbs=qdr%3Ay
+// 遍历搜索参数（被解码）
+for(let [name, value] of url.searchParams) {
+  alert(`${name}=${value}`); // q=test me!，然后是 tbs=qdr:y
+}
+```
+
+### [编码（encoding）](https://zh.javascript.info/url#bian-ma-encoding)
+
+[RFC3986](https://tools.ietf.org/html/rfc3986) 标准定义了 URL 中允许哪些字符，不允许哪些字符。
+
+那些不被允许的字符必须被编码，例如非拉丁字母和空格 —— 用其 UTF-8 代码代替，前缀为 `%`​，例如 `%20`​（由于历史原因，空格可以用 `+`​ 编码，但这是一个例外）。
+
+好消息是 `URL`​ 对象会自动处理这些。我们仅需提供未编码的参数，然后将 `URL`​ 转换为字符串：
+
+```javascript
+// 在此示例中使用一些西里尔字符
+
+let url = new URL('https://ru.wikipedia.org/wiki/Тест');
+
+url.searchParams.set('key', 'ъ');
+alert(url); //https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%81%D1%82?key=%D1%8A
+```
+
+正如你所看到的，url 路径中的 `Тест`​ 和 `ъ`​ 参数都被编码了。
+
+URL 变长了，因为每个西里尔字母用 UTF-8 编码的两个字节表示，因此这里有两个 `%..`​ 实体（entities）。
+
+### [编码字符串](https://zh.javascript.info/url#bian-ma-zi-fu-chuan)
+
+在过去，在出现 `URL`​ 对象之前，人们使用字符串作为 URL。
+
+而现在，`URL`​ 对象通常更方便，但是仍然可以使用字符串。在很多情况下，使用字符串可以使代码更短。
+
+如果使用字符串，则需要手动编码/解码特殊字符。
+
+下面是用于编码/解码 URL 的内建函数：
+
+* [encodeURI](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/encodeURI) —— 编码整个 URL。
+* [decodeURI](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/decodeURI) —— 解码为编码前的状态。
+* [encodeURIComponent](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) —— 编码 URL 组件，例如搜索参数，或者 hash，或者 pathname。
+* [decodeURIComponent](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) —— 解码为编码前的状态。
+
+一个自然的问题：“`encodeURIComponent`​ 和 `encodeURI`​ 之间有什么区别？我们什么时候应该使用哪个？”
+
+如果我们看一个 URL，就容易理解了，它被分解为本文上面图中所示的组件形式：
+
+```none
+https://site.com:8080/path/page?p1=v1&p2=v2#hash
+```
+
+正如我们所看到的，在 URL 中 `:`​，`?`​，`=`​，`&`​，`#`​ 这类字符是被允许的。
+
+……另一方面，对于 URL 的单个组件，例如一个搜索参数，则必须对这些字符进行编码，以免破坏 URL 的格式。
+
+* ​`encodeURI`​ 仅编码 URL 中完全禁止的字符。
+* ​`encodeURIComponent`​ 也编码这类字符，此外，还编码 `#`​，`$`​，`&`​，`+`​，`,`​，`/`​，`:`​，`;`​，`=`​，`?`​ 和 `@`​ 字符。
+
+所以，对于一个 URL 整体，我们可以使用 `encodeURI`​：
+
+```javascript
+// 在 url 路径中使用西里尔字符
+let url = encodeURI('http://site.com/привет');
+
+alert(url); // http://site.com/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82
+```
+
+……而对于 URL 参数，我们应该改用 `encodeURIComponent`​：
+
+```javascript
+let music = encodeURIComponent('Rock&Roll');
+
+let url = `https://google.com/search?q=${music}`;
+alert(url); // https://google.com/search?q=Rock%26Roll
+```
+
+将其与 `encodeURI`​ 进行比较：
+
+```javascript
+let music = encodeURI('Rock&Roll');
+
+let url = `https://google.com/search?q=${music}`;
+alert(url); // https://google.com/search?q=Rock&Roll
+```
+
+我们可以看到，`encodeURI`​ 没有对 `&`​ 进行编码，因为它对于整个 URL 来说是合法的字符。
+
+但是，我们应该编码在搜索参数中的 `&`​ 字符，否则，我们将得到 `q=Rock&Roll`​ —— 实际上是 `q=Rock`​ 加上某个晦涩的参数 `Roll`​。不符合预期。
+
+因此，对于每个搜索参数，我们应该使用 `encodeURIComponent`​，以将其正确地插入到 URL 字符串中。最安全的方式是对 name 和 value 都进行编码，除非我们能够绝对确保它只包含允许的字符。
+
+> ​`encode*`​ **与** `URL`​ **之间的编码差异**
+>
+> [URL](https://url.spec.whatwg.org/#url-class) 和 [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams) 基于最新的 URL 规范：[RFC3986](https://tools.ietf.org/html/rfc3986)，而 `encode*`​ 函数是基于过时的 [RFC2396](https://www.ietf.org/rfc/rfc2396.txt)。
+>
+> 它们之间有一些区别，例如对 IPv6 地址的编码方式不同：
+>
+> ```javascript
+> // IPv6 地址的合法 url
+> let url = 'http://[2607:f8b0:4005:802::1007]/';
+>
+> alert(encodeURI(url)); // http://%5B2607:f8b0:4005:802::1007%5D/
+> alert(new URL(url)); // http://[2607:f8b0:4005:802::1007]/
+> ```
+>
+> 正如我们所看到的，`encodeURI`​ 替换了方括号 `[...]`​，这是不正确的，原因是：在 RFC2396 (August 1998) 时代，还不存在 IPv6 url。
+>
+> 这种情况很少见，`encode*`​ 函数在大多数情况下都能正常工作。
 
 # 正则
-
-### 正则表达式
-
-```js
-//正则的作用是对字符串进行匹配操作，在代码上的体现是一个正则对象
-//正则表达式表示的是一种规则，不具体的一种规则
-// 语法1：通过new
-//  new RegExp(正则表达式)
-let reg1 = new RegExp(/ /)
-
-// 语法2：字面量 //
-let reg2 = /\d/;        // 此正则表示的规则1个数字
-console.log(reg2);
-```
-
-### 正则方法
-
-* 正则校验：检验字符串是否匹配正则
-
-  ```js
-  正则对象.test(字符串)//返回值是boolean
-  let reg = /123/
-  console.log(reg.test('123'))
-  ```
-* 正则替换：字符串替换
-
-  ```js
-  // 字符串.replace(正则,替换内容)
-  // 在字符串中，将正则匹配到的部分使用 替换内容 进行替换
-        
-  // 默认仅替换匹配到的第1个
-  console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
-  console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
-  ```
-* 正则查找：查找字符串中符合正则规则的字符，并返回数组
-
-  ```js
-  正则.exec(str)
-  作用：查看正则表达式匹配str的结果（是第几个字符满足匹配规则的，是哪个字符满足匹配规则等）
-  特点：默认情况下，每一次调用exec只会返回第一个匹配的字符串信息，如果想要返回所有匹配信息
-  a.需要设置正则表达式为全局匹配
-  b.需要执行多次exec方法
-  属性介绍
-  index:匹配字符的下标
-  下标：0：匹配字符
-  1-n：后面的下标只对()分组有效，没有分组则数组只有一个元素
-
-  //示例1：找出第一个匹配字符中包含  数字+单词+单词 字符的内容
-  //默认：只能找到第一个匹配的字符
-  var str = "1aasjdg2bbjahsgd3cc";
-  var reg = /\d\w\w/;
-  var resArr = reg.exec ( str );
-  console.log ( resArr );//["1aa", index: 0, input: "1aasjdg2bbjahsgd3cc", groups: undefined]
-
-  //示例2：找出所有匹配字符中包含   数字+单词+单词 字符的内容
-  var str = "1absjdg2cdjahsgd3ef";
-  var reg = /\d\w\w/g;//需要设置全局匹配
-  var resArr = reg.exec ( str );
-  console.log ( resArr );//["1ab", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-
-  //每一次匹配之后，reg会记录当前已经匹配的字符，下一次再执行exec的时候就会往后面匹配
-  resArr = reg.exec(str);
-  console.log ( resArr );//["2cd", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-  resArr = reg.exec(str);
-  console.log ( resArr );//["3ef", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-
-  //以上代码可以简写成
-  while(resArr){//只要resArr存在，就继续执行exec
-    console.log ( resArr );
-    resArr = reg.exec(str);
-  };
-
-  //示例3：如果正则有分组，则数组从1下标开始获取分组对应的字符
-  var reg1 = /\d(\w)(\w)/;
-  console.log ( reg1.exec ( str ) );
-  //["1ab", "a", "b", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
-  ```
 
 ### 元字符
 
@@ -3565,6 +4598,68 @@ console.log(reg2);
   ```
 
 ---
+
+### string.test(reg)
+
+​`string.test(reg)`​:正则校验，检验字符串是否匹配正则
+
+```js
+正则对象.test(字符串)//返回值是boolean
+let reg = /123/
+console.log(reg.test('123'))
+```
+
+### string.replace(reg)
+
+​`string.replace(reg)`：正则替换，字符串替换
+
+```js
+// 字符串.replace(正则,替换内容)
+// 在字符串中，将正则匹配到的部分使用 替换内容 进行替换
+      
+// 默认仅替换匹配到的第1个
+console.log('abc3des5d'.replace(/\d/,'*'))   //abc*des5d
+console.log('abc3des5d'.replace(/\d/g,'*'))  //abc*des*d
+```
+
+### reg.exec(string)
+
+​`reg.exec(string)`​：正则查找，查找字符串中符合正则规则的字符，并返回类数组对象，还有 index、input 属性，表示匹配的字符串下标，和匹配到的内容
+
+作用：查看正则表达式匹配str的结果（是第几个字符满足匹配规则的，是哪个字符满足匹配规则等）  
+特点：默认情况下，每一次调用exec只会返回第一个匹配的字符串信息，如果想要返回所有匹配信息，需要设置正则表达式为全局匹配或者需要执行多次exec方法
+
+```js
+//示例1：找出第一个匹配字符中包含  数字+单词+单词 字符的内容
+//默认：只能找到第一个匹配的字符
+var str = "1aasjdg2bbjahsgd3cc";
+var reg = /\d\w\w/;
+var resArr = reg.exec ( str );
+console.log ( resArr );//["1aa", index: 0, input: "1aasjdg2bbjahsgd3cc", groups: undefined]
+
+//示例2：找出所有匹配字符中包含   数字+单词+单词 字符的内容
+var str = "1absjdg2cdjahsgd3ef";
+var reg = /\d\w\w/g;//需要设置全局匹配
+var resArr = reg.exec ( str );
+console.log ( resArr );//["1ab", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+
+//每一次匹配之后，reg会记录当前已经匹配的字符，下一次再执行exec的时候就会往后面匹配
+resArr = reg.exec(str);
+console.log ( resArr );//["2cd", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+resArr = reg.exec(str);
+console.log ( resArr );//["3ef", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+
+//以上代码可以简写成
+while(resArr){//只要resArr存在，就继续执行exec
+  console.log ( resArr );
+  resArr = reg.exec(str);
+};
+
+//示例3：如果正则有分组，则数组从1下标开始获取分组对应的字符
+var reg1 = /\d(\w)(\w)/;
+console.log ( reg1.exec ( str ) );
+//["1ab", "a", "b", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
+```
 
 # 常用方法
 
@@ -3945,35 +5040,7 @@ console.log(tar);
 //{age:20,gender:'男',name:'zhangsan',score:100,phone:'12312312312'}
 ```
 
-### 对象遍历
-
-```js
-1.遍历数组:
-for(let i = 0; i<arr.length; i++){ arr[i] }
-
-2.遍历对象:把对象中所有的属性及其值取出
-注意obj[key]中的key是变量, 不能使用引号包裹, 也不能使用点语
-for(let key in obj){  obj[key]  }
-
-let obj = {
-  name: "班长",
-  age: 18,
-  sex: "男",
-  hobby: "学习",
-  sayHi: function () {
-    console.log(123)
-},
-//对象遍历
-for (let key in obj) {
-  // key代表的是属性名
-  console.log(key）
-  // obj[key]  属性值  key不能加引号
-  console.log(obj[key])
-  //console.log(`${key}: ${obj[key]} `)
-}
-```
-
-## 字符串方法
+## 字符方法
 
 ### str.startsWith()
 
@@ -4049,17 +5116,6 @@ padString 填充字符串。如字符串太长，填充后的字符串长度超�
 let str = "0";
 console.log(str.padEnd(5, "0"));//00000
 console.log("123".padEnd(5, "0"));//12300
-```
-
-### str.length()
-
-返回字符串的长度
-
-```js
-var x = "Mozilla";
-var empty = "";
-console.log(x.length);//7
-console.log("empty.length);//0
 ```
 
 ### str.split()
@@ -4973,139 +6029,338 @@ history对象主要用于记录你当前窗口的历史记录，并为我们提�
 
 # 网络请求
 
-## 基本概念
+## ajax
 
-### Content-Type
+**AJAX**（Asynchronous [JavaScript](https://developer.mozilla.org/zh-CN/docs/Glossary/JavaScript) And [XML](https://developer.mozilla.org/zh-CN/docs/Glossary/XML) ）是一种使用 [XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Glossary/XMLHttpRequest) 技术构建更复杂，动态的网页的编程实践。
 
-* 概念：**使用axios提交数据时，axios会根据我们提交的数据类型，自动改变content-type**
+AJAX 允许只更新一个 [HTML](https://developer.mozilla.org/zh-CN/docs/Glossary/HTML) 页面的部分 [DOM](https://developer.mozilla.org/zh-CN/docs/Glossary/DOM)，而无须重新加载整个页面。AJAX 还允许异步工作，这意味着当网页的一部分正试图重新加载时，你的代码可以继续运行（相比之下，同步会阻止代码继续运行，直到这部分的网页完成重新加载）。
 
-  ```js
-  1.在响应中 Content-Type 告诉客户端实际返回的内容的内容类型(浏览器根据这个判断如何解析)
-  2.在请求中 Content-Type 客户端告诉服务器实际发送的数据类型
-  3.使用axios提交不同格式的数据时，content-type是axios帮咱们设置的
-  ```
-* Content-Type类型
-
-  ```js
-  multipart/form-data  :提交FormData对象,new FormData,表单中包含上传文件的场景
-  application/json  :上传json格式数据(文本类),{key:value}
-  application/x-www-form-urlencoded  :通过data提交key=value&key2=valu2,适用于普通数据的提交,不含文件上传
-  ```
-
-### 报文
-
-* 请求报文：在使用`HTTP`​和服务器进行通讯的时候,发送的叫做请求报文，请求报文中的绝大多数内容是自动生成。
-
-  ```js
-  1. 请求行（request line）：有请求的方法和地址
-  2. 请求头部（ header ）
-  3. 空行
-  4. 请求体 4 个部分组成。
-  ```
-
-  ​![image-20220613110032277](assets/image-20220613110032277-20220801165426-zp21wvr.png)​
-* 响应报文：在使用`HTTP`​和服务器进行通讯的时候,服务器响应叫做**请求报文，** 响应报文中的主体内容在响应(主)体
-
-  ```js
-  1. 状态行：有响应状态码
-  2. 响应头部
-  3. 空行
-  4. 响应体 4 个部分组成。
-  ```
-
-  ​![image-20220613110755239](assets/image-20220613110755239-20220801165426-0n0w3jf.png)​
-
-### 状态码
-
-* HTTP状态码：`http`​ 响应状态码（Status Code）由三位数字组成，用来标识响应成功与否的状态
-
-  ```js
-  100//需要后续请求
-  200//请求成功。                                   
-  201//资源在服务器端已成功创建。                   
-  304//资源在客户端被缓存，响应体中不包含任何资源内容！   
-  400// 客户端的请求方式、或请求参数有误导致的请求失败！   
-  401//客户端的用户身份认证未通过，导致的此次请求失败！   
-  404 // 客户端请求的资源地址错误，导致服务器无法找到资源！ 
-  500//服务器内部错误，导致的本次请求失败！
-  ```
-* 业务状态码：业务状态码是服务端给出的关于业务描述的码，用于客户端明确得知本次请求的资源的状态情况。
-
-  ```js
-  1.位置不同
-  在状态行中所包含的状态码，叫做响应状态码
-  在响应体的数据中所包含的状态码，叫做业务状态码
-  2.表示的结果不同
-  响应状态码只能表示这次请求的成功与否（成功或失败）
-  业务状态码用来表示这次业务处理的成功与否
-  3.通用性不同
-  响应状态码是由http协议规定的，具有通用性。每个不同的状态码都有其标准的含义，不能乱用。
-  业务状态码是**后端程序员**自定义的，不具有通用性。
-  ```
+通过交互式网站和现代 Web 标准，AJAX 正在逐渐被 JavaScript 框架中的函数和官方的 [`Fetch API`](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)​ 标准取代。
 
 ## 同源跨域
 
-### 概念
+同源指的是两个 URL 地址具有相同的**协议地址、主机名、端口号。**
 
-同源指的是两个 URL 地址具有相同的**协议地址、主机名、端口号，其中有一个不一样就是跨域**
+**其中有一个不一样就是跨域**
 
 **跨域请求产生时，请求是发出去了，也是有响应的，仅仅是浏览器同源策略，认为不安全，拦截了结果，不将数据传递我们使用罢了**
 
+### 安全请求
+
+有两种类型的**跨源请求**：
+
+1. 安全请求。
+2. 所有其他请求。
+
+如果一个请求满足下面这两个条件，则该请求是安全的：
+
+1. [安全的方法](https://fetch.spec.whatwg.org/#cors-safelisted-method)：GET，POST 或 HEAD
+2. [安全的 header](https://fetch.spec.whatwg.org/#cors-safelisted-request-header) —— 仅允许自定义下列 header：
+
+    * ​`Accept`​，
+    * ​`Accept-Language`​，
+    * ​`Content-Language`​，
+    * ​`Content-Type`​ 的值为 `application/x-www-form-urlencoded`​，`multipart/form-data`​ 或 `text/plain`​。
+
+任何其他请求都被认为是“非安全”请求。例如，具有 `PUT`​ 方法或 `API-Key`​ HTTP-header 的请求就不是安全请求。
+
+**本质区别在于，可以使用**  **`<form>`** ​ **或**  **`<script>`** ​ **进行安全请求，而无需任何其他特殊方法。** 因此，即使是非常旧的服务器也能很好地接收安全请求。
+
+与此相反，带有非标准 header 或者例如 `DELETE`​ 方法的请求，无法通过这种方式创建。
+
+当我们尝试发送一个非安全请求时，浏览器会发送一个特殊的“预检（preflight）”请求到服务器 —— 询问服务器，你接受此类跨源请求吗？
+
+并且，除非服务器明确通过 header 进行确认，否则非安全请求不会被发送。
+
+如果一个请求是跨源的，浏览器始终会向其添加 `Origin`​ header。
+
+例如，如果我们从 `https://javascript.info/page`​ 请求 `https://anywhere.com/request`​，请求的 header 将如下所示：
+
+```http
+GET /request
+Host: anywhere.com
+Origin: https://javascript.info
+...
+```
+
+正如你所看到的，`Origin`​ 包含了确切的源（domain/protocol/port），没有路径（path）。
+
+服务器可以检查 `Origin`​，如果同意接受这样的请求，就会在响应中添加一个特殊的 header `Access-Control-Allow-Origin`​。该 header 包含了允许的源（在我们的示例中是 `https://javascript.info`​），或者一个星号 `*`​。然后响应成功，否则报错。
+
+浏览器在这里扮演受被信任的中间人的角色：
+
+1. 它确保发送的跨源请求带有正确的 `Origin`​。
+2. 它检查响应中的许可 `Access-Control-Allow-Origin`​，如果存在，则允许 JavaScript 访问响应，否则将失败并报错。
+
+​![image](assets/image-20240310103027-w9z9teg.png)​
+
+这是一个带有服务器许可的响应示例：
+
+```http
+200 OK
+Content-Type:text/html; charset=UTF-8
+Access-Control-Allow-Origin: https://javascript.info
+```
+
+---
+
+**对于安全请求：**
+
+* → 浏览器发送带有源的 `Origin`​ header。
+* ← 对于没有凭据的请求（默认不发送），服务器应该设置：
+
+  * ​`Access-Control-Allow-Origin`​ 为 `*`​ 或与 `Origin`​ 的值相同
+* ← 对于具有凭据的请求，服务器应该设置：
+
+  * ​`Access-Control-Allow-Origin`​ 值与 `Origin`​ 的相同
+  * ​`Access-Control-Allow-Credentials`​ 为 `true`​
+
+此外，要授予 JavaScript 访问除 `Cache-Control`​，`Content-Language`​，`Content-Type`​，`Expires`​，`Last-Modified`​ 或 `Pragma`​ 外的任何 response header 的权限，服务器应该在 header `Access-Control-Expose-Headers`​ 中列出允许的那些 header。
+
+**对于非安全请求，会在请求之前发出初步“预检”请求：**
+
+* → 浏览器将具有以下 header 的 `OPTIONS`​ 请求发送到相同的 URL：
+
+  * ​`Access-Control-Request-Method`​ 有请求方法。
+  * ​`Access-Control-Request-Headers`​ 以逗号分隔的“非安全” header 列表。
+* ← 服务器应该响应状态码为 200 和 header：
+
+  * ​`Access-Control-Allow-Methods`​ 带有允许的方法的列表，
+  * ​`Access-Control-Allow-Headers`​ 带有允许的 header 的列表，
+  * ​`Access-Control-Max-Age`​ 带有指定缓存权限的秒数。
+* 然后，发送实际的请求，并应用之前的“安全”方案。
+
+### [非安全请求](https://zh.javascript.info/fetch-crossorigin#fei-an-quan-qing-qiu)
+
+我们可以使用任何 HTTP 方法：不仅仅是 `GET/POST`​，也可以是 `PATCH`​，`DELETE`​ 及其他。
+
+之前，没有人能够设想网页能发出这样的请求。因此，可能仍然存在有些 Web 服务将非标准方法视为一个信号：“这不是浏览器”。它们可以在检查访问权限时将其考虑在内。
+
+因此，为了避免误解，任何“非安全”请求 —— 在过去无法完成的，浏览器不会立即发出此类请求。首先，它会先发送一个初步的、所谓的“预检（preflight）”请求，来请求许可。
+
+预检请求使用 `OPTIONS`​ 方法，它没有 body，但是有三个 header：
+
+* ​`Access-Control-Request-Method`​ header 带有非安全请求的方法。
+* ​`Access-Control-Request-Headers`​ header 提供一个以逗号分隔的非安全 HTTP-header 列表。
+
+如果服务器同意处理请求，那么它会进行响应，此响应的状态码应该为 200，没有 body，具有 header：
+
+* ​`Access-Control-Allow-Origin`​ 必须为 `*`​ 或进行请求的源（例如 `https://javascript.info`​）才能允许此请求。
+* ​`Access-Control-Allow-Methods`​ 必须具有允许的方法。
+* ​`Access-Control-Allow-Headers`​ 必须具有一个允许的 header 列表。
+* 另外，header `Access-Control-Max-Age`​ 可以指定缓存此权限的秒数。因此，浏览器不是必须为满足给定权限的后续请求发送预检。
+
+‍
+
+​![image](assets/image-20240310115628-okwyqo6.png)​
+
+让我们在一个跨源 `PATCH`​ 请求的例子中一步一步地看它是如何工作的（此方法经常被用于更新数据）：
+
+```javascript
+let response = await fetch('https://site.com/service.json', {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json',
+    'API-Key': 'secret'
+  }
+});
+```
+
+这里有三个理由解释为什么它不是一个安全请求（其实一个就够了）：
+
+* 方法 `PATCH`​
+* ​`Content-Type`​ 不是这三个中之一：`application/x-www-form-urlencoded`​，`multipart/form-data`​，`text/plain`​。
+* “非安全” `API-Key`​ header。
+
+---
+
+[ ](https://zh.javascript.info/fetch-crossorigin#step-1-yu-jian-qing-qiu-preflightrequest)​**[预检请求（preflight request）](https://zh.javascript.info/fetch-crossorigin#step-1-yu-jian-qing-qiu-preflightrequest)**
+
+在发送我们的请求前，浏览器会自己发送如下所示的预检请求：
+
+```http
+OPTIONS /service.json
+Host: site.com
+Origin: https://javascript.info
+Access-Control-Request-Method: PATCH
+Access-Control-Request-Headers: Content-Type,API-Key
+```
+
+* 方法：`OPTIONS`​。
+* 路径 —— 与主请求完全相同：`/service.json`​。
+* 特殊跨源头：
+
+  * ​`Origin`​ —— 来源。
+  * ​`Access-Control-Request-Method`​ —— 请求方法。
+  * ​`Access-Control-Request-Headers`​ —— 以逗号分隔的“非安全” header 列表。
+
+---
+
+[ ](https://zh.javascript.info/fetch-crossorigin#step-2-yu-jian-xiang-ying-preflightresponse)​**[预检响应（preflight response）](https://zh.javascript.info/fetch-crossorigin#step-2-yu-jian-xiang-ying-preflightresponse)**
+
+服务应响应状态 200 和 header：
+
+* ​`Access-Control-Allow-Origin: https://javascript.info`​
+* ​`Access-Control-Allow-Methods: PATCH`​
+* ​`Access-Control-Allow-Headers: Content-Type,API-Key`​。
+
+这将允许后续通信，否则会触发错误。
+
+如果服务器将来需要其他方法和 header，则可以通过将这些方法和 header 添加到列表中来预先允许它们。
+
+例如，此响应还允许 `PUT`​、`DELETE`​ 以及其他 header：
+
+```http
+200 OK
+Access-Control-Allow-Origin: https://javascript.info
+Access-Control-Allow-Methods: PUT,PATCH,DELETE
+Access-Control-Allow-Headers: API-Key,Content-Type,If-Modified-Since,Cache-Control
+Access-Control-Max-Age: 86400
+```
+
+现在，浏览器可以看到 `PATCH`​ 在 `Access-Control-Allow-Methods`​ 中，`Content-Type,API-Key`​ 在列表 `Access-Control-Allow-Headers`​ 中，因此它将发送主请求。
+
+如果 `Access-Control-Max-Age`​ 带有一个表示秒的数字，则在给定的时间内，预检权限会被缓存。上面的响应将被缓存 86400 秒，也就是一天。在此时间范围内，后续请求将不会触发预检。假设它们符合缓存的配额，则将直接发送它们。
+
+---
+
+**[实际请求（actual request）](https://zh.javascript.info/fetch-crossorigin#step-3-shi-ji-qing-qiu-actualrequest)**
+
+预检成功后，浏览器现在发出主请求。这里的过程与安全请求的过程相同。
+
+主请求具有 `Origin`​ header（因为它是跨源的）：
+
+```http
+PATCH /service.json
+Host: site.com
+Content-Type: application/json
+API-Key: secret
+Origin: https://javascript.info
+```
+
+**[实际响应（actual response）](https://zh.javascript.info/fetch-crossorigin#step-4-shi-ji-xiang-ying-actualresponse)**
+
+服务器不应该忘记在主响应中添加 `Access-Control-Allow-Origin`​。成功的预检并不能免除此要求：
+
+```http
+Access-Control-Allow-Origin: https://javascript.info
+```
+
+然后，JavaScript 可以读取主服务器响应了。
+
+**请注意：**
+
+**预检请求发生在“幕后”，它对 JavaScript 不可见。**
+
+JavaScript 仅获取对主请求的响应，如果没有服务器许可，则获得一个 error。、
+
+### [Response header](https://zh.javascript.info/fetch-crossorigin#responseheader)
+
+对于跨源请求，默认情况下，JavaScript 只能访问“安全的” response header：
+
+* ​`Cache-Control`​
+* ​`Content-Language`​
+* ​`Content-Type`​
+* ​`Expires`​
+* ​`Last-Modified`​
+* ​`Pragma`​
+
+> 请注意：列表中没有 `Content-Length`​ header！
+>
+> 该 header 包含完整的响应长度。因此，如果我们正在下载某些内容，并希望跟踪进度百分比，则需要额外的权限才能访问该 header。
+
+要授予 JavaScript 对任何其他 response header 的访问权限，服务器必须发送 `Access-Control-Expose-Headers`​ header。它包含一个以逗号分隔的应该被设置为可访问的非安全 header 名称列表。
+
+例如：
+
+```http
+200 OK
+Content-Type:text/html; charset=UTF-8
+Content-Length: 12345
+API-Key: 2c9de507f2c54aa1
+Access-Control-Allow-Origin: https://javascript.info
+Access-Control-Expose-Headers: Content-Length,API-Key
+```
+
+有了这种 `Access-Control-Expose-Headers`​ header，此脚本就被允许读取响应的 `Content-Length`​ 和 `API-Key`​ header。
+
+### [凭据（Credentials）](https://zh.javascript.info/fetch-crossorigin#ping-ju-credentials)
+
+默认情况下，由 JavaScript 代码发起的跨源请求不会带来任何凭据（cookies 或者 HTTP 认证（HTTP authentication））。
+
+这对于 HTTP 请求来说并不常见。通常，对 `http://site.com`​ 的请求附带有该域的所有 cookie。但是由 JavaScript 方法发出的跨源请求是个例外。
+
+例如，`fetch('http://another.com')`​ 不会发送任何 cookie，即使那些 (!) 属于 `another.com`​ 域的 cookie。
+
+这是因为具有凭据的请求比没有凭据的请求要强大得多。如果被允许，它会使用它们的凭据授予 JavaScript 代表用户行为和访问敏感信息的全部权力。
+
+服务器真的这么信任这种脚本吗？是的，它必须显式地带有允许请求的凭据和附加 header。
+
+要在 `fetch`​ 中发送凭据，我们需要添加 `credentials: "include"`​ 选项，像这样：
+
+```javascript
+fetch('http://another.com', {
+  credentials: "include"
+});
+```
+
+现在，`fetch`​ 将把源自 `another.com`​ 的 cookie 和我们的请求发送到该网站。
+
+**注意：**
+
+如果服务器同意接受 **带有凭据** 的请求，则除了 `Access-Control-Allow-Origin`​ 外，服务器还应该在响应中添加 header `Access-Control-Allow-Credentials: true`​。
+
+例如：
+
+```http
+200 OK
+Access-Control-Allow-Origin: https://javascript.info
+Access-Control-Allow-Credentials: true
+```
+
+**对于具有凭据的请求，禁止** `**Access-Control-Allow-Origin**` **使用星号**  `*****`​ **。如上所示，它必须有一个确切的源。这是另一项安全措施，以确保服务器真的知道它信任的发出此请求的是谁。否则浏览器不会发送实际请求，从而导致请求失败。**
+
 ### JSONP
 
-* 原理
+​`script`​ 可以具有任何域的 `src`​，例如 `<script src="http://another.com/…">`​。也可以执行来自任何网站的 `script`​。
 
-  ```js
-  利用 <script>标签没有跨域限制的漏洞，网页可以得到从其他来源动态产生的JSON数据。
-  JSONP请求一定需要对方的服务器做支持才可以
-  JSONP优点是简单兼容性好，可用于解决主流浏览器的跨域数据访问的问题。
-  缺点是仅支持get方法具有局限性,不安全可能会遭受XSS攻击。
-  ```
-* JSONP和AJAX
+如果一个网站，例如 `another.com`​ 试图公开这种访问方式的数据，则会使用所谓的 “JSONP (JSON with padding)” 协议。
 
-  ```js
-  JSONP和AJAX相同，都是客户端向服务器端发送请求，从服务器端获取数据的方式
-  但AJAX属于同源策略，JSONP属于非同源策略(跨域请求)
-  //同源策略会收到同源跨域的影响
-  //非同源策略不受到跨域的影响
-  ```
-* 步骤
+这是它的工作方式。
 
-  ```js
-  1.声明一个回调函数，其函数名(如show)当做参数值，要传递给跨域请求数据的服务器，函数形参为要获取目标数据(服务器返回的data)。
-  2.创建一个<script>标签，把那个跨域的API数据接口地址，赋值给script的src,还要在这个地址中向服务器传递该函数名(可以通过问号传参:?callback=show)
-  3.服务器接收到请求后，需要进行特殊的处理：把传递进来的函数名和它需要给你的数据拼接成一个字符串,例如:传递进去的函数名是show，它准备好的数据是show('xxx')
-  4.最后服务器把准备的数据通过HTTP协议返回给客户端，客户端再调用执行之前声明的回调函数（show），对返回的数据进行操作。
+假设在我们的网站，需要以这种方式从 `http://another.com`​ 网站获取数据，例如天气：
 
-  // index.html
-  //封装方法
-  function jsonp({ url, params, callback }) {
-    return new Promise((resolve, reject) => {
-      let script = document.createElement('script')
-      window[callback] = function(data) {
-        resolve(data)
-        document.body.removeChild(script)
-      }
-      params = { ...params, callback } // wd=b&callback=show
-      let arrs = []
-      for (let key in params) {
-        arrs.push(`${key}=${params[key]}`)
-      }
-      script.src = `${url}?${arrs.join('&')}`
-      document.body.appendChild(script)
-    })
-  }
+1. 首先，我们先声明一个全局函数来接收数据，例如 `gotWeather`​。
 
-  //这段代码相当于向http://localhost:3000/say?wd=Iloveyou&callback=show这个地址请求数据
-  //然后后台返回show('我不爱你')，最后会运行show()这个函数，打印出'我不爱你'
-  jsonp({
-    url: 'http://localhost:3000/say',
-    params: { wd: 'Iloveyou' },
-    callback: 'show'
-  }).then(data => {
-    console.log(data)//主要看后端返回了什么数据
-  })
-  ```
+    ```javascript
+    // 1. 声明处理天气数据的函数
+    function gotWeather({ temperature, humidity }) {
+      alert(`temperature: ${temperature}, humidity: ${humidity}`);
+    }
+    ```
+2. 然后我们创建一个特性（attribute）为 `src="http://another.com/weather.json?callback=gotWeather"`​ 的 `<script>`​ 标签，使用我们的函数名作为它的 `callback`​ URL-参数。
+
+    ```javascript
+    let script = document.createElement('script');
+    script.src = `http://another.com/weather.json?callback=gotWeather`;
+    document.body.append(script);
+    ```
+3. 远程服务器 `another.com`​ 动态生成一个脚本，该脚本调用 `gotWeather(...)`​，发送它想让我们接收的数据。
+
+    ```javascript
+    // 我们期望来自服务器的回答看起来像这样：
+    gotWeather({
+      temperature: 25,
+      humidity: 78
+    });
+    ```
+4. 当远程脚本加载并执行时，`gotWeather`​ 函数将运行，并且因为它是我们的函数，我们就有了需要的数据。
+
+这是可行的，并且不违反安全规定，因为双方都同意以这种方式传递数据。而且，既然双方都同意这种行为，那这肯定不是黑客攻击了。现在仍然有提供这种访问的服务，因为即使是非常旧的浏览器它依然适用。
+
+不久之后，网络方法出现在了浏览器 JavaScript 中。
+
+起初，跨源请求是被禁止的。但是，经过长时间的讨论，跨源请求被允许了，但是任何新功能都需要服务器明确允许，以特殊的 header 表述。
 
 ### CORS
 
@@ -5242,7 +6497,7 @@ server.listen(4000, () => {
 
 上述代码经过两次跨域，值得注意的是浏览器向代理服务器发送请求，也遵循同源策略，最后在index.html文件打印出`{"title":"fontend","password":"123456"}`​
 
-### nginx反向代理
+### nginx
 
 实现原理类似于Node中间件代理，需要你搭建一个中转nginx服务器，用于转发请求。
 
@@ -5299,118 +6554,944 @@ server.listen('8080');
 console.log('Server is running at port 8080...');
 ```
 
-### window.name + iframe
+## 报文
 
-window.name属性的独特之处：name值在不同的页面（甚至不同域名）加载后依旧存在，并且可以支持非常长的 name 值（2MB）。
+* 请求报文：在使用`HTTP`​和服务器进行通讯的时候,发送的叫做请求报文，请求报文中的绝大多数内容是自动生成。
 
-其中a.html和b.html是同域的，都是`http://localhost:3000`​;而c.html是`http://localhost:4000`​
+  ```js
+  1. 请求行（request line）：有请求的方法和地址
+  2. 请求头部（ header ）
+  3. 空行
+  4. 请求体 4 个部分组成。
+  ```
 
-```ini
- // a.html(http://localhost:3000/b.html)
-  <iframe src="http://localhost:4000/c.html" frameborder="0" onload="load()" id="iframe"></iframe>
-  <script>
-    let first = true
-    // onload事件会触发2次，第1次加载跨域页，并留存数据于window.name
-    function load() {
-      if(first){
-      // 第1次onload(跨域页)成功后，切换到同域代理页面
-        let iframe = document.getElementById('iframe');
-        iframe.src = 'http://localhost:3000/b.html';
-        first = false;
-      }else{
-      // 第2次onload(同域b.html页)成功后，读取同域window.name中数据
-        console.log(iframe.contentWindow.name);
+  ​![image-20220613110032277](assets/image-20220613110032277-20220801165426-zp21wvr.png)​
+* 响应报文：在使用HTTP和服务器进行通讯的时候,服务器响应叫做请求报文， 响应报文中的主体内容在响应(主)体
+
+  ```js
+  1. 状态行：有响应状态码
+  2. 响应头部
+  3. 空行
+  4. 响应体 4 个部分组成。
+  ```
+
+  ​![image](assets/image-20240310142021-xj9jilq.png)​
+
+## 状态码
+
+* HTTP状态码：`http`​ 响应状态码（Status Code）由三位数字组成，用来标识响应成功与否的状态
+
+  ```js
+  100//需要后续请求
+  200//请求成功。                           
+  201//资源在服务器端已成功创建。
+  302//重定向
+  304//资源在客户端被缓存，响应体中不包含任何资源内容！   
+  400//客户端的请求方式、或请求参数有误导致的请求失败！   
+  401//客户端的用户身份认证未通过，导致的此次请求失败！ 
+  403//服务器拒绝请求  
+  404 // 客户端请求的资源地址错误，导致服务器无法找到资源！ 
+  500//服务器内部错误，导致的本次请求失败！
+  ```
+* 业务状态码：业务状态码是服务端给出的关于业务描述的码，用于客户端明确得知本次请求的资源的状态情况。
+
+  ```js
+  1.位置不同
+  在状态行中所包含的状态码，叫做响应状态码
+  在响应体的数据中所包含的状态码，叫做业务状态码
+  2.表示的结果不同
+  响应状态码只能表示这次请求的成功与否（成功或失败）
+  业务状态码用来表示这次业务处理的成功与否
+  3.通用性不同
+  响应状态码是由http协议规定的，具有通用性。每个不同的状态码都有其标准的含义，不能乱用。
+  业务状态码是**后端程序员**自定义的，不具有通用性。
+  ```
+
+‍
+
+## [fetch](https://zh.javascript.info/fetch-api)
+
+```js
+let promise = fetch(url, [options])
+
+let promise = fetch(url, {
+  method: "GET", // POST，PUT，DELETE，等。
+  headers: {
+    // 内容类型 header 值通常是自动设置的
+    // 取决于 request body
+    "Content-Type": "text/plain;charset=UTF-8"
+  },
+  body: undefined // string，FormData，Blob，BufferSource，或 URLSearchParams
+  referrer: "about:client", // 或 "" 以不发送 Referer header，
+  // 或者是当前源的 url
+  referrerPolicy: "no-referrer-when-downgrade", // no-referrer，origin，same-origin...
+  mode: "cors", // same-origin，no-cors
+  credentials: "same-origin", // omit，include
+  cache: "default", // no-store，reload，no-cache，force-cache，或 only-if-cached
+  redirect: "follow", // manual，error
+  integrity: "", // 一个 hash，像 "sha256-abcdef1234567890"
+  keepalive: false, // true
+  signal: undefined, // AbortController 来中止请求
+  window: window // null
+})
+  .then((respones)=>{response.json()})
+  .then(esult => /* process result */)
+```
+
+### 请求过程
+
+```js
+let promise = fetch(url, [options])
+```
+
+* ​**`url`**​ —— 要访问的 URL。
+* ​**`options`**​ —— 可选参数：method，header 等。
+
+没有 `options`​，这就是一个简单的 GET 请求，下载 `url`​ 的内容。
+
+浏览器立即启动请求，并返回一个该调用代码应该用来获取结果的 `promise`​。
+
+获取响应通常需要经过两个阶段。
+
+➡️**第一阶段，当服务器发送了响应头（response header），**​**`fetch`**​ **返回的** **`promise`**​ **就使用内建的** **[Response](https://fetch.spec.whatwg.org/#response-class)** **class 对象来对响应头进行解析。**
+
+在这个阶段，我们可以通过检查响应头，来检查 HTTP 状态以确定请求是否成功，当前还没有响应体（response body）。
+
+如果 `fetch`​ 无法建立一个 HTTP 请求，例如网络问题，亦或是请求的网址不存在，那么 promise 就会 reject。异常的 HTTP 状态，例如 404 或 500，不会导致出现 error。
+
+我们可以在 response 的属性中看到 HTTP 状态：
+
+* ​**`status`**​ —— HTTP 状态码，例如 200。
+* ​**`ok`**​ —— 布尔值，如果 HTTP 状态码为 200-299，则为 `true`​。
+
+例如：
+
+```javascript
+let response = await fetch(url);
+
+if (response.ok) { // 如果 HTTP 状态码为 200-299
+  // 获取 response body（此方法会在下面解释）
+  let json = await response.json();
+} else {
+  alert("HTTP-Error: " + response.status);
+}
+```
+
+ **➡️第二阶段，为了获取 response body，我们需要使用一个其他的方法调用。**
+
+​`Response`​ 提供了多种基于 promise 的方法，来以不同的格式访问 body：
+
+```js
+let response = await fetch('url')
+let json = await response.json(); // 读取 response body，并将其解析为 JSON 格式
+let blob = await response.blob(); // 下载为 Blob 对象
+let formData= await response.formData(); // 下载为 FormData 对象
+let body= await response.body(); // 下载为 ReadableStream 对象
+```
+
+---
+
+* ​`response.text()`​ —— 读取 response，并以文本形式返回 response，
+
+  ```js
+  let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+
+  let text = await response.text(); // 将 response body 读取为文本
+
+  alert(text.slice(0, 80) + '...');
+  ```
+* ​`response.json()`​ —— 将 response 解析为 JSON 格式，
+
+  ```js
+  let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
+  let response = await fetch(url);
+
+  let commits = await response.json(); // 读取 response body，并将其解析为 JSON 格式
+
+  alert(commits[0].author.login);
+  ```
+* ​`response.formData()`​ —— 以 `FormData`​ 对象（在 [下一章](https://zh.javascript.info/formdata) 有解释）的形式返回 response，
+* ​`response.blob()`​ —— 以 [Blob](https://zh.javascript.info/blob)（具有类型的二进制数据）形式返回 response，
+
+  ```js
+  let response = await fetch('/article/fetch/logo-fetch.svg');
+
+  let blob = await response.blob(); // 下载为 Blob 对象
+
+  // 为其创建一个 <img>
+  let img = document.createElement('img');
+  img.style = 'position:fixed;top:10px;left:10px;width:100px';
+  document.body.append(img);
+
+  // 显示它
+  img.src = URL.createObjectURL(blob);
+
+  setTimeout(() => { // 3 秒后将其隐藏
+    img.remove();
+    URL.revokeObjectURL(img.src);
+  }, 3000);
+  ```
+* ​`response.arrayBuffer()`​ —— 以 [ArrayBuffer](https://zh.javascript.info/arraybuffer-binary-arrays)（低级别的二进制数据）形式返回 response，
+* 另外，`response.body`​ 是 [ReadableStream](https://streams.spec.whatwg.org/#rs-class) 对象，它允许你逐块读取 body，我们稍后会用一个例子解释它。
+
+> **重要：**
+>
+> 我们只能选择一种读取 body 的方法。
+>
+> 如果我们已经使用了 `response.text()`​ 方法来获取 response，那么如果再用 `response.json()`​，则不会生效，因为 body 内容已经被处理过了。
+>
+> ```javascript
+> let text = await response.text(); // response body 被处理了
+> let parsed = await response.json(); // 失败（已经被处理过了）
+> ```
+
+### Request header
+
+要在 `fetch`​ 中设置 request header，我们可以使用 `headers`​ 选项。它有一个带有输出 header 的对象，如下所示：
+
+```javascript
+let response = fetch(protectedUrl, {
+  headers: {
+    Authentication: 'secret'
+  }
+});
+```
+
+……但是有一些我们无法设置的 header（详见 [forbidden HTTP headers](https://fetch.spec.whatwg.org/#forbidden-header-name)）：
+
+* ​`Accept-Charset`​, `Accept-Encoding`​
+* ​`Access-Control-Request-Headers`​
+* ​`Access-Control-Request-Method`​
+* ​`Connection`​
+* ​`Content-Length`​
+* ​`Cookie`​, `Cookie2`​
+* ​`Date`​
+* ​`DNT`​
+* ​`Expect`​
+* ​`Host`​
+* ​`Keep-Alive`​
+* ​`Origin`​
+* ​`Referer`​
+* ​`TE`​
+* ​`Trailer`​
+* ​`Transfer-Encoding`​
+* ​`Upgrade`​
+* ​`Via`​
+* ​`Proxy-*`​
+* ​`Sec-*`​
+
+这些 header 保证了 HTTP 的正确性和安全性，所以它们仅由浏览器控制。
+
+### Response header
+
+Response header 位于 `response.headers`​ 中的一个类似于 Map 的 header 对象。
+
+它不是真正的 Map，但是它具有类似的方法，我们可以按名称（name）获取各个 header，或迭代它们：
+
+```javascript
+let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+
+// 获取一个 header
+alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
+
+// 迭代所有 header
+for (let [key, value] of response.headers) {
+  alert(`${key} = ${value}`);
+}
+```
+
+### 下载进度
+
+​`fetch`​ 方法允许去跟踪 **下载** 进度。
+
+请注意：到目前为止，`fetch`​ 方法无法跟踪 **上传** 进度。对于这个目的，请使用 [XMLHttpRequest](https://zh.javascript.info/xmlhttprequest)
+
+要跟踪下载进度，我们可以使用 `response.body`​ 属性。它是 `ReadableStream`​ —— 一个特殊的对象，它可以逐块（chunk）提供 body。在 [Streams API](https://streams.spec.whatwg.org/#rs-class) 规范中有对 `ReadableStream`​ 的详细描述。
+
+与 `response.text()`​，`response.json()`​ 和其他方法不同，`response.body`​ 给予了对进度读取的完全控制，我们可以随时计算下载了多少。
+
+这是从 `response.body`​ 读取 response 的示例代码：
+
+```javascript
+// 代替 response.json() 以及其他方法
+const reader = response.body.getReader();
+// 在 body 下载时，一直为无限循环
+while(true) {
+  // 当最后一块下载完成时，done 值为 true
+  // value 是块字节的 Uint8Array
+  const {done, value} = await reader.read();
+
+  if (done) {
+    break;
+  }
+
+  console.log(`Received ${value.length} bytes`)
+}
+```
+
+​`await reader.read()`​ 调用的结果是一个具有两个属性的对象：
+
+* ​**`done`**​ —— 当读取完成时为 `true`​，否则为 `false`​。
+* ​**`value`**​ —— 字节的类型化数组：`Uint8Array`​。
+
+> **请注意：**
+>
+> Streams API 还描述了如果使用 `for await..of`​ 循环异步迭代 `ReadableStream`​，但是目前为止，它还未得到很好的支持（参见 [浏览器问题](https://github.com/whatwg/streams/issues/778#issuecomment-461341033)），所以我们使用了 `while`​ 循环。
+>
+> 我们在循环中接收响应块（response chunk），直到加载完成，也就是：直到 `done`​ 为 `true`​。
+>
+> 要将进度打印出来，我们只需要将每个接收到的片段 `value`​ 的长度（length）加到 counter 即可。
+>
+> 这是获取响应，并在控制台中记录进度的完整工作示例，下面有更多说明：
+
+---
+
+```javascript
+// Step 1：启动 fetch，并获得一个 reader
+let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100');
+const reader = response.body.getReader();
+
+// Step 2：获得总长度（length）
+const contentLength = +response.headers.get('Content-Length');
+
+// Step 3：读取数据
+let receivedLength = 0; // 当前接收到了这么多字节
+let chunks = []; // 接收到的二进制块的数组（包括 body）
+while(true) {
+  const {done, value} = await reader.read();
+  if (done) {
+    break;
+  }
+  chunks.push(value);
+  receivedLength += value.length;
+  console.log(`Received ${receivedLength} of ${contentLength}`)
+}
+
+// Step 4：将块连接到单个 Uint8Array
+let chunksAll = new Uint8Array(receivedLength); // (4.1)
+let position = 0;
+for(let chunk of chunks) {
+  chunksAll.set(chunk, position); // (4.2)
+  position += chunk.length;
+}
+
+// Step 5：解码成字符串
+let result = new TextDecoder("utf-8").decode(chunksAll);
+
+// 我们完成啦！
+let commits = JSON.parse(result);
+alert(commits[0].author.login);
+```
+
+1. 我们像往常一样执行 `fetch`​，但不是调用 `response.json()`​，而是获得了一个流读取器（stream reader）`response.body.getReader()`​。  
+    请注意，我们不能同时使用这两种方法来读取相同的响应。要么使用流读取器，要么使用 reponse 方法来获取结果。
+2. 在读取数据之前，我们可以从 `Content-Length`​ header 中得到完整的响应长度。  
+    跨源请求中可能不存在这个 header（请参见 [Fetch：跨源请求](https://zh.javascript.info/fetch-crossorigin)），并且从技术上讲，服务器可以不设置它。但是通常情况下它都会在那里。
+3. 调用 `await reader.read()`​，直到它完成。  
+    我们将响应块收集到数组 `chunks`​ 中。这很重要，因为在使用完（consumed）响应后，我们将无法使用 `response.json()`​ 或者其他方式（你可以试试，将会出现 error）去“重新读取”它。
+4. 最后，我们有了一个 `chunks`​ —— 一个 `Uint8Array`​ 字节块数组。我们需要将这些块合并成一个结果。但不幸的是，没有单个方法可以将它们串联起来，所以这里需要一些代码来实现：
+
+    1. 我们创建 `chunksAll = new Uint8Array(receivedLength)`​ —— 一个具有所有数据块合并后的长度的同类型数组。
+    2. 然后使用 `.set(chunk, position)`​ 方法，从数组中一个个地复制这些 `chunk`​。
+5. 我们的结果现在储存在 `chunksAll`​ 中。但它是一个字节数组，不是字符串。  
+    要创建一个字符串，我们需要解析这些字节。可以使用内建的 [TextDecoder](https://zh.javascript.info/text-decoder) 对象完成。然后，我们可以 `JSON.parse`​ 它，如果有必要的话。  
+    如果我们需要的是二进制内容而不是字符串呢？这更简单。用下面这行代码替换掉第 4 和第 5 步，这行代码从所有块创建一个 `Blob`​：
+
+    ```javascript
+    let blob = new Blob(chunks);
+    ```
+
+最后，我们得到了结果（以字符串或 blob 的形式表示，什么方便就用什么），并在过程中对进度进行了跟踪。
+
+再强调一遍，这不能用于 **上传** 过程（现在无法通过 `fetch`​ 获取），仅用于 **下载** 过程。
+
+另外，如果大小未知，我们应该检查循环中的 `receivedLength`​，一旦达到一定的限制就将其中断。这样 `chunks`​ 就不会溢出内存了。
+
+### AbortController
+
+正如我们所知道的，`fetch`​ 返回一个 promise。JavaScript 通常并没有“中止” promise 的概念。那么我们怎样才能取消一个正在执行的 `fetch`​ 呢？例如，如果用户在我们网站上的操作表明不再需要某个执行中的 `fetch`​。
+
+为此有一个特殊的内建对象：`AbortController`​。它不仅可以中止 `fetch`​，还可以中止其他异步任务。
+
+创建一个控制器（controller）：
+
+```javascript
+let controller = new AbortController();
+```
+
+控制器是一个极其简单的对象。
+
+* 它具有单个方法 `abort()`​，
+* 和单个属性 `signal:{aborted,reason,onabort}`​对象，我们可以在这个属性上设置事件监听器。
+
+当 `abort()`​ 被调用时：
+
+* ​`controller.signal`​ 就会触发 `abort`​ 事件。
+* ​`controller.signal.aborted`​ 属性变为 `true`​。
+
+通常，我们需要处理两部分：
+
+1. 一部分是通过在 `controller.signal`​ 上添加一个监听器，来执行可取消操作。
+2. 另一部分是触发取消：在需要的时候调用 `controller.abort()`​。
+
+这是完整的示例（目前还没有 `fetch`​）：
+
+```javascript
+let controller = new AbortController();
+let signal = controller.signal;
+
+// 执行可取消操作部分
+// 获取 "signal" 对象，
+// 并将监听器设置为在 controller.abort() 被调用时触发
+signal.addEventListener('abort', () => alert("abort!"));
+
+// 另一部分，取消（在之后的任何时候）：
+controller.abort(); // 中止！
+
+// 事件触发，signal.aborted 变为 true
+alert(signal.aborted); // true
+```
+
+正如我们所看到的，`AbortController`​ 只是在 `abort()`​ 被调用时传递 `abort`​ 事件的一种方式。
+
+我们可以自己在代码中实现相同类型的事件监听，而不需要 `AbortController`​ 对象。
+
+但是有价值的是，`fetch`​ 知道如何与 `AbortController`​ 对象一起工作。它们是集成在一起的。
+
+---
+
+为了能够取消 `fetch`​，请将 `AbortController`​ 的 `signal`​ 属性作为 `fetch`​ 的一个可选参数（option）进行传递：
+
+```javascript
+let controller = new AbortController();
+fetch(url, {
+  signal: controller.signal
+});
+```
+
+​`fetch`​ 方法知道如何与 `AbortController`​ 一起工作。它会监听 `signal`​ 上的 `abort`​ 事件。
+
+现在，想要中止 `fetch`​，调用 `controller.abort()`​ 即可：
+
+```javascript
+controller.abort();
+```
+
+我们完成啦：`fetch`​ 从 `signal`​ 获取了事件并中止了请求。
+
+当一个 fetch 被中止，它的 promise 就会以一个 error `AbortError`​ reject，因此我们应该对其进行处理，例如在 `try..catch`​ 中。
+
+这是完整的示例，其中 `fetch`​ 在 1 秒后中止：
+
+```javascript
+// 1 秒后中止
+let controller = new AbortController();
+setTimeout(() => controller.abort(), 1000);
+
+try {
+  let response = await fetch('/article/fetch-abort/demo/hang', {
+    signal: controller.signal
+  });
+} catch(err) {
+  if (err.name == 'AbortError') { // handle abort()
+    alert("Aborted!");
+  } else {
+    throw err;
+  }
+}
+```
+
+## XMLHttpRequest
+
+​`XMLHttpRequest`​ 是一个内建的浏览器对象，它允许使用 JavaScript 发送 HTTP 请求。
+
+虽然它的名字里面有 “XML” 一词，但它可以操作任何数据，而不仅仅是 XML 格式。我们可以用它来上传/下载文件，跟踪进度等。
+
+现如今，我们有一个更为现代的方法叫做 `fetch`​，它的出现使得 `XMLHttpRequest`​ 在某种程度上被弃用。
+
+在现代 Web 开发中，出于以下三种原因，我们还在使用 `XMLHttpRequest`​：
+
+1. 历史原因：我们需要支持现有的使用了 `XMLHttpRequest`​​ 的脚本。
+2. 我们需要兼容旧浏览器，并且不想用 polyfill（例如为了使脚本更小）。
+3. 我们需要做一些 `fetch`​​ 目前无法做到的事情，例如跟踪上传进度。
+
+### 创建请求
+
+​`XMLHttpRequest `​有两种执行模式：**同步（synchronous）和异步（asynchronous）。**
+
+要发送请求，需要 3 个步骤：
+
+1. 创建 `XMLHttpRequest`​：此构造器没有参数。
+
+    ```javascript
+    let xhr = new XMLHttpRequest();
+    ```
+2. 初始化它，通常就在 `new XMLHttpRequest`​ 之后：
+
+    ```javascript
+    xhr.open(method, URL, [async, user, password])
+    ```
+
+    此方法指定请求的主要参数：
+
+    * ​`method`​ —— HTTP 方法。通常是 `"GET"`​ 或 `"POST"`​。
+    * ​`URL`​ —— 要请求的 URL，通常是一个字符串，也可以是 [URL](https://zh.javascript.info/url) 对象。
+    * ​`async`​ —— 如果显式地设置为 `false`​，那么请求将会以同步的方式处理，我们稍后会讲到它。
+    * ​`user`​，`password`​ —— HTTP 基本身份验证（如果需要的话）的登录名和密码。
+
+    请注意，`open`​ 调用与其名称相反，不会建立连接。它仅配置请求，而网络活动仅以 `send`​ 调用开启。
+3. 发送请求。
+
+    ```javascript
+    xhr.send([body])
+    ```
+
+    这个方法会建立连接，并将请求发送到服务器。可选参数 `body`​ 包含了 request body。  
+    一些请求方法，像 `GET`​ 没有 request body。还有一些请求方法，像 `POST`​ 使用 `body`​ 将数据发送到服务器。我们稍后会看到相应示例。
+4. 监听 `xhr`​ 事件以获取响应。  
+    这三个事件是最常用的：
+
+    * ​`load`​ —— 当请求完成（即使 HTTP 状态为 400 或 500 等），并且响应已完全下载。
+    * ​`error`​ —— 当无法发出请求，例如网络中断或者无效的 URL。
+    * ​`progress`​ —— 在下载响应期间定期触发，报告已经下载了多少。
+
+    ```javascript
+    xhr.onload = function() {
+      alert(`Loaded: ${xhr.status} ${xhr.response}`);
+    };
+
+    xhr.onerror = function() { // 仅在根本无法发出请求时触发
+      alert(`Network Error`);
+    };
+
+    xhr.onprogress = function(event) { // 定期触发
+      // event.loaded —— 已经下载了多少字节
+      // event.lengthComputable = true，当服务器发送了 Content-Length header 时
+      // event.total —— 总字节数（如果 lengthComputable 为 true）
+      alert(`Received ${event.loaded} of ${event.total}`);
+    };
+    ```
+
+下面是一个完整的示例。它从服务器加载 `/article/xmlhttprequest/example/load`​，并打印加载进度：
+
+```javascript
+// 1. 创建一个 new XMLHttpRequest 对象
+let xhr = new XMLHttpRequest();
+
+// 2. 配置它：从 URL /article/.../load GET-request
+xhr.open('GET', '/article/xmlhttprequest/example/load');
+
+// 3. 通过网络发送请求
+xhr.send();
+
+// 4. 当接收到响应后，将调用此函数
+xhr.onload = function() {
+  if (xhr.status != 200) { // 分析响应的 HTTP 状态
+    alert(`Error ${xhr.status}: ${xhr.statusText}`); // 例如 404: Not Found
+  } else { // 显示结果
+    alert(`Done, got ${xhr.response.length} bytes`); // response 是服务器响应
+  }
+};
+
+xhr.onprogress = function(event) {
+  if (event.lengthComputable) {
+    alert(`Received ${event.loaded} of ${event.total} bytes`);
+  } else {
+    alert(`Received ${event.loaded} bytes`); // 没有 Content-Length
+  }
+
+};
+
+xhr.onerror = function() {
+  alert("Request failed");
+};
+```
+
+一旦服务器有了响应，我们可以在以下 `xhr`​ 属性中接收结果：
+
+​`status`​HTTP 状态码（一个数字）：`200`​，`404`​，`403`​ 等，如果出现非 HTTP 错误，则为 `0`​。`statusText`​HTTP 状态消息（一个字符串）：状态码为 `200`​ 对应于 `OK`​，`404`​ 对应于 `Not Found`​，`403`​ 对应于 `Forbidden`​。`response`​（旧脚本可能用的是 `responseText`​）服务器 response body。我们还可以使用相应的属性指定超时（timeout）：
+
+```javascript
+xhr.timeout = 10000; // timeout 单位是 ms，此处即 10 秒
+```
+
+如果在给定时间内请求没有成功执行，请求就会被取消，并且触发 `timeout`​ 事件。
+
+> **URL 搜索参数（URL search parameters）**
+>
+> 为了向 URL 添加像 `?name=value`​ 这样的参数，并确保正确的编码，我们可以使用 [URL](https://zh.javascript.info/url) 对象：
+>
+> ```javascript
+> let url = new URL('https://google.com/search');
+> url.searchParams.set('q', 'test me!');
+>
+> // 参数 'q' 被编码
+> xhr.open('GET', url); // https://google.com/search?q=test+me%21
+> ```
+
+### [同步请求](https://zh.javascript.info/xmlhttprequest#tong-bu-qing-qiu)
+
+如果在 `open`​ 方法中将第三个参数 `async`​ 设置为 `false`​，那么请求就会以同步的方式进行。
+
+换句话说，JavaScript 执行在 `send()`​ 处暂停，并在收到响应后恢复执行。这有点儿像 `alert`​ 或 `prompt`​ 命令。
+
+下面是重写的示例，`open`​ 的第三个参数为 `false`​：
+
+```javascript
+let xhr = new XMLHttpRequest();
+
+xhr.open('GET', '/article/xmlhttprequest/hello.txt', false);
+
+try {
+  xhr.send();
+  if (xhr.status != 200) {
+    alert(`Error ${xhr.status}: ${xhr.statusText}`);
+  } else {
+    alert(xhr.response);
+  }
+} catch(err) { // 代替 onerror
+  alert("Request failed");
+}
+```
+
+这看起来好像不错，但是很少使用同步调用，因为它们会阻塞页面内的 JavaScript，直到加载完成。在某些浏览器中，滚动可能无法正常进行。如果一个同步调用执行时间过长，浏览器可能会建议关闭“挂起（hanging）”的网页。
+
+​`XMLHttpRequest`​ 的很多高级功能在同步请求中都不可用，例如向其他域发起请求或者设置超时。并且，正如你所看到的，没有进度指示。
+
+基于这些原因，同步请求使用的非常少，几乎从不使用。在这我们就不再讨论它了。
+
+### [跨源请求](https://zh.javascript.info/xmlhttprequest#kua-yuan-qing-qiu)
+
+​`XMLHttpRequest`​ 可以使用和 [fetch](https://zh.javascript.info/fetch-crossorigin) 相同的 CORS 策略进行跨源请求。
+
+就像 `fetch`​ 一样，默认情况下不会将 cookie 和 HTTP 授权发送到其他域。要启用它们，可以将 `xhr.withCredentials`​ 设置为 `true`​：
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+xhr.open('POST', 'http://anywhere.com/request');
+...
+```
+
+### ResponseType
+
+我们可以使用 `xhr.responseType`​​ 属性来设置**响应格式**：
+
+* ​`""`​（默认）—— 响应格式为字符串，
+* ​`"text"`​ —— 响应格式为字符串，
+* ​`"arraybuffer"`​ —— 响应格式为 `ArrayBuffer`​（对于二进制数据，请参见 [ArrayBuffer，二进制数组](https://zh.javascript.info/arraybuffer-binary-arrays)），
+* ​`"blob"`​ —— 响应格式为 `Blob`​（对于二进制数据，请参见 [Blob](https://zh.javascript.info/blob)），
+* ​`"document"`​ —— 响应格式为 XML document（可以使用 XPath 和其他 XML 方法）或 HTML document（基于接收数据的 MIME 类型）
+* ​`"json"`​ —— 响应格式为 JSON（自动解析）。
+
+例如，我们以 JSON 格式获取响应：
+
+```javascript
+let xhr = new XMLHttpRequest();
+
+xhr.open('GET', '/article/xmlhttprequest/example/json');
+
+xhr.responseType = 'json';
+
+xhr.send();
+
+// 响应为 {"message": "Hello, world!"}
+xhr.onload = function() {
+  let responseObj = xhr.response;
+  alert(responseObj.message); // Hello, world!
+};
+```
+
+> **请注意：**
+>
+> 在旧的脚本中，你可能会看到 `xhr.responseText`​，甚至会看到 `xhr.responseXML`​ 属性。
+>
+> 它们是由于历史原因而存在的，以获取字符串或 XML 文档。如今，我们应该在 `xhr.responseType`​ 中设置格式，然后就能获取如上所示的 `xhr.response`​ 了。
+
+### [readyState](https://zh.javascript.info/xmlhttprequest#readystate)
+
+​`XMLHttpRequest`​ 的状态（state）会随着它的处理进度变化而变化。可以通过 `xhr.readyState`​ 来了解当前状态。
+
+[规范](https://xhr.spec.whatwg.org/#states) 中提到的所有状态如下：
+
+```javascript
+UNSENT = 0; // 初始状态
+OPENED = 1; // open 被调用
+HEADERS_RECEIVED = 2; // 接收到 response header
+LOADING = 3; // 响应正在被加载（接收到一个数据包）
+DONE = 4; // 请求完成
+```
+
+​`XMLHttpRequest`​ 对象以 `0`​ → `1`​ → `2`​ → `3`​ → … → `3`​ → `4`​ 的顺序在它们之间转变。每当通过网络接收到一个数据包，就会重复一次状态 `3`​。
+
+我们可以使用 `readystatechange`​ 事件来跟踪它们：
+
+```javascript
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 3) {
+    // 加载中
+  }
+  if (xhr.readyState == 4) {
+    // 请求完成
+  }
+};
+```
+
+你可能在非常老的代码中找到 `readystatechange`​ 这样的事件监听器，它的存在是有历史原因的，因为曾经有很长一段时间都没有 `load`​ 以及其他事件。如今，它已被 `load/error/progress`​ 事件处理程序所替代。
+
+### [Aborting](https://zh.javascript.info/xmlhttprequest#zhong-zhi-qing-qiu-aborting)
+
+我们可以随时终止请求。调用 `xhr.abort()`​ 即可：
+
+```javascript
+xhr.abort(); // 终止请求
+```
+
+它会触发 `abort`​ 事件，且 `xhr.status`​ 变为 `0`​。
+
+### [HTTP-header](https://zh.javascript.info/xmlhttprequest#httpheader)
+
+​`XMLHttpRequest`​ 允许发送自定义 header，并且可以从响应中读取 header。
+
+HTTP-header 有三种方法：
+
+​`setRequestHeader(name, value)`​使用给定的 `name`​ 和 `value`​ 设置 request header。
+
+例如：
+
+```javascript
+xhr.setRequestHeader('Content-Type', 'application/json');
+```
+
+> **Header 的限制**
+>
+> 一些 header 是由浏览器专门管理的，例如 `Referer`​ 和 `Host`​。 完整列表请见 [规范](https://xhr.spec.whatwg.org/#the-setrequestheader()-method)。
+>
+> 为了用户安全和请求的正确性，`XMLHttpRequest`​ 不允许更改它们。
+
+---
+
+> **不能移除 header**
+>
+> ​`XMLHttpRequest`​ 的另一个特点是不能撤销 `setRequestHeader`​。
+>
+> 一旦设置了 header，就无法撤销了。其他调用会向 header 中添加信息，但不会覆盖它。
+>
+> 例如：
+>
+> ```javascript
+> xhr.setRequestHeader('X-Auth', '123');
+> xhr.setRequestHeader('X-Auth', '456');
+>
+> // header 将是：
+> // X-Auth: 123, 456
+> ```
+
+​`getResponseHeader(name)`​获取具有给定 `name`​ 的 header（`Set-Cookie`​ 和 `Set-Cookie2`​ 除外）。
+
+例如：
+
+```javascript
+xhr.getResponseHeader('Content-Type')
+```
+
+​`getAllResponseHeaders()`​返回除 `Set-Cookie`​ 和 `Set-Cookie2`​ 外的所有 response header。
+
+header 以单行形式返回，例如：
+
+```http
+Cache-Control: max-age=31536000
+Content-Length: 4260
+Content-Type: image/png
+Date: Sat, 08 Sep 2012 16:53:16 GMT
+```
+
+header 之间的换行符始终为 `"\r\n"`​（不依赖于操作系统），所以我们可以很容易地将其拆分为单独的 header。
+
+name 和 value 之间总是以冒号后跟一个空格 `": "`​ 分隔。这是标准格式。
+
+因此，如果我们想要获取具有 name/value 对的对象，则需要用一点 JavaScript 代码来处理它们。
+
+像这样（假设如果两个 header 具有相同的名称，那么后者就会覆盖前者）：
+
+```javascript
+let headers = xhr
+  .getAllResponseHeaders()
+  .split('\r\n')
+  .reduce((result, current) => {
+    let [name, value] = current.split(': ');
+    result[name] = value;
+    return result;
+  }, {});
+
+// headers['Content-Type'] = 'image/png'
+```
+
+### [上传进度](https://zh.javascript.info/xmlhttprequest#shang-chuan-jin-du)
+
+​`progress`​ 事件仅在下载阶段触发。
+
+也就是说：如果我们 `POST`​ 一些内容，`XMLHttpRequest`​ 首先上传我们的数据（request body），然后下载响应。
+
+如果我们要上传的东西很大，那么我们肯定会对跟踪上传进度感兴趣。但是 `xhr.onprogress`​ 在这里并不起作用。
+
+这里有另一个对象，它没有方法，它专门用于跟踪上传事件：`xhr.upload`​。
+
+它会生成事件，类似于 `xhr`​，但是 `xhr.upload`​ 仅在上传时触发它们：
+
+* ​`loadstart`​ —— 上传开始。
+* ​`progress`​ —— 上传期间定期触发。
+* ​`abort`​ —— 上传中止。
+* ​`error`​ —— 非 HTTP 错误。
+* ​`load`​ —— 上传成功完成。
+* ​`timeout`​ —— 上传超时（如果设置了 `timeout`​ 属性）。
+* ​`loadend`​ —— 上传完成，无论成功还是 error。
+
+handler 示例：
+
+```javascript
+xhr.upload.onprogress = function(event) {
+  alert(`Uploaded ${event.loaded} of ${event.total} bytes`);
+};
+
+xhr.upload.onload = function() {
+  alert(`Upload finished successfully.`);
+};
+
+xhr.upload.onerror = function() {
+  alert(`Error during the upload: ${xhr.status}`);
+};
+```
+
+这是一个真实示例：带有进度指示的文件上传：
+
+```markup
+<input type="file" onchange="upload(this.files[0])">
+
+<script>
+function upload(file) {
+  let xhr = new XMLHttpRequest();
+
+  // 跟踪上传进度
+  xhr.upload.onprogress = function(event) {
+    console.log(`Uploaded ${event.loaded} of ${event.total}`);
+  };
+
+  // 跟踪完成：无论成功与否
+  xhr.onloadend = function() {
+    if (xhr.status == 200) {
+      console.log("success");
+    } else {
+      console.log("error " + this.status);
+    }
+  };
+
+  xhr.open("POST", "/article/xmlhttprequest/post/upload");
+  xhr.send(file);
+}
+</script>
+```
+
+### 生命周期
+
+使用 `XMLHttpRequest`​ 的 GET 请求的典型代码：
+
+实际上还有很多事件，在 [现代规范](https://xhr.spec.whatwg.org/#events) 中有详细列表（按生命周期排序）：
+
+* ​`loadstart`​ —— 请求开始。
+* ​`progress`​ —— 一个响应数据包到达，此时整个 response body 都在 `response`​ 中。
+* ​`abort`​ —— 调用 `xhr.abort()`​ 取消了请求。
+* ​`error`​ —— 发生连接错误，例如，域错误。不会发生诸如 404 这类的 HTTP 错误。
+* ​`load`​ —— 请求成功完成。
+* ​`timeout`​ —— 由于请求超时而取消了该请求（仅发生在设置了 timeout 的情况下）。
+* ​`loadend`​ —— 在 `load`​，`error`​，`timeout`​ 或 `abort`​ 之后触发。
+
+​`error`​，`abort`​，`timeout`​ 和 `load`​ 事件是互斥的。其中只有一种可能发生。
+
+最常用的事件是加载完成（`load`​），加载失败（`error`​），或者我们可以使用单个 `loadend`​ 处理程序并检查请求对象 `xhr`​ 的属性，以查看发生了什么。
+
+我们还了解了另一个事件：`readystatechange`​。由于历史原因，它早在规范制定之前就出现了。如今我们已经无需使用它了，我们可以用新的事件代替它，但通常可以在旧的代码中找到它。
+
+如果我们需要专门跟踪上传，那么我们应该在 `xhr.upload`​ 对象上监听相同的事件。
+
+### 恢复文件上传
+
+使用 `fetch`​ 方法来上传文件相当容易。
+
+连接断开后如何恢复上传？这里没有对此的内建选项，但是我们有实现它的一些方式。
+
+对于大文件（如果我们可能需要恢复），可恢复的上传应该带有上传进度提示。由于 `fetch`​ 不允许跟踪上传进度，我们将会使用 [XMLHttpRequest](https://zh.javascript.info/xmlhttprequest)。
+
+---
+
+要恢复上传，我们需要知道在连接断开前已经上传了多少。
+
+我们有 `xhr.upload.onprogress`​ 来跟踪上传进度。
+
+不幸的是，它不会帮助我们在此处恢复上传，因为它会在数据 **被发送** 时触发，**但是服务器是否接收到了？浏览器并不知道。**
+
+或许它是由本地网络代理缓冲的（buffered），或者可能是远程服务器进程刚刚终止而无法处理它们，亦或是它在中间丢失了，并没有到达服务器。
+
+这就是为什么此事件仅适用于显示一个好看的进度条。
+
+要恢复上传，我们需要 **确切地** 知道服务器接收的字节数。而且只有服务器能告诉我们，因此，我们将发出一个额外的请求。
+
+---
+
+[一个示例算法](https://zh.javascript.info/resume-upload#suan-fa)
+
+1. 首先，创建一个文件 id，以唯一地标识我们要上传的文件：
+
+    ```javascript
+    let fileId = file.name + '-' + file.size + '-' + file.lastModified;
+    ```
+
+    在恢复上传时需要用到它，以告诉服务器我们要恢复的内容。  
+    如果名称，或大小，或最后一次修改时间发生了更改，则将有另一个 `fileId`​。
+2. 向服务器发送一个请求，询问它已经有了多少字节，像这样：
+
+    ```javascript
+    let response = await fetch('status', {
+      headers: {
+        'X-File-Id': fileId
       }
-    }
-  </script>
-复制代码
-```
+    });
 
-b.html为中间代理页，与a.html同域，内容为空。
+    // 服务器已有的字节数
+    let startByte = +await response.text();
+    ```
 
-```xml
- // c.html(http://localhost:4000/c.html)
-  <script>
-    window.name = '我不爱你'  
-  </script>
-复制代码
-```
+    这假设服务器通过 `X-File-Id`​ header 跟踪文件上传。应该在服务端实现。  
+    如果服务器上尚不存在该文件，则服务器响应应为 `0`​。
+3. 然后，我们可以使用 `Blob`​ 和 `slice`​ 方法来发送从 `startByte`​ 开始的文件：
 
-总结：通过iframe的src属性由外域转向本地域，跨域数据即由iframe的window.name从外域传递到本地域。这个就巧妙地绕过了浏览器的跨域访问限制，但同时它又是安全操作。
+    ```javascript
+    xhr.open("POST", "upload", true);
 
-### location.hash + iframe
+    // 文件 id，以便服务器知道我们要恢复的是哪个文件
+    xhr.setRequestHeader('X-File-Id', fileId);
 
-实现原理： a.html欲与c.html跨域相互通信，通过中间页b.html来实现。 三个页面，不同域之间利用iframe的location.hash传值，相同域之间直接js访问来通信。
+    // 发送我们要从哪个字节开始恢复，因此服务器知道我们正在恢复
+    xhr.setRequestHeader('X-Start-Byte', startByte);
 
-具体实现步骤：一开始a.html给c.html传一个hash值，然后c.html收到hash值后，再把hash值传递给b.html，最后b.html将结果放到a.html的hash值中。  
-同样的，a.html和b.html是同域的，都是`http://localhost:3000`​;而c.html是`http://localhost:4000`​
+    xhr.upload.onprogress = (e) => {
+      console.log(`Uploaded ${startByte + e.loaded} of ${startByte + e.total}`);
+    };
 
-```xml
- // a.html
-  <iframe src="http://localhost:4000/c.html#iloveyou"></iframe>
-  <script>
-    window.onhashchange = function () { //检测hash的变化
-      console.log(location.hash);
-    }
-  </script>
-复制代码
-```
+    // 文件可以是来自 input.files[0]，或者另一个源
+    xhr.send(file.slice(startByte));
+    ```
 
-```css
- // b.html
-  <script>
-    window.parent.parent.location.hash = location.hash 
-    //b.html将结果放到a.html的hash值中，b.html可通过parent.parent访问a.html页面
-  </script>
-复制代码
-```
+    这里我们将文件 id 作为 `X-File-Id`​ 发送给服务器，所以服务器知道我们正在上传哪个文件，并且，我们还将起始字节作为 `X-Start-Byte`​ 发送给服务器，所以服务器知道我们不是重新上传它，而是恢复其上传。  
+    服务器应该检查其记录，如果有一个上传的该文件，并且当前已上传的文件大小恰好是 `X-Start-Byte`​，那么就将数据附加到该文件。
 
-```ini
- // c.html
- console.log(location.hash);
-  let iframe = document.createElement('iframe');
-  iframe.src = 'http://localhost:3000/b.html#idontloveyou';
-  document.body.appendChild(iframe);
-```
+这是用 Node.js 写的包含客户端和服务端代码的示例。
 
-### document.domain + iframe
-
- **该方式只能用于二级域名相同的情况下，比如  和  适用于该方式**​`**a.test.comb.test.com**`​ 。  
-只需要给页面添加 `document.domain ='test.com'`​ 表示二级域名都相同就可以实现跨域。
-
-实现原理：两个页面都通过js强制设置document.domain为基础主域，就实现了同域。
-
-我们看个例子：页面`a.zf1.cn:3000/a.html`​获取页面`b.zf1.cn:3000/b.html`​中a的值
-
-```xml
-// a.html
-<body>
- helloa
-  <iframe src="http://b.zf1.cn:3000/b.html" frameborder="0" onload="load()" id="frame"></iframe>
-  <script>
-    document.domain = 'zf1.cn'
-    function load() {
-      console.log(frame.contentWindow.a);
-    }
-  </script>
-</body>
-复制代码
-```
-
-```xml
-// b.html
-<body>
-   hellob
-   <script>
-     document.domain = 'zf1.cn'
-     var a = 100;
-   </script>
-</body>
-```
+在本网站上，它只有部分能工作，因为 Node.js 位于另一个服务 Nginx 后面，该服务器缓冲（buffer）上传的内容，当完全上传后才将其传递给 Node.js。
 
 ## [axios](https://www.axios-http.cn/docs/intro)
 
-* 概念：`axios`​​是目前最为流行的请求库，是基于`Promise`​​封装网络请求库。可以用于浏览器和`node.js`​
+* 概念：`axios`​是目前最为流行的请求库，是基于`Promise`​封装网络请求库。可以用于浏览器和`node.js`​
 * 基本使用：**多看看官方文档，写的很详细的**
 
   ```js
@@ -5488,7 +7569,7 @@ b.html为中间代理页，与a.html同域，内容为空。
       return config;
   })
   ```
-* 取消请求：`XMLHttpRequest.abort()`​​用来取消已发送的请求，浏览器不再解析返回来的数据
+* 取消请求：`XMLHttpRequest.abort()`​用来取消已发送的请求，浏览器不再解析返回来的数据
 
   ```js
   //版本v0.22.0之后
@@ -5519,240 +7600,4 @@ b.html为中间代理页，与a.html同域，内容为空。
       firstName:'Fred'
     }
   })
-  ```
-
-## ajax
-
-* 概念：不刷新页面的情况和服务器通信
-
-  ```js
-  AJAX 是异步的 JavaScript 和 XML（Asynchronous JavaScript And XML）。
-  简单点说，就是使用[XMLHttpRequest]对象与服务器通信。 
-  它可以使用 JSON，XML，HTML 和 text 文本等格式发送和接收数据。
-  AJAX 的 异步 特性，使它可以在不重新刷新页面的情况下与服务器通信，交换数据，或更新页面。
-  ```
-* 常见请求方法
-
-  ```js
-  POST//向服务器新增数据(传递)
-  GET//从服务器获取数据
-  DELETE//删除服务器上的数据
-  PUT//更新服务器上的数据(侧重于完整更新:例如更新用户的完整信息)
-  PATCH//更新服务器上的数据(侧重于部分更新:例如只更新用户的手机号)
-  OPTIONS//跨域时候会触发
-  HEADER
-  ```
-* 核心代码
-
-  ```js
-  // 1.实例化异步对象
-  const xhr = new XMLHttpRequest()
-  // 2.设置请求的 地址 和方法
-  xhr.open('请求方法','请求地址')
-
-  //可以用来设置请求体类型
-  xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded')
-
-  // 3.注册回调函数 服务器响应内容回来之后触发
-  xhr.addEventListener('load',function(){
-    console.log(xhr.response)
-  })
-  // 4.发送请求
-  xhr.send()
-  //xhr.send(data) 向服务器提交的数据，如图片等放里面
-
-  ```
-
-## WebSocket
-
-### WebSocket简介
-
-​`WebSocket`​是一套通讯协议，是属于WebAPI的内容，是H5新增的。
-
-​`WebSocket`​通讯协议的特点：1.长连接；2.服务端可以主动给客户端发消息
-
-* 它基于`http：超文本传输协议`​，因为先用http请求建立连接，后面就是`websocke`​t的**长链接技术**进行交互
-
-* 协议头：`ws://`​ 、`wss://`​
-
-### WebSocket基本使用
-
-```js
-//创建WebSocket对象
-let ws = new WebSocket('连接地址')
-
-//监听服务器发的消息 
-ws.onmessage = function (e) {
-    // 当服务器有消息，就会自动调用这个函数
-    // e.data有服务器返回的数据
-}
-
-//先服务器发送消息
-ws.send('发送的内容')
-
-//关闭连接
-ws.close()
-
-//连接成功时的调用方法
-ws.onopen = function () {
-    // 连接成功时调用
-}
-
-//连接关闭时的调用方法
-ws.onclose = function () {
-    // 连接关闭时调用
-}
-```
-
-### socket.io插件
-
-* ​`socket.io`​是一套基于`websocket协议`​的框架。有客户端和服务器端版本。一般使用`socket.io`​快速搭建`WebSocket`​的接口，也可以在浏览器中快速调用接口
-* 下载socket.io
-
-  ```js
-  //使用npm给项目安装socket.io框架
-  npm i socket.io-client
-  ```
-* 基本使用
-
-  ```js
-  导包
-  import io from "socket.io-client";
-
-  如多个地方需要使用到socket实例，可以把socket定义在data中
-  data () {
-      return {
-          socket:null
-      }
-  }
-
-  创建socket.io对象，并建立链接
-  const socket = io('连接的服务器')//看后台文档，查看创建链接是否需要携带数据
-
-  向服务器端发送信息
-  socket.emit('消息类型', 消息内容)
-
-  监听服务器信息
-  socket.on('消息类型', msg => {
-
-      // msg就是服务器返回的消息
-  })
-
-  ```
-
-‍
-
-## 原生表单提交
-
-### 原生表单数据提交
-
-* 概念：直接用`form`​​表单标签提交数据，和用`ajax`​​最大的区别是`form`​​会导致页面重新加载
-* 基本表单元素
-
-  ```html
-  <form >
-    <input type="text" name="username" placeholder="请输入用户名">
-    <input type="password" name="password" placeholder="请输入密码">
-    <input type="checkbox" name="remember" >
-    <button type="submit">登录</button>
-  </form>
-  ```
-* form标签原生使用
-
-  ```html
-  form标签设置:action接口地址、method请求方法
-  表单输入元素设置:name属性提交到服务器数据的key
-  <body>
-    <form action="https://autumnfish.cn/api/form/submit" method="post">
-      <input type="text" name="username" placeholder="请输入用户名" />
-      <input type="password" name="password" placeholder="请输入密码" />
-      <input type="checkbox" name="remember" />
-      <button type="submit">登录</button>
-    </form>
-   </body>
-  ```
-* 配合axios使用：和原生相比就是不会刷新页面（异步不刷新页面）
-
-  ```html
-  <body>
-    <form>
-      <input type="text" name="username" placeholder="请输入用户名">
-      <input type="password" name="password" placeholder="请输入密码">
-      <button type="submit">登录</button>
-    </form>
-    <script src="./lib/axios.min.js"></script>
-    <script src="./lib/form-serialize.js"></script>
-    <script>
-      // document.querySelector('button').onclick = function (e) {  //button的点击事件
-      document.querySelector('form').onsubmit = function (e) {  //form标签的单独的onsubmit事件
-        e.preventDefault()//清除标签默认事件
-        axios({
-          url:"https://autumnfish.cn/api/form/submit",
-          method:"post",
-          data:{
-            username:document.querySelector('[name=username]').value,//中获取标签
-            password:document.querySelector('[name=password]').value
-          }
-        }).then(res=>{
-          console.log('res:',res)
-        })
-      }
-    </script>
-  </body>
-  ```
-* 配合form-serialize插件使用：快速获取form标签内部表单标签的值
-
-  ```js
-
-  // 1.不设置hash
-  const res = serialize(document.querySelector('form'))
-  console.log('res:', res) // username=autumnfish&password=12345
-
-  // 2.设置hash
-  const res2 = serialize(document.querySelector('form'), { hash: true })
-  console.log('res2:', res2) // {username: 'jack', password: '23456'}
-  ```
-
-### FormData数据提交
-
-* 概念：一个内置对象`FormData`​​，可以用来获取表单数据甚至上传文件
-* 基本使用：获取表单标签的值
-
-  ```js
-  // FormData用法1：直接传入form表单标签，其中表单元素有name属性的属性
-  const data = new FormData(document.querySelector('form'))
-  console.log(data);//直接查看看不到数据的
-  console.log(data.get('username'))//使用.get方法，查看对应key值的value
-  console.log(data.get('friend'))
-  console.log(data.get('password'))
-
-
-  // FormData用法2 .append()添加键值对
-  data.append('friend', '张三')
-  console.log(data.get('friend'));
-  ```
-* 上传图片
-
-  ```js
-  <input type="file" accept="exe/*" />
-  type='file' 设置input是上传文件
-  accept='exe/*' 引导作用，用户可以认为选择其他
-  accpet 接收的类型  image/* 所有的图片 
-
-
-  // change事件:input标签确定选择上传文件之后触发的事件
-  document.querySelector("input").onchange = function (e) {
-    console.log(e.target.files[0])//查看上传的文件
-    //this.files[0]  用this也可以
-    // files 伪数组
-    // files[0] 选择的文件
-
-    // FormData添加
-    // 1. new出来
-    const data = new FormData()
-    // 2. append 追加
-    data.append("icon", e.target.files[0])//把文件和名字放到对象中，通过axios携带来发送请求
-    // 3. get 查看
-    console.log("icon:", data.get('icon'))
-  }
   ```

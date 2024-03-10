@@ -1,20 +1,20 @@
 ![image](assets/HACG_22-20230204152545-63onq54.jpg)
 
-# Vue
-
 # vue3
 
 ## 基本概念
 
 ### 响应式原理
 
-响应式的基本原理：数据和函数之间的关联关系
+响应式的基本原理：响应式数据和函数之间的关联关系
 
 函数：render、computed、watch、watchEffect
 
 数据：响应式数据
 
 只有这样，数据和函数产生关系之后，才会在数据发生变化的时候，去通知视图层去更新
+
+数据劫持和发布订阅模式
 
 ### [响应式数据](https://cn.vuejs.org/guide/extras/reactivity-in-depth.html#how-reactivity-works-in-vue)
 
@@ -31,7 +31,7 @@
 
 ### VNode
 
-* 概念：`VNode`​是一个类，通过属性来描述`dom`​结构的对象
+* 概念：`VNode`​是一个类，通过属性来描述`dom`​对象
 
   ```js
   原生js中的各种节点概念
@@ -130,10 +130,6 @@
 ### scoped
 
 * 作用：达到组件样式独有的效果
-
-  ```js
-  属性选择器：`div[属性名] { 样式 }`
-  ```
 * 设置
 
   ```css
@@ -168,12 +164,6 @@
   也就是说，在设置了 scoped 中写的样式，这个样式只会作用到该标签上面，如果这个标签里面也有标签，那里面的标签是无法接受到该样式的 scoped
   ```
 * 深度作用选择器：组件加了 `scoped`​，它的样式只能给自己用，子组件的内部标签，**甚至该标签里面的内部标签**，也用不了（相当于你写谁谁才可以用，它的子标签是无法继承它的样式属性）。如果希望某个样式能作用的更深（也就是作用到子组件内部），就要用 **深度作用选择器**，有些叫法叫 `样式穿透`​
-
-  ```css
-
-
-
-  ```
 * 深度作用选择器原理：就是把这个选择器的 `data-v-hash`​​​ 的属性选择器提升到前面，变成后代选择器，既然是后代选择器，所有当前组件里的后代就能匹配的上了
 
   ```css
@@ -238,7 +228,7 @@
   }
   </style>
   ```
-* ​`<style module="moduleName"></style> === $classes`​
+* ​`<style module="moduleName"></style> === $moduleName`​
 
   ```css
   <template>
@@ -791,7 +781,7 @@ export default {
 
 ### 响应式工具
 
-* toref（）：可以将值、refs 或 getters 规范化为 refs (3.3+)。也可以基于响应式对象上的一个属性，创建一个对应的 ref。这样创建的 ref 与其源属性保持同步：改变源属性的值将更新 ref 的值，反之亦然。
+* ​`toref()`​：可以将值、refs 或 getters 规范化为 refs (3.3+)。也可以基于响应式对象上的一个属性，创建一个对应的 ref。这样创建的 ref 与其源属性保持同步：改变源属性的值将更新 ref 的值，反之亦然。
 
   ```js
   toRef(existingRef)// 按原样返回现有的 ref
@@ -812,7 +802,7 @@ export default {
   state.foo++
   console.log(fooRef.value) // 3
   ```
-* torefs（）：将一个响应式对象转换为一个普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。每个单独的 ref 都是使用 [`toRef()`](https://cn.vuejs.org/api/reactivity-utilities.html#toref)​ 创建的。
+* ​`torefs()`​：将一个响应式对象转换为一个普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。每个单独的 ref 都是使用 [`toRef()`](https://cn.vuejs.org/api/reactivity-utilities.html#toref)​ 创建的。
 
   ```js
   const state = reactive({
@@ -839,14 +829,14 @@ export default {
 
 ### 响应式进阶
 
-* shallowRef()：`ref()`​的浅层作用形式。浅层 ref 的内部值将会原样存储和暴露，并且不会被深层递归地转为响应式。只有对 `.value`​ 的访问是响应式的。
+* ​`shallowRef()`​：`ref()`​​的浅层作用形式。浅层 ref 的内部值将会原样存储和暴露，并且不会被深层递归地转为响应式。只有对 `.value`​​ 的访问是响应式的。
 
   ```js
   const state = shallowRef({ count: 1 })
   state.value.count = 2// 不会触发更改
   state.value = { count: 2 }// 会触发更改
   ```
-* triggerRef()：强制触发依赖于一个`浅层 ref `​的副作用，这通常在对浅引用的内部值进行深度变更后使用。
+* ​`triggerRef()`​：强制触发依赖于一个`浅层 ref `​​的副作用，这通常在对浅引用的内部值进行深度变更后使用。
 
   ```js
   const shallow = shallowRef({
@@ -861,7 +851,7 @@ export default {
   // 打印 "Hello, universe"
   triggerRef(shallow)
   ```
-* customRef()：创建一个自定义的 ref，显式声明对其依赖追踪和更新触发的控制方式。
+* ​`customRef()`​：创建一个自定义的 ref，显式声明对其依赖追踪和更新触发的控制方式。
 
   ```js
   import { customRef } from 'vue'
@@ -885,7 +875,7 @@ export default {
     })
   }
   ```
-* shallowReactive()：[`reactive()`](https://cn.vuejs.org/api/reactivity-core.html#reactive)​ 的浅层作用形式。**一个浅层响应式对象里只有根级别的属性是响应式的。**
+* ​`shallowReactive()`​：[`reactive()`](https://cn.vuejs.org/api/reactivity-core.html#reactive)​​ 的浅层作用形式。**一个浅层响应式对象里只有根级别的属性是响应式的。**
 
   ```js
   const state = shallowReactive({
@@ -901,7 +891,7 @@ export default {
   // 不是响应式的
   state.nested.bar++
   ```
-* effectScope（）：返回一个对象，创建一个 effect 作用域，可以捕获其中所创建的响应式副作用 (即计算属性和侦听器)，这样捕获到的副作用可以一起处理
+* ​`effectScope()`​：返回一个对象，创建一个 effect 作用域，可以捕获其中所创建的响应式副作用 (即计算属性和侦听器)，这样捕获到的副作用可以一起处理
 
   ```js
   const scope = effectScope()
@@ -1353,6 +1343,8 @@ onMounted(()=>{})
   ```
 
 ### provide、inject
+
+‍
 
 * 概念
 
@@ -2499,9 +2491,9 @@ this.$set(要修改的数组, 下标, 值)
 
 ### 自定义指令全局注册
 
-* 在`main.js`​注册
+* 在`main.js`​​注册
 
-  * 创建自定义指令文件 `/src/direcztives/index.js`​
+  * 创建自定义指令文件 `/src/direcztives/index.js`​​
 
     ```js
     //创建指令集
@@ -2514,7 +2506,7 @@ this.$set(要修改的数组, 下标, 值)
       },
     }
     ```
-  * ​`main.js`​中注册：使用`obj`​方法重复声明全局自定义指令
+  * ​`main.js`​​中注册：使用`obj`​​方法重复声明全局自定义指令
 
     ```js
     import directives from '@/components/directives/index'
@@ -2523,9 +2515,9 @@ this.$set(要修改的数组, 下标, 值)
        Vue.directive(item,directives[item])
     })
     ```
-* 使用`Vue.use`​注册
+* 使用`Vue.use`​​注册
 
-  * 创建自定义指令文件 `/src/direcztives/index.js`​
+  * 创建自定义指令文件 `/src/direcztives/index.js`​​
 
     ```js
     //声明指令和其方法
@@ -2547,7 +2539,7 @@ this.$set(要修改的数组, 下标, 值)
       }
     }
     ```
-  * ​`main.js`​中安装
+  * ​`main.js`​​中安装
 
     ```js
     import directives from '@/directives'
@@ -2942,7 +2934,7 @@ eventBus：专业术语事件总线
 
 ### 基本规则
 
-1. 导航是异步的，返回值一般是`false`​​​或`undefined`​​​，有返回值说明路由跳转失败
+1. **导航是异步的，返回值一般是**​`**false**`​**或**​`**undefined**`​ **，有返回值说明路由跳转失败**
 
     ```js
     可通过await等待路由跳转后再执行
@@ -2977,12 +2969,12 @@ eventBus：专业术语事件总线
       path:string;//路由路径
       query:object;//查询参数、放在url上
       params:object;//参数
-      replace:boolean;//是否刷新记录？这个忘记了
-      hash:string; //"#123" 哈希
       redirect:string; | {name:string};//重定向
       alias:string | string[];//别名
-      props:string | boolean | object //路由传值
       meta:object; //路由元信息
+      props:string | boolean | object //路由传值
+      replace:boolean;//是否刷新记录？这个忘记了
+      hash:string; //"#123" 哈希
     }
     ```
 
@@ -3025,7 +3017,7 @@ eventBus：专业术语事件总线
 
 ### useRouter
 
-* ​`useRouter()`​返回响应式`router`​对象，可通过侦听部分属性`watch(()=>route.params.id,()=>{})`​
+* ​`useRouter()`​：**返回响应式**​`**router**`​**对象**
 * ​`router`​ 类型：部分，文档api用接口，变量，函数啥写的有点抽象，ts 那种类型声明。写一些常用的出来
 
   ```js
@@ -3049,35 +3041,128 @@ eventBus：专业术语事件总线
 
   ```js
   RouteLocationNormalizedLoaded:{
-     fullPath: string
-     hash: string
-     matched: RouteRecordNormalized[]
-     meta: RouteMeta
-     name: undefined | null | RouteRecordName
-     params: RouteParams
-     path: string
-     query: LocationQuery
+     name: undefined | null | RouteRecordName;
+     path: string;
+     fullPath: string;
+     params: RouteParams;
+     query: LocationQuery;
+     meta: RouteMeta;
+     hash: string;
+     matched: RouteRecordNormalized[];
   }
   ```
 
 ### useRoute
 
-* ​`useRoute()`​​返回的路由组件实例对象，里面有当前路由所携带的信息
-* ​`route `​的类型：最好还是看文档，小小脑子完全记不住😭
+* ​`useRoute()`​：返回的路由组件实例对象，里面有当前路由所携带的信息，可通过侦听部分属性`watch(()=>route.params.id,()=>{})`​
+* ​`route`​类型：最好还是看文档，小小脑子完全记不住😭
 
   ```js
-  query: LocationQuery//代表当前地址的 search 属性的对象
-  params: RouteParams//从 path 中提取出来并解码后的参数对象。
   name: undefined | null | RouteRecordName//匹配的路由名称。
-  meta: object// 路由元信息
   path: string//经过百分号编码的 URL 中的 pathname 段。
   fullPath: string //包括 search 和 hash 在内的完整地址。该字符串是经过百分号编码的。
+  query: LocationQuery//代表当前地址的 search 属性的对象
+  params: RouteParams//从 path 中提取出来并解码后的参数对象。
+  meta: object// 路由元信息
   hash: string//当前地址的 hash。如果存在则以 # 开头。
   matched: RouteLocationMatched[]//数组，路由记录
   redirectedFrom: undefined | RouteLocation//包含在重定向到当前地址之前，我们最初想访问的地址。
   ```
 
 ### 动态路由
+
+* 动态添加路由到`routes`​中，实现动态路由，这两个api都只是对路由进行注册，如果需要对新增的路由进行匹配，要重新  `router.push() `​或` router.replace() `​来手动导航，才能显示新路由
+
+  * ​`router.addRoute()`​  //返回一个函数，执行该函数，添加的路由会被删除
+  * ​`router.removeRoute()`​
+
+  ```js
+  这两个api都只是对路由进行注册，如果需要对新增的路由进行匹配，要重新  router.push() 或 router.replace() 来手动导航，才能显示新路由
+  router.addRoute({ path: '/about', component: About })
+  router.replace(router.currentRoute.value.fullPath)
+
+  router.addRoute('admin', { path: 'settings', component: AdminSettings })//添加嵌套路由
+  等效于
+  router.addRoute({
+    name: 'admin',
+    path: '/admin',
+    component: Admin,
+    children: [{ path: 'settings', component: AdminSettings }],
+  })
+  ```
+* 路由守卫中添加动态路由
+
+  ```js
+  router.beforeEach(to => {
+    if (!hasNecessaryRoute(to)) {
+      router.addRoute(generateRoute(to))
+      // 触发重定向
+      return to.fullPath
+    }
+  })
+  ```
+* 删除路由
+
+  ```js
+  1.通过添加一个名称冲突的路由。如果添加与现有途径名称相同的途径，会先删除路由，再添加路由：
+  router.addRoute({ path: '/about', name: 'about', component: About })
+  // 这将会删除之前已经添加的路由，因为他们具有相同的名字且名字必须是唯一的
+  router.addRoute({ path: '/other', name: 'about', component: Other })
+
+  2. router.addRoute() 返回的回调：
+  const removeRoute = router.addRoute(routeRecord)
+  removeRoute() // 删除路由如果存在的话
+
+  3.通过使用 router.removeRoute() 按名称删除路由：
+  router.addRoute({ path: '/about', name: 'about', component: About })
+  // 删除路由
+  router.removeRoute('about')
+  ```
+
+### 路由传参数
+
+* 路由参数Router Params ：可以通过在路由路径中定义动态参数来传递参数
+
+  ```js
+  // 路由配置
+  {
+    path: '/user/:id',
+    component: UserComponent
+  }
+
+  // 组件中获取参数
+  this.$route.params.id
+  ```
+* 查询参数 `Query Params`​：通过在url中字符串拼接的方法
+
+  ```js
+  // 路由配置
+  {
+    path: '/user',
+    component: UserComponent
+  }
+
+  // URL：/user?id=123
+  // 组件中获取参数
+  this.$route.query.id
+
+  ```
+* 编程式导航传参
+
+  ```js
+  // 路由参数
+  router.push({path: '/user/123'})
+  // 获取参数
+  console.log(this.$route.params.id);
+
+  // 查询参数
+  router.push({path: '/user', query: { id: 123 } })
+  // 获取参数
+  console.log(this.$route.query.id);
+
+  ```
+
+### 动态路由匹配
 
 * 概念：多个路径都能匹配到一个组件，改路径上的某些字段其实是params的存在
 
@@ -3352,18 +3437,21 @@ eventBus：专业术语事件总线
   12.调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
   ```
 
-* 全局前置守卫：`router.beforeEach()`​
+* 全局守卫：
+
+  * ​`router.beforeEach()`​全局前置守卫
+  * ​`router.beforeResolve()`​全局解析守卫，导航被确认之前、**所有组件内守卫和异步路由组件被解析之后**调用
+  * ​`router.afterEach()`​全局后置守卫
 
   ```js
+  1.router.beforeEach()
   const router = createRouter({ ... })
   router.beforeEach((to, from,next) => {}) //返回值是false则停止路由跳转，
   to: 即将要进入的目标
   from: 当前导航正要离开的路由
   next:兼容vue2的写法
-  ```
-* 全局解析守卫：`router.beforeResolve()`​ 导航被确认之前、**所有组件内守卫和异步路由组件被解析之后**调用
 
-  ```js
+  2.router.beforeResolve()
   router.beforeResolve 是获取数据或执行任何其他操作（如果用户无法进入页面时你希望避免执行的操作）的理想位置。
   还没进入路由，但是路由组件这些东西都已经准备好了情况下调用这个钩子
   router.beforeResolve(async to => {
@@ -3381,16 +3469,13 @@ eventBus：专业术语事件总线
       }
     }
   })
-  ```
-* 全局后置守卫：`router.afterEach()`​
 
-  ```js
-
+  3.router.afterEach()
   router.afterEach((to, from) => {
     sendToAnalytics(to.fullPath)
   })
   ```
-* 路由独享的守卫：直接在路由配置上定义 `beforeEnter()`​ 守卫，**只在进入路由时触发**，不会在 `params`​、`query`​ 或 `hash`​ 改变时触发。
+* 路由独享的守卫：直接在路由配置上定义 `beforeEnter()`​​ 守卫，**只在进入路由时触发**，不会在 `params`​​、`query`​​ 或 `hash`​​ 改变时触发。
 
   ```js
   1. /users/2 进入到 /users/3 或者从 /users/2#info 进入到 /users/2#projects 不会触发
@@ -3408,9 +3493,9 @@ eventBus：专业术语事件总线
   ```
 * 组件内守卫：
 
-  * ​`beforeRouteEnter(to, from,next)`​ ，只有改钩子可以通过 `next `​拿到组件实例，另外两个不行，因为没有必要了
-  * ​`beforeRouteUpdate(to, from))`​
-  * ​`beforeRouteLeave(to, from))`​ ：通常用来预防用户在还未保存修改前突然离开。该导航可以通过返回 `false`​ 来取消。
+  * ​`beforeRouteEnter(to, from,next)`​​ ，只有改钩子可以通过 `next `​​拿到组件实例，另外两个不行，因为没有必要了
+  * ​`beforeRouteUpdate(to, from))`​​
+  * ​`beforeRouteLeave(to, from))`​​ ：通常用来预防用户在还未保存修改前突然离开。该导航可以通过返回 `false`​​ 来取消。
 
   ```js
   vue2中可以直接写，使用vue3的setup函数时候，需要导入钩子，同时前面加on
@@ -3476,99 +3561,6 @@ const router = createRouter({
 component (和 components) 配置接收一个返回 Promise 组件的函数
 Vue Router 只会在第一次进入页面时才会获取这个函数，然后使用缓存数据。这意味着你也可以使用更复杂的函数，只要它们返回一个 Promise
 ```
-
-### 动态路由
-
-* 动态添加路由到`routes`​中，实现动态路由
-
-  ```js
-  这两个api都只是对路由进行注册，如果需要对新增的路由进行匹配，要重新  router.push() 或 router.replace() 来手动导航，才能显示新路由
-  router.addRoute()  //返回一个函数，执行该函数，添加的路由会被删除
-  router.removeRoute()
-
-  router.addRoute({ path: '/about', component: About })
-  router.replace(router.currentRoute.value.fullPath)
-
-  router.addRoute('admin', { path: 'settings', component: AdminSettings })//添加嵌套路由
-  等效于
-  router.addRoute({
-    name: 'admin',
-    path: '/admin',
-    component: Admin,
-    children: [{ path: 'settings', component: AdminSettings }],
-  })
-  ```
-* 路由守卫中添加动态路由
-
-  ```js
-  router.beforeEach(to => {
-    if (!hasNecessaryRoute(to)) {
-      router.addRoute(generateRoute(to))
-      // 触发重定向
-      return to.fullPath
-    }
-  })
-  ```
-* 删除路由
-
-  ```js
-  1.通过添加一个名称冲突的路由。如果添加与现有途径名称相同的途径，会先删除路由，再添加路由：
-  router.addRoute({ path: '/about', name: 'about', component: About })
-  // 这将会删除之前已经添加的路由，因为他们具有相同的名字且名字必须是唯一的
-  router.addRoute({ path: '/other', name: 'about', component: Other })
-
-  2. router.addRoute() 返回的回调：
-  const removeRoute = router.addRoute(routeRecord)
-  removeRoute() // 删除路由如果存在的话
-
-  3.通过使用 router.removeRoute() 按名称删除路由：
-  router.addRoute({ path: '/about', name: 'about', component: About })
-  // 删除路由
-  router.removeRoute('about')
-  ```
-
-### 路由传参数
-
-* 路由参数Router Params ：可以通过在路由路径中定义动态参数来传递参数
-
-  ```js
-  // 路由配置
-  {
-    path: '/user/:id',
-    component: UserComponent
-  }
-
-  // 组件中获取参数
-  this.$route.params.id
-  ```
-* 查询参数 Query Params：通过在url中字符串拼接的方法
-
-  ```js
-  // 路由配置
-  {
-    path: '/user',
-    component: UserComponent
-  }
-
-  // URL：/user?id=123
-  // 组件中获取参数
-  this.$route.query.id
-
-  ```
-* 编程式导航传参
-
-  ```js
-  // 路由参数
-  router.push({path: '/user/123'})
-  // 获取参数
-  console.log(this.$route.params.id);
-
-  // 查询参数
-  router.push({path: '/user', query: { id: 123 } })
-  // 获取参数
-  console.log(this.$route.query.id);
-
-  ```
 
 # pinia
 
@@ -3731,7 +3723,7 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
         return this.counter * 2//可以通过this访问
       }
       //利用返回值里面写一个箭头函数，箭头函数为输入的参数来达到计算属性传参的效果
-      fn():(state)=>{
+      fn(state): number {
         return (num)=> {
           return   num * this.counter
         }
@@ -3781,42 +3773,67 @@ Vue Router 只会在第一次进入页面时才会获取这个函数，然后使
 
 ### API
 
-```js
-1.重置状态到初始值
-const store = useStore()
-store.$reset()
+​`store.$reset()`​
 
-2.修改状态(即修改state)
-const store = useStore()
-2.1直接修改，不推荐，state里面的方法最好使用actions里面的函数修改
-store.age++
+​`store.$patch({newState}|(state)=>{})`​
 
-2.2$patch()
-store.$petch({name:'李四',age:20})
-store.$petch((state)=>{
-  state.list.push()
-  ...
-})
+​`store.$subscribe((mutation，state)=>{}, { detached: boolean})`​
 
-3.替换
-store.$state = { counter: 666, name: 'Paimon' }//替换该实例的state
-pinia.state.value = {}//替换应用程序的整个状态
+​`storeToRefs(store)`​
 
-4.订阅状态
-就是store的侦听器，在状态(state,getters)有改变后触发，一般用于数据保存
-//组件销毁后，该组件上的sotroe.$subscribe(()=>{})也会销毁
-store.$subscribe(callback, { detached: true })//第二个参数，代表组件销毁，这个订阅还在
+* ​`store.$reset()`​​​：重置状态到初始值
 
-5.解构响应式
-如果直接从pinia中解构数据，会丢失响应式，storeToRefs可以保证解构出来的数据也是响应式的
-只能解构属性，不能解构方法
-import useCountStore from './store/count'
-import { storeToRefs } from 'pinia'
-const count = useCountStore()
-const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响应式
-```
+  ```js
+  const store = useStore()
+  store.$reset()
+  ```
+* ​`store.$patch(Object|Function)`​：变更
 
-### 组合式写法
+  ```js
+  1.同时修改多个值
+  store.$patch({name:'李四',age:20})
+  2.方便使用函数方法
+  store.$patch((state)=>{
+    state.list.push()
+    ...
+  })
+  ```
+* ​`store.$subscribe((mutation，state)=>{}, { detached: boolean})`​：订阅state变化
+
+  ```js
+  就是store的侦听器，在状态(state,getters)有改变后触发，一般用于数据保存
+  返回值是一个停止订阅的函数
+  store.$subscribe(callback, { detached: true })//第二个参数，代表组件销毁，这个订阅还在
+  store.$subscribe((mutation,store), { detached: true })//第二个参数，代表组件销毁，这个订阅还在
+
+  mutation.type // 'direct' | 'patch object' | 'patch function' ,触发本次更新的类型，是直接修改，还是使用 store.$path(obj) \ store.$path(callback)
+  mutation.storeId // storeId  的id
+  mutation.payload // 只有 mutation.type === 'patch object'的情况下才可用，传递给 cartStore.$patch() 的补丁对象。
+  ```
+* ​`storeToRefs(store)`​：解构
+
+  ```js
+  如果直接从pinia中解构数据，会丢失响应式，storeToRefs可以保证解构出来的数据也是响应式的
+  只能解构属性，不能解构方法
+  import useCountStore from './store/count'
+  import { storeToRefs } from 'pinia'
+  const count = useCountStore()
+  const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响应式
+  ```
+* ​`store.xxx = newValue`​：直接修改状态
+
+  ```js
+  const store = useStore()
+  store.age++ //直接修改，不推荐，state里面的方法最好使用actions里面的函数修改
+  ```
+* ​`store.state=newState`​：替换
+
+  ```js
+  store.$state = { counter: 666, name: 'Paimon' }//替换该实例的state
+  pinia.state.value = {}//替换应用程序的整个状态
+  ```
+
+### 定义store
 
 * 选项式：把`state`​、`getter`​、`actions`​都定义好
 
@@ -3830,18 +3847,21 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
     actions:{}
   })
   ```
-* 组合式：`state`​、`getter`​、`actions `​随意自己搭配写，和vue3中的组合式一样
+* 组合式：第一个参数传递入函数，就和 `setup`​一样定义，
+
+  * ​`ref()`​ 就是 `state`​ 属性
+  * ​`computed()`​ 就是 `getters`​
+  * ​`function()`​ 就是 `actions`​
 
   ```js
-  1.ref 是 state
-  2.computed 是 getter
-  3.function 是 actions
-
   import { defineStore } from "pinia"
   import { ref,computed } from "vue"
-  const useStore = defineStore('mian',{
+  const useStore = defineStore('mian',()=>{
+    1.ref 是 state
     const name = ref('name')
+    2.computed() 就是 getters
     const myName = computed(()=>{this.name.value})
+    3.function 是 actions
     const setName = (newName)=>{
       this.name.value = newName
     }
@@ -3966,7 +3986,7 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
   $store.state.模块名.数据名
   $store.state.userInfo.name
   ```
-* 注意：数据的修改要用mutations中的方法，直接修改，如果开了严格模式会报错，其次调试工具无法正确的实时追踪到改变，不利于调试
+* 注意：数据的修改要用`mutations`​中的方法，直接修改，如果开了严格模式会报错，其次调试工具无法正确的实时追踪到改变，不利于调试
 
   ```js
   严格来说不能这样该，开启严格模式会报错
@@ -4154,6 +4174,7 @@ const {name,age} = storeToRefs(count)//这样解构的数据，才能保持响�
 
     //修改属性或方法名
     (模块名，[方法名] => (模块名，{新方法名：原方法名})
+
     改map的方法或者属性名
     ['属性名/方法名'] => {新的名字:'属性名/方法名'}
     ```

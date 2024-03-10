@@ -1,7 +1,5 @@
 ![image](assets/v2-d5a78cd0626ff0acfe3f0d3a65828108_r-20220727205227-2gkknpd.jpg)
 
-# Node
-
 [Node.js ](http://nodejs.cn/api/)是一个基于 `Chrome V8引擎`​​ 的 `JavaScript`​​ 运行时环境，`Node.js`​​ 可以运行 `JS`​​文件。
 
 ​`Node.js`​ 使用了一个**事件驱动**、**非阻塞式 I/O**的模型，使其轻量又高效。

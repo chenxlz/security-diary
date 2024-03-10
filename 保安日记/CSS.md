@@ -1,7 +1,5 @@
 ![image](assets/06-20220926112058-q4yr196.jpg)
 
-# CSS
-
 # 样式问题
 
 ### 宽度适应内容
@@ -98,7 +96,6 @@ progress    进度条
 menu    菜单  
 embed    嵌入的外部资源  
 menuitem    用户可点击的菜单项  
-menu    菜单  
 template  
 section  
 nav  
@@ -500,7 +497,7 @@ align-self: ;该盒子在侧轴上的对齐方式。
 ### 粘性布局
 
 ```js
-//粘性布局：不是很常用，主要是用在**页面吸顶**就想是固定头部导航栏一样
+//粘性布局：不是很常用，主要是用在 页面吸顶  就像是固定头部导航栏一样
 //适配性较差，有的时候需要加私有化前缀
 {
   position: sticky;
@@ -659,6 +656,7 @@ align-self: ;该盒子在侧轴上的对齐方式。
 
   ```scss
   .father === &
+
   .father{
     &-son{
     //子盒子类命名为 <class='father-son'>
