@@ -658,7 +658,7 @@ b//b:3
   console.log(oa instanceof Human);    // false
   console.log(oa instanceof Object);   // true
   ```
-* 区别：
+* 区别
 
   ```js
   //typeof 虽然可以判断原始数据类型（null 除外），但是无法判断引用数据类型（function 除外）
@@ -7365,7 +7365,7 @@ xhr.upload.onerror = function() {
 
 这是一个真实示例：带有进度指示的文件上传：
 
-```markup
+```js
 <input type="file" onchange="upload(this.files[0])">
 
 <script>
@@ -7494,7 +7494,7 @@ function upload(file) {
 * 概念：`axios`​是目前最为流行的请求库，是基于`Promise`​封装网络请求库。可以用于浏览器和`node.js`​
 * 基本使用：**多看看官方文档，写的很详细的**
 
-  ```js
+  ```javascript
   axios本来就是基于promise封装好的http网络请求库
   一般是安装好axios插件后
   在src/utils/创建request.js文件
