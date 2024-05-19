@@ -945,9 +945,7 @@ b//b:3
 
 ‍
 
-# 对象
-
-## 原型对象
+# 原型对象
 
 在`JS`​中只要有一个函数存在，JS就会创建一个与之对应的对象。这个对象就是原型对象。默认只有一个`constructor`​属性
 
@@ -1026,11 +1024,625 @@ oB.run();//undefined   替换了，没有该方法了
 
 # 内建类
 
+## String
+
+### str.startsWith
+
+用来判断当前字符串是否以另外一个给定的子字符串开头，并区分大小写，返回值是`true`​ 或 `false`​
+
+```js
+str.startsWith(searchString[, position])
+searchString：要搜索的子字符串。
+position可选：在 str 中搜索 searchString 的开始位置，默认值为 0。
+
+const str1 = 'Saturday night plans';
+console.log(str1.startsWith('Sat'));//true
+console.log(str1.startsWith('Sat', 3));//false
+console.log(str1.startsWith('Sat',0));//true
+```
+
+### str.endsWith
+
+用来判断当前字符串是否以另外一个给定的子字符串“结尾”的，并区分大小写，返回值是`true`​ 或 `false`​
+
+```js
+str.endsWith(searchString[, length])
+searchString：要搜索的子字符串。
+length 可选：作为 str 的长度。默认值为 str.length。
+已长度为最后截至部分，来判断是否符合。
+
+
+const str1 = 'Cats are the best!';
+console.log(str1.endsWith('best!'));//true
+console.log(str1.endsWith('best', 17));//true
+
+const str2 = 'Is this a question?';
+console.log(str2.endsWith('question'));//false
+```
+
+### str.includes
+
+方法用于判断一个字符串是否包含在另一个字符串中，返回值是`true`​ 或 `false`​
+
+```js
+str.includes(searchString[, position])
+searchString：要在此字符串中搜索的字符串。
+position 可选：从当前字符串的哪个索引位置开始搜寻子字符串，默认值为 0。
+
+let url = 'http://www.xxx.com/admin/index.html';
+console.log(url.includes('.com'));//true
+console.log(url.includes('.com',15))//false 从c开始，没有 . 所有false
+```
+
+### str.padStart
+
+方法用另一个字符串填充当前字符串 (如果需要的话，会重复多次)，以便产生的字符串达到给定的长度。从当前字符串的左侧开始填充。
+
+```js
+str.padStart(targetLength [, padString])
+targetLength：当前字符串需要填充到的目标长度。如果这个数值小于当前字符串的长度，则返回当前字符串本身。
+padString可选：填充字符串。如字符串太长，填充后的字符串长度超过了目标长度，则保留最左侧的部分，其他部分会被截断。默认值为 ""
+
+let str = "0";
+console.log(str.padStart(5, "0"));//00000
+console.log("123".padStart(5, "0"));//00123
+```
+
+### str.padEnd
+
+方法会用一个字符串填充当前字符串（如果需要的话则重复填充），返回填充后达到指定长度的字符串。从末尾（右侧）开始填充。
+
+```js
+str.padEnd(targetLength [, padString])
+targetLength：当前字符串需要填充到的目标长度。如果这个数值小于当前字符串的长度，则返回当前字符串本身。
+padString 填充字符串。如字符串太长，填充后的字符串长度超过了目标长度，则保留最左侧的部分，其他部分会被截断。默认值为 ""
+
+let str = "0";
+console.log(str.padEnd(5, "0"));//00000
+console.log("123".padEnd(5, "0"));//12300
+```
+
+### str.split
+
+使用指定的分隔符字符串将一个String对象分割成子字符串数组，以一个指定的分割字串来决定每个拆分的位置。不改变原字符串。
+
+```js
+//字符串.split(分割符)
+//可以使用正则
+
+let str = 'one-tow-three';
+let arr = str.split('-');
+console.log(arr);//['one', 'tow', 'three']
+console.log(str.split(''));//['o', 'n', 'e', '-', 't', 'o', 'w', '-', 't', 'h', 'r', 'e', 'e']
+console.log(str);//one-tow-three
+```
+
+### str.substring
+
+在字符串中，读取从开始位置至结束位置之间的字符，含头不含尾，不改变原字符串
+
+```js
+str.substring(indexStart[, indexEnd])
+indexStart：需要截取的第一个字符的索引，该索引位置的字符作为返回的字符串的首字母。
+indexEnd可选：一个 0 到字符串长度之间的整数，以该数字为索引的字符不包含在截取的字符串内。
+
+
+var anyString = "Mozilla";
+
+// 输出 "Moz"
+console.log(anyString.substring(0,3));
+console.log(anyString.substring(3,0));
+console.log(anyString.substring(3,-3));
+console.log(anyString.substring(3,NaN));
+console.log(anyString.substring(-2,3));
+console.log(anyString.substring(NaN,3));
+
+// 输出 "lla"
+console.log(anyString.substring(4,7));
+console.log(anyString.substring(7,4));
+
+// 输出 ""
+console.log(anyString.substring(4,4));
+
+// 输出 "Mozill"
+console.log(anyString.substring(0,6));
+
+// 输出 "Mozilla"
+console.log(anyString.substring(0,7));
+console.log(anyString.substring(0,10));
+
+// 字符中也有下标的概念
+console.log(url[0]);// h
+console.log(url[1]);// t
+console.log(url[2]);// t
+
+console.log(url.substring(7, 21));// www.baidu.com/
+console.log(url)// http://www.baidu.com/admin/index.html
+```
+
+### str.toUpperCase
+
+调用该方法的字符串转为大写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
+
+```js
+str.toUpperCase()//点语法，调用str原型对象的方法。不改变原字符串
+
+const str= 'The quick brown fox jumps over the lazy dog.';
+console.log(str.toUpperCase());//"THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
+```
+
+### str.toLowerCase
+
+调用该方法的字符串转为小写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
+
+```js
+str.toLowerCase()//点语法，调用str原型对象的方法。不改变原字符串
+
+console.log( "ALPHABET".toLowerCase() );// "alphabet"
+```
+
+### str.indexOf
+
+功能：获取某一个字符第一次出现的下标（判断一个字符串在一个另一个字符串中）
+
+```js
+str.indexOf(searchValue [, fromIndex])
+searchValue ：要被查找的字符串值，没写，代表'undefined'（是字符串'undefined'）
+fromIndex 可选：数字表示开始查找的位置，默认值为 0。
+fromIndex 的值小于 0，或者大于 str.length ，那么查找分别从 0 和str.length 开始。
+fromIndex 的值小于 0，等同于为空情况； fromIndex 的值大于或等于 str.length ，那么结果会直接返回 -1 。）
+注意：不支持正则
+
+var str = 'abcdefgabcd';
+console.log ( str.indexOf ( "b" ) );//1  如果存在则返回下标
+console.log ( str.indexOf ( "z" ) );//-1  如果不存在则返回固定值-1
+```
+
+### str.lastIndexOf
+
+返回调用String对象的指定值最后一次出现的索引，在一个字符串中的指定位置 `fromIndex`​处**从后向前搜索**。如果没找到这个特定值则返回-1 。
+
+```js
+str.lastIndexOf(searchValue[, fromIndex])
+searchValue：一个字符串，表示被查找的值。如果searchValue是空字符串，则返回fromIndex。
+fromIndex可选：待匹配字符串 searchValue 的开头一位字符从 str 的第 fromIndex 位开始向左回向查找。
+fromIndex默认值是 +Infinity。如果 fromIndex >= str.length ，则会搜索整个字符串。如果 fromIndex < 0 ，则等同于 fromIndex == 0。
+
+'canal'.lastIndexOf('a'); 
+// returns 3（没有指明fromIndex则从末尾l处开始反向检索到的第一个a出现在l的后面，即index为3的位置）
+
+'canal'.lastIndexOf('a', 2);  
+// returns 1（指明 fromIndex 为 2 则从 n 处反向向回检索到其后面就是 a，即 index 为 1 的位置）
+
+'canal'.lastIndexOf('a', 0); 
+// returns -1(指明 fromIndex 为 0 则从 c 处向左回向检索 a 发现没有，故返回-1)
+
+'canal'.lastIndexOf('x'); // returns -1
+'canal'.lastIndexOf('c', -5);// returns 0（指明 fromIndex 为-5 则视同 0，从 c 处向左回向查找发现自己就是，故返回 0）
+'canal'.lastIndexOf('c', 0); // returns 0（指明 fromIndex 为 0 则从 c 处向左回向查找 c 发现自己就是，故返回自己的索引 0）
+'canal'.lastIndexOf(''); // returns 5
+'canal'.lastIndexOf('', 2); // returns 2
+```
+
+### str.replace
+
+把字符串中的字符替换成想要的字符，不改变原字符串本身。
+
+```js
+str.replace('subStr ','newSubStr')
+subStr ：希望被替换的字符
+newSubStr：用于替换的字符
+注意：
+str.replace只会替换一次成功后就直接返回，不会整个字符串进行替换，需要整个替换可以使用正则的严格模式。/  /g
+
+const p = '1223334444'
+const p2 = p.replace('3','5')
+console.log(p);//'1223334444'
+console.log(p2)；//'1225334444' 替换一个就返回，不改变原字符串
+
+const i = /4/;  // 正则表达式
+const p3 = p.replace(i,'5')
+console.log(p3);//1223335444  正则非严格模式，也是只替换一个
+
+const j = /4/g;
+const p4 = p.replace(j,'5')
+console.log(p4);//11223335555
+```
+
+### str.trim
+
+去掉字符串的左右空格，不会改变原字符串
+
+```js
+str.trim（）
+系统自带的trim方法只能去掉左右空格,无法去掉中间
+要去掉所有的空格，使用str.replace（）方法，利用正则的严格模式去掉
+
+var str = '   safga  sdv  dsfgs    ';
+console.log ( str.trim () )//safga  sdv  dsfgs
+
+//去掉所有空格思路：使用正则全局匹配空格`\s`,替换成空字符
+console.log ( str.replace ( /\s/g, "" ) );//safgasdvdsfgs
+```
+
+### str.search
+
+返回第一次和**正则匹配**的索引，如果没有则返回-1
+
+```js
+str.search(regexp)
+regexp：一个正则表达式对象。如果传入一个非正则表达式对象 regexp，则会使用 new RegExp(regexp) 隐式地将其转换为正则表达式对象。
+
+
+var str = 'abcdefg100xyz';
+console.log ( str.search ( /\d/g ) );//7   此方法会忽略全局匹配g
+```
+
+### str.match
+
+提取字符串中与**正则表达式**相匹配的文本，返回值是数组,找不到则返回null
+
+```js
+str.match(regexp)
+regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为一个 RegExp 。
+如果你没有给出任何参数并直接使用 match() 方法 ，你将会得到一 个包含空字符串的 Array ：[""] 。
+返回值：
+如果使用 g 标志，则将返回与完整正则表达式匹配的所有结果，但不会返回捕获组。
+如果未使用 g 标志，则仅返回第一个完整匹配及其相关的捕获组（Array）。
+
+var str = 'abcdefg100xyzabc';
+//返回值是数组,找不到则返回null
+console.log ( str.match ( /a/ ) );//["a", index: 0, input: "abcdefg100xyzabc", groups: undefined]
+console.log ( str.match ( /a/g ) );// ["a", "a"]    此方法支持全局匹配g
+```
+
+## Number
+
+### number.toFixed
+
+功能：对数值保留指定小数倍，并四舍五入
+
+```js
+//要保证number类型
+let price = 10
+console.log(price.toFixed(2));//10.00
+let num = 10.456;
+console.log(num.toFixed(2));//10.46
+```
+
+### number.toString
+
+功能：可以进行进制转换，结果使用字符串表示；如果省略进制，则表示转换为10进制
+
+```js
+let n = 10;
+console.log(n.toString(2));//1010
+console.log(n.toString(8));//12
+console.log(n.toString(16));//a
+console.log(n.toString());//'10'
+```
+
+## Array
+
+### 基本方法
+
+```css
+app.push()//数组后面添加
+arr.pop()//数组后面删除
+arr.unshift()//数组前面添加
+arr.shift()//数组前面删除
+```
+
+### arr.toString()
+
+将数组变成内容变成字符串，不改变原数组。
+
+```js
+arr1 = [1, 2, 3,]
+
+console.log(arr1.toString());  //‘1,2,3’
+console.log(arr1);  //[1, 2, 3,]
+
+arr.join('指定连接符号') 可以选定连接符号
+console.log(arr1.join("--")) //'1--2--3'
+```
+
+### arr.join()
+
+将数组内容进行拼接，返回一个字符串，不改变原数组
+
+```js
+arr.join('指定连接符号') 可以选定连接符号
+arr = [1, 2, 3,]
+console.log(arr.join("--"));//1--2--3
+console.log(arr1);// [1, 2, 3,]
+```
+
+### arr.concat()
+
+合并两个或多个数组。不会更改现有数组，而是返回一个新数组。
+
+```js
+let arr =  [1, 2, 3]
+let arr2 = [4, 5, 6]
+let arr3 = [7, 8, 9]
+console.log(arr1.concat(arr2, arr3)) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+console.log(arr1)// [1, 2, 3]
+```
+
+### arr.reverse()
+
+将数组中元素的位置颠倒，并返回该数组。该方法会改变原数组。
+
+```js
+let arr1 = [1, 2, 3]
+console.log(arr1.reverse()) // [3,2,1]
+console.log(arr1) // [3,2,1]
+```
+
+### arr.sort()
+
+对数组进行排序，并返回数组，会改变原数组。
+
+默认排序顺序是在将元素转换为字符串，然后比较它们的 UTF-16 代码单元值序列时构建的。
+
+```js
+let arr1 = [1, 5, 2, 4, 3]
+
+// 不传参时按照默认顺序排列
+console.log(arr1.sort())//[1, 2, 3, 4, 5]
+console.log(arr1)//[1, 2, 3, 4, 5]
+
+//可以传入函数控制数组排序顺序
+function fn(a, b) {
+        //return a-b //正序(默认顺序)
+    return b - a //倒序(数字倒排)
+}
+console.log(arr1.sort(fn))
+```
+
+### arr.splice()
+
+通过**删除**或**替换**现有元素或者原地**添加**新的元素来修改数组，并以**数组形式返回被修改的内容**。此方法会改变原数组。
+
+```js
+1.数组删除
+//arr.splice(起始位置, 删除个数) 
+//其实位置从0开始，从起始位置开始删除，返回值是被删除的元素组成的数组
+let arr = [1,2,3,4,5,6]
+console.log(arr.splice(1, 2)) // [2, 3]
+console.log(arr) //[1, 4, 5, 6]
+
+2.数组添加
+//arr.splice(起始位置, 删除个数,新增元素...) 
+//删除个数写0，就是在起始位置前面面新增元素
+let arr = [1,2,3,4,5,6]
+console.log(arr.splice(1, 0,'插入元素1','插入元素2')) // []
+console.log(arr) //[1, '插入元素1', '插入元素2', 2, 3, 4, 5, 6]
+
+3.数组替换
+//arr.splice(起始位置, 删除个数,新增元素...) 
+//删除位置这里写数字，就是几个元素被后面的新增元素给替换了
+let arr = [1,2,3,4,5,6]
+console.log(arr.splice(1, 2,'插入元素1','插入元素2')) // [2, 3]
+console.log(arr) //[1, '插入元素1', '插入元素2', 4, 5, 6]
+```
+
+### arr.slice()
+
+返回一个新的数组，这一数组是一个由 `begin`​ 和 `end`​ 决定的原数组的 **浅拷贝** （包括 `begin`​，不包括`end`​）。原始数组不会被改变。
+
+```js
+//slice(起始, 结束(不包括))   如果不写结束参数, 就直接截取到结束
+let arr= [1,2,3,4,5,6]
+console.log(arr.slice(1, 3)) //[2, 3]
+console.log(arr.slice(1)) //[2, 3, 4, 5, 6]
+console.log(arr) //[1, 2, 3, 4, 5, 6] 
+```
+
+### arr.filter()
+
+遍历数组，将符合条件的数组元素返回，组成新数组，没有符合条件的元素则返回空数组。不改变原数组
+
+```js
+//  arr.filter(function(item){return item})
+let arr1 = [10, 20, 30, 0, -20, -5, 60]
+const arr2 = arr1.filter( (item) =>{
+  return item > 0
+  })
+
+console.log(arr1)//[10, 20, 30, 0, -20, -5, 60]
+console.log(arr2)//[10, 20, 30, 60]
+```
+
+### arr.forEach()
+
+用于对前面的数组进行遍历操作，次对数据进行遍历时，都会调用一次回调函数，**return不会中断对数组的遍历过程**
+
+```js
+// 数组.forEach( (item,index,arr)=>{} )
+//item是每次遍历到的元素的值
+//index是每次遍历到的元素的下标
+//arr就是遍历的数据(实际意义不大)
+let arr = [10, 9, 28, 19, 14, 20];
+arr.forEach(function (item, index, arr) {
+  console.log(item);
+  console.log(index);
+  console.log(arr);
+});
+
+```
+
+### arr.reduce()
+
+对数组中的每个元素按序执行一个**reducer**函数，每一次运行**reducer**会将**先前元素的计算结果作为参数传入**，最后将其结果汇总为单个返回值。
+
+第一次执行回调函数时，不存在“上一次的计算结果”。如果需要回调函数从数组索引为 0 的元素开始执行，则需要传递初始值。否则，数组索引为 0 的元素将被作为初始值，迭代器将从第二个元素开始执行（索引为 1 而不是 0）。
+
+```js
+// 数组.reduce((prev, item, index, arr)=>{}, 初始值 )
+// prev参数是上次调用function(){}时的返回值
+// 由于第1次调用是没有上一次的返回值，所以reduce会将 初始值 传递第1次调用 function(){}时的pre参数
+// 如果省略初始值reduce会从第2个元素开始遍历数组，同时将第1个元素的值作为初始值传递给pre，不推荐省略
+
+let arr = [100, 15, 9, 18, 12];
+
+let ret = arr.reduce( function(pre, item){
+    return pre + item;  
+}, 0)
+console.log(ret);//154
+
+// 省略初始值  不推荐,虽然系统会自己给初始值
+let ret2 = arr.reduce(function (pre, item) {
+  return pre + item;
+});
+console.log(ret2);//154
+```
+
+### arr.find()
+
+用于查找满足条件的第1个元素并返回，如果没有满足条件的元素则返回`undefined`​。
+
+```js
+// 数组.find(function(item,index,arr){
+//     return 条件;
+// })
+
+let arr = [10, 15, 9, 18, 8, 12];
+let ret = arr.find(function (item) {
+  return item < 10;
+});
+console.log(ret);//9 返回第一个满足这个条件的值
+```
+
+### arr.findIndex()
+
+返回数组中满足提供的测试函数的第一个元素的索引 。若没有找到对应元素则返回-1。
+
+```js
+// 数组.findIndex(function(item,index,arr){
+//     return 条件;
+// })
+const arr1 = [5, 12, 8, 130, 44];
+const isLargeNumber = (item) => item> 13;//返回元素大于13
+console.log(arr1.findIndex(isLargeNumber));//3
+```
+
+### arr.every()
+
+判断数组中是否所有的元素都满足指定的条件，所有的元素必须都满足才返回true。
+
+```js
+// 数组.every(function(item,index,arr){
+//     return 条件
+// })
+
+// 需求：判断是否所有元素都是偶数
+let arr1 = [10, 20, 30, 40, 10];
+let res = arr1.every(item=>item% 2==0);
+console.log(res);//true
+```
+
+### arr.some()
+
+判断数组中是否所有的满足指定的条件的元素，只要有元素满足就返回true
+
+```js
+// 数组.some(function(item,index,arr){
+//     return 条件
+// })
+
+// 需求：判断是否有奇数元素
+let arr2 = [10, 9, 20, 30, 40, 10];
+let ret = arr2.some((item) => item % 2 == 1);
+console.log(ret);//true
+
+```
+
+### arr.includes()
+
+用来判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 `true`​，否则返回 `false`​。
+
+注意：**includes只可以判断简单数据类型**。它不像`arr.some`​那样，有`item`​可以使用点语法。
+
+```js
+const array1 = [1, 2, 3];
+console.log(array1.includes(2));//true
+
+const pets = ['cat', 'dog', 'bat'];
+console.log(pets.includes('cat'));//true
+console.log(pets.includes('at'));//false
+
+const arr = [{a:1},{b:2}]
+console.log(arr.includes({a:1}))//false
+```
+
+### arr.map()
+
+创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
+
+```js
+const arr = [1, 4, 9, 16];
+const map = arr.map((item,index) => item * 2);//每个元素*2后当作新数组的元素返回
+console.log(map);//[2,8,18,32]
+```
+
+## Object
+
+### object.keys()
+
+作用：用于获取指定对象所有的成员名，返回数组
+
+```js
+let obj = {
+  id: 20,
+  age: 22,
+  name: "zhangsan",
+};
+let ks = Object.keys(obj);
+console.log(ks);//[id,age,name]
+```
+
+### object.values()
+
+作用：用于获取指定对象所有的成员值，返回数组
+
+```js
+let obj = {
+  id: 20,
+  age: 22,
+  name: "zhangsan",
+};
+let vs = Object.values(obj);
+console.log(vs);//[20，22，'zhangsan']
+```
+
+### object.assign()
+
+作用：将原对象成员复制到目标对象上，有相同属性会被覆盖，如果成员是的值是简单数据类型，实现的是深拷贝
+
+**如果成员是的值是复杂数据类型，实现的是浅拷贝**：对象里面有对象，里面那个对象还是引用地址
+
+```js
+let tar = {
+  age:222222
+}
+
+let obj = {
+  age:20,
+  gender:'男',
+  name:'zhangsan'
+}
+Object.assign(tar, obj, {score:100,phone:'12312312312'});
+console.log(tar);
+//{age:20,gender:'男',name:'zhangsan',score:100,phone:'12312312312'}
+```
+
 ## Class
 
 [传送门](https://typescript.bootcss.com/classes.html)
 
-在面向对象的编程中，*`class`*​ 是用于创建对象的可扩展的程序代码模版，它为对象提供了状态（成员变量）的初始值和行为（成员函数或方法）的实现。
+在面向对象的编程中，*​`class`​*​ 是用于创建对象的可扩展的程序代码模版，它为对象提供了状态（成员变量）的初始值和行为（成员函数或方法）的实现。
 
 使用`class`​关键字创建的对象，在其中定义的方法会挂载在原型上
 
@@ -1083,7 +1695,7 @@ oB.run();//undefined   替换了，没有该方法了
 ​`class User {...}`​ 构造实际上做了如下的事儿：
 
 1. 创建一个名为 `User`​ 的函数，该函数成为类声明的结果。该函数的代码来自于 `constructor`​ 方法（如果我们不编写这种方法，那么它就被假定为空）。
-2. **存储类中的方法，例如** `**User.prototype**` **中的** `**sayHi**`​ **。**
+2. **存储类中的方法，例如** **​`User.prototype`​** **中的** **​`sayHi`​**​ **。**
 
 当 `new User`​​ 对象被创建后，当我们调用其方法时，**它会从原型中获取对应的方法**
 
@@ -1213,7 +1825,7 @@ new User().sayHi(); // Hello
 
 ### Getter/Setter
 
-技术上来说，`MyClass`​​ 是一个函数（我们提供作为 `constructor`​​ 的那个），**而 methods、getters 和 setters 都被写入了** `**MyClass.prototype**`​ **** 。
+技术上来说，`MyClass`​​ 是一个函数（我们提供作为 `constructor`​​ 的那个），**而 methods、getters 和 setters 都被写入了** **​`MyClass.prototype`​**​ **** 。
 
 就像对象字面量，类可能包括 getters/setters，计算属性（computed properties）等。
 
@@ -1274,7 +1886,7 @@ new User().sayHi(); // Hello, John!
 
 所以，我们就只需在表达式中写 " = "，就这样。
 
-**类字段重要的不同之处在于，它们会在每个独立对象中被设好，而不是设在** `**User.prototype**`​：
+**类字段重要的不同之处在于，它们会在每个独立对象中被设好，而不是设在** **​`User.prototype`​**​：
 
 ```js
 class User {
@@ -1338,7 +1950,7 @@ setTimeout(button.click, 1000); // undefined
     setTimeout(button.click, 1000); // hello
     ```
 
-**类字段** `**click = () => {...}**` ​ **是基于每一个对象被创建的，在这里对于每一个** `**Button**`​ **对象都有一个独立的方法，在内部都有一个指向此对象的** `**this**`​ **。我们可以把** `**button.click**`​ **传递到任何地方，而且** `**this**`​ **的值总是正确的。**
+**类字段** **​`click = () => {...}`​** ​ **是基于每一个对象被创建的，在这里对于每一个** **​`Button`​**​ **对象都有一个独立的方法，在内部都有一个指向此对象的** **​`this`​**​ **。我们可以把** **​`button.click`​**​ **传递到任何地方，而且** **​`this`​**​ **的值总是正确的。**
 
 ### extends
 
@@ -1347,7 +1959,7 @@ setTimeout(button.click, 1000); // undefined
 类字段的初始化：
 
 * **对于基类（还未继承任何东西的那种），在构造函数调用前初始化。**
-* **对于派生类，在** `**super()**` ​ **后立刻初始化。**
+* **对于派生类，在** **​`super()`​** ​ **后立刻初始化。**
 
 类继承是一个类扩展另一个类的一种方式。我们可以在现有功能之上创建新功能。
 
@@ -1413,7 +2025,7 @@ class `Rabbit`​ 的对象可以访问例如 `rabbit.hide()`​ 等 `Rabbit`​
 
 然而通常，我们不希望完全替换父类的方法，而是希望在父类方法的基础上进行调整或扩展其功能。我们在我们的方法中做一些事儿，但是在它之前或之后或在过程中会调用父类方法。
 
-Class 为此提供了 `**super**`​ 关键字。
+Class 为此提供了 **​`super`​**​ 关键字。
 
 * 执行 `super.method(...)`​ 来调用一个父类方法。
 * 执行 `super(...)`​ 来调用一个父类 constructor（只能在我们的 constructor 中）。
@@ -1495,7 +2107,7 @@ let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
 
 简短的解释是：
 
-**继承类的 constructor 必须调用** **`super(...)`** ​ **，并且 (!) 一定要在使用** **`this`**​ **之前调用。**
+**继承类的 constructor 必须调用** **​`super(...)`​** ​ **，并且 (!) 一定要在使用** **​`this`​**​ **之前调用。**
 
 ……但这是为什么呢？这里发生了什么？确实，这个要求看起来很奇怪。
 
@@ -1579,7 +2191,7 @@ new Rabbit(); // rabbit
 **实际上，原因在于字段初始化的顺序。类字段是这样初始化的：**
 
 * **对于基类（还未继承任何东西的那种），在构造函数调用前初始化。**
-* **对于派生类，在** `**super()**`  **后立刻初始化。**
+* **对于派生类，在** **​`super()`​**  **后立刻初始化。**
 
 在我们的例子中，`Rabbit`​ 是派生类，里面没有 `constructor()`​。正如先前所说，这相当于一个里面只有 `super(...args)`​ 的空构造器。
 
@@ -1836,7 +2448,7 @@ alert(Rabbit.prototype.__proto__ === Animal.prototype); // true
 
 **受保护的字段不是在语言级别的 Javascript 中实现的**，但实际上它们非常方便，因为它们是在 Javascript 中模拟的类定义语法。
 
-**受保护的属性通常以下划线**  **`_`** ​ **作为前缀。这不是在语言级别强制实施的，但是程序员之间有一个众所周知的约定，即不应该从外部访问此类型的属性和方法。**
+**受保护的属性通常以下划线**  **​`_`​** ​ **作为前缀。这不是在语言级别强制实施的，但是程序员之间有一个众所周知的约定，即不应该从外部访问此类型的属性和方法。**
 
 > 受保护的字段是可以被继承的
 >
@@ -2020,7 +2632,7 @@ alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
 
 与我们所了解的通过 `extends`​ 获得的继承相比，这是内建对象之间继承的一个重要区别。
 
-**即，**​**`Date`**​**和**​**`Object`**​**是继承关系，但是只是在原型对象上有继承关系，本身的构造上没有继承关系，在类的继承中，有原型对象的继承和构造函数上的继承。**
+**即，**​**​`Date`​**​**和**​**​`Object`​**​**是继承关系，但是只是在原型对象上有继承关系，本身的构造上没有继承关系，在类的继承中，有原型对象的继承和构造函数上的继承。**
 
 **静态方法归属于类构造器对象，实例方法归属于原型对象上**
 
@@ -2146,7 +2758,7 @@ alert(obj); // [object Object]
 alert(obj.toString()); // 同上
 ```
 
-**这是通过** `**toString**` **方法实现的**。但是这儿有一个隐藏的功能，该功能可以使 `toString`​ 实际上比这更强大。我们可以将其作为 `typeof`​ 的增强版或者 `instanceof`​ 的替代方法来使用。
+**这是通过** **​`toString`​** **方法实现的**。但是这儿有一个隐藏的功能，该功能可以使 `toString`​ 实际上比这更强大。我们可以将其作为 `typeof`​ 的增强版或者 `instanceof`​ 的替代方法来使用。
 
 按照 [规范](https://tc39.github.io/ecma262/#sec-object.prototype.tostring) 所讲，内建的 `toString`​ 方法可以被从对象中提取出来，并在任何其他值的上下文中执行。其结果取决于该值。
 
@@ -3038,7 +3650,7 @@ alert(user.name); // John
 
 尤其是，`Reflect`​ 允许我们将操作符（`new`​，`delete`​，……）作为函数（`Reflect.construct`​，`Reflect.deleteProperty`​，……）执行调用。这是一个有趣的功能，但是这里还有一点很重要。
 
-**对于每个可被** **`Proxy`**​ **捕获的内部方法，在** **`Reflect`**​ **中都有一个对应的方法，其名称和参数与** **`Proxy`**​ **捕捉器相同。**
+**对于每个可被** **​`Proxy`​**​ **捕获的内部方法，在** **​`Reflect`​**​ **中都有一个对应的方法，其名称和参数与** **​`Proxy`​**​ **捕捉器相同。**
 
 所以，我们可以使用 `Reflect`​ 来将操作转发给原始对象。
 
@@ -3264,7 +3876,7 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Map
 
-* 概念：**`Map`**​ 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者[基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive)）都可以作为一个键或一个值。
+* 概念：**​`Map`​**​ 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者[基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive)）都可以作为一个键或一个值。
 
   ```js
   map 是有序的"对象"，接受一个数组参数，该数组里面的参数也是数组形式，如 [key,value]
@@ -3321,7 +3933,7 @@ Promise.all([
 
 请注意，结果数组中元素的顺序与其在源 promise 中的顺序相同。即使第一个 promise 花费了最长的时间才 resolve，但它仍是结果数组中的第一个。
 
-**如果任意一个 promise 被 reject，由** **`Promise.all`**​ **返回的 promise 就会立即 reject，并且带有的就是这个 error。**
+**如果任意一个 promise 被 reject，由** **​`Promise.all`​**​ **返回的 promise 就会立即 reject，并且带有的就是这个 error。**
 
 ```js
 Promise.all([
@@ -3706,7 +4318,7 @@ new Promise(function() {
 
 与其他语言相比，JavaScript 中的二进制数据是以非标准方式实现的。
 
-**基本的二进制对象是** `**ArrayBuffer**`​  **—— 对固定长度的连续内存空间的引用。**
+**基本的二进制对象是** **​`ArrayBuffer`​**​  **—— 对固定长度的连续内存空间的引用。**
 
 ```js
 // 创建一个长度为 16 的 buffer
@@ -3723,14 +4335,14 @@ alert(buffer.byteLength); // 16
 
 ​`ArrayBuffer`​​ 是一个内存区域。它里面存储了什么？无从判断。只是一个原始的字节序列。
 
-**如要操作** **`ArrayBuffer`**​ **，需要使用“视图”对象。**
+**如要操作** **​`ArrayBuffer`​**​ **，需要使用“视图”对象。**
 
 视图对象本身并不存储任何东西。它是一副“眼镜”，透过它来解释存储在 `ArrayBuffer`​ 中的字节。
 
-* ​**`Uint8Array`**​ —— 将 `ArrayBuffer`​ 中的每个字节视为 0 到 255 之间的单个数字（每个字节是 8 位，因此只能容纳那么多）。这称为 “8 位无符号整数”。
-* ​**`Uint16Array`**​ —— 将每 2 个字节视为一个 0 到 65535 之间的整数。这称为 “16 位无符号整数”。
-* ​**`Uint32Array`**​ —— 将每 4 个字节视为一个 0 到 4294967295 之间的整数。这称为 “32 位无符号整数”。
-* ​**`Float64Array`**​ —— 将每 8 个字节视为一个 5.0x10^-324^ 到 1.8x10^308^ 之间的浮点数。
+* ​**​`Uint8Array`​**​ —— 将 `ArrayBuffer`​ 中的每个字节视为 0 到 255 之间的单个数字（每个字节是 8 位，因此只能容纳那么多）。这称为 “8 位无符号整数”。
+* ​**​`Uint16Array`​**​ —— 将每 2 个字节视为一个 0 到 65535 之间的整数。这称为 “16 位无符号整数”。
+* ​**​`Uint32Array`​**​ —— 将每 4 个字节视为一个 0 到 4294967295 之间的整数。这称为 “32 位无符号整数”。
+* ​**​`Float64Array`​**​ —— 将每 8 个字节视为一个 5.0x10<sup>-324</sup> 到 1.8x10<sup>308</sup> 之间的浮点数。
 
 ​![image](assets/image-20240226193315-7ijdlhv.png)​
 
@@ -3738,9 +4350,9 @@ alert(buffer.byteLength); // 16
 
 所有这些视图（`Uint8Array`​，`Uint32Array`​ 等）的通用术语是 [TypedArray](https://tc39.github.io/ecma262/#sec-typedarray-objects)。它们共享同一方法和属性集。
 
-**请注意，没有名为** `**TypedArray**` **的构造器，它只是表示** `**ArrayBuffer**` **上的视图之一的通用总称术语：**​`**Int8Array**`​ **，**​`**Uint8Array**` **及其他。**
+**请注意，没有名为** **​`TypedArray`​** **的构造器，它只是表示** **​`ArrayBuffer`​** **上的视图之一的通用总称术语：**​**​`Int8Array`​**​ **，**​**​`Uint8Array`​** **及其他。**
 
-**当看到** `**new TypedArray**` **之类的内容时，它表示** `**new Int8Array**`​ **、**​`**new Uint8Array**` **及其他中之一。**
+**当看到** **​`new TypedArray`​** **之类的内容时，它表示** **​`new Int8Array`​**​ **、**​**​`new Uint8Array`​** **及其他中之一。**
 
 类型化数组的行为类似于常规数组：具有索引，并且是可迭代的。
 
@@ -3824,9 +4436,9 @@ let arr16 = new Uint16Array(arr8.buffer);
 new DataView(buffer, [byteOffset], [byteLength])
 ```
 
-* ​**`buffer`**​ —— 底层的 `ArrayBuffer`​。与类型化数组不同，`DataView`​ 不会自行创建缓冲区（buffer）。我们需要事先准备好。
-* ​**`byteOffset`**​ —— 视图的起始字节位置（默认为 0）。
-* ​**`byteLength`**​ —— 视图的字节长度（默认至 `buffer`​ 的末尾）。
+* ​**​`buffer`​**​ —— 底层的 `ArrayBuffer`​。与类型化数组不同，`DataView`​ 不会自行创建缓冲区（buffer）。我们需要事先准备好。
+* ​**​`byteOffset`​**​ —— 视图的起始字节位置（默认为 0）。
+* ​**​`byteLength`​**​ —— 视图的字节长度（默认至 `buffer`​ 的末尾）。
 
 ```js
 // 4 个字节的二进制数组，每个都是最大值 255
@@ -3992,7 +4604,7 @@ blob:https://javascript.info/1e67e00e-860d-40a5-89ae-6ab0cbee6273
 
 在文档退出时（unload），该映射会被自动清除，因此 `Blob`​ 也相应被释放了。但是，如果应用程序寿命很长，那这个释放就不会很快发生。
 
-**因此，如果我们创建一个 URL，那么即使我们不再需要该** **`Blob`**​ **了，它也会被挂在内存中。**
+**因此，如果我们创建一个 URL，那么即使我们不再需要该** **​`Blob`​**​ **了，它也会被挂在内存中。**
 
 ​`URL.revokeObjectURL(url)`​ 从内部映射中移除引用，因此允许 `Blob`​ 被删除（如果没有其他引用的话），并释放内存。
 
@@ -4140,10 +4752,10 @@ let reader = new FileReader(); // 没有参数
 
 ---
 
-* ​**`readAsArrayBuffer(blob)`** ​ —— 将数据读取为二进制格式的 `ArrayBuffer`​。
-* ​**`readAsText(blob, [encoding])`** ​ —— 将数据读取为给定编码（默认为 `utf-8`​ 编码）的文本字符串。
-* ​**`readAsDataURL(blob)`** ​ —— 读取二进制数据，并将其编码为 base64 的 data url。
-* ​**`abort()`** ​ —— 取消操作。
+* ​**​`readAsArrayBuffer(blob)`​** ​ —— 将数据读取为二进制格式的 `ArrayBuffer`​。
+* ​**​`readAsText(blob, [encoding])`​** ​ —— 将数据读取为给定编码（默认为 `utf-8`​ 编码）的文本字符串。
+* ​**​`readAsDataURL(blob)`​** ​ —— 读取二进制数据，并将其编码为 base64 的 data url。
+* ​**​`abort()`​** ​ —— 取消操作。
 
 ​`read*`​ 方法的选择，取决于我们喜欢哪种格式，以及如何使用数据。
 
@@ -4266,8 +4878,8 @@ for(let [name, value] of formData) {
 new URL(url, [base])
 ```
 
-* ​**`url`**​ —— 完整的 URL，或者仅路径（如果设置了 base），
-* ​**`base`**​ —— 可选的 base URL：如果设置了此参数，且参数 `url`​ 只有路径，则会根据这个 `base`​ 生成 URL。
+* ​**​`url`​**​ —— 完整的 URL，或者仅路径（如果设置了 base），
+* ​**​`base`​**​ —— 可选的 base URL：如果设置了此参数，且参数 `url`​ 只有路径，则会根据这个 `base`​ 生成 URL。
 
 例如：
 
@@ -4335,13 +4947,13 @@ new URL('https://google.com/search?query=JavaScript')
 
 它为搜索参数提供了简便的方法：
 
-* ​**`append(name, value)`** ​ —— 按照 `name`​ 添加参数，
-* ​**`delete(name)`** ​ —— 按照 `name`​ 移除参数，
-* ​**`get(name)`** ​ —— 按照 `name`​ 获取参数，
-* ​**`getAll(name)`** ​ —— 获取相同 `name`​ 的所有参数（这是可行的，例如 `?user=John&user=Pete`​），
-* ​**`has(name)`** ​ —— 按照 `name`​ 检查参数是否存在，
-* ​**`set(name, value)`** ​ —— set/replace 参数，
-* ​**`sort()`** ​ —— 按 name 对参数进行排序，很少使用，
+* ​**​`append(name, value)`​** ​ —— 按照 `name`​ 添加参数，
+* ​**​`delete(name)`​** ​ —— 按照 `name`​ 移除参数，
+* ​**​`get(name)`​** ​ —— 按照 `name`​ 获取参数，
+* ​**​`getAll(name)`​** ​ —— 获取相同 `name`​ 的所有参数（这是可行的，例如 `?user=John&user=Pete`​），
+* ​**​`has(name)`​** ​ —— 按照 `name`​ 检查参数是否存在，
+* ​**​`set(name, value)`​** ​ —— set/replace 参数，
+* ​**​`sort()`​** ​ —— 按 name 对参数进行排序，很少使用，
 * ……并且它是可迭代的，类似于 `Map`​。
 
 包含空格和标点符号的参数的示例：
@@ -4661,685 +5273,6 @@ console.log ( reg1.exec ( str ) );
 //["1ab", "a", "b", index: 0, input: "1absjdg2cdjahsgd3ef", groups: undefined]
 ```
 
-# 常用方法
-
-## 数组方法
-
-### 基本方法
-
-* 数组查询：`arr.[]`查询
-
-  ```js
-  let names = ['小花', '小红', '小绿', '小粉', '小黑']
-
-  // 1. 取一个元素 : 数组名[下标]  下标不存在时为undefined
-  console.log(names[2]) //打印下标为2的元素'小绿';
-  console.log(names[9]); //undefined
-  ```
-* 数组遍历
-
-  ```js
-  let names = ['小花', '小红', '小绿', '小粉', '小黑']
-  for (let i = 0; i < names.length; i++) {
-    console.log(names[i]);
-  }
-  arr.forEach(item=>{
-    console.log(tiem)
-  })
-  ```
-* 修改元素：数组名[下标] = 值 ，尽量不要跨下标赋值， 否则的数组元素未赋值为undefined
-
-  ```js
-  let names = []
-  // 数组赋值方法一: 直接对整个数组赋值
-  names = ["小花", "小红", "小绿", "小粉", "小黑"]
-  console.log(names)//['小花', '小红', '小绿', '小粉', '小黑']
-  // 数组赋值方法二: 下标赋值
-  names[5] = "小狗"
-  console.log(names)//['小花', '小红', '小绿', '小粉', '小黑', '小狗']
-  // 注意 : 尽量不要跨下标赋值
-  names[8] = "小猫"
-  console.log(names)//['小花', '小红', '小绿', '小粉', '小黑', '小狗', 空属性 × 2, '小猫']
-  ```
-* 新增元素
-
-  ```js
-  let arr = [1,2,3]
-  // 开头添加，改变原来数值
-  arr.unshift(3, 2)
-  console.log(arr);//[3,2,1,2,3]
-  // 结尾添加，改变原来数值
-  arr.push(4, 5)
-  console.log(arr);//[1,2,3,4,5]
-  ```
-* 删除元素
-
-  ```js
-  let arr = [10, 20, 30, 40, 50]
-
-  // 前面删除，改变原来数值
-  arr.shift()
-  console.log(arr);//[20, 30, 40, 50]
-
-  // 后面删除，改变原来数值
-  arr.pop()
-  console.log(arr);//[10, 20, 30, 40]
-  ```
-* 删除指定元素
-
-  ```js
-  let arr = [10, 20, 30, 40, 50]   
-  arr.splice(2, 1) // 从30开始, 删除一个, 包含30
-  console.log(arr) // [10, 20, 40, 50]
-  arr.splice(2) // 从30开始, 删除后面所有
-  console.log(arr) // [10, 20]
-  ```
-
-### arr.toString()
-
-将数组变成内容变成字符串，不改变原数组。
-
-```js
-arr1 = [1, 2, 3,]
-
-console.log(arr1.toString());  //‘1,2,3’
-console.log(arr1);  //[1, 2, 3,]
-
-arr.join('指定连接符号') 可以选定连接符号
-console.log(arr1.join("--")) //'1--2--3'
-```
-
-### arr.join()
-
-将数组内容进行拼接，返回一个字符串，不改变原数组
-
-```js
-arr.join('指定连接符号') 可以选定连接符号
-arr = [1, 2, 3,]
-console.log(arr.join("--"));//1--2--3
-console.log(arr1);// [1, 2, 3,]
-```
-
-### arr.concat()
-
-合并两个或多个数组。不会更改现有数组，而是返回一个新数组。
-
-```js
-let arr =  [1, 2, 3]
-let arr2 = [4, 5, 6]
-let arr3 = [7, 8, 9]
-console.log(arr1.concat(arr2, arr3)) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-console.log(arr1)// [1, 2, 3]
-```
-
-### arr.reverse()
-
-将数组中元素的位置颠倒，并返回该数组。该方法会改变原数组。
-
-```js
-let arr1 = [1, 2, 3]
-console.log(arr1.reverse()) // [3,2,1]
-console.log(arr1) // [3,2,1]
-```
-
-### arr.sort()
-
-对数组进行排序，并返回数组，会改变原数组。
-
-默认排序顺序是在将元素转换为字符串，然后比较它们的 UTF-16 代码单元值序列时构建的。
-
-```js
-let arr1 = [1, 5, 2, 4, 3]
-
-// 不传参时按照默认顺序排列
-console.log(arr1.sort())//[1, 2, 3, 4, 5]
-console.log(arr1)//[1, 2, 3, 4, 5]
-
-//可以传入函数控制数组排序顺序
-function fn(a, b) {
-        //return a-b //正序(默认顺序)
-    return b - a //倒序(数字倒排)
-}
-console.log(arr1.sort(fn))
-```
-
-### arr.splice()
-
-通过**删除**或**替换**现有元素或者原地**添加**新的元素来修改数组，并以**数组形式返回被修改的内容**。此方法会改变原数组。
-
-```js
-1.数组删除
-//arr.splice(起始位置, 删除个数) 
-//其实位置从0开始，从起始位置开始删除，返回值是被删除的元素组成的数组
-let arr = [1,2,3,4,5,6]
-console.log(arr.splice(1, 2)) // [2, 3]
-console.log(arr) //[1, 4, 5, 6]
-
-2.数组添加
-//arr.splice(起始位置, 删除个数,新增元素...) 
-//删除个数写0，就是在起始位置前面面新增元素
-let arr = [1,2,3,4,5,6]
-console.log(arr.splice(1, 0,'插入元素1','插入元素2')) // []
-console.log(arr) //[1, '插入元素1', '插入元素2', 2, 3, 4, 5, 6]
-
-3.数组替换
-//arr.splice(起始位置, 删除个数,新增元素...) 
-//删除位置这里写数字，就是几个元素被后面的新增元素给替换了
-let arr = [1,2,3,4,5,6]
-console.log(arr.splice(1, 2,'插入元素1','插入元素2')) // [2, 3]
-console.log(arr) //[1, '插入元素1', '插入元素2', 4, 5, 6]
-```
-
-### arr.slice()
-
-返回一个新的数组，这一数组是一个由 `begin`​ 和 `end`​ 决定的原数组的 **浅拷贝** （包括 `begin`​，不包括`end`​）。原始数组不会被改变。
-
-```js
-//slice(起始, 结束(不包括))   如果不写结束参数, 就直接截取到结束
-let arr= [1,2,3,4,5,6]
-console.log(arr.slice(1, 3)) //[2, 3]
-console.log(arr.slice(1)) //[2, 3, 4, 5, 6]
-console.log(arr) //[1, 2, 3, 4, 5, 6] 
-```
-
-### arr.filter()
-
-遍历数组，将符合条件的数组元素返回，组成新数组，没有符合条件的元素则返回空数组。不改变原数组
-
-```js
-//  arr.filter(function(item){return item})
-let arr1 = [10, 20, 30, 0, -20, -5, 60]
-const arr2 = arr1.filter( (item) =>{
-  return item > 0
-  })
-
-console.log(arr1)//[10, 20, 30, 0, -20, -5, 60]
-console.log(arr2)//[10, 20, 30, 60]
-```
-
-### arr.forEach()
-
-用于对前面的数组进行遍历操作，次对数据进行遍历时，都会调用一次回调函数，**return不会中断对数组的遍历过程**
-
-```js
-// 数组.forEach( (item,index,arr)=>{} )
-//item是每次遍历到的元素的值
-//index是每次遍历到的元素的下标
-//arr就是遍历的数据(实际意义不大)
-let arr = [10, 9, 28, 19, 14, 20];
-arr.forEach(function (item, index, arr) {
-  console.log(item);
-  console.log(index);
-  console.log(arr);
-});
-
-```
-
-### arr.reduce()
-
-对数组中的每个元素按序执行一个**reducer**函数，每一次运行**reducer**会将**先前元素的计算结果作为参数传入**，最后将其结果汇总为单个返回值。
-
-第一次执行回调函数时，不存在“上一次的计算结果”。如果需要回调函数从数组索引为 0 的元素开始执行，则需要传递初始值。否则，数组索引为 0 的元素将被作为初始值，迭代器将从第二个元素开始执行（索引为 1 而不是 0）。
-
-```js
-// 数组.reduce((prev, item, index, arr)=>{}, 初始值 )
-// prev参数是上次调用function(){}时的返回值
-// 由于第1次调用是没有上一次的返回值，所以reduce会将 初始值 传递第1次调用 function(){}时的pre参数
-// 如果省略初始值reduce会从第2个元素开始遍历数组，同时将第1个元素的值作为初始值传递给pre，不推荐省略
-
-let arr = [100, 15, 9, 18, 12];
-
-let ret = arr.reduce( function(pre, item){
-    return pre + item;  
-}, 0)
-console.log(ret);//154
-
-// 省略初始值  不推荐,虽然系统会自己给初始值
-let ret2 = arr.reduce(function (pre, item) {
-  return pre + item;
-});
-console.log(ret2);//154
-```
-
-### arr.find()
-
-用于查找满足条件的第1个元素并返回，如果没有满足条件的元素则返回`undefined`。
-
-```js
-// 数组.find(function(item,index,arr){
-//     return 条件;
-// })
-
-let arr = [10, 15, 9, 18, 8, 12];
-let ret = arr.find(function (item) {
-  return item < 10;
-});
-console.log(ret);//9 返回第一个满足这个条件的值
-```
-
-### arr.findIndex()
-
-返回数组中满足提供的测试函数的第一个元素的索引 。若没有找到对应元素则返回-1。
-
-```js
-// 数组.findIndex(function(item,index,arr){
-//     return 条件;
-// })
-const arr1 = [5, 12, 8, 130, 44];
-const isLargeNumber = (item) => item> 13;//返回元素大于13
-console.log(arr1.findIndex(isLargeNumber));//3
-```
-
-### arr.every()
-
-判断数组中是否所有的元素都满足指定的条件，所有的元素必须都满足才返回true。
-
-```js
-// 数组.every(function(item,index,arr){
-//     return 条件
-// })
-
-// 需求：判断是否所有元素都是偶数
-let arr1 = [10, 20, 30, 40, 10];
-let res = arr1.every(item=>item% 2==0);
-console.log(res);//true
-```
-
-### arr.some()
-
-判断数组中是否所有的满足指定的条件的元素，只要有元素满足就返回true
-
-```js
-// 数组.some(function(item,index,arr){
-//     return 条件
-// })
-
-// 需求：判断是否有奇数元素
-let arr2 = [10, 9, 20, 30, 40, 10];
-let ret = arr2.some((item) => item % 2 == 1);
-console.log(ret);//true
-
-```
-
-### arr.includes()
-
-用来判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 `true`，否则返回 `false`。
-
-注意：**includes只可以判断简单数据类型**。它不像`arr.some`那样，有`item`可以使用点语法。
-
-```js
-const array1 = [1, 2, 3];
-console.log(array1.includes(2));//true
-
-const pets = ['cat', 'dog', 'bat'];
-console.log(pets.includes('cat'));//true
-console.log(pets.includes('at'));//false
-
-const arr = [{a:1},{b:2}]
-console.log(arr.includes({a:1}))//false
-```
-
-### arr.map()
-
-创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
-
-```js
-const arr = [1, 4, 9, 16];
-const map = arr.map((item,index) => item * 2);//每个元素*2后当作新数组的元素返回
-console.log(map);//[2,8,18,32]
-```
-
-## 对象方法
-
-### Object.keys()
-
-作用：用于获取指定对象所有的成员名，返回数组
-
-```js
-let obj = {
-  id: 20,
-  age: 22,
-  name: "zhangsan",
-};
-let ks = Object.keys(obj);
-console.log(ks);//[id,age,name]
-```
-
-### Object.values()
-
-作用：用于获取指定对象所有的成员值，返回数组
-
-```js
-let obj = {
-  id: 20,
-  age: 22,
-  name: "zhangsan",
-};
-let vs = Object.values(obj);
-console.log(vs);//[20，22，'zhangsan']
-```
-
-### Object.assign()
-
-作用：将原对象成员复制到目标对象上，有相同属性会被覆盖，如果成员是的值是简单数据类型，实现的是深拷贝
-
-**如果成员是的值是复杂数据类型，实现的是浅拷贝**：对象里面有对象，里面那个对象还是引用地址
-
-```js
-let tar = {
-  age:222222
-}
-
-let obj = {
-  age:20,
-  gender:'男',
-  name:'zhangsan'
-}
-Object.assign(tar, obj, {score:100,phone:'12312312312'});
-console.log(tar);
-//{age:20,gender:'男',name:'zhangsan',score:100,phone:'12312312312'}
-```
-
-## 字符方法
-
-### str.startsWith()
-
-用来判断当前字符串是否以另外一个给定的子字符串开头，并区分大小写，返回值是`true` 或 `false`
-
-```js
-str.startsWith(searchString[, position])
-searchString：要搜索的子字符串。
-position可选：在 str 中搜索 searchString 的开始位置，默认值为 0。
-
-const str1 = 'Saturday night plans';
-console.log(str1.startsWith('Sat'));//true
-console.log(str1.startsWith('Sat', 3));//false
-console.log(str1.startsWith('Sat',0));//true
-```
-
-### str.endsWith()
-
-用来判断当前字符串是否以另外一个给定的子字符串“结尾”的，并区分大小写，返回值是`true` 或 `false`
-
-```js
-str.endsWith(searchString[, length])
-searchString：要搜索的子字符串。
-length 可选：作为 str 的长度。默认值为 str.length。
-已长度为最后截至部分，来判断是否符合。
-
-
-const str1 = 'Cats are the best!';
-console.log(str1.endsWith('best!'));//true
-console.log(str1.endsWith('best', 17));//true
-
-const str2 = 'Is this a question?';
-console.log(str2.endsWith('question'));//false
-```
-
-### str.includes（）
-
-方法用于判断一个字符串是否包含在另一个字符串中，返回值是`true` 或 `false`
-
-```js
-str.includes(searchString[, position])
-searchString：要在此字符串中搜索的字符串。
-position 可选：从当前字符串的哪个索引位置开始搜寻子字符串，默认值为 0。
-
-let url = 'http://www.xxx.com/admin/index.html';
-console.log(url.includes('.com'));//true
-console.log(url.includes('.com',15))//false 从c开始，没有 . 所有false
-```
-
-### str.padStart()
-
-方法用另一个字符串填充当前字符串 (如果需要的话，会重复多次)，以便产生的字符串达到给定的长度。从当前字符串的左侧开始填充。
-
-```js
-str.padStart(targetLength [, padString])
-targetLength：当前字符串需要填充到的目标长度。如果这个数值小于当前字符串的长度，则返回当前字符串本身。
-padString可选：填充字符串。如字符串太长，填充后的字符串长度超过了目标长度，则保留最左侧的部分，其他部分会被截断。默认值为 ""
-
-let str = "0";
-console.log(str.padStart(5, "0"));//00000
-console.log("123".padStart(5, "0"));//00123
-```
-
-### str.padEnd()
-
-方法会用一个字符串填充当前字符串（如果需要的话则重复填充），返回填充后达到指定长度的字符串。从末尾（右侧）开始填充。
-
-```js
-str.padEnd(targetLength [, padString])
-targetLength：当前字符串需要填充到的目标长度。如果这个数值小于当前字符串的长度，则返回当前字符串本身。
-padString 填充字符串。如字符串太长，填充后的字符串长度超过了目标长度，则保留最左侧的部分，其他部分会被截断。默认值为 ""
-
-let str = "0";
-console.log(str.padEnd(5, "0"));//00000
-console.log("123".padEnd(5, "0"));//12300
-```
-
-### str.split()
-
-使用指定的分隔符字符串将一个String对象分割成子字符串数组，以一个指定的分割字串来决定每个拆分的位置。不改变原字符串。
-
-```js
-//字符串.split(分割符)
-//可以使用正则
-
-let str = 'one-tow-three';
-let arr = str.split('-');
-console.log(arr);//['one', 'tow', 'three']
-console.log(str.split(''));//['o', 'n', 'e', '-', 't', 'o', 'w', '-', 't', 'h', 'r', 'e', 'e']
-console.log(str);//one-tow-three
-```
-
-### str.substring()
-
-在字符串中，读取从开始位置至结束位置之间的字符，含头不含尾，不改变原字符串
-
-```js
-str.substring(indexStart[, indexEnd])
-indexStart：需要截取的第一个字符的索引，该索引位置的字符作为返回的字符串的首字母。
-indexEnd可选：一个 0 到字符串长度之间的整数，以该数字为索引的字符不包含在截取的字符串内。
-
-
-var anyString = "Mozilla";
-
-// 输出 "Moz"
-console.log(anyString.substring(0,3));
-console.log(anyString.substring(3,0));
-console.log(anyString.substring(3,-3));
-console.log(anyString.substring(3,NaN));
-console.log(anyString.substring(-2,3));
-console.log(anyString.substring(NaN,3));
-
-// 输出 "lla"
-console.log(anyString.substring(4,7));
-console.log(anyString.substring(7,4));
-
-// 输出 ""
-console.log(anyString.substring(4,4));
-
-// 输出 "Mozill"
-console.log(anyString.substring(0,6));
-
-// 输出 "Mozilla"
-console.log(anyString.substring(0,7));
-console.log(anyString.substring(0,10));
-
-// 字符中也有下标的概念
-console.log(url[0]);// h
-console.log(url[1]);// t
-console.log(url[2]);// t
-
-console.log(url.substring(7, 21));// www.baidu.com/
-console.log(url)// http://www.baidu.com/admin/index.html
-```
-
-### str.toUpperCase()
-
-调用该方法的字符串转为大写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
-
-```js
-str.toUpperCase()//点语法，调用str原型对象的方法。不改变原字符串
-
-const str= 'The quick brown fox jumps over the lazy dog.';
-console.log(str.toUpperCase());//"THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG."
-```
-
-### str.toLowerCase()
-
-调用该方法的字符串转为小写形式并返回（如果调用该方法的值不是字符串类型会被强制转换）。
-
-```js
-str.toLowerCase()//点语法，调用str原型对象的方法。不改变原字符串
-
-​console.log( "ALPHABET".toLowerCase() );// "alphabet"
-```
-
-### str.indexOf()
-
-功能：获取某一个字符第一次出现的下标（判断一个字符串在一个另一个字符串中）
-
-```js
-str.indexOf(searchValue [, fromIndex])
-searchValue ：要被查找的字符串值，没写，代表'undefined'（是字符串'undefined'）
-fromIndex 可选：数字表示开始查找的位置，默认值为 0。
-fromIndex 的值小于 0，或者大于 str.length ，那么查找分别从 0 和str.length 开始。
-fromIndex 的值小于 0，等同于为空情况； fromIndex 的值大于或等于 str.length ，那么结果会直接返回 -1 。）
-注意：不支持正则
-
-var str = 'abcdefgabcd';
-console.log ( str.indexOf ( "b" ) );//1  如果存在则返回下标
-console.log ( str.indexOf ( "z" ) );//-1  如果不存在则返回固定值-1
-```
-
-### str.lastIndexOf()
-
-返回调用String对象的指定值最后一次出现的索引，在一个字符串中的指定位置 `fromIndex`处**从后向前搜索**。如果没找到这个特定值则返回-1 。
-
-```js
-str.lastIndexOf(searchValue[, fromIndex])
-searchValue：一个字符串，表示被查找的值。如果searchValue是空字符串，则返回fromIndex。
-fromIndex可选：待匹配字符串 searchValue 的开头一位字符从 str 的第 fromIndex 位开始向左回向查找。
-fromIndex默认值是 +Infinity。如果 fromIndex >= str.length ，则会搜索整个字符串。如果 fromIndex < 0 ，则等同于 fromIndex == 0。
-
-'canal'.lastIndexOf('a'); 
-// returns 3（没有指明fromIndex则从末尾l处开始反向检索到的第一个a出现在l的后面，即index为3的位置）
-
-'canal'.lastIndexOf('a', 2);  
-// returns 1（指明 fromIndex 为 2 则从 n 处反向向回检索到其后面就是 a，即 index 为 1 的位置）
-
-'canal'.lastIndexOf('a', 0); 
-// returns -1(指明 fromIndex 为 0 则从 c 处向左回向检索 a 发现没有，故返回-1)
-
-'canal'.lastIndexOf('x'); // returns -1
-'canal'.lastIndexOf('c', -5);// returns 0（指明 fromIndex 为-5 则视同 0，从 c 处向左回向查找发现自己就是，故返回 0）
-'canal'.lastIndexOf('c', 0); // returns 0（指明 fromIndex 为 0 则从 c 处向左回向查找 c 发现自己就是，故返回自己的索引 0）
-'canal'.lastIndexOf(''); // returns 5
-'canal'.lastIndexOf('', 2); // returns 2
-```
-
-### str.replace()
-
-把字符串中的字符替换成想要的字符，不改变原字符串本身。
-
-```js
-str.replace('subStr ','newSubStr')
-subStr ：希望被替换的字符
-newSubStr：用于替换的字符
-注意：
-str.replace只会替换一次成功后就直接返回，不会整个字符串进行替换，需要整个替换可以使用正则的严格模式。/  /g
-
-const p = '1223334444'
-const p2 = p.replace('3','5')
-console.log(p);//'1223334444'
-console.log(p2)；//'1225334444' 替换一个就返回，不改变原字符串
-
-const i = /4/;  // 正则表达式
-const p3 = p.replace(i,'5')
-console.log(p3);//1223335444  正则非严格模式，也是只替换一个
-
-const j = /4/g;
-const p4 = p.replace(j,'5')
-console.log(p4);//11223335555
-```
-
-### str.trim()
-
-去掉字符串的左右空格，不会改变原字符串
-
-```js
-str.trim（）
-系统自带的trim方法只能去掉左右空格,无法去掉中间
-要去掉所有的空格，使用str.replace（）方法，利用正则的严格模式去掉
-
-var str = '   safga  sdv  dsfgs    ';
-console.log ( str.trim () )//safga  sdv  dsfgs
-
-//去掉所有空格思路：使用正则全局匹配空格`\s`,替换成空字符
-console.log ( str.replace ( /\s/g, "" ) );//safgasdvdsfgs
-```
-
-### str.search()
-
-返回第一次和**正则匹配**的索引，如果没有则返回-1
-
-```js
-str.search(regexp)
-regexp：一个正则表达式对象。如果传入一个非正则表达式对象 regexp，则会使用 new RegExp(regexp) 隐式地将其转换为正则表达式对象。
-
-
-var str = 'abcdefg100xyz';
-console.log ( str.search ( /\d/g ) );//7   此方法会忽略全局匹配g
-```
-
-### str.match()
-
-提取字符串中与**正则表达式**相匹配的文本，返回值是数组,找不到则返回null
-
-```js
-str.match(regexp)
-regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为一个 RegExp 。
-如果你没有给出任何参数并直接使用 match() 方法 ，你将会得到一 个包含空字符串的 Array ：[""] 。
-返回值：
-如果使用 g 标志，则将返回与完整正则表达式匹配的所有结果，但不会返回捕获组。
-如果未使用 g 标志，则仅返回第一个完整匹配及其相关的捕获组（Array）。
-
-var str = 'abcdefg100xyzabc';
-//返回值是数组,找不到则返回null
-console.log ( str.match ( /a/ ) );//["a", index: 0, input: "abcdefg100xyzabc", groups: undefined]
-console.log ( str.match ( /a/g ) );// ["a", "a"]    此方法支持全局匹配g
-```
-
-## 数值方法
-
-### 数值.toFixed()
-
-功能：对数值保留指定小数倍，并四舍五入
-
-```js
-//要保证number类型
-let price = 10
-console.log(price.toFixed(2));//10.00
-let num = 10.456;
-console.log(num.toFixed(2));//10.46
-```
-
-### 数值.toString()
-
-功能：可以进行进制转换，结果使用字符串表示；如果省略进制，则表示转换为10进制
-
-```js
-let n = 10;
-console.log(n.toString(2));//1010
-console.log(n.toString(8));//12
-console.log(n.toString(16));//a
-console.log(n.toString());//'10'
-```
-
----
-
 # WebAPI
 
 ## Dom
@@ -5379,7 +5312,7 @@ dom.src  //获取路径(常用于img标签)
   ```js
   <img id="pic" src="./images/yshg.png" alt="" data-sex='男'>
   ```
-* 获取非标属性：`**dom.data.xx**`​
+* 获取非标属性：**​`dom.data.xx`​**​
 
   ```js
   document.querySelector('img').data.sex//获取dom的sex属性（标签内为data-sex="boy"）
@@ -5487,9 +5420,11 @@ form.selected = false  //设置选中状态，用于option
 
 ## 页面尺寸和滚动
 
+​![image](assets/image-20240515203016-wq0ueue.png)​
+
 ### offset
 
-* offsetWidth、offsetHeight
+* ​`offsetWidth`​、`offsetHeight`​
 
   ```js
   //offsetWidth     获取元素在页面的宽尺寸(width padding border)
@@ -5500,7 +5435,7 @@ form.selected = false  //设置选中状态，用于option
   console.log(oBox.offsetWidth);
   console.log(oBox.offsetHeight);
   ```
-* offsetParent：用于获取相对定位的父元素。
+* ​`offsetParent`​：用于获取相对定位的父元素。
 
   ```js
   //offsetParent 用于获取相对位置的父元素。
@@ -5511,7 +5446,7 @@ form.selected = false  //设置选中状态，用于option
   let oCore = document.querySelector('.core');
   console.log(oCore.offsetParent);
   ```
-* offsetLeft、offsetTop
+* ​`offsetLeft`​、`offsetTop`​
 
   ```js
   //offsetLeft与offsetTop是用于获取当前元素，距离它的offsetParent的尺寸
@@ -5892,6 +5827,28 @@ Brower Object Model浏览器对象模型，浏览器厂商将浏览器设计成�
   window.onbeforeunload=function(){}//界面在关闭之前会触发这个事件，一般用于关闭之前保存一些数据
   window.onunload=function(){}//界面在关闭的那一瞬间会触发这个事件
   ```
+* 内置对象的分类
+
+  ```js
+  1）值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。例如 Infinity、NaN、undefined、null 字面量
+  （2）函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。例如 eval()、parseFloat()、parseInt() 等
+  （3）基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。例如 Object、Function、Boolean、Symbol、Error 等
+  （4）数字和日期对象，用来表示数字、日期和执行数学计算的对象。例如 Number、Math、Date
+  （5）字符串，用来表示和操作字符串的对象。例如 String、RegExp
+  （6）可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。例如 Array
+  （7）使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
+  例如 Map、Set、WeakMap、WeakSet
+  （8）矢量集合，SIMD 矢量集合中的数据会被组织为一个数据序列。
+  例如 SIMD 等
+  （9）结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。例如 JSON 等
+  （10）控制抽象对象
+  例如 Promise、Generator 等
+  （11）反射。例如 Reflect、Proxy
+  （12）国际化，为了支持多语言处理而加入 ECMAScript 的对象。例如 Intl、Intl.Collator 等
+  （13）WebAssembly
+  （14）其他。例如 arguments
+
+  ```
 
 ### location对象
 
@@ -5920,13 +5877,6 @@ Brower Object Model浏览器对象模型，浏览器厂商将浏览器设计成�
   ```js
   location.assign(url):实现跳转
   location.reload():刷新当前页面
-
-  function clk(){
-    location.assign('http://www.baidu.com')
-  }
-  function clk1(){
-    location.reload();
-  }
   ```
 
 ### history对象
@@ -6064,7 +6014,7 @@ AJAX 允许只更新一个 [HTML](https://developer.mozilla.org/zh-CN/docs/Gloss
 
 任何其他请求都被认为是“非安全”请求。例如，具有 `PUT`​ 方法或 `API-Key`​ HTTP-header 的请求就不是安全请求。
 
-**本质区别在于，可以使用**  **`<form>`** ​ **或**  **`<script>`** ​ **进行安全请求，而无需任何其他特殊方法。** 因此，即使是非常旧的服务器也能很好地接收安全请求。
+**本质区别在于，可以使用**  **​`<form>`​** ​ **或**  **​`<script>`​** ​ **进行安全请求，而无需任何其他特殊方法。** 因此，即使是非常旧的服务器也能很好地接收安全请求。
 
 与此相反，带有非标准 header 或者例如 `DELETE`​ 方法的请求，无法通过这种方式创建。
 
@@ -6318,7 +6268,7 @@ Access-Control-Allow-Origin: https://javascript.info
 Access-Control-Allow-Credentials: true
 ```
 
-**对于具有凭据的请求，禁止** `**Access-Control-Allow-Origin**` **使用星号**  `*****`​ **。如上所示，它必须有一个确切的源。这是另一项安全措施，以确保服务器真的知道它信任的发出此请求的是谁。否则浏览器不会发送实际请求，从而导致请求失败。**
+**对于具有凭据的请求，禁止** **​`Access-Control-Allow-Origin`​** **使用星号**  **​`*`​**​ **。如上所示，它必须有一个确切的源。这是另一项安全措施，以确保服务器真的知道它信任的发出此请求的是谁。否则浏览器不会发送实际请求，从而导致请求失败。**
 
 ### JSONP
 
@@ -6644,8 +6594,8 @@ let promise = fetch(url, {
 let promise = fetch(url, [options])
 ```
 
-* ​**`url`**​ —— 要访问的 URL。
-* ​**`options`**​ —— 可选参数：method，header 等。
+* ​**​`url`​**​ —— 要访问的 URL。
+* ​**​`options`​**​ —— 可选参数：method，header 等。
 
 没有 `options`​，这就是一个简单的 GET 请求，下载 `url`​ 的内容。
 
@@ -6653,7 +6603,7 @@ let promise = fetch(url, [options])
 
 获取响应通常需要经过两个阶段。
 
-➡️**第一阶段，当服务器发送了响应头（response header），**​**`fetch`**​ **返回的** **`promise`**​ **就使用内建的** **[Response](https://fetch.spec.whatwg.org/#response-class)** **class 对象来对响应头进行解析。**
+➡️**第一阶段，当服务器发送了响应头（response header），**​**​`fetch`​**​ **返回的** **​`promise`​**​ **就使用内建的** **[Response](https://fetch.spec.whatwg.org/#response-class)** **class 对象来对响应头进行解析。**
 
 在这个阶段，我们可以通过检查响应头，来检查 HTTP 状态以确定请求是否成功，当前还没有响应体（response body）。
 
@@ -6661,8 +6611,8 @@ let promise = fetch(url, [options])
 
 我们可以在 response 的属性中看到 HTTP 状态：
 
-* ​**`status`**​ —— HTTP 状态码，例如 200。
-* ​**`ok`**​ —— 布尔值，如果 HTTP 状态码为 200-299，则为 `true`​。
+* ​**​`status`​**​ —— HTTP 状态码，例如 200。
+* ​**​`ok`​**​ —— 布尔值，如果 HTTP 状态码为 200-299，则为 `true`​。
 
 例如：
 
@@ -6683,10 +6633,11 @@ if (response.ok) { // 如果 HTTP 状态码为 200-299
 
 ```js
 let response = await fetch('url')
+let text = awati response.text() //读取成文本格式
 let json = await response.json(); // 读取 response body，并将其解析为 JSON 格式
 let blob = await response.blob(); // 下载为 Blob 对象
 let formData= await response.formData(); // 下载为 FormData 对象
-let body= await response.body(); // 下载为 ReadableStream 对象
+let body= await response.body(); // 下载为 ReadableStream 对象，流式读取
 ```
 
 ---
@@ -6831,8 +6782,8 @@ while(true) {
 
 ​`await reader.read()`​ 调用的结果是一个具有两个属性的对象：
 
-* ​**`done`**​ —— 当读取完成时为 `true`​，否则为 `false`​。
-* ​**`value`**​ —— 字节的类型化数组：`Uint8Array`​。
+* ​**​`done`​**​ —— 当读取完成时为 `true`​，否则为 `false`​。
+* ​**​`value`​**​ —— 字节的类型化数组：`Uint8Array`​。
 
 > **请注意：**
 >
@@ -7306,7 +7257,7 @@ Content-Type: image/png
 Date: Sat, 08 Sep 2012 16:53:16 GMT
 ```
 
-header 之间的换行符始终为 `"\r\n"`​（不依赖于操作系统），所以我们可以很容易地将其拆分为单独的 header。
+**header 之间的换行符始终为**  **​`"\r\n"`​**​ **（不依赖于操作系统）** ，所以我们可以很容易地将其拆分为单独的 header。
 
 name 和 value 之间总是以冒号后跟一个空格 `": "`​ 分隔。这是标准格式。
 
@@ -7601,3 +7552,1144 @@ function upload(file) {
     }
   })
   ```
+
+# typeScript
+
+## 基本配置
+
+* 基本命令：安装编译`TS`​的工具包，`node`​只能识别`js`​代码，安装编译包可以把`ts`​代码转成`js`​代码
+
+  ```bash
+  npm i -g typescript
+  tsc –v (查看 typescript 的版本)
+  tsc xxx.ts //把ts文件转成node可执行的js文件
+  ```
+* ​`tsconfig.js`​：`ts`​的配置文件
+
+  ```js
+  {
+      /*
+      tsconfig.json是ts编译器的配置，ts编译器可以根据他的信息来对代码进行编译
+      */
+
+      // 'include'用来指定哪些ts文件需要被编译，
+      // 路径： *任意文件， **任意目录
+      "include": ["./src/**/*"],
+
+      // 'exclude' 不需要背编译的文件目录，
+      // 默认值：['node_modules'， 'bower_components', 'jspm_packages']
+      "exclude": ["./src/hello/**/*"],
+
+      /*
+      定义被继承的配置文件
+      */
+      // "extends": "",
+
+      /*
+      compilerOptions： 编译器选项
+      */
+      "compilerOptions": {
+          //用来指定ts被编译为的ES的版本
+          "target": "es2015",
+
+          //指定使用的模块化的规范'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node12', 'nodenext'
+          "module": "es2015",
+
+          //用来指定项目中要使用的库,代码提示，代码检查， 在浏览中执行的化不需要指定
+          // 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'esnext', 'dom', 'dom.iterable', 
+          // 'webworker', 'webworker.importscripts', 'webworker.iterable', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 
+          // 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 
+          // 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays',
+          // 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 
+          // 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.sharedmemory', 'es2020.string', 
+          // 'es2020.symbol.wellknown', 'es2020.intl', 'es2021.promise', 'es2021.string', 'es2021.weakref', 'es2021.intl', 'esnext.array',
+          // 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise', 'esnext.weakref'.
+          //默认值为：es6, dom 即为浏览器的运行环境
+          "lib": ["dom","es5"]
+
+          //指定编译后文件所在的目录
+          "outDir": "./dist",
+
+          //将代码合并为1个文件
+          //设置outFile后所有的全局作用域中的代码会合并到同一个文件中
+          //用于module: amd, system
+          // "outFile": "./dist/app.js"
+
+          //所有严格检查的总开关
+          "strict": true,
+
+          //是否对js文件进行编译，默认为false
+          "allowJs": true,
+
+          //是否检查js代码是否符合语法规范，默认为false
+          "checkJs": true,
+
+          //是否移除注释，默认为false
+          "removeComments": true,
+
+          //不生成编译后的文件，只执行编译的过程，默认为false
+          "noEmit": false,
+
+          //当有错误时，不生成编译后的文件，默认为false
+          "noEmitOnError": true,
+
+          //用来设置编译后的文件是否使用严格模式，默认为false
+          "alwaysStrict": true,
+
+          //不允许隐式any类型，默认为false
+          "noImplicitAny": true,
+
+          //不允许不明确类型this,默认为false
+          "noImplicitThis": true,
+
+          //严格的检查空值，默认为false
+          "strictNullChecks": true
+      }
+  }
+  ```
+
+## 数据类型
+
+### boolean类型
+
+```js
+let isDone: boolean = false;
+```
+
+### number类型
+
+```js
+let count: number = 10;
+```
+
+### string类型
+
+```js
+let name: string = "semliker";
+```
+
+### enum类型
+
+* 基本概念
+
+  ```js
+  1.枚举（enum）的功能类似于字面量类型+联合类型组合的功能，来描述一个值。规定了某些特定的值。
+  2.该值只能是一组命名常量中的一个。
+  3.枚举值不能使用计算属性，即定义的时候必须要有明确的数据定义
+
+  定义:
+  enum 枚举名 { 可取值1, 可取值2,.. }
+
+  使用:
+  枚举名.可取值
+  ```
+* 数字枚举：这类枚举获取到的值，默认是从0开始，也可以设置初始值
+
+  ```js
+  enum Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+  }
+
+  let dir: Direction = Direction.NORTH;
+  默认情况下，NORTH 的初始值为 0，其余的成员会从 1 开始自动增长。换句话说，Direction.SOUTH 的值为 1，Direction.EAST 的值为 2，Direction.WEST 的值为 3。
+  let dirName = Direction[0]; // NORTH
+  let dirVal = Direction["NORTH"]; // 0
+
+
+  enum Direction {
+    NORTH = 3,
+    SOUTH,
+    EAST,
+    WEST,
+  }
+  ```
+* 字符串枚举：对于纯字符串枚举，我们不能省略任何初始化程序。字符串系统是不会有数字那种默认累计加一的
+
+  ```js
+  enum Direction {
+    NORTH = "NORTH",
+    SOUTH = "SOUTH",
+    EAST = "EAST",
+    WEST = "WEST",
+  }
+  ```
+* 常量枚举：使用 `const`​ 关键字修饰的枚举，常量枚举会使用内联语法，不会为枚举类型编译生成任何 JavaScript。
+
+  ```js
+  const enum Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+  }
+
+  let dir: Direction = Direction.NORTH; //编译后： var dir = 0 /* NORTH */;
+  ```
+* 异构枚举：异构枚举的成员值是数字和字符串的混合
+
+  ```js
+  enum Enum {
+    A,
+    B,
+    C = "C",
+    D = "D",
+    E = 8,
+    F,
+  }
+
+  //编译后
+  var Enum;
+  (function (Enum) {
+      Enum[Enum["A"] = 0] = "A";
+      Enum[Enum["B"] = 1] = "B";
+      Enum["C"] = "C";
+      Enum["D"] = "D";
+      Enum[Enum["E"] = 8] = "E";
+      Enum[Enum["F"] = 9] = "F";
+  })(Enum || (Enum = {}));
+
+  console.log(Enum.A) //输出：0
+  console.log(Enum[0]) // 输出：A
+  ```
+
+### any类型
+
+* 任何类型都可以被归为 `any `​类型。这让 `any `​类型成为了类型系统的顶级类型（也被称作全局超级类型）。
+
+  ```js
+  当类型设置为 any 时，就取消了类型的限制,不推荐使用any这会让TypeScript变为“AnyScript”(失去TS类型保护的优势)
+  隐式 any，有下面两种情况会触发:
+  1.声明变量不提供类型也不提供默认值
+  2.定义函数时，参数不给类型
+
+  let value: any;
+  value.foo.bar; // OK
+  value.trim(); // OK
+  value(); // OK
+  new value(); // OK
+  value[0][1]; // OK
+  ```
+
+### unknown类型
+
+* 所有类型也都可以赋值给 `unknown`​。这使得 `unknown`​ 成为 TypeScript 类型系统的另一种顶级类型（另一种是 `any`​）
+* ​`nuknown`​可以接受任何值的赋值，因为它本身的意思是不知道该变量的具体类型
+
+  ```js
+  let value: unknown;
+
+  value = true; // OK
+  value = 42; // OK
+  value = "Hello World"; // OK
+  ```
+* ​`nuknown`​只能赋值给`any`​类型和`nuknown`​类型本身
+
+  ```js
+  let value: unknown;
+
+  value.foo.bar; // Error
+  value.trim(); // Error
+  value(); // Error
+  new value(); // Error
+  value[0][1]; // Error
+  ```
+
+### nudefined、null类型
+
+```js
+let u: undefined = undefined;
+let n: null = null;
+```
+
+### never类型
+
+* ​`never`​ 类型表示的是那些永不存在的值的类型。`never`​ 类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型。
+
+  ```js
+  // 返回never的函数必须存在无法达到的终点
+  function error(message: string): never {
+    throw new Error(message);
+  }
+
+  function infiniteLoop(): never {
+    while (true) {}
+  }
+
+  ```
+* ​`never`​ 经常用来做类型检查，**使用 never 避免出现新增了联合类型没有对应的实现，目的就是写出类型绝对安全的代码。**
+
+  ```js
+  type Foo = string | number;
+
+  function controlFlowAnalysisWithNever(foo: Foo) {
+    if (typeof foo === "string") {
+      // 这里 foo 被收窄为 string 类型
+    } else if (typeof foo === "number") {
+      // 这里 foo 被收窄为 number 类型
+    } else {
+      // foo 在这里是 never
+      const check: never = foo;
+    }
+  }
+  ```
+
+### Array类型
+
+```js
+// 写法1:
+let 变量: [] = [值1，...]:
+let numbers: number[] = [1, 3, 5] 
+//  numbers必须是数组，每个元素都必须是数字
+
+// 写法2:
+let 变量: Array<类型> = [值1，...]
+let strings: Array<string> = ['a', 'b', 'c'] 
+//  strings必须是数组，每个元素都必须是字符串
+```
+
+### Tuple类型
+
+* 概念：**元组**是一种特殊的**数组** 。
+
+  ```js
+  1.它约定了的元素个数
+  2.它约定了特定索引对应的数据类型
+  ```
+* 定义
+
+  ```js
+  let arr: number[] = [116.27,39.527]  //不严谨，因为该类型的数组中可以出现任意多个数字
+  let arr: [number, number] = [116.27,39.527]  //元组确切地知道包含多少个元素，以及特定索引对应的类型
+  ```
+
+### function类型
+
+* 函数涉及的类型实际上指的是：`函数参数类型`​和`返回值类型`​
+* 单个函数定义
+
+  ```js
+  // 声明式实际写法:
+  function add(num1: number, num2: number): number {
+    return num1 + num2
+  }
+  let fn2:(num1:number)=>number=function(){}
+
+  // 箭头函数
+  const add2 = (a: number =100, b: number = 100): number =>{
+     return a + b
+   }
+  ```
+* 返回值void：即没有返回值，强制`return`​得话，也不会报错
+
+  ```js
+  // 如果什么都不写，此时，add 函数的返回值类型为: void
+  const add = (num1: number):void => {}
+
+  // 如果return之后什么都不写，此时，add 函数的返回值类型为: void
+  const add = (num1: number):void => { return }
+
+  // 如果return的undefined,是你自己明确返回的undefined，不是计算之后得到的undefined
+  const add = (num1: number):undefined => {
+    return undefined  // 返回的 undefined是JS中的一个值
+  }
+  ```
+* 可选参数
+
+  ```js
+  function slice (a?: number, b?: number):void {
+      // ? 跟在参数名字的后面，表示可选的参数,可选参数只能在必须参数的后面
+      // 如果可选参数在必选参数的前面，会报错
+      console.log(111);  
+  }
+
+  注意可选和默认值的区别:
+  设置了默认值之后，就是可选的了，不写就会使用默认值，
+  可选和默认值它们不能一起使用。优先使用默认值
+  ```
+
+### void
+
+* 用来声明函数没有返回值
+
+  ```js
+  // 声明函数返回值为void
+  function warnUser(): void {
+    console.log("This is my warning message");
+  }
+  ```
+
+### object
+
+* 基本使用
+
+  ```js
+  const 对象名: {
+    属性名1:类型1,
+    属性名2?:类型2,
+    方法名1(形参1: 类型1,形参2: 类型2):返回值类型,
+    方法名2:(形参1: 类型1,形参2: 类型2) => 返回值类型
+  } = { 属性名1: 值1，属性名2: 值2  }
+
+  // 空对象
+  let person: {} = {}
+
+  // 有属性的对象
+  let person: { name: string } = {
+    name: '同学'
+  }
+
+  // 在一行代码中指定对象的多个属性类型时，使用;(分号)来分隔
+  let person: {name: 'jack'; greet1(name: string):void; greet2: (name: string) => void} = {
+    name: 'jack',
+    greet1() {},
+    greet2:()=>{}
+  }
+
+  // 对象中如果有多个类型，可以换行写，通过换行来分隔多个属性类型，可以去掉 ; 
+  let person: {
+    name: string
+    greet1(name: string):void
+    greet2: (name: string) => void
+  } = {
+    name: 'jack',
+    greet1() {},
+    greet2:()=>{}
+  }
+  ```
+* 可选参数
+
+  ```js
+  let obj: {
+    name: String
+    age: Number
+    gender?: Boolean
+  } = {
+    name: 'xjj',
+    age: 18
+  }
+  ```
+
+## 相关概念
+
+### 断言
+
+* 类型断言
+
+  ```js
+  有时候你会比TS更加明确一个值的类型，此时，可以使用类型断言来指定更具体的类型。
+  即，你可能知道里面值得类型，但是不知道里面具体的值就使用类型断言，先给个空的再as一下，告诉系统其实是这个as之后的东西
+  类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和解构。它没有运行时的影响，只是在编译阶段起作用。
+  type TObj = {
+    name: string,
+    age: number
+  }
+  let obj : TObj = {} as TObj//写法1
+  let obj : TObj = <TObj>{}//写法2
+  ```
+* 非空断言
+
+  ```js
+  在上下文中当类型检查器无法断定类型时，可以使用缀表达式操作符 ! 进行断言操作对象是非 null 和非 undefined 的类型。
+  即x!的值不会为 null 或 undefined(有时候要 .出去 的那个值有可能是null或者undefined的时候，你使用.操作，系统会提示报错)
+  也就是说，使用 x!. 告诉系统，这里肯定可以进行点操作的
+  let user: string | null | undefined;
+  console.log(user!.toUpperCase()); // 编译正确
+  console.log(user.toUpperCase()); // 错误。是null的时候是无法点操作的
+  ```
+* 确定赋值断言
+
+  ```js
+  我们定义了变量, 没有赋值就使用，则会报错
+  通过 let x!: number; 确定赋值断言，TypeScript 编译器就会知道该属性会被明确地赋值。
+  let value:number
+  console.log(value); // Variable 'value' is used before being assigned.
+  let value!:number
+  console.log(value); // undefined 编译正确
+  ```
+
+### 操作符
+
+* 概念：类型保护是可执行运行时检查的一种表达式，用于确保该类型在一定的范围内。换句话说，类型保护可以保证一个字符串是一个字符串，尽管它的值也可以是一个数值。
+
+  ```js
+  类型保护与特性检测并不是完全不同，其主要思想是尝试检测属性、方法或原型，以确定如何处理值
+  ```
+* ​`is`​操作符：判断是否是该类型，返回`boolean`​值
+
+  ```javascript
+  const isString = (val: unknown): val is string => getType(val) === 'string'
+  ```
+* ​`in`​操作符：用来遍历枚举类型
+
+  ```js
+  type Keys = "a" | "b" | "c"
+
+  type Obj =  {
+    [p in Keys]: any
+  } // -> { a: any, b: any, c: any }
+  ```
+* ​`typeof`​ 操作符： 可以用来获取一个变量声明或对象的类型。
+
+  ```js
+  interface Person {
+    name: string;
+    age: number;
+  }
+
+  const sem: Person = { name: 'semlinker', age: 33 };
+  type Sem= typeof sem; // -> Person
+
+  function toArray(x: number): Array<number> {
+    return [x];
+  }
+
+  type Func = typeof toArray; // -> (x: number) => number[]
+  ```
+* ​`keyof`​操作符：可以用于获取某种类型的所有键，其返回类型是联合类型
+
+  ```js
+  interface Person {
+    name: string;
+    age: number;
+  }
+
+  type K1 = keyof Person; // "name" | "age"
+  type K2 = keyof Person[]; // "length" | "toString" | "pop" | "push" | "concat" | "join" 
+  type K3 = keyof { [x: string]: Person };  // string | number
+
+  ```
+* ​`instanceof`​操作符：实例是否在构造函数的原型对象的原型链上
+
+  ```js
+  interface Padder {
+    getPaddingString(): string;
+  }
+
+  class SpaceRepeatingPadder implements Padder {
+    constructor(private numSpaces: number) {}
+    getPaddingString() {
+      return Array(this.numSpaces + 1).join(" ");
+    }
+  }
+
+  class StringPadder implements Padder {
+    constructor(private value: string) {}
+    getPaddingString() {
+      return this.value;
+    }
+  }
+
+  let padder: Padder = new SpaceRepeatingPadder(6);
+
+  if (padder instanceof SpaceRepeatingPadder) {
+    // padder的类型收窄为 'SpaceRepeatingPadder'
+  }
+
+
+  ```
+* ​`infer`​：在条件类型语句中，可以用 `infer`​ 声明一个类型变量并且对它进行使用。简单说就是用它取到函数返回值的类型方便之后使用。
+
+  ```js
+  type ReturnType<T> = T extends (
+    ...args: any[]
+  ) => infer R ? R : any;
+  ```
+* ​`Partial<T>`​：作用就是将某个类型里的属性全部变为可选项 `?`​
+
+  ```js
+  1.定义
+  /**
+   * node_modules/typescript/lib/lib.es5.d.ts
+   * Make all properties in T optional
+   */
+  type Partial<T> = {
+    [P in keyof T]?: T[P];
+  };
+
+  2.示例
+  interface Todo {
+    title: string;
+    description: string;
+  }
+
+  function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
+    return { ...todo, ...fieldsToUpdate };
+  }
+
+  const todo1 = {
+    title: "Learn TS",
+    description: "Learn TypeScript",
+  };
+
+  const todo2 = updateTodo(todo1, {
+    description: "Learn TypeScript Enum",
+  });
+
+  在上面的 updateTodo 方法中，我们利用 Partial<T> 工具类型，定义 fieldsToUpdate 的类型为 Partial<Todo>，即：
+  {
+     title?: string | undefined;
+     description?: string | undefined;
+  }
+  ```
+
+### 类型别名
+
+* 概念：`type`​ 类型别名的关键字，可以定义任何数据类型，和((20231007224624-8ge5iws '接口'))有些类似
+
+  ```js
+  type 别名 = 类型//别名一般首字母大写，也使用T开头
+
+  type SType = string // 定义
+  type CustomArray = (number | string)[]
+
+  const str1:s = 'abc'
+  let arr1: CustomArray = [1, 'a', 3, 'b']
+  ```
+* 交叉类型： 类型别名使用 `&`​ 来把多个类型合并成一个类型，`接口interface`​使用 **​`extends`​**​ 继承
+
+  ```js
+  type PartialPointX = { x: number; };
+  type PartialPointY = { y: number; }
+  type Point = PartialPointX & PartialPointY;
+
+  let point: Point = {
+    x: 1,
+    y: 1
+  }
+
+
+  ```
+* 交叉类型：**同名基础类型属性**的合并，基础类型合并，会导致合并成never，因为没有交集
+
+  ```js
+  //某些类型存在相同的成员，类型又不一直的情况下，会报错，如 TypeA 中 c:number ,TypeB 中 c：string 。c不能存在c是number又是string的情况，则 c 应该是 never 类型。
+  interface X {
+    c: string;
+    d: string;
+  }
+
+  interface Y {
+    c: number;
+    e: string
+  }
+
+  type XY = X & Y;
+  type YX = Y & X;
+
+  let p: XY; //此时的c是 never 类型
+  let q: YX; //此时的c是 never 类型
+  ```
+* 交叉类型：**同名非基础类型属性**的合并，可以成功合并
+
+  ```js
+  interface D { d: boolean; }
+  interface E { e: string; }
+  interface F { f: number; }
+
+  interface A { x: D; }
+  interface B { x: E; }
+  interface C { x: F; }
+
+  type ABC = A & B & C;
+
+  let abc: ABC = {
+    x: {
+      d: true,
+      e: 'semlinker',
+      f: 666
+    }
+  };
+
+  console.log('abc:', abc);
+  ```
+
+### 接口
+
+* 概念：当一个对象类型被多次使用时，可以使用类型别名(`type`​)或接口(`interface`​)，以达到复用的目的
+* 基本使用：用来修饰对象类型的，可以重复声明，会继承上一次定义的类型
+
+  ```js
+  // 使用 interface 关键字
+  interface IObj {
+    name: String
+    age: Number
+    gender: Boolean
+    sayHi: () => void
+  }
+  let obj1: IObj = {
+    name: '张三',
+    age: 18,
+    gender: false,
+    sayHi: () => console.log('Hi')
+  }
+  ```
+* 只读可选属性：只读关键字`readonly`​
+
+  ```js
+  interface Person {
+    readonly name: string;
+    age?: number;//可选
+  }
+  ```
+* 接口继承：如果两个接口之间有相同的属性或方法，可以将**公共的属性或方法抽离出来，通过继承来实现复用**
+
+  ```js
+  interface Point2D { x: number; y: number }
+  interface Point3D { x: number; y: number; z: number }
+
+  interface Point2D { x: number; y: number }
+  // 继承 Point2D
+  interface Point3D extends Point2D {
+    z: number
+  }
+  ```
+* 和((20231007224614-ifoo4zq '类型别名'))的区别
+
+  ```js
+  接口:
+  只能为对象指定类型。它可以继承。
+  可以重复声明，并继承之前声明的接口类型
+
+  类型别名:
+  不仅可以为对象指定类型,实际上可以为任意类型指定别名
+  不能重复声明同一个类型别名
+  ```
+
+### 索引签名
+
+* 控制`key`​值的类型
+
+  ```js
+  interface Person {
+    [propName: string]: any; //控制 索引key 的类型
+  } 
+  ```
+
+### 泛型
+
+* 概念：泛型，类型的占位，**不预先指定具体的类型，而是在使用的时候在指定类型限制**的一种特性。  
+  ​![image](assets/image-20221014133828-fdpgaia.png)​
+* 泛型约束：用来约束泛型，即限制泛型的数据类型
+
+  ```js
+  //定义一个函数：函数的参数必须有一个属性： length
+  interface ILength {
+    length: number
+  }
+  //限制了T肯定有length属性
+  function fn<T extends ILength> (a: T): T {
+    console.log(a.length)
+    return a
+  }
+
+  let arr: Array<number> = [1, 2, 3]
+  fn(arr)
+  ```
+* 泛型函数：泛型函数，使用泛型的函数
+
+  ```js
+  //先定义，用泛型占领占位
+  function fn<type>(a:type):tpye{return a}
+
+  //使用的时候，在明确泛型的具体类型
+  fn<number>(1)
+  fn<string>('a')
+  fn('b')
+  ```
+* 泛型接口：使用泛型的接口
+
+  ```js
+  interface IObj<T> {
+    name: string
+    age: number
+    gender: number
+    height: T
+    weight: T
+  }
+
+  let o1: IObj<number> = {
+    name: 'xjj',
+    age: 18,
+    gender: 0,
+    height: 100,
+    weight: 100
+  }
+
+  let o2: IObj<string> = {
+    name: 'xjj',
+    age: 19,
+    gender: 0,
+    height: '一米八',
+    weight: '一百八'
+  }
+  ```
+
+### 函数重载
+
+* 函数重载或方法重载是使用相同名称和不同参数数量或类型创建多个方法的一种能力。即对函数的多次类型定义，而不是对函数的实现签名
+
+  ```js
+  function add(a: number, b: number): number; //多次对函数的参数类型，和返回值进行定义
+  function add(a: string, b: string): string; //多次对函数的参数类型，和返回值进行定义
+  function add(a: string, b: number): string;
+  function add(a: number, b: string): string;
+
+  //函数的实现签名，需要同时满足上面的所有类型条件才可以
+  function add(a: Combinable, b: Combinable) {
+    // type Combinable = string | number;
+    if (typeof a === 'string' || typeof b === 'string') {
+      return a.toString() + b.toString();
+    }
+    return a + b;
+  }
+  ```
+
+## 模块化
+
+### 命名空间
+
+关键字 `namespace`​ ,会在全局生成一个对象，定义在`namespace`​内部的都要通过这个对象的属性访问。
+
+通过`export`​关键字对外暴露需要在外部访问的对象。
+
+命名空间表示一个全局变量是一个对象，可以定义很多属性类型。同时命名空间里可能会用到一些接口类型(`interface`​、`type`​)，这时候一般有两种写法：
+
+* 写在`namespace`​外层，会作为全局类型被引入，从而可能污染全局类型空间。
+* 写在`namespace`​里层，在想使用该类型的时候，可以通过`namespace.interface`​进行使用。（推荐）
+* 同时，命名空间支持嵌套使用，即：`namespace`​嵌套`namepsace`​。或者简化的写法，可以写成`namepsace.namespace`​进行声明。
+
+```js
+// ./types/test.d.ts
+declare namespace Jye {
+  interface Info {
+    name: string;
+    age: number;
+  }
+
+  function getAge(): number;
+}
+
+
+// ./src/test.ts
+let settings: Jye.Info = {
+  name: "jye",
+  age: 8,
+};
+
+Jye.getAge();
+
+```
+
+### 三斜线指令
+
+概念：`ts `​早期模块化的标签, 用来导入依赖, `ES6`​广泛使用后, 在编写TS文件中不推荐使用, 除了以下的场景使用`///`​, 其他场景使用 `import`​ 代替
+
+1. 库依赖全局库, 因为全局库不能使用import导入
+2. 全局库依赖于某个 UMD 模块，因为全局库中不能出现import/export, 出现则为npm/UMD
+
+```js
+说白了，三斜线的path & types，和es6的import语义相似，
+同时三斜线指令必须放在文件的最顶端。
+例如，当我们的声明文件过于庞大，一般都会采用三斜线指令，将我们的声明文件拆分成若干个，然后由一个入口文件引入。
+
+///<reference types=“UMDModuleName/globalName” /> 表示对一个库的依赖
+///<reference path="./lib/index.d.ts" /> 表示对一个文件的依赖。
+```
+
+## 类型声明
+
+### 全局类型声明
+
+* 在TS中，以`.d.ts`​结尾的文件默认是全局模块，里面声明的类型，或者变量会被默认当成全局性质的，其他后缀结尾的文件默认是局部模块。对于局部模块要在文件里面显式写import或者export，否则会报错
+* 声明变量使用关键字`declare`​来表示声明其后面的**全局**变量的类型，`declare namespace`​声明全局命名空间，`interface`​可以不使用`declare`​关键字来命名全局类型声明
+* 声明文件放在项目里的**任意路径/文件名**都可以被`ts`​编译器识别，但实际开发中发现，为了规避一些奇怪的问题， **推荐放在根目录下。**
+
+```js
+//ts会识别 xxx.d.ts 文件为类型声明，使用 declare 修饰的就是全局类型声明，可以直接在文件中使用
+// src/jQuery.d.ts
+declare namespace jQuery {
+    const version: number;
+    class Event {
+        blur(eventType: EventType): void
+    }
+    enum EventType {
+        CustomClick
+    }
+    interface AjaxSettings {
+        method?: 'GET' | 'POST'
+        data?: any;
+    }
+    function ajax(url: string, settings?: AjaxSettings): void;
+}
+```
+
+## 类
+
+* 继承
+* 封装
+* 多态
+
+### 基本定义
+
+* 类使用 `class`​ 关键字来定义
+
+  ```js
+  class Greeter {
+    // 静态属性 。 使用 类 来访问
+    static cname: string = "Greeter";
+    // 成员属性
+    greeting: string;
+    // 构造函数 - 执行初始化操作
+    constructor(message: string) {
+      super()//调用父类的方法
+      this.greeting = message;
+    }
+
+    // 静态方法
+    static getClassName() {
+      return "Class name is Greeter";
+    }
+
+    // 成员方法
+    greet() {
+      return "Hello, " + this.greeting;
+    }
+
+    //自读属性
+    readonly age = 20
+  }
+
+  let greeter = new Greeter("world");
+  ```
+* 编译后
+
+  ```js
+  "use strict";
+  var Greeter = /** @class */ (function () {
+      // 构造函数 - 执行初始化操作
+      function Greeter(message) {
+        this.greeting = message;
+      }
+      // 静态方法
+      Greeter.getClassName = function () {
+        return "Class name is Greeter";
+      };
+      // 成员方法
+      Greeter.prototype.greet = function () {
+        return "Hello, " + this.greeting;
+      };
+      // 静态属性
+      Greeter.cname = "Greeter";
+      return Greeter;
+  }());
+  var greeter = new Greeter("world");
+  ```
+
+### 继承
+
+* ​`extends`​：实现类的继承
+
+  ```js
+  class Student extends Person {
+    study() {
+      console.log(`${this.name} needs study`)
+    }
+  }
+
+  const s1 = new Student('lin')
+  s1.study()
+  ```
+
+### 接口实现
+
+* ​`implements`​接口是一种描述对象的形状的方式，它定义了对象应该具有的属性和方法。在 TypeScript 中，可以使用接口来实现类的约束。
+
+  ```js
+  interface Shape {
+    calculateArea(): number;
+  }
+
+  class Circle implements Shape {
+    radius: number;
+
+    constructor(radius: number) {
+      this.radius = radius;
+    }
+
+    calculateArea() {
+      return Math.PI * this.radius * this.radius;
+    }
+  }
+
+  ```
+
+### 访问修饰符
+
+* ​`public `​、`private`​、`protected `​
+
+  ```js
+  1.public ：公开，子类和构建出来的实例对象都能访问，默认是public
+  2.private ：私有，子类和实例都无法访问，只能自己使用
+  3.protected ：受保护的，只有自己和子类才能访问，实例对象不能访问
+
+  class Person {
+    public name = "张三"
+    protected age = 20
+    private passWord = "123456789"
+  }
+
+
+
+  ```
+* 私有字段：使用`#`​ 来修饰的字段，和常规字段和使用`private`​修饰的字段不同，
+
+  ```js
+  1.私有字段以 # 字符开头，有时我们称之为私有名称
+  2.每个私有字段名称都唯一地限定于其包含的类；
+  3.不能在私有字段上使用 TypeScript 可访问性修饰符（如 public 或 private）；
+  4.私有字段不能在包含的类之外访问，甚至不能被检测到。
+
+  class Person {
+    #name: string;
+
+    constructor(name: string) {
+      this.#name = name;
+    }
+
+    greet() {
+      console.log(`Hello, my name is ${this.#name}!`);
+    }
+  }
+
+  let semlinker = new Person("Semlinker");
+
+  semlinker.#name;
+  //     ~~~~~
+  // Property '#name' is not accessible outside class 'Person'
+  // because it has a private identifier.
+
+  ```
+
+### 访问器
+
+* ​`set`​、`get`​字段修饰，进行数据的拦截，实现数据的封装和有效性校验，防止出现异常数据。
+
+  ```js
+  let passcode = "Hello TypeScript";
+
+  class Employee {
+    private _fullName: string;
+
+    get fullName(): string {
+      return this._fullName;
+    }
+
+    set fullName(newName: string) {
+      if (passcode && passcode == "Hello TypeScript") {
+        this._fullName = newName;
+      } else {
+        console.log("Error: Unauthorized update of employee!");
+      }
+    }
+  }
+
+  let employee = new Employee();
+  employee.fullName = "Semlinker";
+  if (employee.fullName) {
+    console.log(employee.fullName);
+  }
+  ```
+
+### 抽象类
+
+* 抽象类`abstract`​：使用 `abstract`​ 关键字声明的类，我们称之为抽象类。抽象类不能被实例化，因为它里面包含一个或多个抽象方法。所谓的抽象方法，是指不包含具体实现的方法。
+
+  ```js
+  抽象类可以看作是一个基础模板，不生成具体实例，用来给别的子类继承
+  abstract class Person {
+    constructor(public name: string){}
+    abstract say(words: string) :void;
+  }
+
+  // Cannot create an instance of an abstract class.(2511)
+  const lolo = new Person(); // Error
+
+
+  // 抽象类不能被实例化，可以用来做基类，只能实例化实现了所有抽象方法的子类
+  abstract class Person {
+    constructor(public name: string){}
+    // 抽象方法
+    abstract say(words: string) :void;
+  }
+
+  class Developer extends Person {
+    constructor(name: string) {
+      super(name);
+    }
+    say(words: string): void {
+      console.log(`${this.name} says ${words}`);
+    }
+  }
+
+  const lolo = new Developer("lolo");
+  lolo.say("I love ts!"); // lolo says I love ts!
+
+  ```
+
+## 装饰器概述
+
+修饰器本质是个函数，可以用于修饰类、属性、方法，装饰器其实是js中的内容
+
+装饰器的运行时机：在装饰器使用的时候就已经运行了
+
+装饰器的运行顺序：从下到上（实际被装饰的对象实在最下面）
+
+### 类装饰器
+
+类装饰器接收一个参数，该参数表示类本身（即构造函数）
+
+```javascript
+//虽然class的本质是函数，但是ts是不知道这个是个类函数函数
+//如果说该装饰器是类装饰器，为了告诉ts该参数是类，需要如下声明
+function test1(target:new (...args:ang [])=>object){ // ...args 是剩余参数，是个数组
+  ...
+}
+
+function test2(){ // ...args 是剩余参数，是个数组
+  return function(target:new (...args:ang [])=>object){
+    ...
+  }
+}
+
+@test
+class class1{}
+
+
+@test()//装饰器也可以主动调用，因为他本身就是函数，类装饰器主动调用的情况，需要有显示的返回函数
+//这种叫做装饰器工厂，执行之后返回装饰器,还可以自己传递参数进去
+class class2{}
+
+
+```
+
+### 成员装饰器
+
+成员装饰器：
+
+1. 属性装饰器
+
+    1. 属性装饰器也是一个函数，该函数有三个参数
+    2. 第一个参数：如果是静态属性，则是**类本身**，如果是成员属性，则是**类的原型对象**
+    3. 第二个参数：固定是一个字符串，是属性的key值
+    4. 第三个参数：描述符对象
+2. 方法装饰器
+
+```
+```
+
+### 前端工程化
+
+‍

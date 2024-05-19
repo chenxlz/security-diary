@@ -198,7 +198,7 @@ import "../css/home.css"
   1.行内样式写多了，导致整个组件结构看起来怪怪的，要是样式太多，那逻辑、样式就全在一起了
   2.不支持 伪类 的选择器
   ```
-* ​`css module`​​：组件间的样式不会相互影响，类名发生变化，后面添加了 hash 值。使用 `** classname.module.css **` ​导入到组件中，是个变量。
+* ​`css module`​​：组件间的样式不会相互影响，类名发生变化，后面添加了 hash 值。使用 **​` classname.module.css `​** ​导入到组件中，是个变量。
 
   ```js
   样式文件名称.module.css //开启模块化
@@ -231,7 +231,7 @@ import "../css/home.css"
 
 ### 订阅发布
 
-类似于vue中的eventBus。
+类似于vue中的((20220926111147-vaq8k52 'eventBus'))。
 
 核心思想是，创建个对象，里面一个数组，用于收集 组件订阅触发事件的函数， 一个`subscribe`​函数用于接受订阅函数，一个 `publish`​函数用于触发事件，把事件对于的函数执行。
 
@@ -271,7 +271,7 @@ import "../css/home.css"
 
 ### context
 
-* 概念：`context`​​ 上下文对象，react可以使用 `context`​​对子组件提供依赖。这个方法和vue中的provide、inject蛮像的
+* 概念：`context`​​ 上下文对象，react可以使用 `context`​​对子组件提供依赖。这个方法和vue中的((20230813110927-4fvour8 'provide、inject'))蛮像的
 * 基本使用，需要` React.createContext() `​
 
   ```js
@@ -608,7 +608,7 @@ import "../css/home.css"
 
 ### children
 
-父组件可以直接向子组件中插入内容，此时在子组件中可以在**`this.props.children`**​获取到插入到其中传递的元素。
+父组件可以直接向子组件中插入内容，此时在子组件中可以在**​`this.props.children`​**​获取到插入到其中传递的元素。
 
 1. 如果插入了多个元素，那么`this.props.children`​是一个数组，此时可通过索引访问到对应位置的元素
 
@@ -966,7 +966,7 @@ Hook只能在顶层调用，不能在循环、条件语句或嵌套函数中使�
 
 ### useMemo
 
-* 概念：对依赖的计算结果进行缓存，可以提高组件的性能，类似vue中的computed
+* 概念：对依赖的计算结果进行缓存，可以提高组件的性能，类似vue中的((20220926111147-fha6o1a 'computed'))
 * 使用：它接收两个参数：一个计算函数和一个依赖项数组。
 
   ```js
@@ -1564,7 +1564,7 @@ function AuthComponent({children}){
 
   * ​`BrowserRouter`​的路径中没有`#`​
   * ​`HashRouter`​的路径中包含`#`​
-* **刷新后对路由**​**`state`**​**参数的影响**
+* **刷新后对路由**​**​`state`​**​**参数的影响**
 
   * ​`BrowserRouter`​没有任何影响，因为`state`​存在`history`​对象中
   * ​`HashRouter`​刷新后会`导致路由state参数的丢失`​
