@@ -39,7 +39,7 @@ export User from './user.js' //无效。这会导致一个语法错误。
 export * from './user.js'
 ```
 
-### 按需导入
+### import
 
 ​`import(module)`​ 表达式：加载模块并返回一个 `promise`​，该 `promise `​resolve 为一个包含其所有导出的模块对象。我们可以在代码中的任意位置调用这个表达式。
 
@@ -945,7 +945,7 @@ b//b:3
 
 ‍
 
-# 原型对象
+## 原型对象
 
 在`JS`​中只要有一个函数存在，JS就会创建一个与之对应的对象。这个对象就是原型对象。默认只有一个`constructor`​属性
 
@@ -1021,6 +1021,52 @@ oB.run();//undefined   替换了，没有该方法了
 
   //二级原型再向上找则是null
   ```
+
+## 装饰器
+
+修饰器本质是个函数，可以用于修饰类、属性、方法，装饰器其实是js中的内容
+
+装饰器的运行时机：在装饰器使用的时候就已经运行了
+
+装饰器的运行顺序：从下到上（实际被装饰的对象实在最下面）
+
+### 类装饰器
+
+类装饰器接收一个参数，该参数表示类本身（即构造函数）
+
+```javascript
+//虽然class的本质是函数，但是ts是不知道这个是个类函数函数
+//如果说该装饰器是类装饰器，为了告诉ts该参数是类，需要如下声明
+function test1(target:new (...args:ang [])=>object){ // ...args 是剩余参数，是个数组
+  ...
+}
+
+function test2(){ // ...args 是剩余参数，是个数组
+  return function(target:new (...args:ang [])=>object){
+    ...
+  }
+}
+
+@test
+class class1{}
+
+
+@test()//装饰器也可以主动调用，因为他本身就是函数，类装饰器主动调用的情况，需要有显示的返回函数
+//这种叫做装饰器工厂，执行之后返回装饰器,还可以自己传递参数进去
+class class2{}
+
+
+```
+
+### 成员装饰器
+
+1. 属性装饰器
+
+    1. 属性装饰器也是一个函数，该函数有三个参数
+    2. 第一个参数：如果是静态属性，则是**类本身**，如果是成员属性，则是**类的原型对象**
+    3. 第二个参数：固定是一个字符串，是属性的key值
+    4. 第三个参数：描述符对象
+2. 方法装饰器
 
 # 内建类
 
@@ -1589,9 +1635,11 @@ console.log(map);//[2,8,18,32]
 
 ## Object
 
-### object.keys()
+### Object.keys()
 
 作用：用于获取指定对象所有的成员名，返回数组
+
+注意：会返回带有 `enumerable`​ 标志的非 symbol 键/值
 
 ```js
 let obj = {
@@ -1603,9 +1651,11 @@ let ks = Object.keys(obj);
 console.log(ks);//[id,age,name]
 ```
 
-### object.values()
+### Object.values()
 
 作用：用于获取指定对象所有的成员值，返回数组
+
+注意：会返回带有 `enumerable`​ 标志的非 symbol 键/值
 
 ```js
 let obj = {
@@ -1617,7 +1667,7 @@ let vs = Object.values(obj);
 console.log(vs);//[20，22，'zhangsan']
 ```
 
-### object.assign()
+### Object.assign()
 
 作用：将原对象成员复制到目标对象上，有相同属性会被覆盖，如果成员是的值是简单数据类型，实现的是深拷贝
 
@@ -1638,1290 +1688,17 @@ console.log(tar);
 //{age:20,gender:'男',name:'zhangsan',score:100,phone:'12312312312'}
 ```
 
-## Class
+### Object.​getOwnPropertyNames
 
-[传送门](https://typescript.bootcss.com/classes.html)
+​`Object.getOwnPropertyNames(obj)`​：返回`obj`​上的`非symbol`​属性数组
 
-在面向对象的编程中，*​`class`​*​ 是用于创建对象的可扩展的程序代码模版，它为对象提供了状态（成员变量）的初始值和行为（成员函数或方法）的实现。
+### Object.getOwnPropertySymbols
 
-使用`class`​关键字创建的对象，在其中定义的方法会挂载在原型上
-
-* 相关概念
-
-  ```js
-  extends :继承
-  public :公开
-  private :私有
-  protected :受保护
-  readonly :只读修饰符
-  get、set :存取器，控制对象成员的访问
-  static :静态属性
-  abstract :抽象类
-  constructor :构造函数
-  super :调用父类的constructor再继承
-  ```
-* ES5：`new`​返回对象
-
-  ```js
-  function User(name,age) {
-      this.name = name;
-      this.age = age;
-  }
-  Person.prototype.sayName  = function() {
-      return this.sayName;
-  }
-  let p = new Person('小马哥',18);
-  console.log(p);
-  ```
-* ES6：`es6`​提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过`class`​关键字，可以定义类。
-
-  ```js
-  class User{
-      // constructor方法 是类的默认方法,通过new命令生成对象实例时,自动调用该方法,一个类必须有constructor方法,如果没有定义,会被默认添加
-      constructor(name, age) {
-          this.name = name;
-          this.age = age;
-      }
-      //等同于Person.prototype = function sayName(){}
-      sayName(){
-          return this.name;
-      }
-  }
-  console.log(Person===Person.prototype.constructor)
-  ```
-
----
-
-​`class User {...}`​ 构造实际上做了如下的事儿：
-
-1. 创建一个名为 `User`​ 的函数，该函数成为类声明的结果。该函数的代码来自于 `constructor`​ 方法（如果我们不编写这种方法，那么它就被假定为空）。
-2. **存储类中的方法，例如** **​`User.prototype`​** **中的** **​`sayHi`​**​ **。**
-
-当 `new User`​​ 对象被创建后，当我们调用其方法时，**它会从原型中获取对应的方法**
-
-我们可以将 `class User`​ 声明的结果解释为：
-
-​![image](assets/image-20240227211609-n282fq2.png)​
-
-```js
-class User {
-  constructor(name) { this.name = name; }
-  sayHi() { alert(this.name); }
-}
-
-// class 是一个函数
-alert(typeof User); // function
-
-// ...或者，更确切地说，是 constructor 方法
-alert(User === User.prototype.constructor); // true
-
-// 方法在 User.prototype 中，例如：
-alert(User.prototype.sayHi); // sayHi 方法的代码
-
-// 在原型中实际上有两个方法
-alert(Object.getOwnPropertyNames(User.prototype)); // constructor, sayHi
-```
-
-### 函数语法糖
-
-常说 `class`​ 是一个语法糖（旨在使内容更易阅读，但不引入任何新内容的语法），因为我们实际上可以在不使用 `class`​ 的情况下声明相同的内容：
-
-```js
-// 用纯函数重写 class User
-// 1. 创建构造器函数
-function User(name) {
-  this.name = name;
-}
-// 函数的原型（prototype）默认具有 "constructor" 属性，
-// 所以，我们不需要创建它
-
-// 2. 将方法添加到原型
-User.prototype.sayHi = function() {
-  alert(this.name);
-};
-
-// 用法：
-let user = new User("John");
-user.sayHi();
-```
-
-这个定义的结果与使用类得到的结果基本相同。因此，这确实是将 `class`​ 视为一种定义构造器及其原型方法的语法糖的理由。
-
-尽管，它们之间存在着重大差异：
-
-1. 首先，通过 `class`​ 创建的函数具有特殊的内部属性标记 `[[IsClassConstructor]]: true`​。因此，它与手动创建并不完全相同。
-
-    编程语言会在许多地方检查该属性。例如，与普通函数不同，必须使用 `new`​ 来调用它：
-
-    ```js
-    class User {
-      constructor() {}
-    }
-    alert(typeof User); // function
-    User(); // Error: Class constructor User cannot be invoked without 'new'
-    ```
-
-    此外，大多数 JavaScript 引擎中的类构造器的字符串表示形式都以 “class…” 开头
-
-    ```js
-    class User {
-      constructor() {}
-    }
-    alert(User); // class User { ... }
-    ```
-2. 类方法不可枚举。 类定义将 `"prototype"`​ 中的所有方法的 `enumerable`​ 标志设置为 `false`​。  
-    这很好，因为如果我们对一个对象调用 `for..in`​ 方法，我们通常不希望 class 方法出现。
-3. 类总是使用 `use strict`​。 在类构造中的所有代码都将自动进入严格模式。
-
-### 类表达式
-
-就像函数一样，类可以在另外一个表达式中被定义，被传递，被返回，被赋值等。
-
-这是一个类表达式的例子：
-
-```js
-let User = class {
-  sayHi() {
-    alert("Hello");
-  }
-};
-```
-
-类似于命名函数表达式（Named Function Expressions），类表达式可能也应该有一个名字。
-
-如果类表达式有名字，那么该名字仅在类内部可见：
-
-```js
-// “命名类表达式（Named Class Expression）”
-// (规范中没有这样的术语，但是它和命名函数表达式类似)
-let User = class MyClass {
-  sayHi() {
-    alert(MyClass); // MyClass 这个名字仅在类内部可见
-  }
-};
-
-new User().sayHi(); // 正常运行，显示 MyClass 中定义的内容
-
-alert(MyClass); // error，MyClass 在外部不可见
-```
-
-我们甚至可以动态地“按需”创建类，就像这样：
-
-```js
-function makeClass(phrase) {
-  // 声明一个类并返回它
-  return class {
-    sayHi() {
-      alert(phrase);
-    }
-  };
-}
-
-// 创建一个新的类
-let User = makeClass("Hello");
-
-new User().sayHi(); // Hello
-```
-
-### Getter/Setter
-
-技术上来说，`MyClass`​​ 是一个函数（我们提供作为 `constructor`​​ 的那个），**而 methods、getters 和 setters 都被写入了** **​`MyClass.prototype`​**​ **** 。
-
-就像对象字面量，类可能包括 getters/setters，计算属性（computed properties）等。
-
-```js
-class User {
-  constructor(name) {
-    // 调用 setter
-    this.name = name;
-  }
-  get name() {
-    return this._name;
-  }
-  set name(value) {
-    if (value.length < 4) {
-      alert("Name is too short.");
-      return;
-    }
-    this._name = value;
-  }
-}
-let user = new User("John");
-alert(user.name); // John
-user = new User(""); // Name is too short.
-```
-
-可使用中括号`[xxx]`​
-
-```js
-class User {
-  ['say' + 'Hi']() {
-    alert("Hello");
-  }
-
-}
-new User().sayHi();
-```
-
-### 类字段
-
-> **旧的浏览器可能需要 polyfill**
->
-> 类字段（field）是最近才添加到语言中的。
-
-“类字段”是一种允许添加任何属性的语法。
-
-例如，让我们在 `class User`​ 中添加一个 `name`​ 属性：
-
-```js
-class User {
-  name = "John";
-  sayHi() {
-    alert(`Hello, ${this.name}!`);
-  }
-}
-
-new User().sayHi(); // Hello, John!
-```
-
-所以，我们就只需在表达式中写 " = "，就这样。
-
-**类字段重要的不同之处在于，它们会在每个独立对象中被设好，而不是设在** **​`User.prototype`​**​：
-
-```js
-class User {
-  name = "John";
-}
-
-let user = new User();
-alert(user.name); // John
-alert(User.prototype.name); // undefined
-```
-
-我们也可以在赋值时使用更复杂的表达式和函数调用：
-
-```js
-class User {
-  name = prompt("Name, please?", "John");
-}
-let user = new User();
-alert(user.name); // John
-```
-
-JavaScript 中的函数具有动态的 `this`​​。它取决于调用上下文。
-
-因此，如果一个对象方法被传递到某处，或者在另一个上下文中被调用，则 `this`​ 将不再是对其对象的引用。
-
-例如，此代码将显示 `undefined`​：
-
-```js
-class Button {
-  constructor(value) {
-    this.value = value;
-  }
-  click() {
-    alert(this.value);
-  }
-}
-let button = new Button("hello");
-button.click 是作为一个传入的回调函数
-setTimeout(button.click, 1000); // undefined
-```
-
-解决此时`this`​指向问题
-
-1. 传递一个包装函数
-
-    ```js
-    例如 setTimeout(() => button.click(), 1000)
-    ```
-2. 使用类字段
-
-    ```js
-    class Button {
-      constructor(value) {
-        this.value = value;
-      }
-      click = () => {
-        alert(this.value);
-      }
-    }
-    let button = new Button("hello");
-    setTimeout(button.click, 1000); // hello
-    ```
-
-**类字段** **​`click = () => {...}`​** ​ **是基于每一个对象被创建的，在这里对于每一个** **​`Button`​**​ **对象都有一个独立的方法，在内部都有一个指向此对象的** **​`this`​**​ **。我们可以把** **​`button.click`​**​ **传递到任何地方，而且** **​`this`​**​ **的值总是正确的。**
-
-### extends
-
-**对于父类方法的调用而言，使用this时候，优先使用父类本身的类字段。**
-
-类字段的初始化：
-
-* **对于基类（还未继承任何东西的那种），在构造函数调用前初始化。**
-* **对于派生类，在** **​`super()`​** ​ **后立刻初始化。**
-
-类继承是一个类扩展另一个类的一种方式。我们可以在现有功能之上创建新功能。
-
-假设我们有 class `Animal`​：
-
-```js
-class Animal {
-  constructor(name) {
-    this.speed = 0;
-    this.name = name;
-  }
-  run(speed) {
-    this.speed = speed;
-    alert(`${this.name} runs with speed ${this.speed}.`);
-  }
-  stop() {
-    this.speed = 0;
-    alert(`${this.name} stands still.`);
-  }
-}
-
-let animal = new Animal("My animal");
-```
-
-这是我们对对象 `animal`​ 和 class `Animal`​ 的图形化表示：
-
-​![image](assets/image-20240227214506-n6q1mkm.png)​
-
-……然后我们想创建另一个 `class Rabbit`​：
-
-因为 rabbit 是 animal，所以 class `Rabbit`​ 应该是基于 class `Animal`​ 的，可以访问 animal 的方法，以便 rabbit 可以做“一般”动物可以做的事儿。
-
-扩展另一个类的语法是：`class Child extends Parent`​。
-
-让我们创建一个继承自 `Animal`​ 的 `class Rabbit`​：
-
-```js
-class Rabbit extends Animal {
-  hide() {
-    alert(`${this.name} hides!`);
-  }
-}
-let rabbit = new Rabbit("White Rabbit");
-rabbit.run(5); // White Rabbit runs with speed 5.
-rabbit.hide(); // White Rabbit hides!
-```
-
-class `Rabbit`​ 的对象可以访问例如 `rabbit.hide()`​ 等 `Rabbit`​ 的方法，还可以访问例如 `rabbit.run()`​ 等 `Animal`​ 的方法。
-
-在内部，关键字 `extends`​ 使用了很好的旧的原型机制进行工作。它将 `Rabbit.prototype.[[Prototype]]`​ 设置为 `Animal.prototype`​。所以，如果在 `Rabbit.prototype`​ 中找不到一个方法，JavaScript 就会从 `Animal.prototype`​ 中获取该方法。
-
-​![image](assets/image-20240227214743-xrgjqxk.png)​
-
-例如，要查找 `rabbit.run`​ 方法，JavaScript 引擎会进行如下检查（如图所示从下到上）：
-
-1. 查找对象 `rabbit`​（没有 `run`​）。
-2. 查找它的原型，即 `Rabbit.prototype`​（有 `hide`​，但没有 `run`​）。
-3. 查找它的原型，即（由于 `extends`​）`Animal.prototype`​，在这儿找到了 `run`​ 方法。
-
-我们可以回忆一下 [原生的原型](https://zh.javascript.info/native-prototypes) 这一章的内容，JavaScript 内建对象同样也使用原型继承。例如，`Date.prototype.[[Prototype]]`​ 是 `Object.prototype`​。这就是为什么日期可以访问通用对象的方法。
-
----
-
-然而通常，我们不希望完全替换父类的方法，而是希望在父类方法的基础上进行调整或扩展其功能。我们在我们的方法中做一些事儿，但是在它之前或之后或在过程中会调用父类方法。
-
-Class 为此提供了 **​`super`​**​ 关键字。
-
-* 执行 `super.method(...)`​ 来调用一个父类方法。
-* 执行 `super(...)`​ 来调用一个父类 constructor（只能在我们的 constructor 中）。
-
-例如，让我们的 rabbit 在停下来的时候自动 hide：
-
-```js
-class Animal {
-  constructor(name) {
-    this.speed = 0;
-    this.name = name;
-  }
-  run(speed) {
-    this.speed = speed;
-    alert(`${this.name} runs with speed ${this.speed}.`);
-  }
-  stop() {
-    this.speed = 0;
-    alert(`${this.name} stands still.`);
-  }
-
-}
-class Rabbit extends Animal {
-  hide() {
-    alert(`${this.name} hides!`);
-  }
-  stop() {
-    super.stop(); // 调用父类的 stop
-    this.hide(); // 然后 hide
-  }
-}
-let rabbit = new Rabbit("White Rabbit");
-rabbit.run(5); // White Rabbit runs with speed 5.
-rabbit.stop(); // White Rabbit stands still. White Rabbit hides!
-```
-
----
-
-对于重写 constructor 来说，则有点棘手。
-
-到目前为止，`Rabbit`​ 还没有自己的 `constructor`​。
-
-根据 [规范](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation)，如果一个类扩展了另一个类并且没有 `constructor`​，那么将生成下面这样的“空” `constructor`​：
-
-```js
-class Rabbit extends Animal {
-  // 为没有自己的 constructor 的扩展类生成的
-  constructor(...args) {
-    super(...args);
-  }
-}
-```
-
-正如我们所看到的，它调用了父类的 `constructor`​，并传递了所有的参数。如果我们没有写自己的 constructor，就会出现这种情况。
-
-```js
-class Animal {
-  constructor(name) {
-    this.speed = 0;
-    this.name = name;
-  }
-  // ...
-}
-
-class Rabbit extends Animal {
-  constructor(name, earLength) {
-    this.speed = 0;
-    this.name = name;
-    this.earLength = earLength;
-  }
-  // ...
-}
-
-// 不工作！
-let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
-```
-
-哎呦！我们得到了一个报错。现在我们没法新建 rabbit。是什么地方出错了？
-
-简短的解释是：
-
-**继承类的 constructor 必须调用** **​`super(...)`​** ​ **，并且 (!) 一定要在使用** **​`this`​**​ **之前调用。**
-
-……但这是为什么呢？这里发生了什么？确实，这个要求看起来很奇怪。
-
-当然，本文会给出一个解释。让我们深入细节，这样你就可以真正地理解发生了什么。
-
-在 JavaScript 中，**继承类**（所谓的“**派生构造器**”，英文为 “derived constructor”）的构造函数与其他函数之间是有区别的。派生构造器具有特殊的内部属性 `[[ConstructorKind]]:"derived"`​。这是一个特殊的内部标签。
-
-该标签会影响它的 `new`​ 行为：
-
-* 当通过 `new`​ 执行一个常规函数时，它将创建一个空对象，并将这个空对象赋值给 `this`​。
-* **但是当继承的 constructor 执行时，它不会执行此操作。它期望父类的 constructor 来完成这项工作。**
-
-因此，派生的 constructor 必须调用 `super`​ 才能执行其父类（base）的 constructor，否则 `this`​ 指向的那个对象将不会被创建。并且我们会收到一个报错。
-
----
-
-我们不仅可以重写方法，还可以重写类字段。
-
-不过，当我们在父类构造器中访问一个被重写的字段时，有一个诡异的行为，这与绝大多数其他编程语言都很不一样。
-
-请思考此示例：
-
-```js
-class Animal {
-  name = 'animal';
-  constructor() {
-    alert(this.name); // (*)
-  }
-}
-
-class Rabbit extends Animal {
-  name = 'rabbit';
-}
-
-new Animal(); // animal
-new Rabbit(); // animal
-```
-
-这里，`Rabbit`​ 继承自 `Animal`​，并且用它自己的值重写了 `name`​ 字段。
-
-因为 `Rabbit`​ 中没有自己的构造器，所以 `Animal`​ 的构造器被调用了。
-
-有趣的是在这两种情况下：`new Animal()`​ 和 `new Rabbit()`​，在 `(*)`​ 行的 `alert`​ 都打印了 `animal`​。
-
-**换句话说，父类构造器总是会使用它自己字段的值，而不是被重写的那一个。**
-
-古怪的是什么呢？
-
-如果这还不清楚，那么让我们用方法来进行比较。
-
-这里是相同的代码，但是我们调用 `this.showName()`​ 方法而不是 `this.name`​ 字段：
-
-```js
-class Animal {
-  showName() {  // 而不是 this.name = 'animal'
-    alert('animal');
-  }
-  constructor() {
-    this.showName(); // 而不是 alert(this.name);
-  }
-}
-
-class Rabbit extends Animal {
-  showName() {
-    alert('rabbit');
-  }
-}
-
-new Animal(); // animal
-new Rabbit(); // rabbit
-```
-
-请注意：这时的输出是不同的。
-
-这才是我们本来所期待的结果。当父类构造器在派生的类中被调用时，它会使用被重写的方法。
-
-……但对于类字段并非如此。正如前文所述，父类构造器总是使用父类的字段。
-
-这里为什么会有这样的区别呢？
-
-**实际上，原因在于字段初始化的顺序。类字段是这样初始化的：**
-
-* **对于基类（还未继承任何东西的那种），在构造函数调用前初始化。**
-* **对于派生类，在** **​`super()`​**  **后立刻初始化。**
-
-在我们的例子中，`Rabbit`​ 是派生类，里面没有 `constructor()`​。正如先前所说，这相当于一个里面只有 `super(...args)`​ 的空构造器。
-
-所以，`new Rabbit()`​ 调用了 `super()`​，因此它执行了父类构造器，并且（根据派生类规则）只有在此之后，它的类字段才被初始化。在父类构造器被执行的时候，`Rabbit`​ 还没有自己的类字段，这就是为什么 `Animal`​ 类字段被使用了。
-
-这种字段与方法之间微妙的区别只特定于 JavaScript。
-
-幸运的是，这种行为仅在一个被重写的字段被父类构造器使用时才会显现出来。接下来它会发生的东西可能就比较难理解了，所以我们要在这里对此行为进行解释。
-
-如果出问题了，我们可以通过使用方法或者 getter/setter 替代类字段，来修复这个问题。
-
-### [[HomeObject]]
-
-**当一个函数被定义为类或者对象方法时**，它的 `[[HomeObject]]`​ 属性就成为了该对象。
-
-在`JavaScript`​中，`[[HomeObject]]`​ 不是函数或方法的属性，而是内部的一种特殊概念，通常用于处理继承和 "super" 关键字的行为。这与 ECMAScript 中的 "`HomeObject`​" 和 "`MethodHome`​" 相关。
-
-在 ECMAScript 规范中，`[[HomeObject]]`​ 是指一个函数对象的内部属性，用于跟踪该函数是被哪个对象拥有的。这对于支持类的语法和继承非常重要。
-
-当你使用类语法定义一个方法时，这个方法会被添加到类的原型上，但它的 `[[HomeObject]]`​ 会指向这个类本身。这个信息对于使用 "super" 关键字调用父类方法是至关重要的。
-
-"super" 关键字在子类方法内部引用的是父类的方法，而 `[[HomeObject]]`​ 用于确定在哪个对象上查找父类的方法。
-
----
-
-```js
-let animal = {
-  eat: function() { // 这里是故意这样写的，而不是 eat() {...
-    // ...
-  }
-};
-
-let rabbit = {
-  __proto__: animal,
-  eat: function() {
-    super.eat();
-  }
-};
-
-rabbit.eat();  // 错误调用 super（因为这里没有 [[HomeObject]]）
-```
-
-### 静态属性和静态方法
-
-我们可以把一个方法作为一个整体赋值给类。这样的方法被称为 **静态的（static）** 。
-
-在一个类的声明中，它们以 `static`​ 关键字开头，如下所示：
-
-```js
-class User {
-  static staticMethod() {
-    alert(this === User);
-  }
-}
-
-User.staticMethod(); // true
-```
-
-这实际上跟直接将其作为属性赋值的作用相同：
-
-```js
-class User { }
-
-User.staticMethod = function() {
-  alert(this === User);
-};
-
-User.staticMethod(); // true
-```
-
-在 `User.staticMethod()`​ 调用中的 `this`​ 的值是类构造器 `User`​ 自身（“点符号前面的对象”规则）。
-
-通常，静态方法用于实现属于整个类，但不属于该类任何特定对象的函数。
-
-例如，我们有对象 `Article`​，并且需要一个方法来比较它们。
-
-通常的解决方案就是添加 `Article.compare`​ 静态方法：
-
-```js
-class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
-
-  static compare(articleA, articleB) {
-    return articleA.date - articleB.date;
-  }
-}
-
-// 用法
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JavaScript", new Date(2019, 11, 1))
-];
-
-articles.sort(Article.compare);
-
-alert( articles[0].title ); // CSS
-```
-
-这里 `Article.compare`​ 方法代表“上面的”文章，意思是比较它们。它不是文章的方法，而是整个 class 的方法。
-
-另一个例子是所谓的“工厂”方法。
-
-比如说，我们需要通过多种方式来创建一篇文章：
-
-1. 通过用给定的参数来创建（`title`​，`date`​ 等）。
-2. 使用今天的日期来创建一个空的文章。
-3. ……其它方法。
-
-第一种方法我们可以通过 constructor 来实现。对于第二种方式，我们可以创建类的一个静态方法来实现。
-
-例如这里的 `Article.createTodays()`​：
-
-```js
-class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
-
-  static createTodays() {
-    // 记住 this = Article
-    return new this("Today's digest", new Date());
-  }
-}
-
-let article = Article.createTodays();
-
-alert( article.title ); // Today's digest
-```
-
-现在，每当我们需要创建一个今天的文章时，我们就可以调用 `Article.createTodays()`​。再说明一次，它不是一个文章的方法，而是整个 class 的方法。
-
-静态方法也被用于与数据库相关的公共类，可以用于搜索/保存/删除数据库中的条目， 就像这样：
-
-```js
-// 假定 Article 是一个用来管理文章的特殊类
-// 通过 id 来移除文章的静态方法：
-Article.remove({id: 12345});
-```
-
-> **静态方法不适用于单个对象**
->
-> 静态方法可以在类上调用，而不是在单个对象上。
->
-> 例如，这样的代码无法正常工作：
->
-> ```js
-> article.createTodays(); /// Error: article.createTodays is not a function
-> ```
-
----
-
-静态的属性也是可能的，它们看起来就像常规的类属性，但前面加有 `static`​：
-
-```js
-class Article {
-  static publisher = "Levi Ding";
-}
-
-alert( Article.publisher ); // Levi Ding
-```
-
-这等同于直接给 `Article`​ 赋值：
-
-```javascript
-Article.publisher = "Levi Ding";
-```
-
----
-
-静态属性和方法是可被继承的。
-
-例如，下面这段代码中的 `Animal.compare`​ 和 `Animal.planet`​ 是可被继承的，可以通过 `Rabbit.compare`​ 和 `Rabbit.planet`​ 来访问：
-
-```js
-class Animal {
-  static planet = "Earth";
-  constructor(name, speed) {
-    this.speed = speed;
-    this.name = name;
-  }
-
-  run(speed = 0) {
-    this.speed += speed;
-    alert(`${this.name} runs with speed ${this.speed}.`);
-  }
-
-  static compare(animalA, animalB) {
-    return animalA.speed - animalB.speed;
-  }
-
-}
-
-// 继承于 Animal
-class Rabbit extends Animal {
-  hide() {
-    alert(`${this.name} hides!`);
-  }
-}
-
-let rabbits = [
-  new Rabbit("White Rabbit", 10),
-  new Rabbit("Black Rabbit", 5)
-];
-
-rabbits.sort(Rabbit.compare);
-
-rabbits[0].run(); // Black Rabbit runs with speed 5.
-
-alert(Rabbit.planet); // Earth
-```
-
-现在我们调用 `Rabbit.compare`​ 时，继承的 `Animal.compare`​ 将会被调用。
-
-它是如何工作的？再次，使用原型。你可能已经猜到了，`extends`​ 让 `Rabbit`​ 的 `[[Prototype]]`​ 指向了 `Animal`​。
-
-​![image](assets/image-20240227230528-9ndk05q.png)​
-
-所以，`Rabbit extends Animal`​ 创建了两个 `[[Prototype]]`​ 引用：
-
-1. ​`Rabbit`​ 函数原型继承自 `Animal`​ 函数。
-2. ​`Rabbit.prototype`​ 原型继承自 `Animal.prototype`​。
-
-结果就是，继承对常规方法和静态方法都有效。
-
-```js
-class Animal {}
-class Rabbit extends Animal {}
-
-// 对于静态的
-alert(Rabbit.__proto__ === Animal); // true
-
-// 对于常规方法
-alert(Rabbit.prototype.__proto__ === Animal.prototype); // true
-```
-
-### 私有和受保护的属性和方法
-
-在面向对象的编程中，属性和方法分为两组：
-
-* **内部接口** —— 可以通过该类的其他方法访问，但不能从外部访问的方法和属性。
-* **外部接口** —— 也可以从类的外部访问的方法和属性。
-
-在 JavaScript 中，有两种类型的对象字段（属性和方法）：
-
-* 公共的：可从任何地方访问。它们构成了外部接口。到目前为止，我们只使用了公共的属性和方法。
-* 私有的：只能从类的内部访问。这些用于内部接口。
-
-在许多其他编程语言中，还存在“受保护”的字段：只能从类的内部和基于其扩展的类的内部访问（例如私有的，但可以从继承的类进行访问）。它们对于内部接口也很有用。从某种意义上讲，它们比私有的属性和方法更为广泛，因为我们通常希望继承类来访问它们。
-
-**受保护的字段不是在语言级别的 Javascript 中实现的**，但实际上它们非常方便，因为它们是在 Javascript 中模拟的类定义语法。
-
-**受保护的属性通常以下划线**  **​`_`​** ​ **作为前缀。这不是在语言级别强制实施的，但是程序员之间有一个众所周知的约定，即不应该从外部访问此类型的属性和方法。**
-
-> 受保护的字段是可以被继承的
->
-> 如果我们继承 `class MegaMachine extends CoffeeMachine`​，那么什么都无法阻止我们从新的类中的方法访问 `this._waterAmount`​ 或 `this._power`​。
->
-> 所以受保护的字段是自然可被继承的。与我们接下来将看到的私有字段不同。
-
----
-
-> **最近新增的特性**
->
-> 这是一个最近添加到 JavaScript 的特性。 JavaScript 引擎不支持（或部分支持），需要 polyfills。
-
-这儿有一个马上就会被加到规范中的已完成的 Javascript 提案，它为私有属性和方法提供语言级支持。
-
-私有属性和方法应该以 `#`​ 开头。它们只在类的内部可被访问。
-
-例如，这儿有一个私有属性 `#waterLimit`​ 和检查水量的私有方法 `#fixWaterAmount`​：
-
-```js
-class CoffeeMachine {
-  #waterLimit = 200;
-  #fixWaterAmount(value) {
-    if (value < 0) return 0;
-    if (value > this.#waterLimit) return this.#waterLimit;
-  }
-  setWaterAmount(value) {
-    this.#waterLimit = this.#fixWaterAmount(value);
-  }
-}
-let coffeeMachine = new CoffeeMachine();
-// 不能从类的外部访问类的私有属性和方法
-coffeeMachine.#fixWaterAmount(123); // Error
-coffeeMachine.#waterLimit = 1000; // Error
-```
-
-在语言级别，`#`​ 是该字段为私有的特殊标志。我们无法从外部或从继承的类中访问它。
-
-私有字段与公共字段不会发生冲突。我们可以同时拥有私有的 `#waterAmount`​ 和公共的 `waterAmount`​ 字段。
-
-例如，让我们使 `waterAmount`​ 成为 `#waterAmount`​ 的一个访问器：
-
-```js
-class CoffeeMachine {
-  #waterAmount = 0;
-  get waterAmount() {
-    return this.#waterAmount;
-  }
-
-  set waterAmount(value) {
-    if (value < 0) value = 0;
-    this.#waterAmount = value;
-  }
-}
-
-let machine = new CoffeeMachine();
-
-machine.waterAmount = 100;
-alert(machine.#waterAmount); // Error
-```
-
-与受保护的字段不同，私有字段由语言本身强制执行。这是好事儿。
-
-但是如果我们继承自 `CoffeeMachine`​，那么我们将无法直接访问 `#waterAmount`​。我们需要依靠 `waterAmount`​ getter/setter：
-
-```js
-class MegaCoffeeMachine extends CoffeeMachine {
-  method() {
-    alert( this.#waterAmount ); // Error: can only access from CoffeeMachine
-  }
-}
-```
-
-在许多情况下，这种限制太严重了。如果我们扩展 `CoffeeMachine`​，则可能有正当理由访问其内部。这就是为什么大多数时候都会使用受保护字段，即使它们不受语言语法的支持。
+​`Object.getOwnPropertySymbols(obj)`​：返回`obj`​上的`symbol`​属性数组
 
 ‍
 
-> **私有字段不能通过 this[name] 访问**
->
-> 私有字段很特别。正如我们所知道的，通常我们可以使用 `this[name]`​​ 访问字段：
->
-> ```js
-> class User {
->   ...
->   sayHi() {
->     let fieldName = "name";
->     alert(`Hello, ${this[fieldName]}`);
->   }
-> }
-> ```
->
-> 对于私有字段来说，这是不可能的：`this['#name']`​ 不起作用。这是确保私有性的语法限制。
-
 ‍
-
-### 扩展内建类
-
-内建的类，例如 `Array`​，`Map`​ 等也都是可以扩展的（extendable）。
-
-例如，这里有一个继承自原生 `Array`​ 的类 `PowerArray`​：
-
-```js
-// 给 PowerArray 新增了一个方法（可以增加更多）
-class PowerArray extends Array {
-  isEmpty() {
-    return this.length === 0;
-  }
-}
-
-let arr = new PowerArray(1, 2, 5, 10, 50);
-alert(arr.isEmpty()); // false
-
-let filteredArr = arr.filter(item => item >= 10);
-alert(filteredArr); // 10, 50
-alert(filteredArr.isEmpty()); // false
-```
-
-请注意一个非常有趣的事儿。内建的方法例如 `filter`​，`map`​ 等 —— 返回的正是子类 `PowerArray`​ 的新对象。它们内部使用了对象的 `constructor`​ 属性来实现这一功能。
-
-在上面的例子中，
-
-```js
-arr.constructor === PowerArray
-```
-
-当 `arr.filter()`​ 被调用时，它的内部使用的是 `arr.constructor`​ 来创建新的结果数组，而不是使用原生的 `Array`​。这真的很酷，因为我们可以在结果数组上继续使用 `PowerArray`​ 的方法。
-
-甚至，我们可以定制这种行为。
-
-我们可以给这个类添加一个特殊的静态 getter `Symbol.species`​。如果存在，则应返回 JavaScript 在内部用来在 `map`​ 和 `filter`​ 等方法中创建新实体的 `constructor`​。
-
-如果我们希望像 `map`​ 或 `filter`​ 这样的内建方法返回常规数组，我们可以在 `Symbol.species`​ 中返回 `Array`​，就像这样：
-
-```js
-lass PowerArray extends Array {
-  isEmpty() {
-    return this.length === 0;
-  }
-
-  // 内建方法将使用这个作为 constructor
-  static get [Symbol.species]() {
-    return Array;
-  }
-}
-
-let arr = new PowerArray(1, 2, 5, 10, 50);
-alert(arr.isEmpty()); // false
-
-// filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组
-let filteredArr = arr.filter(item => item >= 10);
-
-// filteredArr 不是 PowerArray，而是 Array
-alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
-```
-
-正如你所看到的，现在 `.filter`​ 返回 `Array`​。所以扩展的功能不再传递。
-
-> **其他集合的工作方式类似**
->
-> 其他集合，例如 `Map`​ 和 `Set`​ 的工作方式类似。它们也使用 `Symbol.species`​。
-
----
-
-**内建类没有静态方法继承**
-
-内建对象有它们自己的静态方法，例如 `Object.keys`​，`Array.isArray`​ 等。
-
-如我们所知道的，原生的类互相扩展。例如，`Array`​ 扩展自 `Object`​。
-
-通常，当一个类扩展另一个类时，静态方法和非静态方法都会被继承。
-
-但内建类却是一个例外。它们相互间不继承静态方法。
-
-例如，`Array`​ 和 `Date`​ 都继承自 `Object`​，所以它们的实例都有来自 `Object.prototype`​ 的方法。但 `Array.[[Prototype]]`​ 并不指向 `Object`​，所以它们没有例如 `Array.keys()`​（或 `Date.keys()`​）这些静态方法。
-
-这里有一张 `Date`​ 和 `Object`​ 的结构关系图：
-
-​![image](assets/image-20240228200932-gwl9kq4.png)​
-
-正如你所看到的，`Date`​ 和 `Object`​ 之间没有连结。它们是独立的，只有 `Date.prototype`​ 继承自 `Object.prototype`​，仅此而已。
-
-与我们所了解的通过 `extends`​ 获得的继承相比，这是内建对象之间继承的一个重要区别。
-
-**即，**​**​`Date`​**​**和**​**​`Object`​**​**是继承关系，但是只是在原型对象上有继承关系，本身的构造上没有继承关系，在类的继承中，有原型对象的继承和构造函数上的继承。**
-
-**静态方法归属于类构造器对象，实例方法归属于原型对象上**
-
-​![image](assets/image-20240228201637-80g99pm.png)​
-
-### instanceof
-
-​`instanceof`​ 操作符用于检查一个对象是否属于某个特定的 class。同时，它还考虑了继承。
-
-在许多情况下，可能都需要进行此类检查。例如，它可以被用来构建一个 **多态性（polymorphic）**  的函数，该函数根据参数的类型对参数进行不同的处理。
-
-语法：
-
-```javascript
-obj instanceof Class
-```
-
-如果 `obj`​ 隶属于 `Class`​ 类（或 `Class`​ 类的衍生类），则返回 `true`​。
-
-例如：
-
-```javascript
-class Rabbit {}
-let rabbit = new Rabbit();
-
-// rabbit 是 Rabbit class 的对象吗？
-alert( rabbit instanceof Rabbit ); // true
-```
-
-它还可以与构造函数一起使用：
-
-```javascript
-// 这里是构造函数，而不是 class
-function Rabbit() {}
-
-alert( new Rabbit() instanceof Rabbit ); // true
-```
-
-……与诸如 `Array`​ 之类的内建 class 一起使用：
-
-```javascript
-let arr = [1, 2, 3];
-alert( arr instanceof Array ); // true
-alert( arr instanceof Object ); // true
-```
-
-有一点需要留意，`arr`​ 同时还隶属于 `Object`​ 类。因为从原型上来讲，`Array`​ 是继承自 `Object`​ 的。
-
-通常，`instanceof`​ 在检查中会将原型链考虑在内。此外，我们还可以在静态方法 `Symbol.hasInstance`​ 中设置自定义逻辑。
-
-​`obj instanceof Class`​ 算法的执行过程大致如下：
-
-1. 如果这儿有静态方法 `Symbol.hasInstance`​，那就直接调用这个方法：  
-    例如：
-
-    ```javascript
-    // 设置 instanceOf 检查
-    // 并假设具有 canEat 属性的都是 animal
-    class Animal {
-      static [Symbol.hasInstance](obj) {
-        if (obj.canEat) return true;
-      }
-    }
-
-    let obj = { canEat: true };
-
-    alert(obj instanceof Animal); // true：Animal[Symbol.hasInstance](obj) 被调用
-    ```
-2. 大多数 class 没有 `Symbol.hasInstance`​。在这种情况下，标准的逻辑是：使用 `obj instanceOf Class`​ 检查 `Class.prototype`​ 是否等于 `obj`​ 的原型链中的原型之一。  
-    换句话说就是，一个接一个地比较：
-
-    ```javascript
-    obj.__proto__ === Class.prototype?
-    obj.__proto__.__proto__ === Class.prototype?
-    obj.__proto__.__proto__.__proto__ === Class.prototype?
-    ...
-    // 如果任意一个的答案为 true，则返回 true
-    // 否则，如果我们已经检查到了原型链的尾端，则返回 false
-    ```
-
-    在上面那个例子中，`rabbit.__proto__ === Rabbit.prototype`​，所以立即就给出了结果。  
-    而在继承的例子中，匹配将在第二步进行：
-
-    ```javascript
-    class Animal {}
-    class Rabbit extends Animal {}
-
-    let rabbit = new Rabbit();
-    alert(rabbit instanceof Animal); // true
-
-    // rabbit.__proto__ === Animal.prototype（无匹配）
-    // rabbit.__proto__.__proto__ === Animal.prototype（匹配！）
-    ```
-
-下图展示了 `rabbit instanceof Animal`​ 的执行过程中，`Animal.prototype`​ 是如何参与比较的：
-
-这里还要提到一个方法 [objA.isPrototypeOf(objB)](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/object/isPrototypeOf)，如果 `objA`​ 处在 `objB`​ 的原型链中，则返回 `true`​。所以，可以将 `obj instanceof Class`​ 检查改为 `Class.prototype.isPrototypeOf(obj)`​。
-
-这很有趣，但是 `Class`​ 的 constructor 自身是不参与检查的！检查过程只和原型链以及 `Class.prototype`​ 有关。
-
-创建对象后，如果更改 `prototype`​ 属性，可能会导致有趣的结果。
-
-就像这样：
-
-```javascript
-function Rabbit() {}
-let rabbit = new Rabbit();
-
-// 修改了 prototype
-Rabbit.prototype = {};
-
-// ...再也不是 rabbit 了！
-alert( rabbit instanceof Rabbit ); // false
-```
-
-### 对象打印
-
-大家都知道，一个普通对象被转化为字符串时为 `[object Object]`​：
-
-```javascript
-let obj = {};
-alert(obj); // [object Object]
-alert(obj.toString()); // 同上
-```
-
-**这是通过** **​`toString`​** **方法实现的**。但是这儿有一个隐藏的功能，该功能可以使 `toString`​ 实际上比这更强大。我们可以将其作为 `typeof`​ 的增强版或者 `instanceof`​ 的替代方法来使用。
-
-按照 [规范](https://tc39.github.io/ecma262/#sec-object.prototype.tostring) 所讲，内建的 `toString`​ 方法可以被从对象中提取出来，并在任何其他值的上下文中执行。其结果取决于该值。
-
-* 对于 number 类型，结果是 `[object Number]`​
-* 对于 boolean 类型，结果是 `[object Boolean]`​
-* 对于 `null`​：`[object Null]`​
-* 对于 `undefined`​：`[object Undefined]`​
-* 对于数组：`[object Array]`​
-* ……等（可自定义）
-
-让我们演示一下：
-
-```javascript
-// 方便起见，将 toString 方法复制到一个变量中
-let objectToString = Object.prototype.toString;
-
-// 它是什么类型的？
-let arr = [];
-
-alert( objectToString.call(arr) ); // [object Array]
-```
-
-这里我们用到了在 [装饰器模式和转发，call/apply](https://zh.javascript.info/call-apply-decorators) 一章中讲过的 [call](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/function/call) 方法来在上下文 `this=arr`​ 中执行函数 `objectToString`​。
-
-在内部，`toString`​ 的算法会检查 `this`​，并返回相应的结果。再举几个例子：
-
-```javascript
-let s = Object.prototype.toString;
-
-alert( s.call(123) ); // [object Number]
-alert( s.call(null) ); // [object Null]
-alert( s.call(alert) ); // [object Function]
-```
-
-​`[Symbol.toStringTag]`​
-
-可以使用特殊的对象属性 `Symbol.toStringTag`​ 自定义对象的 `toString`​ 方法的行为。
-
-例如：
-
-```javascript
-let user = {
-  [Symbol.toStringTag]: "User"
-};
-
-alert( {}.toString.call(user) ); // [object User]
-```
-
-对于大多数特定于环境的对象，都有一个这样的属性。下面是一些特定于浏览器的示例：
-
-```javascript
-// 特定于环境的对象和类的 toStringTag：
-alert( window[Symbol.toStringTag]); // Window
-alert( XMLHttpRequest.prototype[Symbol.toStringTag] ); // XMLHttpRequest
-
-alert( {}.toString.call(window) ); // [object Window]
-alert( {}.toString.call(new XMLHttpRequest()) ); // [object XMLHttpRequest]
-```
-
-正如我们所看到的，输出结果恰好是 `Symbol.toStringTag`​（如果存在），只不过被包裹进了 `[object ...]`​ 里。
-
-这样一来，我们手头上就有了个“磕了药似的 typeof”，不仅能检查原始数据类型，而且适用于内建对象，更可贵的是还支持自定义。
-
-所以，如果我们想要获取内建对象的类型，并希望把该信息以字符串的形式返回，而不只是检查类型的话，我们可以用 `{}.toString.call`​ 替代 `instanceof`​。
-
-### minxi
-
-在 JavaScript 中，我们只能继承单个对象。每个对象只能有一个 `[[Prototype]]`​。并且每个类只可以扩展另外一个类。
-
-但是有些时候这种设定（译注：单继承）会让人感到受限制。例如，我有一个 `StreetSweeper`​ 类和一个 `Bicycle`​ 类，现在想要一个它们的 mixin：`StreetSweepingBicycle`​ 类。
-
-或者，我们有一个 `User`​ 类和一个 `EventEmitter`​ 类来实现事件生成（event generation），并且我们想将 `EventEmitter`​ 的功能添加到 `User`​ 中，以便我们的用户可以触发事件（emit event）。
-
-有一个概念可以帮助我们，叫做 “mixins”。
-
-根据维基百科的定义，[mixin](https://en.wikipedia.org/wiki/Mixin) 是一个包含可被其他类使用而无需继承的方法的类。
-
-换句话说，*mixin* 提供了实现特定行为的方法，但是我们不单独使用它，而是使用它来将这些行为添加到其他类中。
-
-```js
-// mixin
-let sayHiMixin = {
-  sayHi() {
-    alert(`Hello ${this.name}`);
-  },
-  sayBye() {
-    alert(`Bye ${this.name}`);
-  }
-};
-
-// 用法：
-class User {
-  constructor(name) {
-    this.name = name;
-  }
-}
-
-// 拷贝方法
-Object.assign(User.prototype, sayHiMixin);
-
-// 现在 User 可以打招呼了
-new User("Dude").sayHi(); // Hello Dude!
-```
-
-这里没有继承，只有一个简单的方法拷贝。所以 `User`​ 可以从另一个类继承，还可以包括 mixin 来 "mix-in“ 其它方法，就像这样：
-
-```js
-class User extends Person {
-  // ...
-}
-
-Object.assign(User.prototype, sayHiMixin);
-```
-
-Mixin 可以在自己内部使用继承。
-
-例如，这里的 `sayHiMixin`​ 继承自 `sayMixin`​：
-
-```javascript
-let sayMixin = {
-  say(phrase) {
-    alert(phrase);
-  }
-};
-
-let sayHiMixin = {
-  __proto__: sayMixin, // (或者，我们可以在这儿使用 Object.setPrototypeOf 来设置原型)
-
-  sayHi() {
-    // 调用父类方法
-    super.say(`Hello ${this.name}`); // (*)
-  },
-  sayBye() {
-    super.say(`Bye ${this.name}`); // (*)
-  }
-};
-
-class User {
-  constructor(name) {
-    this.name = name;
-  }
-}
-
-// 拷贝方法
-Object.assign(User.prototype, sayHiMixin);
-
-// 现在 User 可以打招呼了
-new User("Dude").sayHi(); // Hello Dude!
-```
-
-请注意，在 `sayHiMixin`​ 内部对父类方法 `super.say()`​ 的调用（在标有 `(*)`​ 的行）会在 mixin 的原型中查找方法，而不是在 class 中查找。
-
-这是示意图（请参见图中右侧部分）：
-
-这是因为方法 `sayHi`​ 和 `sayBye`​ 最初是在 `sayHiMixin`​ 中创建的。因此，即使复制了它们，但是它们的 `[[HomeObject]]`​ 内部属性仍引用的是 `sayHiMixin`​，如上图所示。
-
-当 `super`​ 在 `[[HomeObject]].[[Prototype]]`​ 中寻找父方法时，意味着它搜索的是 `sayHiMixin.[[Prototype]]`​，而不是 `User.[[Prototype]]`​。
-
-​![image](assets/image-20240228203439-e3o0mhj.png)​
-
-这是因为方法 `sayHi`​ 和 `sayBye`​ 最初是在 `sayHiMixin`​ 中创建的。因此，即使复制了它们，但是它们的 `[[HomeObject]]`​ 内部属性仍引用的是 `sayHiMixin`​，如上图所示。
-
-当 `super`​ 在 `[[HomeObject]].[[Prototype]]`​ 中寻找父方法时，意味着它搜索的是 `sayHiMixin.[[Prototype]]`​，而不是 `User.[[Prototype]]`​。
 
 ## Proxy
 
@@ -2934,45 +1711,17 @@ let proxy = new Proxy(target, handler)
 * ​`target`​ —— 是要包装的对象，可以是任何东西，包括函数。
 * ​`handler`​ —— 代理配置：带有“捕捉器”（“traps”，即拦截操作的方法）的对象。比如 `get`​ 捕捉器用于读取 `target`​ 的属性，`set`​ 捕捉器用于写入 `target`​ 的属性，等等。
 
-对 `proxy`​ 进行操作，如果在 `handler`​ 中存在相应的捕捉器，则它将运行，并且 Proxy 有机会对其进行处理，否则将直接对 target 进行处理。
-
-首先，让我们创建一个没有任何捕捉器的代理（Proxy）：
-
-```js
-let target = {};
-let proxy = new Proxy(target, {}); // 空的 handler 对象
-
-proxy.test = 5; // 写入 proxy 对象 (1)
-alert(target.test); // 5，test 属性出现在了 target 中！
-
-alert(proxy.test); // 5，我们也可以从 proxy 对象读取它 (2)
-
-for(let key in proxy) alert(key); // test，迭代也正常工作 (3)
-```
-
-由于没有捕捉器，所有对 `proxy`​ 的操作都直接转发给了 `target`​。
-
-1. 写入操作 `proxy.test=`​ 会将值写入 `target`​。
-2. 读取操作 `proxy.test`​ 会从 `target`​ 返回对应的值。
-3. 迭代 `proxy`​ 会从 `target`​ 返回对应的值。
-
-我们可以看到，没有任何捕捉器，`proxy`​ 是一个 `target`​ 的透明包装器（wrapper）。
-
-​![image](assets/image-20240309194529-vlzhuuo.png)​
-
-​`Proxy`​ 是一种特殊的“奇异对象（exotic object）”。它没有自己的属性。如果 `handler`​ 为空，则透明地将操作转发给 `target`​。
+对 `proxy`​ 进行操作，如果在 `handler`​ 中存在相应的捕捉器，则它将运行，并且 `Proxy `​有机会对其进行处理，否则将直接对 `target `​进行处理。
 
 ---
 
 ### 捕捉器
 
-要激活更多功能，让我们添加捕捉器。
+对于对象的大多数操作，JavaScript 规范中有一个所谓的“内部方法”，它描述了最底层的工作方式。
 
-我们可以用它们拦截什么？
+例如 `[[Get]]`​，用于读取属性的内部方法，`[[Set]]`​，用于写入属性的内部方法，等等。**这些方法仅在规范中使用，我们不能直接通过方法名调用它们。**
 
-对于对象的大多数操作，JavaScript 规范中有一个所谓的“内部方法”，它描述了最底层的工作方式。例如 `[[Get]]`​，用于读取属性的内部方法，`[[Set]]`​，用于写入属性的内部方法，等等。**这些方法仅在规范中使用，我们不能直接通过方法名调用它们。**
-
-Proxy 捕捉器会拦截这些方法的调用。它们在 [proxy 规范](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) 和下表中被列出。
+Proxy 捕捉器会拦截这些方法的调用。
 
 对于每个内部方法，此表中都有一个捕捉器：可用于添加到 `new Proxy`​ 的 `handler`​ 参数中以拦截操作的方法名称：
 
@@ -2992,28 +1741,6 @@ Proxy 捕捉器会拦截这些方法的调用。它们在 [proxy 规范](https:/
 |​`[[GetOwnProperty]]`​|​`getOwnPropertyDescriptor`​|[Object.getOwnPropertyDescriptor](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor), `for..in`​, `Object.keys/values/entries`​|
 |​`[[OwnPropertyKeys]]`​|​`ownKeys`​|[Object.getOwnPropertyNames](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames), [Object.getOwnPropertySymbols](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols), `for..in`​, `Object.keys/values/entries`​|
 
----
-
-> **不变量（Invariant）**
->
-> JavaScript 强制执行某些不变量 —— 内部方法和捕捉器必须满足的条件。
->
-> 其中大多数用于返回值：
->
-> * ​`[[Set]]`​ 如果值已成功写入，则必须返回 `true`​，否则返回 `false`​。
-> * ​`[[Delete]]`​ 如果已成功删除该值，则必须返回 `true`​，否则返回 `false`​。
-> * ……依此类推，我们将在下面的示例中看到更多内容。
->
-> 还有其他一些不变量，例如：
->
-> * 应用于代理（proxy）对象的 `[[GetPrototypeOf]]`​，必须返回与应用于被代理对象的 `[[GetPrototypeOf]]`​ 相同的值。换句话说，读取代理对象的原型必须始终返回被代理对象的原型。
->
-> 捕捉器可以拦截这些操作，但是必须遵循上面这些规则。
->
-> 不变量确保语言功能的正确和一致的行为。完整的不变量列表在 [规范](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots) 中。如果你不做奇怪的事情，你可能就不会违反它们。
->
-> 让我们来看看它们是如何在实际示例中工作的。
-
 ### get
 
 最常见的捕捉器是用于读取/写入的属性。
@@ -3024,13 +1751,7 @@ Proxy 捕捉器会拦截这些方法的调用。它们在 [proxy 规范](https:/
 
 * ​`target`​ —— 是目标对象，该对象被作为第一个参数传递给 `new Proxy`​，
 * ​`property`​ —— 目标属性名，
-* ​`receiver`​ —— 如果目标属性是一个 getter 访问器属性，则 `receiver`​ 就是本次读取属性所在的 `this`​ 对象。通常，这就是 `proxy`​ 对象本身（或者，如果我们从 proxy 继承，则是从该 proxy 继承的对象）。
-
-让我们用 `get`​ 来实现一个对象的默认值。
-
-我们将创建一个对不存在的数组项返回 `0`​ 的数组。
-
-通常，当人们尝试获取不存在的数组项时，他们会得到 `undefined`​，但是我们在这将常规数组包装到代理（proxy）中，以捕获读取操作，并在没有要读取的属性的时返回 `0`​：
+* ​`receiver`​ —— 如果目标属性是一个 `getter `​访问器属性，则 `receiver`​ 就是本次读取属性所在的 `this`​ 对象。通常，这就是 `proxy`​ 对象本身（或者，如果我们从 proxy 继承，则是从该 proxy 继承的对象）。
 
 ```javascript
 let numbers = [0, 1, 2];
@@ -3050,10 +1771,6 @@ alert( numbers[123] ); // 0（没有这个数组项）
 ```
 
 ### set
-
-假设我们想要一个专门用于数字的数组。如果添加了其他类型的值，则应该抛出一个错误。
-
-当写入属性时 `set`​ 捕捉器被触发。
 
 ​`set(target, property, value, receiver)`​：
 
@@ -3093,28 +1810,14 @@ alert("This line is never reached (error in the line above)");
 
 我们不必重写诸如 `push`​ 和 `unshift`​ 等添加元素的数组方法，就可以在其中添加检查，因为在内部它们使用代理所拦截的 `[[Set]]`​ 操作。
 
-因此，代码简洁明了。
-
-> **别忘了返回** `true`​
->
-> 如上所述，要保持不变量。
->
-> 对于 `set`​ 操作，它必须在成功写入时返回 `true`​。
->
-> 如果我们忘记这样做，或返回任何假（falsy）值，则该操作将触发 `TypeError`​。
-
 ### ownKeys、getOwnPropertyDescriptor
 
 ​`Object.keys`​，`for..in`​ 循环和大多数其他遍历对象属性的方法都使用内部方法 `[[OwnPropertyKeys]]`​（由 `ownKeys`​ 捕捉器拦截) 来获取属性列表。
-
-这些方法在细节上有所不 同：
 
 * ​`Object.getOwnPropertyNames(obj)`​ 返回非 symbol 键。
 * ​`Object.getOwnPropertySymbols(obj)`​ 返回 symbol 键。
 * ​`Object.keys/values()`​ 返回带有 `enumerable`​ 标志的非 symbol 键/值。
 * ​`for..in`​ 循环遍历所有带有 `enumerable`​ 标志的非 symbol 键，以及原型对象的键。
-
-……但是所有这些都从该列表开始。
 
 在下面这个示例中，我们使用 `ownKeys`​ 捕捉器拦截 `for..in`​ 对 `user`​ 的遍历，并使用 `Object.keys`​ 和 `Object.values`​ 来跳过以下划线 `_`​ 开头的属性：
 
@@ -3139,9 +1842,7 @@ alert( Object.keys(user) ); // name,age
 alert( Object.values(user) ); // John,30
 ```
 
-到目前为止，它仍然有效。
-
-尽管如此，但如果我们返回对象中不存在的键，`Object.keys`​ 并不会列出这些键：
+如果我们返回对象中不存在的键，`Object.keys`​ 并不会列出这些键：
 
 ```javascript
 let user = { };
@@ -3155,11 +1856,9 @@ user = new Proxy(user, {
 alert( Object.keys(user) ); // <empty>
 ```
 
-为什么？原因很简单：`Object.keys`​ 仅返回带有 `enumerable`​ 标志的属性。为了检查它，该方法会对每个属性调用内部方法 `[[GetOwnProperty]]`​ 来获取 [它的描述符（descriptor）](https://zh.javascript.info/property-descriptors)。在这里，由于没有属性，其描述符为空，没有 `enumerable`​ 标志，因此它被略过。
+​`Object.keys`​ 仅返回带有 `enumerable`​ 标志的属性。为了检查它，该方法会对每个属性调用内部方法 `[[GetOwnProperty]]`​ 来获取 [它的描述符（descriptor）](https://zh.javascript.info/property-descriptors)。在这里，由于没有属性，其描述符为空，没有 `enumerable`​ 标志，因此它被略过。
 
-为了让 `Object.keys`​ 返回一个属性，我们需要它要么存在于带有 `enumerable`​ 标志的对象，要么我们可以拦截对 `[[GetOwnProperty]]`​ 的调用（捕捉器 `getOwnPropertyDescriptor`​ 可以做到这一点)，并返回带有 `enumerable: true`​ 的描述符。
-
-这是关于此的一个例子：
+为了让 `Object.keys`​ 返回一个属性，我们需要它要么存在于带有 `enumerable`​ 标志的对象，要么我们可以拦截对`[[GetOwnProperty]]`​ 的调用（捕捉器 `getOwnPropertyDescriptor`​ 可以做到这一点)，并返回带有 `enumerable: true`​ 的描述符。
 
 ```javascript
 let user = { };
@@ -3182,56 +1881,16 @@ user = new Proxy(user, {
 alert( Object.keys(user) ); // a, b, c
 ```
 
-让我们再次注意：如果该属性在对象中不存在，那么我们只需要拦截 `[[GetOwnProperty]]`​。  
+### deletePropert
 
-### deleteProperty
-
-有一个普遍的约定，即以下划线 `_`​ 开头的属性和方法是内部的。不应从对象外部访问它们。
-
-从技术上讲，我们也是能访问到这样的属性的：
-
-```javascript
-let user = {
-  name: "John",
-  _password: "secret"
-};
-
-alert(user._password); // secret
-```
-
-让我们使用代理来防止对以 `_`​ 开头的属性的任何访问。
-
-我们将需要以下捕捉器：
-
-* ​`get`​ 读取此类属性时抛出错误，
-* ​`set`​ 写入属性时抛出错误，
-* ​`deleteProperty`​ 删除属性时抛出错误，
-* ​`ownKeys`​ 在使用 `for..in`​ 和像 `Object.keys`​ 这样的的方法时排除以 `_`​ 开头的属性。
-
-代码如下：
+​`deleteProperty(target,propty,receiver)`​：返回true则正常删除，返回false则删除失败
 
 ```javascript
 let user = {
   name: "John",
   _password: "***"
 };
-
 user = new Proxy(user, {
-  get(target, prop) {
-    if (prop.startsWith('_')) {
-      throw new Error("Access denied");
-    }
-    let value = target[prop];
-    return (typeof value === 'function') ? value.bind(target) : value; // (*)
-  },
-  set(target, prop, val) { // 拦截属性写入
-    if (prop.startsWith('_')) {
-      throw new Error("Access denied");
-    } else {
-      target[prop] = val;
-      return true;
-    }
-  },
   deleteProperty(target, prop) { // 拦截属性删除
     if (prop.startsWith('_')) {
       throw new Error("Access denied");
@@ -3240,84 +1899,15 @@ user = new Proxy(user, {
       return true;
     }
   },
-  ownKeys(target) { // 拦截读取属性列表
-    return Object.keys(target).filter(key => !key.startsWith('_'));
-  }
+
 });
-
-// "get" 不允许读取 _password
-try {
-  alert(user._password); // Error: Access denied
-} catch(e) { alert(e.message); }
-
-// "set" 不允许写入 _password
-try {
-  user._password = "test"; // Error: Access denied
-} catch(e) { alert(e.message); }
-
 // "deleteProperty" 不允许删除 _password
 try {
   delete user._password; // Error: Access denied
 } catch(e) { alert(e.message); }
-
-// "ownKeys" 将 _password 过滤出去
-for(let key in user) alert(key); // name
 ```
-
-请注意在 `(*)`​ 行中 `get`​ 捕捉器的重要细节：
-
-```javascript
-get(target, prop) {
-  // ...
-  let value = target[prop];
-  return (typeof value === 'function') ? value.bind(target) : value; // (*)
-}
-```
-
-为什么我们需要一个函数去调用 `value.bind(target)`​？
-
-原因是对象方法（例如 `user.checkPassword()`​）必须能够访问 `_password`​：
-
-```javascript
-user = {
-  // ...
-  checkPassword(value) {
-    //对象方法必须能读取 _password
-    return value === this._password;
-  }
-}
-```
-
-对 `user.checkPassword()`​ 的调用会将被代理的对象 `user`​ 作为 `this`​（点符号之前的对象会成为 `this`​），因此，当它尝试访问 `this._password`​ 时，`get`​ 捕捉器将激活（在任何属性读取时，它都会被触发）并抛出错误。
-
-因此，我们在 `(*)`​ 行中将对象方法的上下文绑定到原始对象 `target`​。然后，它们将来的调用将使用 `target`​ 作为 `this`​，不会触发任何捕捉器。
-
-该解决方案通常可行，但并不理想，因为一个方法可能会将未被代理的对象传递到其他地方，然后我们就会陷入困境：原始对象在哪里，被代理的对象在哪里？
-
-此外，一个对象可能会被代理多次（多个代理可能会对该对象添加不同的“调整”），并且如果我们将未包装的对象传递给方法，则可能会产生意想不到的后果。
-
-因此，在任何地方都不应使用这种代理。
-
-> **类的私有属性**
->
-> 现代 JavaScript 引擎原生支持 class 中的私有属性，这些私有属性以 `#`​ 为前缀。它们在 [私有的和受保护的属性和方法](https://zh.javascript.info/private-protected-properties-methods) 一章中有详细描述。无需代理（proxy）。
->
-> 但是，此类属性有其自身的问题。特别是，它们是不可继承的。
-
-‍
 
 ### has
-
-我们有一个 range 对象：
-
-```javascript
-let range = {
-  start: 1,
-  end: 10
-};
-```
-
-我们想使用 `in`​ 操作符来检查一个数字是否在 `range`​ 范围内。
 
 ​`has`​ 捕捉器会拦截 `in`​ 调用。
 
@@ -3346,63 +1936,11 @@ alert(50 in range); // false
 
 ### apply
 
-我们也可以将代理（proxy）包装在函数周围。
-
 ​`apply(target, thisArg, args)`​ 捕捉器能使代理以函数的方式被调用：
 
 * ​`target`​ 是目标对象（在 JavaScript 中，函数就是一个对象），
 * ​`thisArg`​ 是 `this`​ 的值。
 * ​`args`​ 是参数列表。
-
-例如，让我们回忆一下我们在 [装饰器模式和转发，call/apply](https://zh.javascript.info/call-apply-decorators) 一章中所讲的 `delay(f, ms)`​ 装饰器。
-
-在该章中，我们没有用 proxy 来实现它。调用 `delay(f, ms)`​ 会返回一个函数，该函数会在 `ms`​ 毫秒后把所有调用转发给 `f`​。
-
-这是以前的基于函数的实现：
-
-```javascript
-function delay(f, ms) {
-  // 返回一个包装器（wrapper），该包装器将在时间到了的时候将调用转发给函数 f
-  return function() { // (*)
-    setTimeout(() => f.apply(this, arguments), ms);
-  };
-}
-
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
-}
-
-// 在进行这个包装后，sayHi 函数会被延迟 3 秒后被调用
-sayHi = delay(sayHi, 3000);
-
-sayHi("John"); // Hello, John! (after 3 seconds)
-```
-
-正如我们所看到的那样，大多数情况下它都是可行的。包装函数 `(*)`​ 在到达延迟的时间后后执行调用。
-
-但是包装函数不会转发属性读取/写入操作或者任何其他操作。进行包装后，就失去了对原始函数属性的访问，例如 `name`​，`length`​ 和其他属性：
-
-```javascript
-function delay(f, ms) {
-  return function() {
-    setTimeout(() => f.apply(this, arguments), ms);
-  };
-}
-
-function sayHi(user) {
-  alert(`Hello, ${user}!`);
-}
-
-alert(sayHi.length); // 1（函数的 length 是函数声明中的参数个数）
-
-sayHi = delay(sayHi, 3000);
-
-alert(sayHi.length); // 0（在包装器声明中，参数个数为 0)
-```
-
-​`Proxy`​ 的功能要强大得多，因为它可以将所有东西转发到目标对象。
-
-让我们使用 `Proxy`​ 来替换掉包装函数：
 
 ```javascript
 function delay(f, ms) {
@@ -3424,23 +1962,13 @@ alert(sayHi.length); // 1 (*) proxy 将“获取 length”的操作转发给目�
 sayHi("John"); // Hello, John!（3 秒后）
 ```
 
-结果是相同的，但现在不仅仅调用，而且代理上的所有操作都能被转发到原始函数。所以在 `(*)`​ 行包装后的 `sayHi.length`​ 会返回正确的结果。
-
-我们得到了一个“更丰富”的包装器。
-
-还存在其他捕捉器：完整列表在本文的开头。它们的使用模式与上述类似。
-
 ### [内部插槽（Internal slot）](https://zh.javascript.info/proxy#nei-jian-dui-xiang-nei-bu-cha-cao-internalslot)
 
 许多内建对象，例如 `Map`​，`Set`​，`Date`​，`Promise`​ 等，都使用了所谓的“内部插槽”。
 
 它们类似于属性，但仅限于内部使用，仅用于规范目的。例如，`Map`​ 将项目（item）存储在 `[[MapData]]`​ 中。内建方法可以直接访问它们，而不通过 `[[Get]]/[[Set]]`​ 内部方法。所以 `Proxy`​ 无法拦截它们。
 
-为什么要在意这些呢？毕竟它们是内部的！
-
-好吧，问题在这儿。在类似这样的内建对象被代理后，代理对象没有这些内部插槽，因此内建方法将会失败。
-
-例如：
+在类似这样的内建对象被代理后，代理对象没有这些内部插槽，因此内建方法将会失败。
 
 ```javascript
 let map = new Map();
@@ -3476,93 +2004,7 @@ alert(proxy.get('test')); // 1（工作了！）
 >
 > 所以，代理数组时没有这种问题。
 
-### [私有字段](https://zh.javascript.info/proxy#si-you-zi-duan)
-
-类的私有字段也会发生类似的情况。
-
-例如，`getName()`​ 方法访问私有的 `#name`​ 属性，并在代理后中断：
-
-```javascript
-class User {
-  #name = "Guest";
-
-  getName() {
-    return this.#name;
-  }
-}
-
-let user = new User();
-
-user = new Proxy(user, {});
-
-alert(user.getName()); // Error
-```
-
-原因是私有字段是通过内部插槽实现的。JavaScript 在访问它们时不使用 `[[Get]]/[[Set]]`​。
-
-在调用 `getName()`​ 时，`this`​ 的值是代理后的 `user`​，它没有带有私有字段的插槽。
-
-再次，带有 `bind`​ 方法的解决方案使它恢复正常：
-
-```javascript
-class User {
-  #name = "Guest";
-
-  getName() {
-    return this.#name;
-  }
-}
-
-let user = new User();
-
-user = new Proxy(user, {
-  get(target, prop, receiver) {
-    let value = Reflect.get(...arguments);
-    return typeof value == 'function' ? value.bind(target) : value;
-  }
-});
-
-alert(user.getName()); // Guest
-```
-
-如前所述，该解决方案也有缺点：它将原始对象暴露给该方法，可能使其进一步传递并破坏其他代理功能。
-
-### [Proxy != target](https://zh.javascript.info/proxy#proxytarget)
-
-代理和原始对象是不同的对象。这很自然，对吧？
-
-所以，如果我们使用原始对象作为键，然后对其进行代理，之后却无法找到代理了：
-
-```javascript
-let allUsers = new Set();
-
-class User {
-  constructor(name) {
-    this.name = name;
-    allUsers.add(this);
-  }
-}
-
-let user = new User("John");
-
-alert(allUsers.has(user)); // true
-
-user = new Proxy(user, {});
-
-alert(allUsers.has(user)); // false
-```
-
-如我们所见，进行代理后，我们在 `allUsers`​ 中找不到 `user`​，因为代理是一个不同的对象。
-
-**Proxy 无法拦截严格相等性检查** `===`​
-
-Proxy 可以拦截许多操作符，例如 `new`​（使用 `construct`​），`in`​（使用 `has`​），`delete`​（使用 `deleteProperty`​）等。
-
-但是没有办法拦截对于对象的严格相等性检查。一个对象只严格等于其自身，没有其他值。
-
-因此，比较对象是否相等的所有操作和内建类都会区分对象和代理。这里没有透明的替代品。
-
-### [可撤销 Proxy](https://zh.javascript.info/proxy#ke-che-xiao-proxy)
+### 可撤销 Proxy
 
 一个 **可撤销** 的代理是可以被禁用的代理。
 
@@ -3577,8 +2019,6 @@ let {proxy, revoke} = Proxy.revocable(target, handler)
 ```
 
 该调用返回一个带有 `proxy`​ 和 `revoke`​ 函数的对象以将其禁用。
-
-这是一个例子：
 
 ```javascript
 let object = {
@@ -3598,32 +2038,6 @@ alert(proxy.data); // Error
 ```
 
 对 `revoke()`​ 的调用会从代理中删除对目标对象的所有内部引用，因此它们之间再无连接。
-
-最初，`revoke`​ 与 `proxy`​ 是分开的，因此我们可以传递 `proxy`​，同时将 `revoke`​ 留在当前范围内。
-
-我们也可以通过设置 `proxy.revoke = revoke`​ 来将 `revoke`​ 绑定到 `proxy`​。
-
-另一种选择是创建一个 `WeakMap`​，其中 `proxy`​ 作为键，相应的 `revoke`​ 作为值，这样可以轻松找到 `proxy`​ 所对应的 `revoke`​：
-
-```javascript
-let revokes = new WeakMap();
-
-let object = {
-  data: "Valuable data"
-};
-
-let {proxy, revoke} = Proxy.revocable(object, {});
-
-revokes.set(proxy, revoke);
-
-// ...我们代码中的其他位置...
-revoke = revokes.get(proxy);
-revoke();
-
-alert(proxy.data); // Error（revoked）
-```
-
-此处我们使用 `WeakMap`​ 而不是 `Map`​，因为它不会阻止垃圾回收。如果一个代理对象变得“不可访问”（例如，没有变量再引用它），则 `WeakMap`​ 允许将其与它的 `revoke`​ 一起从内存中清除，因为我们不再需要它了。
 
 ## Reflect
 
@@ -3647,8 +2061,6 @@ Reflect.set(user, 'name', 'John');
 
 alert(user.name); // John
 ```
-
-尤其是，`Reflect`​ 允许我们将操作符（`new`​，`delete`​，……）作为函数（`Reflect.construct`​，`Reflect.deleteProperty`​，……）执行调用。这是一个有趣的功能，但是这里还有一点很重要。
 
 **对于每个可被** **​`Proxy`​**​ **捕获的内部方法，在** **​`Reflect`​**​ **中都有一个对应的方法，其名称和参数与** **​`Proxy`​**​ **捕捉器相同。**
 
@@ -3681,121 +2093,7 @@ user.name = "Pete"; // 显示 "SET name=Pete"
 * ​`Reflect.get`​ 读取一个对象属性。
 * ​`Reflect.set`​ 写入一个对象属性，如果写入成功则返回 `true`​，否则返回 `false`​。
 
-这样，一切都很简单：如果一个捕捉器想要将调用转发给对象，则只需使用相同的参数调用 `Reflect.<method>`​ 就足够了。
-
-在大多数情况下，我们可以不使用 `Reflect`​ 完成相同的事情，例如，用于读取属性的 `Reflect.get(target, prop, receiver)`​ 可以被替换为 `target[prop]`​。尽管有一些细微的差别。
-
----
-
-让我们看一个示例，来说明为什么 `Reflect.get`​ 更好。此外，我们还将看到为什么 `get/set`​ 有第三个参数 `receiver`​，而且我们之前从来没有使用过它。
-
-我们有一个带有 `_name`​ 属性和 getter 的对象 `user`​。
-
-这是对 `user`​ 对象的一个代理：
-
-```javascript
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
-  }
-};
-
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) {
-    return target[prop];
-  }
-});
-
-alert(userProxy.name); // Guest
-```
-
-其 `get`​ 捕捉器在这里是“透明的”，它返回原来的属性，不会做任何其他的事。这对于我们的示例而言就足够了。
-
-一切似乎都很好。但是让我们将示例变得稍微复杂一点。
-
-另一个对象 `admin`​ 从 `user`​ 继承后，我们可以观察到错误的行为：
-
-```javascript
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
-  }
-};
-
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) {
-    return target[prop]; // (*) target = user
-  }
-});
-
-let admin = {
-  __proto__: userProxy,
-  _name: "Admin"
-};
-
-// 期望输出：Admin
-alert(admin.name); // 输出：Guest (?!?)
-```
-
-读取 `admin.name`​ 应该返回 `"Admin"`​，而不是 `"Guest"`​！
-
-发生了什么？或许我们在继承方面做错了什么？
-
-但是，如果我们移除代理，那么一切都会按预期进行。
-
-问题实际上出在代理中，在 `(*)`​ 行。
-
-1. 当我们读取 `admin.name`​ 时，由于 `admin`​ 对象自身没有对应的的属性，搜索将转到其原型。
-2. 原型是 `userProxy`​。
-3. 从代理读取 `name`​ 属性时，`get`​ 捕捉器会被触发，并从原始对象返回 `target[prop]`​ 属性，在 `(*)`​ 行。  
-    当调用 `target[prop]`​ 时，若 `prop`​ 是一个 getter，它将在 `this=target`​ 上下文中运行其代码。因此，结果是来自原始对象 `target`​ 的 `this._name`​，即来自 `user`​。
-
-为了解决这种情况，我们需要 `get`​ 捕捉器的第三个参数 `receiver`​。它保证将正确的 `this`​ 传递给 getter。在我们的例子中是 `admin`​。
-
-如何把上下文传递给 getter？对于一个常规函数，我们可以使用 `call/apply`​，但这是一个 getter，它不能“被调用”，只能被访问。
-
-​`Reflect.get`​ 可以做到。如果我们使用它，一切都会正常运行。
-
-这是更正后的变体：
-
-```javascript
-let user = {
-  _name: "Guest",
-  get name() {
-    return this._name;
-  }
-};
-
-let userProxy = new Proxy(user, {
-  get(target, prop, receiver) { // receiver = admin
-    return Reflect.get(target, prop, receiver); // (*)
-  }
-});
-
-
-let admin = {
-  __proto__: userProxy,
-  _name: "Admin"
-};
-
-alert(admin.name); // Admin
-```
-
-现在 `receiver`​ 保留了对正确 `this`​ 的引用（即 `admin`​），该引用是在 `(*)`​ 行中被通过 `Reflect.get`​ 传递给 getter 的。
-
-我们可以把捕捉器重写得更短：
-
-```javascript
-get(target, prop, receiver) {
-  return Reflect.get(...arguments);
-}
-```
-
-​`Reflect`​ 调用的命名与捕捉器的命名完全相同，并且接受相同的参数。它们是以这种方式专门设计的。
-
-因此，`return Reflect...`​ 提供了一个安全的方式，可以轻松地转发操作，并确保我们不会忘记与此相关的任何内容。
+如果一个捕捉器想要将调用转发给对象，则只需使用相同的参数调用 `Reflect.<method>`​ 就足够了。
 
 ## Math
 
@@ -3804,15 +2102,20 @@ get(target, prop, receiver) {
 console.log(Math.random())
 console.log(Math.random() * 10) //0-10  不包含10
 console.log(parseInt(Math.random() * 11)) // 0-9
+
 //2. 向上取整  Math.ceil()
 console.log(Math.ceil(9.003))//10
+
 //3. 向下取整 Math.floor()
 console.log(Math.floor(9.99))//9
+
 //4. 找最大最小数
 console.log(Math.max(2, 3, 15, 8, 4))//15
 console.log(Math.min(2, 3, 15, 8, 4))//2
+
 //5. 幂运算  10的3次幂运算  Math.pow(值, 次方数)
 console.log(Math.pow(2, 3))//8
+
 //6. 绝对值
 console.log(Math.abs(-10.01))//10.01
 ```
@@ -3876,7 +2179,7 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ## Map
 
-* 概念：**​`Map`​**​ 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者[基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive)）都可以作为一个键或一个值。
+* 概念：`Map`​ 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者[基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive)）都可以作为一个键或一个值。
 
   ```js
   map 是有序的"对象"，接受一个数组参数，该数组里面的参数也是数组形式，如 [key,value]
@@ -3893,7 +2196,7 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
   3.map是有顺序的，依据插入的顺序来；对象是"无序"的，其实也有一定顺序，不过这个顺序其实不是那么明确
   4.map可以使用size属性获取个数，map可迭代； 对象不能直接获取键值对格式，且没有迭代协议，只能通过keys、values方法
   ```
-* map常用方法
+* ​`map`​常用方法
 
   ```js
   const map= new Map();
@@ -3917,9 +2220,9 @@ console.log(d.getTime())//时间戳作用 ： 解决浏览器时区兼容性
 
 ### Promist.all()
 
-​`Promise.all`​ 接受一个可迭代对象（通常是一个数组项为 promise 的数组），并返回一个新的 promise。
+​`Promise.all`​ 接受一个可迭代对象（通常是一个数组项为 `promise `​的数组），并返回一个新的 `promise`​。
 
-当所有给定的 promise 都 resolve 时，新的 promise 才会 resolve，并且其结果数组将成为新 promise 的结果。
+当所有给定的 `promise`​ 都 `resolve`​时，新的 `promise `​才会 `resolve`​，并且其结果数组将成为新 `promise`​ 的结果。
 
 ```js
 let promise = Promise.all(iterable);
@@ -3943,35 +2246,9 @@ Promise.all([
 ]).catch(alert); // Error: Whoops!
 ```
 
-> **如果出现 error，其他 promise 将被忽略**
->
-> 如果其中一个 promise 被 reject，`Promise.all`​ 就会立即被 reject，完全忽略列表中其他的 promise。它们的结果也被忽略。
->
-> 例如，像上面那个例子，如果有多个同时进行的 `fetch`​ 调用，其中一个失败，其他的 `fetch`​ 操作仍然会继续执行，但是 `Promise.all`​ 将不会再关心（watch）它们。它们可能会 settle，但是它们的结果将被忽略。
->
-> ​`Promise.all`​ 没有采取任何措施来取消它们，因为 promise 中没有“取消”的概念。在 [另一个章节](https://zh.javascript.info/fetch-abort) 中，我们将介绍可以帮助我们解决这个问题（译注：指的是“取消” promise）的 `AbortController`​，但它不是 Promise API 的一部分。
-
-> ​`Promise.all(iterable)`​ **允许在** `iterable`​ **中使用非 promise 的“常规”值**
->
-> 通常，`Promise.all(...)`​ 接受含有 promise 项的可迭代对象（大多数情况下是数组）作为参数。但是，如果这些对象中的任何一个不是 promise，那么它将被“按原样”传递给结果数组。
->
-> 例如，这里的结果是 `[1, 2, 3]`​：
->
-> ```javascript
-> Promise.all([
->   new Promise((resolve, reject) => {
->     setTimeout(() => resolve(1), 1000)
->   }),
->   2,
->   3
-> ]).then(alert); // 1, 2, 3
-> ```
->
-> 所以我们可以在方便的地方将准备好的值传递给 `Promise.all`​。
-
 ### Promise.allSettled
 
-​`Promise.allSettled`​ 等待所有的 promise 都被 settle，无论结果如何。结果数组具有：
+​`Promise.allSettled`​ 等待所有的 `promise `​都被 `settle`​，无论结果如何。结果数组具有：
 
 * ​`{status:"fulfilled", value:result}`​ 对于成功的响应，
 * ​`{status:"rejected", reason:error}`​ 对于 error。
@@ -4020,11 +2297,9 @@ Promise.race([
 ]).then(alert); // 1
 ```
 
-这里第一个 promise 最快，所以它变成了结果。第一个 settled 的 promise “赢得了比赛”之后，所有进一步的 result/error 都会被忽略。
-
 ### Promise.any
 
- `Promise.race`​ 类似，区别在于 `Promise.any`​ 只等待第一个 fulfilled 的 promise，并将这个 fulfilled 的 promise 返回。如果给出的 promise 都 rejected，那么返回的 promise 会带有 [`AggregateError`](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/AggregateError)​ —— 一个特殊的 error 对象，在其 `errors`​ 属性中存储着所有 promise error。
+​`Promise.race`​ 类似，区别在于 `Promise.any`​ 只等待第一个 `fulfilled `​的 `promise`​，并将这个 `fulfilled `​的 `promise `​返回。如果给出的 `promise `​都 `rejected`​，那么返回的 `promise `​会带有 [`AggregateError`](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/AggregateError)​ —— 一个特殊的 error 对象，在其 `errors`​ 属性中存储着所有 promise error。
 
 语法如下：
 
@@ -4042,46 +2317,17 @@ Promise.any([
 ]).then(alert); // 1
 ```
 
-这里的第一个 promise 是最快的，但 rejected 了，所以第二个 promise 则成为了结果。在第一个 fulfilled 的 promise “赢得比赛”后，所有进一步的结果都将被忽略。
-
 ### Promise.resolve
 
-​`Promise.resolve(value)`​ 用结果 `value`​ 创建一个 resolved 的 promise。
-
-如同：
+​`Promise.resolve(value)`​ 用结果 `value`​ 创建一个 `resolved `​的 `promise`​。
 
 ```javascript
 let promise = new Promise(resolve => resolve(value));
 ```
 
-当一个函数被期望返回一个 promise 时，这个方法用于兼容性。（译注：这里的兼容性是指，我们直接从缓存中获取了当前操作的结果 `value`​，但是期望返回的是一个 promise，所以可以使用 `Promise.resolve(value)`​ 将 `value`​ “封装”进 promise，以满足期望返回一个 promise 的这个需求。）
-
-例如，下面的 `loadCached`​ 函数获取（fetch）一个 URL 并记住其内容。以便将来对使用相同 URL 的调用，它能立即从缓存中获取先前的内容，但使用 `Promise.resolve`​ 创建了一个该内容的 promise，所以返回的值始终是一个 promise。
-
-```javascript
-let cache = new Map();
-
-function loadCached(url) {
-  if (cache.has(url)) {
-    return Promise.resolve(cache.get(url)); // (*)
-  }
-
-  return fetch(url)
-    .then(response => response.text())
-    .then(text => {
-      cache.set(url,text);
-      return text;
-    });
-}
-```
-
-我们可以使用 `loadCached(url).then(…)`​，因为该函数保证了会返回一个 promise。我们就可以放心地在 `loadCached`​ 后面使用 `.then`​。这就是 `(*)`​ 行中 `Promise.resolve`​ 的目的。
-
 ### Promise.reject
 
 ​`Promise.reject(error)`​ 用 `error`​ 创建一个 rejected 的 promise。
-
-如同：
 
 ```javascript
 let promise = new Promise((resolve, reject) => reject(error));
@@ -4176,8 +2422,6 @@ new Promise((resolve, reject) => {
 3. ​`finally`​ 处理程序也不应该返回任何内容。如果它返回了，返回的值会默认被忽略。  
     此规则的唯一例外是当 `finally`​ 处理程序抛出 error 时。此时这个 error（而不是任何之前的结果）会被转到下一个处理程序。
 
-‍
-
 ### 隐式try...catch
 
 ​`promise `​的执行者（executor）和 `promise `​的处理程序周围有一个“隐式的 `try..catch`​”。如果发生异常，它就会被捕获，并被视为 rejection 进行处理。
@@ -4188,7 +2432,7 @@ new Promise((resolve, reject) => {
 }).catch(alert); // Error: Whoops!
 ```
 
-……与下面这段代码工作上完全相同：
+与下面这段代码工作上完全相同：
 
 ```javascript
 new Promise((resolve, reject) => {
@@ -4257,7 +2501,7 @@ new Promise(function() {
 }); // 没有用来处理 error 的 catch
 ```
 
-这个事件是 [HTML 标准](https://html.spec.whatwg.org/multipage/webappapis.html#unhandled-promise-rejections) 的一部分。
+这个事件是 HTML 标准 的一部分。
 
 如果出现了一个 error，并且在这没有 `.catch`​，那么 `unhandledrejection`​ 处理程序就会被触发，并获取具有 error 相关信息的 `event`​ 对象，所以我们就能做一些后续处理了。
 
@@ -4870,6 +3114,8 @@ for(let [name, value] of formData) {
 
 ## URL
 
+### 基本概念
+
 内建的 `URL`​ 类提供了用于创建和解析 URL 的便捷接口。
 
 创建一个新 `URL`​ 对象的语法：
@@ -4941,7 +3187,7 @@ alert(url.pathname); // /url
 new URL('https://google.com/search?query=JavaScript')
 ```
 
-……但是，如果参数中包含空格，非拉丁字母等（具体参见下文），参数就需要被编码。
+但是，如果参数中包含空格，非拉丁字母等（具体参见下文），参数就需要被编码。
 
 因此，有一个 URL 属性用于解决这个问题：`url.searchParams`​，[URLSearchParams](https://url.spec.whatwg.org/#urlsearchparams) 类型的对象。
 
@@ -4954,7 +3200,7 @@ new URL('https://google.com/search?query=JavaScript')
 * ​**​`has(name)`​** ​ —— 按照 `name`​ 检查参数是否存在，
 * ​**​`set(name, value)`​** ​ —— set/replace 参数，
 * ​**​`sort()`​** ​ —— 按 name 对参数进行排序，很少使用，
-* ……并且它是可迭代的，类似于 `Map`​。
+* 并且它是可迭代的，类似于 `Map`​。
 
 包含空格和标点符号的参数的示例：
 
@@ -5017,7 +3263,7 @@ https://site.com:8080/path/page?p1=v1&p2=v2#hash
 
 正如我们所看到的，在 URL 中 `:`​，`?`​，`=`​，`&`​，`#`​ 这类字符是被允许的。
 
-……另一方面，对于 URL 的单个组件，例如一个搜索参数，则必须对这些字符进行编码，以免破坏 URL 的格式。
+另一方面，对于 URL 的单个组件，例如一个搜索参数，则必须对这些字符进行编码，以免破坏 URL 的格式。
 
 * ​`encodeURI`​ 仅编码 URL 中完全禁止的字符。
 * ​`encodeURIComponent`​ 也编码这类字符，此外，还编码 `#`​，`$`​，`&`​，`+`​，`,`​，`/`​，`:`​，`;`​，`=`​，`?`​ 和 `@`​ 字符。
@@ -5073,7 +3319,7 @@ alert(url); // https://google.com/search?q=Rock&Roll
 >
 > 这种情况很少见，`encode*`​ 函数在大多数情况下都能正常工作。
 
-# 正则
+## 正则
 
 ### 元字符
 
@@ -5208,8 +3454,6 @@ alert(url); // https://google.com/search?q=Rock&Roll
   var reg1 = /\d{3,6}?/;//匹配3-6位数字
   console.log ( "1234567890".replace ( reg1, "X" ) );//X4567890   (正则表达式会匹配3位数字)
   ```
-
----
 
 ### string.test(reg)
 
@@ -7552,1144 +5796,3 @@ function upload(file) {
     }
   })
   ```
-
-# typeScript
-
-## 基本配置
-
-* 基本命令：安装编译`TS`​的工具包，`node`​只能识别`js`​代码，安装编译包可以把`ts`​代码转成`js`​代码
-
-  ```bash
-  npm i -g typescript
-  tsc –v (查看 typescript 的版本)
-  tsc xxx.ts //把ts文件转成node可执行的js文件
-  ```
-* ​`tsconfig.js`​：`ts`​的配置文件
-
-  ```js
-  {
-      /*
-      tsconfig.json是ts编译器的配置，ts编译器可以根据他的信息来对代码进行编译
-      */
-
-      // 'include'用来指定哪些ts文件需要被编译，
-      // 路径： *任意文件， **任意目录
-      "include": ["./src/**/*"],
-
-      // 'exclude' 不需要背编译的文件目录，
-      // 默认值：['node_modules'， 'bower_components', 'jspm_packages']
-      "exclude": ["./src/hello/**/*"],
-
-      /*
-      定义被继承的配置文件
-      */
-      // "extends": "",
-
-      /*
-      compilerOptions： 编译器选项
-      */
-      "compilerOptions": {
-          //用来指定ts被编译为的ES的版本
-          "target": "es2015",
-
-          //指定使用的模块化的规范'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node12', 'nodenext'
-          "module": "es2015",
-
-          //用来指定项目中要使用的库,代码提示，代码检查， 在浏览中执行的化不需要指定
-          // 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'esnext', 'dom', 'dom.iterable', 
-          // 'webworker', 'webworker.importscripts', 'webworker.iterable', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 
-          // 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 
-          // 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays',
-          // 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 
-          // 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.sharedmemory', 'es2020.string', 
-          // 'es2020.symbol.wellknown', 'es2020.intl', 'es2021.promise', 'es2021.string', 'es2021.weakref', 'es2021.intl', 'esnext.array',
-          // 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise', 'esnext.weakref'.
-          //默认值为：es6, dom 即为浏览器的运行环境
-          "lib": ["dom","es5"]
-
-          //指定编译后文件所在的目录
-          "outDir": "./dist",
-
-          //将代码合并为1个文件
-          //设置outFile后所有的全局作用域中的代码会合并到同一个文件中
-          //用于module: amd, system
-          // "outFile": "./dist/app.js"
-
-          //所有严格检查的总开关
-          "strict": true,
-
-          //是否对js文件进行编译，默认为false
-          "allowJs": true,
-
-          //是否检查js代码是否符合语法规范，默认为false
-          "checkJs": true,
-
-          //是否移除注释，默认为false
-          "removeComments": true,
-
-          //不生成编译后的文件，只执行编译的过程，默认为false
-          "noEmit": false,
-
-          //当有错误时，不生成编译后的文件，默认为false
-          "noEmitOnError": true,
-
-          //用来设置编译后的文件是否使用严格模式，默认为false
-          "alwaysStrict": true,
-
-          //不允许隐式any类型，默认为false
-          "noImplicitAny": true,
-
-          //不允许不明确类型this,默认为false
-          "noImplicitThis": true,
-
-          //严格的检查空值，默认为false
-          "strictNullChecks": true
-      }
-  }
-  ```
-
-## 数据类型
-
-### boolean类型
-
-```js
-let isDone: boolean = false;
-```
-
-### number类型
-
-```js
-let count: number = 10;
-```
-
-### string类型
-
-```js
-let name: string = "semliker";
-```
-
-### enum类型
-
-* 基本概念
-
-  ```js
-  1.枚举（enum）的功能类似于字面量类型+联合类型组合的功能，来描述一个值。规定了某些特定的值。
-  2.该值只能是一组命名常量中的一个。
-  3.枚举值不能使用计算属性，即定义的时候必须要有明确的数据定义
-
-  定义:
-  enum 枚举名 { 可取值1, 可取值2,.. }
-
-  使用:
-  枚举名.可取值
-  ```
-* 数字枚举：这类枚举获取到的值，默认是从0开始，也可以设置初始值
-
-  ```js
-  enum Direction {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
-  }
-
-  let dir: Direction = Direction.NORTH;
-  默认情况下，NORTH 的初始值为 0，其余的成员会从 1 开始自动增长。换句话说，Direction.SOUTH 的值为 1，Direction.EAST 的值为 2，Direction.WEST 的值为 3。
-  let dirName = Direction[0]; // NORTH
-  let dirVal = Direction["NORTH"]; // 0
-
-
-  enum Direction {
-    NORTH = 3,
-    SOUTH,
-    EAST,
-    WEST,
-  }
-  ```
-* 字符串枚举：对于纯字符串枚举，我们不能省略任何初始化程序。字符串系统是不会有数字那种默认累计加一的
-
-  ```js
-  enum Direction {
-    NORTH = "NORTH",
-    SOUTH = "SOUTH",
-    EAST = "EAST",
-    WEST = "WEST",
-  }
-  ```
-* 常量枚举：使用 `const`​ 关键字修饰的枚举，常量枚举会使用内联语法，不会为枚举类型编译生成任何 JavaScript。
-
-  ```js
-  const enum Direction {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
-  }
-
-  let dir: Direction = Direction.NORTH; //编译后： var dir = 0 /* NORTH */;
-  ```
-* 异构枚举：异构枚举的成员值是数字和字符串的混合
-
-  ```js
-  enum Enum {
-    A,
-    B,
-    C = "C",
-    D = "D",
-    E = 8,
-    F,
-  }
-
-  //编译后
-  var Enum;
-  (function (Enum) {
-      Enum[Enum["A"] = 0] = "A";
-      Enum[Enum["B"] = 1] = "B";
-      Enum["C"] = "C";
-      Enum["D"] = "D";
-      Enum[Enum["E"] = 8] = "E";
-      Enum[Enum["F"] = 9] = "F";
-  })(Enum || (Enum = {}));
-
-  console.log(Enum.A) //输出：0
-  console.log(Enum[0]) // 输出：A
-  ```
-
-### any类型
-
-* 任何类型都可以被归为 `any `​类型。这让 `any `​类型成为了类型系统的顶级类型（也被称作全局超级类型）。
-
-  ```js
-  当类型设置为 any 时，就取消了类型的限制,不推荐使用any这会让TypeScript变为“AnyScript”(失去TS类型保护的优势)
-  隐式 any，有下面两种情况会触发:
-  1.声明变量不提供类型也不提供默认值
-  2.定义函数时，参数不给类型
-
-  let value: any;
-  value.foo.bar; // OK
-  value.trim(); // OK
-  value(); // OK
-  new value(); // OK
-  value[0][1]; // OK
-  ```
-
-### unknown类型
-
-* 所有类型也都可以赋值给 `unknown`​。这使得 `unknown`​ 成为 TypeScript 类型系统的另一种顶级类型（另一种是 `any`​）
-* ​`nuknown`​可以接受任何值的赋值，因为它本身的意思是不知道该变量的具体类型
-
-  ```js
-  let value: unknown;
-
-  value = true; // OK
-  value = 42; // OK
-  value = "Hello World"; // OK
-  ```
-* ​`nuknown`​只能赋值给`any`​类型和`nuknown`​类型本身
-
-  ```js
-  let value: unknown;
-
-  value.foo.bar; // Error
-  value.trim(); // Error
-  value(); // Error
-  new value(); // Error
-  value[0][1]; // Error
-  ```
-
-### nudefined、null类型
-
-```js
-let u: undefined = undefined;
-let n: null = null;
-```
-
-### never类型
-
-* ​`never`​ 类型表示的是那些永不存在的值的类型。`never`​ 类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型。
-
-  ```js
-  // 返回never的函数必须存在无法达到的终点
-  function error(message: string): never {
-    throw new Error(message);
-  }
-
-  function infiniteLoop(): never {
-    while (true) {}
-  }
-
-  ```
-* ​`never`​ 经常用来做类型检查，**使用 never 避免出现新增了联合类型没有对应的实现，目的就是写出类型绝对安全的代码。**
-
-  ```js
-  type Foo = string | number;
-
-  function controlFlowAnalysisWithNever(foo: Foo) {
-    if (typeof foo === "string") {
-      // 这里 foo 被收窄为 string 类型
-    } else if (typeof foo === "number") {
-      // 这里 foo 被收窄为 number 类型
-    } else {
-      // foo 在这里是 never
-      const check: never = foo;
-    }
-  }
-  ```
-
-### Array类型
-
-```js
-// 写法1:
-let 变量: [] = [值1，...]:
-let numbers: number[] = [1, 3, 5] 
-//  numbers必须是数组，每个元素都必须是数字
-
-// 写法2:
-let 变量: Array<类型> = [值1，...]
-let strings: Array<string> = ['a', 'b', 'c'] 
-//  strings必须是数组，每个元素都必须是字符串
-```
-
-### Tuple类型
-
-* 概念：**元组**是一种特殊的**数组** 。
-
-  ```js
-  1.它约定了的元素个数
-  2.它约定了特定索引对应的数据类型
-  ```
-* 定义
-
-  ```js
-  let arr: number[] = [116.27,39.527]  //不严谨，因为该类型的数组中可以出现任意多个数字
-  let arr: [number, number] = [116.27,39.527]  //元组确切地知道包含多少个元素，以及特定索引对应的类型
-  ```
-
-### function类型
-
-* 函数涉及的类型实际上指的是：`函数参数类型`​和`返回值类型`​
-* 单个函数定义
-
-  ```js
-  // 声明式实际写法:
-  function add(num1: number, num2: number): number {
-    return num1 + num2
-  }
-  let fn2:(num1:number)=>number=function(){}
-
-  // 箭头函数
-  const add2 = (a: number =100, b: number = 100): number =>{
-     return a + b
-   }
-  ```
-* 返回值void：即没有返回值，强制`return`​得话，也不会报错
-
-  ```js
-  // 如果什么都不写，此时，add 函数的返回值类型为: void
-  const add = (num1: number):void => {}
-
-  // 如果return之后什么都不写，此时，add 函数的返回值类型为: void
-  const add = (num1: number):void => { return }
-
-  // 如果return的undefined,是你自己明确返回的undefined，不是计算之后得到的undefined
-  const add = (num1: number):undefined => {
-    return undefined  // 返回的 undefined是JS中的一个值
-  }
-  ```
-* 可选参数
-
-  ```js
-  function slice (a?: number, b?: number):void {
-      // ? 跟在参数名字的后面，表示可选的参数,可选参数只能在必须参数的后面
-      // 如果可选参数在必选参数的前面，会报错
-      console.log(111);  
-  }
-
-  注意可选和默认值的区别:
-  设置了默认值之后，就是可选的了，不写就会使用默认值，
-  可选和默认值它们不能一起使用。优先使用默认值
-  ```
-
-### void
-
-* 用来声明函数没有返回值
-
-  ```js
-  // 声明函数返回值为void
-  function warnUser(): void {
-    console.log("This is my warning message");
-  }
-  ```
-
-### object
-
-* 基本使用
-
-  ```js
-  const 对象名: {
-    属性名1:类型1,
-    属性名2?:类型2,
-    方法名1(形参1: 类型1,形参2: 类型2):返回值类型,
-    方法名2:(形参1: 类型1,形参2: 类型2) => 返回值类型
-  } = { 属性名1: 值1，属性名2: 值2  }
-
-  // 空对象
-  let person: {} = {}
-
-  // 有属性的对象
-  let person: { name: string } = {
-    name: '同学'
-  }
-
-  // 在一行代码中指定对象的多个属性类型时，使用;(分号)来分隔
-  let person: {name: 'jack'; greet1(name: string):void; greet2: (name: string) => void} = {
-    name: 'jack',
-    greet1() {},
-    greet2:()=>{}
-  }
-
-  // 对象中如果有多个类型，可以换行写，通过换行来分隔多个属性类型，可以去掉 ; 
-  let person: {
-    name: string
-    greet1(name: string):void
-    greet2: (name: string) => void
-  } = {
-    name: 'jack',
-    greet1() {},
-    greet2:()=>{}
-  }
-  ```
-* 可选参数
-
-  ```js
-  let obj: {
-    name: String
-    age: Number
-    gender?: Boolean
-  } = {
-    name: 'xjj',
-    age: 18
-  }
-  ```
-
-## 相关概念
-
-### 断言
-
-* 类型断言
-
-  ```js
-  有时候你会比TS更加明确一个值的类型，此时，可以使用类型断言来指定更具体的类型。
-  即，你可能知道里面值得类型，但是不知道里面具体的值就使用类型断言，先给个空的再as一下，告诉系统其实是这个as之后的东西
-  类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和解构。它没有运行时的影响，只是在编译阶段起作用。
-  type TObj = {
-    name: string,
-    age: number
-  }
-  let obj : TObj = {} as TObj//写法1
-  let obj : TObj = <TObj>{}//写法2
-  ```
-* 非空断言
-
-  ```js
-  在上下文中当类型检查器无法断定类型时，可以使用缀表达式操作符 ! 进行断言操作对象是非 null 和非 undefined 的类型。
-  即x!的值不会为 null 或 undefined(有时候要 .出去 的那个值有可能是null或者undefined的时候，你使用.操作，系统会提示报错)
-  也就是说，使用 x!. 告诉系统，这里肯定可以进行点操作的
-  let user: string | null | undefined;
-  console.log(user!.toUpperCase()); // 编译正确
-  console.log(user.toUpperCase()); // 错误。是null的时候是无法点操作的
-  ```
-* 确定赋值断言
-
-  ```js
-  我们定义了变量, 没有赋值就使用，则会报错
-  通过 let x!: number; 确定赋值断言，TypeScript 编译器就会知道该属性会被明确地赋值。
-  let value:number
-  console.log(value); // Variable 'value' is used before being assigned.
-  let value!:number
-  console.log(value); // undefined 编译正确
-  ```
-
-### 操作符
-
-* 概念：类型保护是可执行运行时检查的一种表达式，用于确保该类型在一定的范围内。换句话说，类型保护可以保证一个字符串是一个字符串，尽管它的值也可以是一个数值。
-
-  ```js
-  类型保护与特性检测并不是完全不同，其主要思想是尝试检测属性、方法或原型，以确定如何处理值
-  ```
-* ​`is`​操作符：判断是否是该类型，返回`boolean`​值
-
-  ```javascript
-  const isString = (val: unknown): val is string => getType(val) === 'string'
-  ```
-* ​`in`​操作符：用来遍历枚举类型
-
-  ```js
-  type Keys = "a" | "b" | "c"
-
-  type Obj =  {
-    [p in Keys]: any
-  } // -> { a: any, b: any, c: any }
-  ```
-* ​`typeof`​ 操作符： 可以用来获取一个变量声明或对象的类型。
-
-  ```js
-  interface Person {
-    name: string;
-    age: number;
-  }
-
-  const sem: Person = { name: 'semlinker', age: 33 };
-  type Sem= typeof sem; // -> Person
-
-  function toArray(x: number): Array<number> {
-    return [x];
-  }
-
-  type Func = typeof toArray; // -> (x: number) => number[]
-  ```
-* ​`keyof`​操作符：可以用于获取某种类型的所有键，其返回类型是联合类型
-
-  ```js
-  interface Person {
-    name: string;
-    age: number;
-  }
-
-  type K1 = keyof Person; // "name" | "age"
-  type K2 = keyof Person[]; // "length" | "toString" | "pop" | "push" | "concat" | "join" 
-  type K3 = keyof { [x: string]: Person };  // string | number
-
-  ```
-* ​`instanceof`​操作符：实例是否在构造函数的原型对象的原型链上
-
-  ```js
-  interface Padder {
-    getPaddingString(): string;
-  }
-
-  class SpaceRepeatingPadder implements Padder {
-    constructor(private numSpaces: number) {}
-    getPaddingString() {
-      return Array(this.numSpaces + 1).join(" ");
-    }
-  }
-
-  class StringPadder implements Padder {
-    constructor(private value: string) {}
-    getPaddingString() {
-      return this.value;
-    }
-  }
-
-  let padder: Padder = new SpaceRepeatingPadder(6);
-
-  if (padder instanceof SpaceRepeatingPadder) {
-    // padder的类型收窄为 'SpaceRepeatingPadder'
-  }
-
-
-  ```
-* ​`infer`​：在条件类型语句中，可以用 `infer`​ 声明一个类型变量并且对它进行使用。简单说就是用它取到函数返回值的类型方便之后使用。
-
-  ```js
-  type ReturnType<T> = T extends (
-    ...args: any[]
-  ) => infer R ? R : any;
-  ```
-* ​`Partial<T>`​：作用就是将某个类型里的属性全部变为可选项 `?`​
-
-  ```js
-  1.定义
-  /**
-   * node_modules/typescript/lib/lib.es5.d.ts
-   * Make all properties in T optional
-   */
-  type Partial<T> = {
-    [P in keyof T]?: T[P];
-  };
-
-  2.示例
-  interface Todo {
-    title: string;
-    description: string;
-  }
-
-  function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
-    return { ...todo, ...fieldsToUpdate };
-  }
-
-  const todo1 = {
-    title: "Learn TS",
-    description: "Learn TypeScript",
-  };
-
-  const todo2 = updateTodo(todo1, {
-    description: "Learn TypeScript Enum",
-  });
-
-  在上面的 updateTodo 方法中，我们利用 Partial<T> 工具类型，定义 fieldsToUpdate 的类型为 Partial<Todo>，即：
-  {
-     title?: string | undefined;
-     description?: string | undefined;
-  }
-  ```
-
-### 类型别名
-
-* 概念：`type`​ 类型别名的关键字，可以定义任何数据类型，和((20231007224624-8ge5iws '接口'))有些类似
-
-  ```js
-  type 别名 = 类型//别名一般首字母大写，也使用T开头
-
-  type SType = string // 定义
-  type CustomArray = (number | string)[]
-
-  const str1:s = 'abc'
-  let arr1: CustomArray = [1, 'a', 3, 'b']
-  ```
-* 交叉类型： 类型别名使用 `&`​ 来把多个类型合并成一个类型，`接口interface`​使用 **​`extends`​**​ 继承
-
-  ```js
-  type PartialPointX = { x: number; };
-  type PartialPointY = { y: number; }
-  type Point = PartialPointX & PartialPointY;
-
-  let point: Point = {
-    x: 1,
-    y: 1
-  }
-
-
-  ```
-* 交叉类型：**同名基础类型属性**的合并，基础类型合并，会导致合并成never，因为没有交集
-
-  ```js
-  //某些类型存在相同的成员，类型又不一直的情况下，会报错，如 TypeA 中 c:number ,TypeB 中 c：string 。c不能存在c是number又是string的情况，则 c 应该是 never 类型。
-  interface X {
-    c: string;
-    d: string;
-  }
-
-  interface Y {
-    c: number;
-    e: string
-  }
-
-  type XY = X & Y;
-  type YX = Y & X;
-
-  let p: XY; //此时的c是 never 类型
-  let q: YX; //此时的c是 never 类型
-  ```
-* 交叉类型：**同名非基础类型属性**的合并，可以成功合并
-
-  ```js
-  interface D { d: boolean; }
-  interface E { e: string; }
-  interface F { f: number; }
-
-  interface A { x: D; }
-  interface B { x: E; }
-  interface C { x: F; }
-
-  type ABC = A & B & C;
-
-  let abc: ABC = {
-    x: {
-      d: true,
-      e: 'semlinker',
-      f: 666
-    }
-  };
-
-  console.log('abc:', abc);
-  ```
-
-### 接口
-
-* 概念：当一个对象类型被多次使用时，可以使用类型别名(`type`​)或接口(`interface`​)，以达到复用的目的
-* 基本使用：用来修饰对象类型的，可以重复声明，会继承上一次定义的类型
-
-  ```js
-  // 使用 interface 关键字
-  interface IObj {
-    name: String
-    age: Number
-    gender: Boolean
-    sayHi: () => void
-  }
-  let obj1: IObj = {
-    name: '张三',
-    age: 18,
-    gender: false,
-    sayHi: () => console.log('Hi')
-  }
-  ```
-* 只读可选属性：只读关键字`readonly`​
-
-  ```js
-  interface Person {
-    readonly name: string;
-    age?: number;//可选
-  }
-  ```
-* 接口继承：如果两个接口之间有相同的属性或方法，可以将**公共的属性或方法抽离出来，通过继承来实现复用**
-
-  ```js
-  interface Point2D { x: number; y: number }
-  interface Point3D { x: number; y: number; z: number }
-
-  interface Point2D { x: number; y: number }
-  // 继承 Point2D
-  interface Point3D extends Point2D {
-    z: number
-  }
-  ```
-* 和((20231007224614-ifoo4zq '类型别名'))的区别
-
-  ```js
-  接口:
-  只能为对象指定类型。它可以继承。
-  可以重复声明，并继承之前声明的接口类型
-
-  类型别名:
-  不仅可以为对象指定类型,实际上可以为任意类型指定别名
-  不能重复声明同一个类型别名
-  ```
-
-### 索引签名
-
-* 控制`key`​值的类型
-
-  ```js
-  interface Person {
-    [propName: string]: any; //控制 索引key 的类型
-  } 
-  ```
-
-### 泛型
-
-* 概念：泛型，类型的占位，**不预先指定具体的类型，而是在使用的时候在指定类型限制**的一种特性。  
-  ​![image](assets/image-20221014133828-fdpgaia.png)​
-* 泛型约束：用来约束泛型，即限制泛型的数据类型
-
-  ```js
-  //定义一个函数：函数的参数必须有一个属性： length
-  interface ILength {
-    length: number
-  }
-  //限制了T肯定有length属性
-  function fn<T extends ILength> (a: T): T {
-    console.log(a.length)
-    return a
-  }
-
-  let arr: Array<number> = [1, 2, 3]
-  fn(arr)
-  ```
-* 泛型函数：泛型函数，使用泛型的函数
-
-  ```js
-  //先定义，用泛型占领占位
-  function fn<type>(a:type):tpye{return a}
-
-  //使用的时候，在明确泛型的具体类型
-  fn<number>(1)
-  fn<string>('a')
-  fn('b')
-  ```
-* 泛型接口：使用泛型的接口
-
-  ```js
-  interface IObj<T> {
-    name: string
-    age: number
-    gender: number
-    height: T
-    weight: T
-  }
-
-  let o1: IObj<number> = {
-    name: 'xjj',
-    age: 18,
-    gender: 0,
-    height: 100,
-    weight: 100
-  }
-
-  let o2: IObj<string> = {
-    name: 'xjj',
-    age: 19,
-    gender: 0,
-    height: '一米八',
-    weight: '一百八'
-  }
-  ```
-
-### 函数重载
-
-* 函数重载或方法重载是使用相同名称和不同参数数量或类型创建多个方法的一种能力。即对函数的多次类型定义，而不是对函数的实现签名
-
-  ```js
-  function add(a: number, b: number): number; //多次对函数的参数类型，和返回值进行定义
-  function add(a: string, b: string): string; //多次对函数的参数类型，和返回值进行定义
-  function add(a: string, b: number): string;
-  function add(a: number, b: string): string;
-
-  //函数的实现签名，需要同时满足上面的所有类型条件才可以
-  function add(a: Combinable, b: Combinable) {
-    // type Combinable = string | number;
-    if (typeof a === 'string' || typeof b === 'string') {
-      return a.toString() + b.toString();
-    }
-    return a + b;
-  }
-  ```
-
-## 模块化
-
-### 命名空间
-
-关键字 `namespace`​ ,会在全局生成一个对象，定义在`namespace`​内部的都要通过这个对象的属性访问。
-
-通过`export`​关键字对外暴露需要在外部访问的对象。
-
-命名空间表示一个全局变量是一个对象，可以定义很多属性类型。同时命名空间里可能会用到一些接口类型(`interface`​、`type`​)，这时候一般有两种写法：
-
-* 写在`namespace`​外层，会作为全局类型被引入，从而可能污染全局类型空间。
-* 写在`namespace`​里层，在想使用该类型的时候，可以通过`namespace.interface`​进行使用。（推荐）
-* 同时，命名空间支持嵌套使用，即：`namespace`​嵌套`namepsace`​。或者简化的写法，可以写成`namepsace.namespace`​进行声明。
-
-```js
-// ./types/test.d.ts
-declare namespace Jye {
-  interface Info {
-    name: string;
-    age: number;
-  }
-
-  function getAge(): number;
-}
-
-
-// ./src/test.ts
-let settings: Jye.Info = {
-  name: "jye",
-  age: 8,
-};
-
-Jye.getAge();
-
-```
-
-### 三斜线指令
-
-概念：`ts `​早期模块化的标签, 用来导入依赖, `ES6`​广泛使用后, 在编写TS文件中不推荐使用, 除了以下的场景使用`///`​, 其他场景使用 `import`​ 代替
-
-1. 库依赖全局库, 因为全局库不能使用import导入
-2. 全局库依赖于某个 UMD 模块，因为全局库中不能出现import/export, 出现则为npm/UMD
-
-```js
-说白了，三斜线的path & types，和es6的import语义相似，
-同时三斜线指令必须放在文件的最顶端。
-例如，当我们的声明文件过于庞大，一般都会采用三斜线指令，将我们的声明文件拆分成若干个，然后由一个入口文件引入。
-
-///<reference types=“UMDModuleName/globalName” /> 表示对一个库的依赖
-///<reference path="./lib/index.d.ts" /> 表示对一个文件的依赖。
-```
-
-## 类型声明
-
-### 全局类型声明
-
-* 在TS中，以`.d.ts`​结尾的文件默认是全局模块，里面声明的类型，或者变量会被默认当成全局性质的，其他后缀结尾的文件默认是局部模块。对于局部模块要在文件里面显式写import或者export，否则会报错
-* 声明变量使用关键字`declare`​来表示声明其后面的**全局**变量的类型，`declare namespace`​声明全局命名空间，`interface`​可以不使用`declare`​关键字来命名全局类型声明
-* 声明文件放在项目里的**任意路径/文件名**都可以被`ts`​编译器识别，但实际开发中发现，为了规避一些奇怪的问题， **推荐放在根目录下。**
-
-```js
-//ts会识别 xxx.d.ts 文件为类型声明，使用 declare 修饰的就是全局类型声明，可以直接在文件中使用
-// src/jQuery.d.ts
-declare namespace jQuery {
-    const version: number;
-    class Event {
-        blur(eventType: EventType): void
-    }
-    enum EventType {
-        CustomClick
-    }
-    interface AjaxSettings {
-        method?: 'GET' | 'POST'
-        data?: any;
-    }
-    function ajax(url: string, settings?: AjaxSettings): void;
-}
-```
-
-## 类
-
-* 继承
-* 封装
-* 多态
-
-### 基本定义
-
-* 类使用 `class`​ 关键字来定义
-
-  ```js
-  class Greeter {
-    // 静态属性 。 使用 类 来访问
-    static cname: string = "Greeter";
-    // 成员属性
-    greeting: string;
-    // 构造函数 - 执行初始化操作
-    constructor(message: string) {
-      super()//调用父类的方法
-      this.greeting = message;
-    }
-
-    // 静态方法
-    static getClassName() {
-      return "Class name is Greeter";
-    }
-
-    // 成员方法
-    greet() {
-      return "Hello, " + this.greeting;
-    }
-
-    //自读属性
-    readonly age = 20
-  }
-
-  let greeter = new Greeter("world");
-  ```
-* 编译后
-
-  ```js
-  "use strict";
-  var Greeter = /** @class */ (function () {
-      // 构造函数 - 执行初始化操作
-      function Greeter(message) {
-        this.greeting = message;
-      }
-      // 静态方法
-      Greeter.getClassName = function () {
-        return "Class name is Greeter";
-      };
-      // 成员方法
-      Greeter.prototype.greet = function () {
-        return "Hello, " + this.greeting;
-      };
-      // 静态属性
-      Greeter.cname = "Greeter";
-      return Greeter;
-  }());
-  var greeter = new Greeter("world");
-  ```
-
-### 继承
-
-* ​`extends`​：实现类的继承
-
-  ```js
-  class Student extends Person {
-    study() {
-      console.log(`${this.name} needs study`)
-    }
-  }
-
-  const s1 = new Student('lin')
-  s1.study()
-  ```
-
-### 接口实现
-
-* ​`implements`​接口是一种描述对象的形状的方式，它定义了对象应该具有的属性和方法。在 TypeScript 中，可以使用接口来实现类的约束。
-
-  ```js
-  interface Shape {
-    calculateArea(): number;
-  }
-
-  class Circle implements Shape {
-    radius: number;
-
-    constructor(radius: number) {
-      this.radius = radius;
-    }
-
-    calculateArea() {
-      return Math.PI * this.radius * this.radius;
-    }
-  }
-
-  ```
-
-### 访问修饰符
-
-* ​`public `​、`private`​、`protected `​
-
-  ```js
-  1.public ：公开，子类和构建出来的实例对象都能访问，默认是public
-  2.private ：私有，子类和实例都无法访问，只能自己使用
-  3.protected ：受保护的，只有自己和子类才能访问，实例对象不能访问
-
-  class Person {
-    public name = "张三"
-    protected age = 20
-    private passWord = "123456789"
-  }
-
-
-
-  ```
-* 私有字段：使用`#`​ 来修饰的字段，和常规字段和使用`private`​修饰的字段不同，
-
-  ```js
-  1.私有字段以 # 字符开头，有时我们称之为私有名称
-  2.每个私有字段名称都唯一地限定于其包含的类；
-  3.不能在私有字段上使用 TypeScript 可访问性修饰符（如 public 或 private）；
-  4.私有字段不能在包含的类之外访问，甚至不能被检测到。
-
-  class Person {
-    #name: string;
-
-    constructor(name: string) {
-      this.#name = name;
-    }
-
-    greet() {
-      console.log(`Hello, my name is ${this.#name}!`);
-    }
-  }
-
-  let semlinker = new Person("Semlinker");
-
-  semlinker.#name;
-  //     ~~~~~
-  // Property '#name' is not accessible outside class 'Person'
-  // because it has a private identifier.
-
-  ```
-
-### 访问器
-
-* ​`set`​、`get`​字段修饰，进行数据的拦截，实现数据的封装和有效性校验，防止出现异常数据。
-
-  ```js
-  let passcode = "Hello TypeScript";
-
-  class Employee {
-    private _fullName: string;
-
-    get fullName(): string {
-      return this._fullName;
-    }
-
-    set fullName(newName: string) {
-      if (passcode && passcode == "Hello TypeScript") {
-        this._fullName = newName;
-      } else {
-        console.log("Error: Unauthorized update of employee!");
-      }
-    }
-  }
-
-  let employee = new Employee();
-  employee.fullName = "Semlinker";
-  if (employee.fullName) {
-    console.log(employee.fullName);
-  }
-  ```
-
-### 抽象类
-
-* 抽象类`abstract`​：使用 `abstract`​ 关键字声明的类，我们称之为抽象类。抽象类不能被实例化，因为它里面包含一个或多个抽象方法。所谓的抽象方法，是指不包含具体实现的方法。
-
-  ```js
-  抽象类可以看作是一个基础模板，不生成具体实例，用来给别的子类继承
-  abstract class Person {
-    constructor(public name: string){}
-    abstract say(words: string) :void;
-  }
-
-  // Cannot create an instance of an abstract class.(2511)
-  const lolo = new Person(); // Error
-
-
-  // 抽象类不能被实例化，可以用来做基类，只能实例化实现了所有抽象方法的子类
-  abstract class Person {
-    constructor(public name: string){}
-    // 抽象方法
-    abstract say(words: string) :void;
-  }
-
-  class Developer extends Person {
-    constructor(name: string) {
-      super(name);
-    }
-    say(words: string): void {
-      console.log(`${this.name} says ${words}`);
-    }
-  }
-
-  const lolo = new Developer("lolo");
-  lolo.say("I love ts!"); // lolo says I love ts!
-
-  ```
-
-## 装饰器概述
-
-修饰器本质是个函数，可以用于修饰类、属性、方法，装饰器其实是js中的内容
-
-装饰器的运行时机：在装饰器使用的时候就已经运行了
-
-装饰器的运行顺序：从下到上（实际被装饰的对象实在最下面）
-
-### 类装饰器
-
-类装饰器接收一个参数，该参数表示类本身（即构造函数）
-
-```javascript
-//虽然class的本质是函数，但是ts是不知道这个是个类函数函数
-//如果说该装饰器是类装饰器，为了告诉ts该参数是类，需要如下声明
-function test1(target:new (...args:ang [])=>object){ // ...args 是剩余参数，是个数组
-  ...
-}
-
-function test2(){ // ...args 是剩余参数，是个数组
-  return function(target:new (...args:ang [])=>object){
-    ...
-  }
-}
-
-@test
-class class1{}
-
-
-@test()//装饰器也可以主动调用，因为他本身就是函数，类装饰器主动调用的情况，需要有显示的返回函数
-//这种叫做装饰器工厂，执行之后返回装饰器,还可以自己传递参数进去
-class class2{}
-
-
-```
-
-### 成员装饰器
-
-成员装饰器：
-
-1. 属性装饰器
-
-    1. 属性装饰器也是一个函数，该函数有三个参数
-    2. 第一个参数：如果是静态属性，则是**类本身**，如果是成员属性，则是**类的原型对象**
-    3. 第二个参数：固定是一个字符串，是属性的key值
-    4. 第三个参数：描述符对象
-2. 方法装饰器
-
-```
-```
-
-### 前端工程化
-
-‍
