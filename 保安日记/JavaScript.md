@@ -2,44 +2,127 @@
 
 ‍
 
-# JS基础
+# 基本概念
 
-## 模块化
+## 执行上下文
 
-### 导入导出
+执行上下文：**代码（全局代码、函数代码）执行前进行的准备工作，也被称为“执行上下文环境”。**
+
+与之对应的有全局环境、函数环境、`eval`​环境（自定义代码块，基本不使用了）
+
+代码中会存在多个函数，所以会有多个函数执行上下文。在`js`​中，通过栈的存取来管理执行上下文，对于管理上下文的栈，我们称之为执行栈，或者函数调用栈
+
+---
+
+栈的管理遵循先进后出，后进先出（只有一个出入口，先进来的放在底下了）（`LIFO`​）
+
+```ts
+function foo() {
+  function bar() {
+    var str = 'string'
+    console.log('I am bar')
+  }
+  bar()
+}
+foo()
+```
+
+​![image](assets/image-20240519232111-visv3lf.png)​
+
+‍
+
+执行上下文可以有多个，没有明确数量限制，倒是超出了栈分配空间，会造成堆栈溢出，堆栈溢出最常见的是死循环代码
+
+---
+
+执行上下文生命周期
+
+1. 创建阶段（进入执行上下文）：函数被调用时候，进入函数环境，为其创建一个执行上下文，此时为创建阶段
+
+    ```ts
+    1.创建变量对象 vo
+      确定函数的形参并赋值
+      函数阶段初始化创建Arguments对象并赋值
+      确定普通字面量形式的函数声明，并赋值 fnName(){} //赋值
+      变量声明，函数表达式声明（未赋值） fnName = function(){}//未赋值  变量提升打印的undefined
+    2.确定 this 指向
+    3.确定作用域（词法环境决定，哪里声明定义，就哪里确定） scope
+    ```
+2. 执行阶段（代码执行）：执行函数代码时，此时执行上下文进入执行阶段
+
+    ```ts
+    1.变量对象赋值
+      变量赋值
+      函数表达式赋值
+    2.调用函数
+    3.顺序指向其他代码
+    ```
+
+---
+
+```ts
+fn(i){
+  console.log(i)
+  var fn1 = function(){}
+  fn2(){}
+  var name = 'myName'
+}
+fn(1)
+
+1.创建阶段
+vo = {
+  i : 1,
+  argument:{0:1,length:1}
+  fn1 : undefined,
+  fn2  : 指向 fn2
+  name : undefined
+}
+// 所以未到实际赋值的地方去打印fn1、name 会打印出来undefined
+// 变量提升？
+```
+
+## ES6导入导出
 
 ```js
 1.按需导入
 import {sayHi, sayBye} from './say.js';
+
 2.全部导入并重命名
 import * as say from './say.js';
 say.default //获取默认导出的内容
+
 3.全部导入
 import * from './say.js';
+
 4.按需导入并重命名
 import {sayHi as hi, sayBye as bye} from './say.js';
+
 5.导入默认内容
 import say from './say.js';
 import {default as say} from './say.js';//和上面等价
 
 6.导出
 export sayHi 
+
 7.导出并重命名
 export {sayHi as hi, sayBye as bye};
+
 8.默认导出
 export default sayHi 
 export { sayHi as default } //和上面等价
 
 9.重新导出sayHi
 export {sayHi} from './say.js'; 
+
 10.重新导出 默认导出 并重命名
 export {default as User} from './user.js';
 export User from './user.js' //无效。这会导致一个语法错误。
+
 11.导出命名的导出，默认导出的内容没有
 export * from './user.js'
 ```
 
-### import
+## import
 
 ​`import(module)`​ 表达式：加载模块并返回一个 `promise`​，该 `promise `​resolve 为一个包含其所有导出的模块对象。我们可以在代码中的任意位置调用这个表达式。
 
@@ -1024,49 +1107,220 @@ oB.run();//undefined   替换了，没有该方法了
 
 ## 装饰器
 
-修饰器本质是个函数，可以用于修饰类、属性、方法，装饰器其实是js中的内容
+修饰器本质是个函数，可以用于修饰类、方法、属性、参数、访问符
 
-装饰器的运行时机：在装饰器使用的时候就已经运行了
+装饰器的运行时机：在装饰器使用的时候就已经运行了（在运行时被调用）
 
 装饰器的运行顺序：从下到上（实际被装饰的对象实在最下面）
 
+**装饰器的运用都要紧挨这需要装饰的对象上面**
+
+### 装饰器分类
+
+1. 带参数：装饰器工厂，返回一个新的函数（装饰器内的参数本身就已经被规定好了，需要自己向装饰器传递参数就只能定义好装饰器工程函数，然后返回一个普通装饰器函数）
+
+    ```ts
+    function Route(routePath: string): ClassDecorator {
+      return (target: object) => {
+        ...
+      }
+    } 
+
+    @Route("params")
+    class DetailPage {
+      ...
+    }
+    ```
+2. 不带参数：普通装饰器
+
+    ```ts
+    function Route(target: object) {
+      ...
+    }
+
+    @Route
+    struct DetailPage {
+      ...
+    }
+
+    ```
+
 ### 类装饰器
 
-类装饰器接收一个参数，该参数表示类本身（即构造函数）
+类装饰器参数：
 
-```javascript
-//虽然class的本质是函数，但是ts是不知道这个是个类函数函数
-//如果说该装饰器是类装饰器，为了告诉ts该参数是类，需要如下声明
-function test1(target:new (...args:ang [])=>object){ // ...args 是剩余参数，是个数组
-  ...
-}
+1. `target`​：对于类装饰器，`target`​ 就是这个类本身，或者说是类的构造函数。
 
-function test2(){ // ...args 是剩余参数，是个数组
-  return function(target:new (...args:ang [])=>object){
-    ...
+* 类装饰器类型
+
+  ```ts
+  type ClassDecorator = <TFunction extends Function>(
+    target: TFunction
+  ) => TFunction | void;
+  ```
+* 基本使用
+
+  ```ts
+  //虽然class的本质是函数，但是ts是不知道你传入的参数是一个 class 
+  //如果要告诉ts入参是一个class，则可以进行以下声明
+  function test(target: new ()=>{}){}
+  function test(target: typeof className){}
+
+
+  function CustomClassDecorator(info: string): ClassDecorator {
+    return (target: Function) => {
+      console.log(target) // [Function user]
+      console.log(info) // 你好
+    }
   }
-}
 
-@test
-class class1{}
+  @CustomClassDecorator('你好')
+  class User {
+    public name!: string
+    constructor() {
+      this.name = '马东锡'
+    }
+  }
 
 
-@test()//装饰器也可以主动调用，因为他本身就是函数，类装饰器主动调用的情况，需要有显示的返回函数
-//这种叫做装饰器工厂，执行之后返回装饰器,还可以自己传递参数进去
-class class2{}
+  ```
 
+### 属性装饰器
 
-```
+属性（成员）装饰器参数：
 
-### 成员装饰器
+1. ​`target`​：如果是静态属性，则是**类本身**，如果是成员属性，则是**类的原型对象**
+2. ​`propertyName`​：固定是一个字符串，是属性的key值
+3. ​`properDescribe`​：描述符对象
 
-1. 属性装饰器
+* 属性（成员）装饰器类型
 
-    1. 属性装饰器也是一个函数，该函数有三个参数
-    2. 第一个参数：如果是静态属性，则是**类本身**，如果是成员属性，则是**类的原型对象**
-    3. 第二个参数：固定是一个字符串，是属性的key值
-    4. 第三个参数：描述符对象
-2. 方法装饰器
+  ```ts
+  type PropertyDecorator = (
+    target: Object,
+    propertyName: string | symbol,
+    properDescribe:object
+  ) => void;
+
+  ```
+* 基本使用
+
+  ```ts
+  function CustomPropertyDecorator(userName: string): PropertyDecorator {
+    return (target: Object, propertyName: string | symbol) => {
+      console.log(target); // {}
+      console.log(propertyName); // userName
+      targetClassPrototype[propertyName] = userName
+    }
+  }
+
+  class User {
+    @CustomPropertyDecorator('你好')
+    public userName!: string
+    constructor() {}
+  }
+
+  let user = new User()
+  console.log(user.userName) // 你好
+  ```
+
+### 方法装饰器
+
+方法装饰器参数
+
+1. ​`target`​：对于静态成员来说是类的构造函数，对于实例成员是类的原型对象。（同属性装饰器）
+2. ​`methodName`​：成员的名字。
+3. ​`propertyDescriptor`​：成员的属性描述符
+
+**如果方法装饰器返回一个值，它会被用作方法的属性描述符。**
+
+* 方法装饰器类型
+
+  ```ts
+  type MethodDecorator = <T>(
+    target: Object,
+    methodName: string | symbol,
+    propertyDescriptor: TypedPropertyDescriptor<T>
+  ) => TypedPropertyDescriptor<T> | void;
+  ```
+* 基本使用
+
+  ```ts
+  function CustomMethodDecorator(info: string): MethodDecorator {
+    return (target: Object,
+            methodName: any,
+            propertyDescriptor: PropertyDescriptor) => {
+      console.log(target) // { sayHello: [Function (anonymous)] }
+      console.log(methodName) //sayHello
+      let originMethod = propertyDescriptor.value
+
+      propertyDescriptor.value = function (...args: any) {
+        console.log("before")
+        console.log(info) //你好
+        originMethod.call(this, args)
+        console.log("after")
+      }
+    }
+  }
+
+  class User {
+    @CustomMethodDecorator('你好')
+    sayHello() {
+      console.log('执行sayHello()方法)')
+    }
+  }
+  ```
+
+### 参数装饰器
+
+参数装饰器参数：
+
+1. ​`target`​：对于静态成员来说是类的构造函数，对于实例成员是类的原型对象。
+2. ​`methodName`​：成员的名字(函数名称)。
+
+    * 如果参数修饰器所在的方法为类的静态/实例方法时，此参数为当前参数修饰器所在方法的方法名。
+    * 如果参数修饰器所在的方法为类的构造函数参数修饰时，此参数为 undefined。
+3. ​`parameterIndex`​：参数在函数参数列表中的索引。
+
+**参数装饰器只能用来监视一个方法的参数是否被传入。**
+
+**参数装饰器的返回值会被忽略。**
+
+* 参数装饰器类型
+
+  ```ts
+  type ParameterDecorator = (
+    target: Object,
+    methodName: string | symbol,
+    parameterIndex: number
+  ) => void;
+  ```
+* 基本使用
+
+  ```ts
+  function CustomParameterDecorator(tag: string): ParameterDecorator {
+    return (target: any,
+            methodName: string | symbol,
+            parameterIndex: number) => {
+
+      console.log(tag); // 装饰实例方法的参数
+      console.log(target); // { sayHello: [Function (anonymous)] }
+      console.log(methodName.toString()); // sayHello
+      console.log(parameterIndex.toString()); // 0
+
+    }
+  }
+
+  class User {
+    constructor() {
+
+    }
+
+    sayHello(@CustomParameterDecorator("装饰实例方法的参数") name: String) {
+      console.log("你好，" + name);
+    }
+  }
+  ```
 
 # 内建类
 
