@@ -2057,7 +2057,7 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
 
 ### 自定义指令
 
-* 创建vue3自定义指令：在 `<script setup>`​ 中，任何以`v`​开头的驼峰式命名的变量都可以被用作一个自定义指令。
+* 创建`vue3`​自定义指令：在 `<script setup>`​ 中，任何以`v`​开头的驼峰式命名的变量都可以被用作一个自定义指令。
 
   ```js
   <script setup>
@@ -2071,7 +2071,29 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   <template>
     <input v-focus />
   </template>
+  ```
+* 局部自定义指令
 
+  ```ts
+  directive:{
+    directiveName:{
+      created(el, binding, vnode, prevVnode) {},
+      beforeMount(el, binding, vnode, prevVnode) {},
+      mounted(el, binding, vnode, prevVnode) {},
+      beforeUpdate(el, binding, vnode, prevVnode) {},
+      updated(el, binding, vnode, prevVnode) {},
+      beforeUnmount(el, binding, vnode, prevVnode) {},
+      unmounted(el, binding, vnode, prevVnode) {}
+    }
+  }
+  ```
+* 全局自定义指令
+
+  ```ts
+  Vue.directive('directiveName', directiveObje) //有多个生命周期函数，生命周期和组件的是一样的，，函数参数有el、binding，vnode等
+  可以使用Vue.use(obj)//方法去实现全局自动注册，该方法会自动调用传入对象中的instance方法，同时向instance方法传入需要的Vue实例
+  使用
+  v-inputFilter:修饰符=”指令value“
   ```
 
 * 自定义指令的钩子
@@ -2126,8 +2148,6 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   1.自定义指令作用到根节点的时候，会抛出警告。
   2.和 attribute 不同，指令不能通过 v-bind="$attrs" 来传递给一个不同的元素
   ```
-
-‍
 
 # [router-v4.x](https://router.vuejs.org/zh/api/)
 
@@ -2362,6 +2382,102 @@ v-cloak 会保留在所绑定的元素上，直到相关组件实例被挂载后
   console.log(this.$route.query.id);
 
   ```
+
+### 路由传参-prop
+
+在组件中使用 `$route`​ 会与路由紧密耦合，这限制了组件的灵活性，因为它只能用于特定的 URL。虽然这不一定是件坏事，但我们可以通过 `props`​ 配置来解除这种行为。
+
+1. 布尔模式：当 `props`​ 设置为 `true`​ 时，`route.params`​ 将被设置为组件的 props。
+
+    使用prop之前
+
+    ```ts
+    const User = {
+      template: '<div>User {{ $route.params.id }}</div>'
+    }
+    const routes = [{ path: '/user/:id', component: User }]
+    ```
+
+    使用prop设置之后
+
+    ```ts
+    const User = {
+      props: ['id'], // 组件中通过 props 获取 id
+      template: '<div>User {{ id }}</div>'
+    }
+    // 路由配置中，增加 props 字段，并将值 设置为 true
+    const routes = [{ path: '/user/:id', component: User, props: true }]
+    ```
+
+    **注意：对于有命名视图的路由，你必须为每个命名视图定义** **​`props`​**​ **配置：**
+
+    ```ts
+    const routes = [
+      {
+        path: '/user/:id',
+        components: { default: User, sidebar: Sidebar },
+        // 为 User 提供 props
+        props: { default: true, sidebar: false }
+      }
+    ]
+    ```
+2. 对象模式：当 `props`​ 是一个对象时，它将原样设置为组件 `props`​。当 `props `​是静态的时候很有用。  
+    路由配置
+
+    ```ts
+      const routes = [
+      {
+        path: '/hello',
+        component: Hello,
+        props: { name: 'World' }
+      }
+    ]
+    ```
+
+    组件中获取数据
+
+    ```ts
+    const Hello = {
+      props: {
+        name: {
+          type: String,
+          default: 'Vue'
+        }
+      },
+      template: '<div> Hello {{ name }}</div>'
+    }
+    ```
+3. 函数模式：可以创建一个返回 `props `​的函数。这允许你将参数转换为其他类型，将静态值与基于路由的值相结合等等。
+
+    路由配置：使用函数模式时，返回 props 的函数接受的参数为路由记录 `route`​。
+
+    ```ts
+    // 创建一个返回 props 的函数
+    const dynamicPropsFn = (route) => {
+      return { name: route.query.say + "!" }
+    }
+    const routes = [
+      {
+        path: '/hello',
+        component: Hello,
+        props: dynamicPropsFn
+      }
+    ]
+    ```
+
+    组件获取数据
+
+    ```ts
+    const Hello = {
+      props: {
+        name: {
+          type: String,
+          default: 'Vue'
+        }
+      },
+      template: '<div> Hello {{ name }}</div>'
+    }
+    ```
 
 ### 动态路由匹配
 
